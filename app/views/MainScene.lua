@@ -22,15 +22,24 @@ MainScene.RESOURCE_BINDING = {
     ["coin_num_text"]		= {["varname"] = "coin_num_text"},
     ["add_coin_btn"]		= {["varname"] = "add_coin_btn"},
 	
+	["adventure_frame_img"]	= {["varname"] = "adventure_frame_img"},
+
 	--setting_panel
     ["setting_panel"]		= {["varname"] = "setting_panel"},
 	["close_btn"]			= {["varname"] = "close_btn"},
+
+	--advence_panel
+    ["advence_panel"]		= {["varname"] = "advence_panel"},
+    ["back_btn"]			= {["varname"] = "back_btn"},
+    ["chapter_sv"]			= {["varname"] = "chapter_sv"},
+	["left_btn"]			= {["varname"] = "left_btn"},
+	["right_btn"]			= {["varname"] = "right_btn"},
+
 
 }
 
 
 function MainScene:onCreate()
-	print("MainScene:onCreate()")
 	self:mainInfoInit()
 	self:mainLayoutButtonInit()
 end
@@ -38,7 +47,8 @@ end
 function MainScene:mainInfoInit()
 	self.coin_num = self.coin_num_text:getString()
 	self.crystal_num = self.crystal_num_text:getString()
-	
+	self.cur_chapter_num = 1
+	self.left_btn:setVisible(false)
 end
 
 function MainScene:mainLayoutButtonInit()
@@ -51,14 +61,47 @@ function MainScene:mainLayoutButtonInit()
         self.crystal_num_text:setString(self.crystal_num + 1)
 		self.crystal_num = self.crystal_num_text:getString()
     end)
+	
+	self.adventure_frame_img:addClickEventListener(function(sender)
+        self.advence_panel:setPosition(0,0)
+    end)
+
+	self.back_btn:addClickEventListener(function(sender)
+        self.advence_panel:setPosition(10000,10000)
+    end)
 
 	self.close_btn:addClickEventListener(function(sender)
-        self.setting_panel:setVisible(false)
+        self.setting_panel:setPosition(10000,10000)
     end)
 
 	self.title_btn:addClickEventListener(function(sender)
-        self.setting_panel:setVisible(true)
+        self.setting_panel:setPosition(0,0)
     end)
+
+	self.right_btn:addClickEventListener(function(sender)
+		if self.cur_chapter_num == 1 then
+			self.chapter_sv:scrollToPercentHorizontal(50,0.5,true)
+			self.cur_chapter_num = 2
+			self.left_btn:setVisible(true)
+		elseif self.cur_chapter_num == 2 then
+			self.chapter_sv:scrollToRight(0.5,true)
+			self.cur_chapter_num = 3
+			self.right_btn:setVisible(false)
+		end
+    end)
+
+	self.left_btn:addClickEventListener(function(sender)
+		if self.cur_chapter_num == 2 then
+			self.chapter_sv:scrollToLeft(0.5,true)
+			self.left_btn:setVisible(false)
+			self.cur_chapter_num = 1
+		elseif self.cur_chapter_num == 3 then
+			self.chapter_sv:scrollToPercentHorizontal(50,0.5,true)
+			self.right_btn:setVisible(true)
+			self.cur_chapter_num = 2
+		end
+    end)
+	
 end
 
 return MainScene
