@@ -32,4 +32,6 @@ function print_r ( t )
     print()
 end
 
+
 table.print = print_r
+

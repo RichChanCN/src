@@ -8,7 +8,7 @@ MainScene.RESOURCE_FILENAME = "MainScene.csb"
 -- »ñÈ¡UI¿Ø¼þ
 MainScene.RESOURCE_BINDING = {
 	--main_panel
-    ["mian_panel"]			= {["varname"] = "mian_panel"},
+    ["main_panel"]			= {["varname"] = "mian_panel"},
     ["title_left_node"]		= {["varname"] = "title_left_node"},
     ["title_face_sp"]		= {["varname"] = "title_face_sp"},
     ["title_btn"]			= {["varname"] = "title_btn"},
@@ -30,6 +30,7 @@ MainScene.RESOURCE_BINDING = {
 
 
 function MainScene:onCreate()
+	print("MainScene:onCreate()")
 	self:mainInfoInit()
 	self:mainLayoutButtonInit()
 end
@@ -52,11 +53,11 @@ function MainScene:mainLayoutButtonInit()
     end)
 
 	self.close_btn:addClickEventListener(function(sender)
-        self.setting_panel:setPosition(10000,10000)
+        self.setting_panel:setVisible(false)
     end)
 
 	self.title_btn:addClickEventListener(function(sender)
-        self.setting_panel:setPosition(0,0)
+        self.setting_panel:setVisible(true)
     end)
 end
 
