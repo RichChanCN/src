@@ -1,20 +1,16 @@
-local LayoutBase = require("packages.mvc.LayoutBase")
+local layout = require("packages.mvc.LayoutBase")
+
 local adventure_panel = {}
+
+setmetatable(adventure_panel, { __index = layout })
 
 adventure_panel.RESOURCE_BINDING = {
     ["back_btn"]			= {["varname"] = "back_btn"},
     ["chapter_sv"]			= {["varname"] = "chapter_sv"},
 	["left_btn"]			= {["varname"] = "left_btn"},
 	["right_btn"]			= {["varname"] = "right_btn"},
+	["site_1_img"]			= {["varname"] = "site_1_img"},
 }
-
-function adventure_panel:new( root, ctrl, data )
-	local o = LayoutBase:new(root,ctrl,data)
-  	setmetatable(o, self)
-  	self.__index = self
-
-	return o
-end
 
 function adventure_panel:init()
 	uitool:createUIBinding(self, self.RESOURCE_BINDING)
@@ -62,18 +58,15 @@ function adventure_panel:initEvents()
 			self.cur_chapter_num = 2
 		end
     end)
+
+    self.site_1_img:addClickEventListener(function(sender)
+		self.ctrl:openConfirmView()
+    end)
 end
 
 function adventure_panel:updateView()
 
 end
 
-function adventure_panel:openView()
-	self.root:setPosition(uitool:zero())
-end
-
-function adventure_panel:closeView()
-	self.root:setPosition(uitool:farAway())
-end
 
 return adventure_panel

@@ -1,15 +1,12 @@
 local LayoutBase = {}
 
-function LayoutBase:new(root, ctrl, data )
-	local o = {}
-	setmetatable(o, self)
-  	self.__index = self
+function LayoutBase:new( root, ctrl, data )
 	self.root = root
 	self.ctrl = ctrl
 	self.data = data
 	self.isInited = false
 
-	return o
+	return self
 end
 
 function LayoutBase:openView()

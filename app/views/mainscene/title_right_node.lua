@@ -1,5 +1,8 @@
-local LayoutBase = require("packages.mvc.LayoutBase")
+local layout = require("packages.mvc.LayoutBase")
+
 local title_right_node = {}
+
+setmetatable(title_right_node, { __index = layout })
 
 title_right_node.RESOURCE_BINDING = {
     ["crystal_num_text"]	= {["varname"] = "crystal_num_text"},
@@ -7,14 +10,6 @@ title_right_node.RESOURCE_BINDING = {
     ["coin_num_text"]		= {["varname"] = "coin_num_text"},
     ["add_coin_btn"]		= {["varname"] = "add_coin_btn"},
 }
-
-function title_right_node:new( root, ctrl, data )
-	local o = LayoutBase:new(root,ctrl,data)
-  	setmetatable(o, self)
-  	self.__index = self
-
-	return o
-end
 
 function title_right_node:init()
 	uitool:createUIBinding(self, self.RESOURCE_BINDING)

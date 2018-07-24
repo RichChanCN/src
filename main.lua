@@ -14,7 +14,7 @@ local function main()
 	cc.FileUtils:getInstance():addSearchPath("src")
 	cc.FileUtils:getInstance():addSearchPath("res")
 
-    require("app.MyApp"):create():run("MainScene")
+    require("app.MyApp"):create():run()
 end
 
 local status, msg = xpcall(main, __G__TRACKBACK__)

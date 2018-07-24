@@ -1,5 +1,5 @@
 
-local PreScene = class("PreScene", cc.load("mvc").SceneBase)
+local PreScene = class("PreScene", cc.load("mvc").ViewBase)
 
 
 -- 加载csb文件

@@ -48,7 +48,11 @@ function ViewBase:createLayoutBinding(binding)
         local node = self.resourceNode_:getChildByName(nodeName);
         if nodeBinding.varname then
             local path = rawget(self.class, "VIEW_PATH")
-            self[nodeBinding.varname] = require(path.."."..nodeBinding.varname):new(node, self)
+            if path then
+                self[nodeBinding.varname] = require(path.."."..nodeBinding.varname):new(node, self)
+            else
+                self[nodeBinding.varname] = node
+            end
         end
     end
     

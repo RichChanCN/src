@@ -1,14 +1,15 @@
 local layout = require("packages.mvc.LayoutBase")
 
-local setting_panel = {}
+local confirm_panel = {}
 
-setmetatable(setting_panel, { __index = layout })
+setmetatable(confirm_panel, { __index = layout })
 
-setting_panel.RESOURCE_BINDING = {
+confirm_panel.RESOURCE_BINDING = {
     ["close_btn"]			= {["varname"] = "close_btn"},
+    ["go_btn"]				= {["varname"] = "go_btn"},
 }
 
-function setting_panel:init()
+function confirm_panel:init()
 	uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
 	self:initInfo()
@@ -17,18 +18,18 @@ function setting_panel:init()
 	self.isInited = true
 end
 
-function setting_panel:initInfo()
+function confirm_panel:initInfo()
 end
 
-function setting_panel:initEvents()
+function confirm_panel:initEvents()
 	self.close_btn:addClickEventListener(function(sender)
         self:closeView()
     end)
 end
 
-function setting_panel:updateView()
+function confirm_panel:updateView()
 
 end
 
 
-return setting_panel
+return confirm_panel
