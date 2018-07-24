@@ -1,3 +1,4 @@
+local LayoutBase = require("packages.mvc.LayoutBase")
 local adventure_panel = {}
 
 adventure_panel.RESOURCE_BINDING = {
@@ -7,19 +8,19 @@ adventure_panel.RESOURCE_BINDING = {
 	["right_btn"]			= {["varname"] = "right_btn"},
 }
 
-function adventure_panel:create( root, ctrl, data )
-	self.root = root
-	self.ctrl = ctrl
-	self.data = data
-	self.isInited = false
-	return self
+function adventure_panel:new( root, ctrl, data )
+	local o = LayoutBase:new(root,ctrl,data)
+  	setmetatable(o, self)
+  	self.__index = self
+
+	return o
 end
 
 function adventure_panel:init()
 	uitool:createUIBinding(self, self.RESOURCE_BINDING)
 	self:initInfo()
 	self:initEvents()
-	
+
 	self.isInited = true
 end
 

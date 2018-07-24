@@ -1,16 +1,16 @@
+local LayoutBase = require("packages.mvc.LayoutBase")
 local setting_panel = {}
 
 setting_panel.RESOURCE_BINDING = {
     ["close_btn"]			= {["varname"] = "close_btn"},
 }
 
-function setting_panel:create( root, ctrl, data )
-	self.root = root
-	self.ctrl = ctrl
-	self.data = data
-	self.isInited = false
+function setting_panel:new( root, ctrl, data )
+	local o = LayoutBase:new(root,ctrl,data)
+  	setmetatable(o, self)
+  	self.__index = self
 
-	return self
+	return o
 end
 
 function setting_panel:init()
@@ -18,7 +18,7 @@ function setting_panel:init()
 
 	self:initInfo()
 	self:initEvents()
-	
+
 	self.isInited = true
 end
 

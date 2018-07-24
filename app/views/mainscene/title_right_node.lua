@@ -1,3 +1,4 @@
+local LayoutBase = require("packages.mvc.LayoutBase")
 local title_right_node = {}
 
 title_right_node.RESOURCE_BINDING = {
@@ -7,13 +8,12 @@ title_right_node.RESOURCE_BINDING = {
     ["add_coin_btn"]		= {["varname"] = "add_coin_btn"},
 }
 
-function title_right_node:create( root, ctrl, data )
-	self.root = root
-	self.ctrl = ctrl
-	self.data = data
-	self.isInited = false
+function title_right_node:new( root, ctrl, data )
+	local o = LayoutBase:new(root,ctrl,data)
+  	setmetatable(o, self)
+  	self.__index = self
 
-	return self
+	return o
 end
 
 function title_right_node:init()
@@ -21,7 +21,7 @@ function title_right_node:init()
 
 	self:initInfo()
 	self:initEvents()
-	
+
 	self.isInited = true
 end
 
