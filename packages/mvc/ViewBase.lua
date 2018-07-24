@@ -14,7 +14,7 @@ function ViewBase:ctor(app, name)
 
     local binding = rawget(self.class, "RESOURCE_BINDING")
     if res and binding then
-        self:createResourceBinding(binding)
+        self:createLayoutBinding(binding)
     end
     
     if self.onCreate then self:onCreate() end
@@ -42,17 +42,13 @@ function ViewBase:createResourceNode(resourceFilename)
     self:addChild(self.resourceNode_)
 end
 
-function ViewBase:createResourceBinding(binding)
+function ViewBase:createLayoutBinding(binding)
     assert(self.resourceNode_, "ViewBase:createResourceBinding() - not load resource node")
 	for nodeName, nodeBinding in pairs(binding) do
-        local node = self:seekChildNode(self.resourceNode_, nodeName);
+        local node = self.resourceNode_:getChildByName(nodeName);
         if nodeBinding.varname then
-            self[nodeBinding.varname] = node
-        end
-        for _, event in ipairs(nodeBinding.events or {}) do
-            if event.event == "touch" then
-                node:onTouch(handler(self, self[event.method]))
-            end
+            local path = rawget(self.class, "VIEW_PATH")
+            self[nodeBinding.varname] = require(path.."."..nodeBinding.varname):create(node, self)
         end
     end
     
@@ -64,23 +60,6 @@ function ViewBase:showWithScene(transition, time, more)
     scene:addChild(self)
     display.runScene(scene, transition, time, more)
     return self
-end
-
-function ViewBase:seekChildNode(node, name)
-	local child = node:getChildByName(name)
-    --print("find" .. name .. "in" .. node:getName())
-    if child then
-        return child 
-    else
-        local children = node:getChildren()
-        for i=1, #children do
-            child = self:seekChildNode(children[i], name)
-            if child then
-                return child
-            end
-        end
-        return nil
-    end
 end
 
 return ViewBase

@@ -4,6 +4,7 @@ cc.FileUtils:getInstance():setPopupNotify(false)
 require "config"
 require "cocos.init"
 require "mytool"
+require "uitool"
 
 local function main()
 	collectgarbage("collect")
