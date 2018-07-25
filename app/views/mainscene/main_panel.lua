@@ -1,8 +1,6 @@
 local layout = require("packages.mvc.LayoutBase")
 
-local main_panel = {}
-
-setmetatable(main_panel, { __index = layout })
+local main_panel = layout:instance()
 
 main_panel.RESOURCE_BINDING = {
 	["title_left_node"]		= {["varname"] = "title_left_node"},
@@ -13,7 +11,8 @@ main_panel.RESOURCE_BINDING = {
     ["mail_btn"]			= {["varname"] = "mail_btn"},
     ["exp_now_img"]			= {["varname"] = "exp_now_img"},
     ["level_text"]			= {["varname"] = "level_text"},
-	["adventure_frame_img"]	= {["varname"] = "adventure_frame_img"},
+	["adventure_img"]		= {["varname"] = "adventure_img"},
+	["train_img"]			= {["varname"] = "train_img"},
 }
 
 function main_panel:initInfo()
@@ -21,9 +20,13 @@ function main_panel:initInfo()
 end
 
 function main_panel:initEvents()
-	self.adventure_frame_img:addClickEventListener(function(sender)
+	uitool:makeImgToButton(self.adventure_img,
+	function(sender)
         self.ctrl:openAdventureView()
+        self:closeView()
     end)
+
+    uitool:makeImgToButton(self.train_img,nil)
 
 	self.title_btn:addClickEventListener(function(sender)
         self.ctrl:openSettingView()

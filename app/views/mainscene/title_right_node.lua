@@ -1,8 +1,6 @@
 local layout = require("packages.mvc.LayoutBase")
 
-local title_right_node = {}
-
-setmetatable(title_right_node, { __index = layout })
+local title_right_node = layout:instance()
 
 title_right_node.RESOURCE_BINDING = {
     ["crystal_num_text"]	= {["varname"] = "crystal_num_text"},

@@ -1,8 +1,6 @@
 local layout = require("packages.mvc.LayoutBase")
 
-local adventure_panel = {}
-
-setmetatable(adventure_panel, { __index = layout })
+local adventure_panel = layout:instance()
 
 adventure_panel.RESOURCE_BINDING = {
     ["back_btn"]			= {["varname"] = "back_btn"},
@@ -24,6 +22,7 @@ function adventure_panel:initEvents()
 	end
 
 	self.back_btn:addClickEventListener(function(sender)
+        self.ctrl:openMainView()
         self:closeView()
     end)
 

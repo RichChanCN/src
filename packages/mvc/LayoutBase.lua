@@ -1,5 +1,9 @@
 local LayoutBase = {}
 
+function LayoutBase:instance()
+	return setmetatable({}, { __index = self })
+end
+
 function LayoutBase:new( name, root, ctrl, data )
 	self.name = name
 	self.root = root

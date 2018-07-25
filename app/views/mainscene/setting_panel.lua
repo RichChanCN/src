@@ -1,8 +1,6 @@
 local layout = require("packages.mvc.LayoutBase")
 
-local setting_panel = {}
-
-setmetatable(setting_panel, { __index = layout })
+local setting_panel = layout:instance()
 
 setting_panel.RESOURCE_BINDING = {
     ["close_btn"]			= {["varname"] = "close_btn"},
