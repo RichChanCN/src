@@ -16,15 +16,6 @@ main_panel.RESOURCE_BINDING = {
 	["adventure_frame_img"]	= {["varname"] = "adventure_frame_img"},
 }
 
-function main_panel:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-	self:initInfo()
-	self:initEvents()
-
-	self.isInited = true
-end
-
 function main_panel:initInfo()
 
 end

@@ -12,14 +12,6 @@ adventure_panel.RESOURCE_BINDING = {
 	["site_1_img"]			= {["varname"] = "site_1_img"},
 }
 
-function adventure_panel:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
-	self:initInfo()
-	self:initEvents()
-
-	self.isInited = true
-end
-
 function adventure_panel:initInfo()
 	self.cur_chapter_num = 1
 end

@@ -8,14 +8,6 @@ setting_panel.RESOURCE_BINDING = {
     ["close_btn"]			= {["varname"] = "close_btn"},
 }
 
-function setting_panel:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-	self:initInfo()
-	self:initEvents()
-
-	self.isInited = true
-end
 
 function setting_panel:initInfo()
 end

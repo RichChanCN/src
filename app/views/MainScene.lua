@@ -17,6 +17,8 @@ MainScene.RESOURCE_BINDING = {
     ["adventure_panel"]		= {["varname"] = "adventure_panel"},
 	--confirm_panel
     ["confirm_panel"]		= {["varname"] = "confirm_panel"},
+	--ready_panel
+    ["ready_panel"]			= {["varname"] = "ready_panel"},
 
 }
 
@@ -33,6 +35,7 @@ function MainScene:panelInit()
 	self.setting_panel:init()
 	self.adventure_panel:init()
 	self.confirm_panel:init()
+	self.ready_panel:init()
 end
 
 function MainScene:openAdventureView()
@@ -53,4 +56,9 @@ function MainScene:openSettingView()
 	end
 end
 
+function MainScene:openReadyView()
+	if self.ready_panel then
+		self.ready_panel:openView()
+	end
+end
 return MainScene

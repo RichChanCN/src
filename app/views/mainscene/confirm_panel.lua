@@ -9,21 +9,16 @@ confirm_panel.RESOURCE_BINDING = {
     ["go_btn"]				= {["varname"] = "go_btn"},
 }
 
-function confirm_panel:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-	self:initInfo()
-	self:initEvents()
-
-	self.isInited = true
-end
-
 function confirm_panel:initInfo()
 end
 
 function confirm_panel:initEvents()
 	self.close_btn:addClickEventListener(function(sender)
         self:closeView()
+    end)
+    self.go_btn:addClickEventListener(function(sender)
+    	self:closeView()
+    	self.ctrl:openReadyView()
     end)
 end
 

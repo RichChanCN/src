@@ -11,15 +11,6 @@ title_right_node.RESOURCE_BINDING = {
     ["add_coin_btn"]		= {["varname"] = "add_coin_btn"},
 }
 
-function title_right_node:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-	self:initInfo()
-	self:initEvents()
-
-	self.isInited = true
-end
-
 function title_right_node:initInfo()
 	self.coin_num = self.coin_num_text:getString()
 	self.crystal_num = self.crystal_num_text:getString()
