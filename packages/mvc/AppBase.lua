@@ -3,7 +3,7 @@ local AppBase = class("AppBase")
 
 function AppBase:ctor(configs)
     self.configs_ = {
-        viewsRoot  = "app.views",
+        scenesRoot  = "app.scenes",
         modelsRoot = "app.models",
         defaultSceneName = "MainScene",
     }
@@ -12,8 +12,8 @@ function AppBase:ctor(configs)
         self.configs_[k] = v
     end
 
-    if type(self.configs_.viewsRoot) ~= "table" then
-        self.configs_.viewsRoot = {self.configs_.viewsRoot}
+    if type(self.configs_.scenesRoot) ~= "table" then
+        self.configs_.scenesRoot = {self.configs_.scenesRoot}
     end
     if type(self.configs_.modelsRoot) ~= "table" then
         self.configs_.modelsRoot = {self.configs_.modelsRoot}
@@ -43,7 +43,7 @@ function AppBase:enterScene(sceneName, transition, time, more)
 end
 
 function AppBase:createView(name)
-    for _, root in ipairs(self.configs_.viewsRoot) do
+    for _, root in ipairs(self.configs_.scenesRoot) do
         local packageName = string.format("%s.%s", root, name)
         local status, view = xpcall(function()
                 return require(packageName)
@@ -58,7 +58,7 @@ function AppBase:createView(name)
         end
     end
     error(string.format("AppBase:createView() - not found view \"%s\" in search paths \"%s\"",
-        name, table.concat(self.configs_.viewsRoot, ",")), 0)
+        name, table.concat(self.configs_.scenesRoot, ",")), 0)
 end
 
 function AppBase:onCreate()

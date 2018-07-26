@@ -1,8 +1,8 @@
-local layout = require("packages.mvc.LayoutBase")
+local view = require("packages.mvc.ViewBase")
 
-local main_panel = layout:instance()
+local main_view = view:instance()
 
-main_panel.RESOURCE_BINDING = {
+main_view.RESOURCE_BINDING = {
 	["title_left_node"]		= {["varname"] = "title_left_node"},
     ["title_face_sp"]		= {["varname"] = "title_face_sp"},
     ["title_btn"]			= {["varname"] = "title_btn"},
@@ -15,11 +15,11 @@ main_panel.RESOURCE_BINDING = {
 	["train_img"]			= {["varname"] = "train_img"},
 }
 
-function main_panel:initInfo()
+function main_view:initInfo()
 
 end
 
-function main_panel:initEvents()
+function main_view:initEvents()
 	uitool:makeImgToButton(self.adventure_img,
 	function(sender)
         self.ctrl:openAdventureView()
@@ -33,8 +33,8 @@ function main_panel:initEvents()
     end)
 end
 
-function main_panel:updateView()
+function main_view:updateView()
 
 end
 
-return main_panel
+return main_view

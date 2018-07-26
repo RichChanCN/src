@@ -1,69 +1,45 @@
+local ViewBase = {}
 
-local ViewBase = class("ViewBase", cc.Node)
-
-function ViewBase:ctor(app, name)
-    self:enableNodeEvents()
-    self.app_ = app
-    self.name_ = name
-
-    -- check CSB resource file
-    local res = rawget(self.class, "RESOURCE_FILENAME")
-    if res then
-        self:createResourceNode(res)
-    end
-
-    local binding = rawget(self.class, "RESOURCE_BINDING")
-    if res and binding then
-        self:createLayoutBinding(binding)
-    end
-    
-    if self.onCreate then self:onCreate() end
+function ViewBase:instance()
+	return setmetatable({}, { __index = self })
 end
 
-function ViewBase:getApp()
-    return self.app_
+function ViewBase:new( name, root, ctrl, data )
+	self.name = name
+	self.root = root
+	self.ctrl = ctrl
+	self.data = data
+	self.isInited = false
+
+	return self
 end
 
-function ViewBase:getName()
-    return self.name_
+function ViewBase:init()
+	uitool:createUIBinding(self, self.RESOURCE_BINDING)
+
+	self:initInfo()
+	self:initEvents()
+
+	self.isInited = true
 end
 
-function ViewBase:getResourceNode()
-    return self.resourceNode_
+function ViewBase:initInfo()
+	print("warning! you should implement initInfo() in instance!---"..self.name)
 end
 
-function ViewBase:createResourceNode(resourceFilename)
-    if self.resourceNode_ then
-        self.resourceNode_:removeSelf()
-        self.resourceNode_ = nil
-    end
-    self.resourceNode_ = cc.CSLoader:createNode(resourceFilename)
-    assert(self.resourceNode_, string.format("ViewBase:createResourceNode() - load resouce node from file \"%s\" failed", resourceFilename))
-    self:addChild(self.resourceNode_)
+function ViewBase:initEvents()
+	print("warning! you should implement initEvents() in instance")
 end
 
-function ViewBase:createLayoutBinding(binding)
-    assert(self.resourceNode_, "ViewBase:createResourceBinding() - not load resource node")
-	for nodeName, nodeBinding in pairs(binding) do
-        local node = self.resourceNode_:getChildByName(nodeName);
-        if nodeBinding.varname then
-            local path = rawget(self.class, "VIEW_PATH")
-            if path then
-                self[nodeBinding.varname] = require(path.."."..nodeBinding.varname):new(nodeBinding.varname, node, self)
-            else
-                self[nodeBinding.varname] = node
-            end
-        end
-    end
-    
+function ViewBase:openView()
+	if not self.isInited then
+		self:init()
+	end
+	self.root:setPosition(uitool:zero())
 end
 
-function ViewBase:showWithScene(transition, time, more)
-    self:setVisible(true)
-    local scene = display.newScene(self.name_)
-    scene:addChild(self)
-    display.runScene(scene, transition, time, more)
-    return self
+function ViewBase:closeView()
+	self.root:setPosition(uitool:farAway())
 end
 
 return ViewBase

@@ -1,8 +1,8 @@
-local layout = require("packages.mvc.LayoutBase")
+local view = require("packages.mvc.ViewBase")
 
-local adventure_panel = layout:instance()
+local adventure_view = view:instance()
 
-adventure_panel.RESOURCE_BINDING = {
+adventure_view.RESOURCE_BINDING = {
     ["back_btn"]			= {["varname"] = "back_btn"},
     ["chapter_sv"]			= {["varname"] = "chapter_sv"},
 	["left_btn"]			= {["varname"] = "left_btn"},
@@ -10,11 +10,11 @@ adventure_panel.RESOURCE_BINDING = {
 	["site_1_img"]			= {["varname"] = "site_1_img"},
 }
 
-function adventure_panel:initInfo()
+function adventure_view:initInfo()
 	self.cur_chapter_num = 1
 end
 
-function adventure_panel:initEvents()
+function adventure_view:initEvents()
 	if self.cur_chapter_num == 1 then
 		self.left_btn:setVisible(false)
 	elseif self.cur_chapter_num == 3 then
@@ -55,9 +55,9 @@ function adventure_panel:initEvents()
     end)
 end
 
-function adventure_panel:updateView()
+function adventure_view:updateView()
 
 end
 
 
-return adventure_panel
+return adventure_view

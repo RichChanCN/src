@@ -1,15 +1,15 @@
 uitool = {}
 
 function uitool:farAway()
-    return 10000,10000
+    return cc.p(10000,10000)
 end
 
 function uitool:zero()
-    return 0,0
+    return cc.p(0,0)
 end
 
 function uitool:createUIBinding(panel,binding)
-    assert(panel.root, "ViewBase:createResourceBinding() - not load resource node")
+    assert(panel.root, "uitool:createResourceBinding() - not load resource node")
 	for nodeName, nodeBinding in pairs(binding) do
         local node = self:seekChildNode(panel.root, nodeName);
         if nodeBinding.varname then
@@ -34,6 +34,13 @@ function uitool:seekChildNode(node, name)
         end
         return nil
     end
+end
+
+function uitool:moveToAndFadeOut(node,pos)
+    local ac1 = node:runAction(cc.MoveTo:create(0.1,cc.p(pos.x,pos.y)))
+    local ac2 = node:runAction(cc.FadeOut:create(0.2))
+    local seq1 = cc.Sequence:create(ac1,ac2,callback)
+    node:runAction(seq1)
 end
 
 function uitool:makeImgToButton(img,callback)
@@ -75,11 +82,11 @@ function uitool:makeImgToButton(img,callback)
         end
     end
 
-    local listener = cc.EventListenerTouchOneByOne:create()
-    listener:setSwallowTouches(true)
-    listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
-    listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    img.listener = cc.EventListenerTouchOneByOne:create()
+    img.listener:setSwallowTouches(true)
+    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
+    img.listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
+    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(listener, img)
+    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end

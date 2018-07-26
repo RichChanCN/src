@@ -1,10 +1,11 @@
 
 cc.FileUtils:getInstance():setPopupNotify(false)
 
-require "config"
+require "config.config"
 require "cocos.init"
-require "mytool"
-require "uitool"
+require "tool.mytool"
+require "tool.uitool"
+require "config.config_texture"
 
 local function main()
 	collectgarbage("collect")

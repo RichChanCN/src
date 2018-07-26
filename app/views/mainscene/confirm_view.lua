@@ -1,16 +1,16 @@
-local layout = require("packages.mvc.LayoutBase")
+local view = require("packages.mvc.ViewBase")
 
-local confirm_panel = layout:instance()
+local confirm_view = view:instance()
 
-confirm_panel.RESOURCE_BINDING = {
+confirm_view.RESOURCE_BINDING = {
     ["close_btn"]			= {["varname"] = "close_btn"},
     ["go_img"]				= {["varname"] = "go_img"},
 }
 
-function confirm_panel:initInfo()
+function confirm_view:initInfo()
 end
 
-function confirm_panel:initEvents()
+function confirm_view:initEvents()
 	self.close_btn:addClickEventListener(function(sender)
         self:closeView()
     end)
@@ -21,9 +21,9 @@ function confirm_panel:initEvents()
     end)
 end
 
-function confirm_panel:updateView()
+function confirm_view:updateView()
 
 end
 
 
-return confirm_panel
+return confirm_view
