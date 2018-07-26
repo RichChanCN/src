@@ -13,8 +13,8 @@ embattle_view.RESOURCE_BINDING = {
 
 function embattle_view:init()
 	uitool:createUIBinding(self, self.RESOURCE_BINDING)
-	self:initArena()
 	self:initInfo()
+	self:initArena()
 	self:initEvents()
 	self:initMonsterLV()
 	self.isInited = true
@@ -22,10 +22,12 @@ end
 
 function embattle_view:initInfo()
 	self.gezi_cell_num = 44
-	self.cur_drag_monster = nil
-	self.target_pos = nil
-	self.cur_focus_tag = nil
+	self.cur_drag_chesspiece = nil
+	self.target_node = nil
+	self.is_chesspiece_from_arena = false
 	self.monster_team = {}
+
+	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
 
 function embattle_view:initEvents()
@@ -77,17 +79,15 @@ end
 function embattle_view:addMonsterCardEvent(img)
 	   
 	local function touchBegan( touch, event )
-
-		if self.cur_drag_monster then
-			self.hex_node:removeChild(self.cur_drag_monster)
-			self.cur_drag_monster = nil
-		end
-
         local node = event:getCurrentTarget()
         local locationInNode = node:convertToNodeSpace(touch:getLocation())
         local s = node:getContentSize()
         local rect = cc.rect(0,0,s.width,s.height)
         if cc.rectContainsPoint(rect, locationInNode) then
+			if self.cur_drag_chesspiece then
+				self.hex_node:removeChild(self.cur_drag_chesspiece)
+				self.cur_drag_chesspiece = nil
+			end
             node:setScale(1.06)
             return true
         end
@@ -100,21 +100,17 @@ function embattle_view:addMonsterCardEvent(img)
 		local cur_pos = self.hex_node:convertToNodeSpace(touch:getLocation())
 		local start_pos = self.hex_node:convertToNodeSpace(touch:getStartLocation())
 
-		if math.abs(cur_pos.y-start_pos.y)<50 and math.abs(cur_pos.x-start_pos.x)>50 and not self.cur_drag_monster then
-			self.cur_drag_monster = cc.Sprite:create(Config.embattle_sprite.hex_boder_1)
-			self.hex_node:addChild(self.cur_drag_monster, 500)
+		if math.abs(cur_pos.y-start_pos.y)<50 and math.abs(cur_pos.x-start_pos.x)>50 and not self.cur_drag_chesspiece then
+			self.is_chesspiece_from_arena = false
+			self.cur_drag_chesspiece = cc.Sprite:create(Config.embattle_sprite.hex_boder_1)
+			self.hex_node:addChild(self.cur_drag_chesspiece, 500)
 		end
 
-		if self.cur_drag_monster then
-			self.cur_drag_monster:setPosition(cc.p(cur_pos.x, cur_pos.y))
+		if self.cur_drag_chesspiece then
+			self.cur_drag_chesspiece:setPosition(cc.p(cur_pos.x, cur_pos.y))
 		end
 
-		local locationInNode = node:convertToNodeSpace(touch:getLocation())
-        local s = node:getContentSize()
-        local rect = cc.rect(0,0,s.width,s.height)
-        
-
-        if cc.rectContainsPoint(rect, locationInNode) then
+        if uitool:isTouchInNodeRect(node, touch, event) then
             node:setScale(1.06)
         else
             node:setScale(1.0)
@@ -123,21 +119,22 @@ function embattle_view:addMonsterCardEvent(img)
 
     local function touchEnded( touch, event )
         local node = event:getCurrentTarget()
-        local locationInNode = node:convertToNodeSpace(touch:getLocation())
-        local s = node:getContentSize()
-        local rect = cc.rect(0,0,s.width,s.height)
 
-        if self.cur_drag_monster and not self.target_pos then
+        if self.cur_drag_chesspiece and not self.target_node then
         	local pos = self.hex_node:convertToNodeSpace(touch:getStartLocation())
-			uitool:moveToAndFadeOut(self.cur_drag_monster,pos)
-		elseif self.target_pos then
-			self.cur_drag_monster:setPosition(self.target_pos)
-			table.insert(self.monster_team, self.cur_drag_monster)
-			self.target_pos = nil
-			self.cur_drag_monster = nil
+			uitool:moveToAndFadeOut(self.cur_drag_chesspiece,pos)
+		elseif self.target_node then
+			self.cur_drag_chesspiece:setPosition(self.target_node:getPosition())
+			self.cur_drag_chesspiece.from_card = node
+			self.cur_drag_chesspiece.arena_cell = self.target_node
+			self.target_node.chesspiece = self.cur_drag_chesspiece
+			self.eventDispatcher:pauseEventListenersForTarget(node)
+			table.insert(self.monster_team, self.cur_drag_chesspiece)
+			self.target_node = nil
+			self.cur_drag_chesspiece = nil
 		end
 
-        if cc.rectContainsPoint(rect, locationInNode) then
+        if uitool:isTouchInNodeRect(node, touch, event) then
             node:setScale(1.0)
             if callback then
                 callback()
@@ -150,8 +147,8 @@ function embattle_view:addMonsterCardEvent(img)
     img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
     img.listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
     img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
-    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+    
+    self.eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 ------------左边卡池部分结束------------
 ------------棋子部分开始------------
@@ -163,6 +160,9 @@ function embattle_view:initArena()
 		for j=1,8 do
 			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
 			self["gezi_"..i.."_"..j] = self.arena_node:getChildByName("gezi_"..i.."_"..j)
+			if self["gezi_"..i.."_"..j] then
+				self["gezi_"..i.."_"..j].arena_pos = cc.p(i,j)
+			end
 			if j<3 and self["gezi_"..i.."_"..j] then
 				self["gezi_"..i.."_"..j]:loadTexture(Config.embattle_sprite.gezi_raw)
 				self["gezi_"..i.."_"..j]:setScaleX(0.9)
@@ -173,7 +173,7 @@ function embattle_view:initArena()
 
 	self.highlight_border_sp = self.arena_node:getChildByName("highlight_border_sp")
 	self.selected_sp = self.arena_node:getChildByName("selected_sp")
-	print(self.highlight_border_sp:getOpacity())
+
 end
 
 function embattle_view:selectHex(pos)
@@ -205,34 +205,54 @@ end
 function embattle_view:addArenaListener()
 
 	local function touchBegan( touch, event )
+		local node = event:getCurrentTarget()
+		if uitool:isTouchInNodeRect(node, touch, event ,0.8) then
+			if node.chesspiece then
+				self.is_chesspiece_from_arena = true
+				self.cur_drag_chesspiece = node.chesspiece
+			end
+		end
+
 		return true
 	end
 
 	local function touchMoved( touch, event )
 		local node = event:getCurrentTarget()
 		local x,y = node:getPosition()
-		local locationInNode = node:convertToNodeSpace(touch:getLocation())
-		
-		local border = node:getContentSize()
-		
-		local rect = cc.rect(0,0,border.width*0.8,border.height*0.8)
-		
-		if self.cur_drag_monster and cc.rectContainsPoint(rect, locationInNode) then
-			self.cur_focus_tag = node:getTag()
+		local cur_pos = self.hex_node:convertToNodeSpace(touch:getLocation())
+
+		if self.is_chesspiece_from_arena and self.cur_drag_chesspiece then
+			self.cur_drag_chesspiece:setPosition(cc.p(cur_pos.x, cur_pos.y))
+		end
+
+		if self.cur_drag_chesspiece and uitool:isTouchInNodeRect(node, touch, event, 0.8) then
 			self:selectHex(cc.p(x,y))
-			self.target_pos = cc.p(x,y)
-		elseif self.cur_focus_tag == node:getTag() then
+			self.target_node = node
+		elseif self.target_node and self.target_node:getTag() == node:getTag() then
 			self:resetSelectEffect()
-			self.target_pos = nil
+			self.target_node = nil
 		end
 	end
 
 	local function touchEnded( touch, event )
 		local node = event:getCurrentTarget()
-		local locationInNode = node:convertToNodeSpace(touch:getLocation())
-		local s = node:getContentSize()
-		local rect = cc.rect(0,0,s.width*0.8,s.height*0.8)
-		if cc.rectContainsPoint(rect, locationInNode) then
+		if uitool:isTouchInNodeRect(node, touch, event, 0.8) then
+			if self.cur_drag_chesspiece and node.chesspiece then
+				self.cur_drag_chesspiece:setPosition(node:getPosition())
+				node.chesspiece:setPosition(self.cur_drag_chesspiece.arena_cell:getPosition())
+				
+				local temp_cell = self.cur_drag_chesspiece.arena_cell
+				self.cur_drag_chesspiece.arena_cell = node
+				node.chesspiece.arena_cell = temp_cell
+				
+				temp_cell.chesspiece = node.chesspiece
+				node.chesspiece = self.cur_drag_chesspiece
+
+			elseif self.cur_drag_chesspiece then
+				self.cur_drag_chesspiece:setPosition(node:getPosition())
+				self.cur_drag_chesspiece.arena_cell = node
+				node.chesspiece = self.cur_drag_chesspiece
+			end
 			self:putInHex()
 		end
 	end
@@ -243,48 +263,47 @@ function embattle_view:addArenaListener()
 	listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
 	listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
 	
-	local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+	
 	--注意！！！如果一个界面监听的事件很多会导致降帧！
 	for i=1,7 do
 		for j=1,2 do 
 			if self["gezi_"..i.."_"..j] then
 				self["gezi_"..i.."_"..j].listener = listener:clone()
-				eventDispatcher:addEventListenerWithSceneGraphPriority(self["gezi_"..i.."_"..j].listener, self["gezi_"..i.."_"..j])
-				eventDispatcher:pauseEventListenersForTarget(self["gezi_"..i.."_"..j])
+				self.eventDispatcher:addEventListenerWithSceneGraphPriority(self["gezi_"..i.."_"..j].listener, self["gezi_"..i.."_"..j])
 			end
 		end
 	end
-
+	self:pauseArenaListener()
 end
 
 function embattle_view:resumeArenaListener()
-	local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+	
 	for i=1,7 do
 		for j=1,2 do 
 			if self["gezi_"..i.."_"..j] then
-				eventDispatcher:resumeEventListenersForTarget(self["gezi_"..i.."_"..j])
+				self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..i.."_"..j])
 			end
 		end
 	end
 end
 
 function embattle_view:pauseArenaListener()
-	local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+	
 	for i=1,7 do
 		for j=1,2 do 
 			if self["gezi_"..i.."_"..j] then
-				eventDispatcher:pauseEventListenersForTarget(self["gezi_"..i.."_"..j])
+				self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..i.."_"..j])
 			end
 		end
 	end
 end
 
 function embattle_view:removeArenaListener()
-	local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+	
 	for i=1,7 do
 		for j=1,2 do 
 			if self["gezi_"..i.."_"..j] then
-				eventDispatcher:removeEventListener(self["gezi_"..i.."_"..j].listener)
+				self.eventDispatcher:removeEventListener(self["gezi_"..i.."_"..j].listener)
 			end
 		end
 	end

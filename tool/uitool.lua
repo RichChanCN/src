@@ -36,6 +36,16 @@ function uitool:seekChildNode(node, name)
     end
 end
 
+function uitool:isTouchInNodeRect(node,touch,event,scale)
+    local scale = scale or 1.0
+    local node = event:getCurrentTarget()
+    local locationInNode = node:convertToNodeSpace(touch:getLocation())
+    local border = node:getContentSize()
+    local rect = cc.rect(0,0,border.width*scale,border.height*scale)
+    
+    return cc.rectContainsPoint(rect, locationInNode)
+end
+
 function uitool:moveToAndFadeOut(node,pos)
     local ac1 = node:runAction(cc.MoveTo:create(0.1,cc.p(pos.x,pos.y)))
     local ac2 = node:runAction(cc.FadeOut:create(0.2))
@@ -46,10 +56,8 @@ end
 function uitool:makeImgToButton(img,callback)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
-        local locationInNode = node:convertToNodeSpace(touch:getLocation())
-        local s = node:getContentSize()
-        local rect = cc.rect(0,0,s.width,s.height)
-        if cc.rectContainsPoint(rect, locationInNode) then
+
+        if self:isTouchInNodeRect(node,touch,event) then
             node:setScale(1.06)
             return true
         end
@@ -59,10 +67,8 @@ function uitool:makeImgToButton(img,callback)
 
     local function touchMoved( touch, event )
         local node = event:getCurrentTarget()
-        local locationInNode = node:convertToNodeSpace(touch:getLocation())
-        local s = node:getContentSize()
-        local rect = cc.rect(0,0,s.width,s.height)
-        if cc.rectContainsPoint(rect, locationInNode) then
+
+        if self:isTouchInNodeRect(node,touch,event) then
             node:setScale(1.06)
         else
             node:setScale(1.0)
@@ -71,10 +77,8 @@ function uitool:makeImgToButton(img,callback)
 
     local function touchEnded( touch, event )
         local node = event:getCurrentTarget()
-        local locationInNode = node:convertToNodeSpace(touch:getLocation())
-        local s = node:getContentSize()
-        local rect = cc.rect(0,0,s.width,s.height)
-        if cc.rectContainsPoint(rect, locationInNode) then
+        
+        if self:isTouchInNodeRect(node,touch,event) then
             node:setScale(1.0)
             if callback then
                 callback()
