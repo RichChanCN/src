@@ -35,3 +35,8 @@ end
 
 table.print = print_r
 
+function debugPrintTable(table)
+    for k,v in pairs(table) do
+        print(k,v:getName())
+    end
+end

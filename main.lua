@@ -6,6 +6,7 @@ require "cocos.init"
 require "tool.mytool"
 require "tool.uitool"
 require "config.config_texture"
+require "config.config_monster"
 
 local function main()
 	collectgarbage("collect")
