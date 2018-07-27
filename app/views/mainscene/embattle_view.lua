@@ -10,7 +10,7 @@ embattle_view.RESOURCE_BINDING = {
     ["template_panel"]		= {["varname"] = "template_panel"},
     ["hex_node"]			= {["varname"] = "hex_node"},
     ["select_num_text"]		= {["varname"] = "select_num_text"},
-    ["chesspiece_template"]		= {["varname"] = "chesspiece_template"},
+    ["chesspiece_template"]	= {["varname"] = "chesspiece_template"},
 
 }
 ----------------------------------------------------------------
@@ -83,24 +83,26 @@ function embattle_view:initMonsterLV()
 
 	for i = 1, rows_num do
 		local test_item = self.template_panel:clone()
-		self:initLVItem(test_item, i-1)
+		self:initLVItem(test_item, i-1) --这里-1是为了里面好计算正真的索引值
 		self.monster_lv:pushBackCustomItem(test_item)
 	end
 end
 
 function embattle_view:initLVItem(item, index)
-	local monster = {}
 	for i=1,3 do
-		if self.monsters_list[i+3*index] then
-			monster[i+3*index] = {}
-			monster[i+3*index].head_img = item:getChildByName("monster_"..i.."_img")
-			monster[i+3*index].border_img = item:getChildByName("border_img")
-			monster[i+3*index].type_img = item:getChildByName("type_img")
-			self:addMonsterCardEvent(monster[i+3*index].head_img, i+3*index)
+		local cur_index = i+3*index
+		local cur_monster = {}
+		if self.monsters_list[cur_index] then
+			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
+			cur_monster.head_img:loadTexture(self.monsters_list[cur_index].char_img_path)
+			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
+			cur_monster.border_img:loadTexture(Config.embattle_sprite["card_border_"..self.monsters_list[cur_index].rank])
+			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
+			cur_monster.type_img:loadTexture(Config.embattle_sprite["attack_type_"..self.monsters_list[cur_index].attack_type])
+			self:addMonsterCardEvent(cur_monster.head_img, cur_index)
 		else
-			monster[i+3*index] = {}
-			monster[i+3*index].head_img = item:getChildByName("monster_"..i.."_img")
-			monster[i+3*index].head_img:setVisible(false)
+			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
+			cur_monster.head_img:setVisible(false)
 		end
 	end
 end
@@ -183,20 +185,46 @@ end
 
 function embattle_view:selectTheCard(card)
 	self.eventDispatcher:pauseEventListenersForTarget(card)
+	local selected_sp = cc.Sprite:create(Config.embattle_sprite.selected)
+	selected_sp:setName("selected_sp")
+
+	card:addChild(selected_sp, uitool:top_Z_order())
+
+	selected_sp:setPosition(uitool:getNodeCenterPosition(card))
 end
 
 function embattle_view:unselectTheCard(card)
 	self.eventDispatcher:resumeEventListenersForTarget(card)
+
+	if card:getChildByName("selected_sp") then
+		card:removeChildByName("selected_sp")
+	end
 end
 ------------左边卡池部分结束------------
 
 ------------棋子部分开始------------
 function embattle_view:createChesspiece(index)
-	local chesspiece = self.chesspiece_template:clone()
-	local face_sp = chesspiece:getChildByName("face_sp")
-	local hex_border = chesspiece:getChildByName("hex_border")
+
+	local chesspiece = cc.Sprite:create(Config.embattle_sprite.chesspiece_mask)
+	chesspiece:setScale(0.5)
+	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}
+	chesspiece:setBlendFunc(blendfunc)
+	
+	local face_sp = cc.Sprite:create(self.monsters_list[index].char_img_path)
+	blendfunc = {src = gl.ONE_MINUS_DST_ALPHA, dst = gl.DST_ALPHA}
+	face_sp:setBlendFunc(blendfunc)
+	face_sp:setName("face_sp")
+
+	local hex_border = cc.Sprite:create(Config.embattle_sprite["hex_border_"..self.monsters_list[index].rank])
+	hex_border:setScale(2.0)
+	hex_border:setName("hex_border")
+	chesspiece:addChild(hex_border, uitool:bottom_Z_order()+5)
+	hex_border:setPosition(uitool:getNodeCenterPosition(chesspiece))
+	chesspiece:addChild(face_sp, uitool:bottom_Z_order())
+	face_sp:setPosition(uitool:getNodeCenterPosition(chesspiece))
+	
 	chesspiece:setName("chesspiece_"..index)
-	self.hex_node:addChild(chesspiece, 100)
+	self.hex_node:addChild(chesspiece, uitool:bottom_Z_order())
 
 	return chesspiece
 end
@@ -235,9 +263,11 @@ function embattle_view:resetSelectHexEffect()
 end
 
 function embattle_view:addDragedChesspieceToArena(add_to_team)
+	self:putInHexEffect()
+
 	self.target_node.chesspiece = self.cur_drag_chesspiece
 	self.cur_drag_chesspiece:setPosition(self.target_node:getPosition())
-	self.cur_drag_chesspiece:setLocalZOrder(0)
+	self.cur_drag_chesspiece:setLocalZOrder(uitool:bottom_Z_order())
 	self.cur_drag_chesspiece.arena_cell = self.target_node
 	if add_to_team then
 		table.insert(self.monster_team,self.cur_drag_chesspiece)
@@ -247,7 +277,9 @@ function embattle_view:addDragedChesspieceToArena(add_to_team)
 end
 
 function embattle_view:exchangeDragedAndTargetChesspiece()
-	self.cur_drag_chesspiece:setLocalZOrder(0)
+	self:putInHexEffect()
+
+	self.cur_drag_chesspiece:setLocalZOrder(uitool:bottom_Z_order())
 
 	local temp_cell = self.cur_drag_chesspiece.arena_cell
 	self.cur_drag_chesspiece.arena_cell = self.target_node
@@ -311,7 +343,7 @@ function embattle_view:addArenaListener()
 		if uitool:isTouchInNodeRect(node, touch, event ,0.8) then
 			if node.chesspiece then
 				self.cur_drag_chesspiece = node.chesspiece
-				self.cur_drag_chesspiece:setLocalZOrder(100)
+				self.cur_drag_chesspiece:setLocalZOrder(uitool:top_Z_order())
 				self.is_chesspiece_from_arena = true
 			end
 		end
@@ -347,7 +379,7 @@ function embattle_view:addArenaListener()
 					self:removeOneChesspieceFromArena(self.cur_drag_chesspiece)
 				else
 					self.cur_drag_chesspiece:setPosition(self.cur_drag_chesspiece.arena_cell:getPosition())
-					self.cur_drag_chesspiece:setLocalZOrder(0)
+					self.cur_drag_chesspiece:setLocalZOrder(uitool:bottom_Z_order())
 				end
 			elseif self.cur_drag_chesspiece and self.target_node then
 				--判断如果该位置已经有棋子，那么就交换
@@ -357,14 +389,13 @@ function embattle_view:addArenaListener()
 					self.cur_drag_chesspiece.arena_cell.chesspiece = nil
 					self:addDragedChesspieceToArena()
 				end
-				self:putInHexEffect()
 				self.target_node = nil
 			elseif self.cur_drag_chesspiece and self.cur_drag_chesspiece.arena_cell then
 				if cur_pos.x < self.pool_right_boder then
 					self:removeOneChesspieceFromArena(self.cur_drag_chesspiece)
 				elseif node:getTag() == self.target_node:getTag() then
 					self.cur_drag_chesspiece:setPosition(self.cur_drag_chesspiece.arena_cell:getPosition())
-					self.cur_drag_chesspiece:setLocalZOrder(0)
+					self.cur_drag_chesspiece:setLocalZOrder(uitool:bottom_Z_order())
 				end
 			end
 			self.cur_drag_chesspiece = nil

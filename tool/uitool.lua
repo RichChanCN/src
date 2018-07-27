@@ -8,6 +8,23 @@ function uitool:zero()
     return cc.p(0,0)
 end
 
+function uitool:top_Z_order()
+    return 2000
+end
+
+function uitool:mid_Z_order()
+    return 1000
+end
+
+function uitool:bottom_Z_order()
+    return 0
+end
+
+function uitool:getNodeCenterPosition(node)
+    local size = node:getContentSize()
+    return cc.p(size.width/2,size.height/2)
+end
+
 function uitool:createUIBinding(panel,binding)
     assert(panel.root, "uitool:createResourceBinding() - not load resource node")
 	for nodeName, nodeBinding in pairs(binding) do
@@ -47,9 +64,22 @@ function uitool:isTouchInNodeRect(node,touch,event,scale)
 end
 
 function uitool:moveToAndFadeOut(node,pos)
-    local ac1 = node:runAction(cc.MoveTo:create(0.1,cc.p(pos.x,pos.y)))
+    local children = node:getChildren()
+
+    if #children > 0 then
+        for i=1, #children do
+            self:moveToAndFadeOut(children[i])
+        end
+    end
+
+    local ac1 = nil 
+    if pos then
+        ac1 = node:runAction(cc.MoveTo:create(0.1,cc.p(pos.x,pos.y)))
+    end   
     local ac2 = node:runAction(cc.FadeOut:create(0.2))
-    local seq1 = cc.Sequence:create(ac1,ac2,callback)
+
+    local seq1 = cc.Sequence:create(ac1,ac2)
+    
     node:runAction(seq1)
 end
 
