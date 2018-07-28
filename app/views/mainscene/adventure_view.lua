@@ -15,16 +15,16 @@ function adventure_view:initInfo()
 end
 
 function adventure_view:initEvents()
+
+	self.back_btn:addClickEventListener(function(sender)
+        self.ctrl:closeAdventureView()
+    end)
+    
 	if self.cur_chapter_num == 1 then
 		self.left_btn:setVisible(false)
 	elseif self.cur_chapter_num == 3 then
 		self.right_btn:setVisible(false)
 	end
-
-	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:openMainView()
-        self:closeView()
-    end)
 
 	self.right_btn:addClickEventListener(function(sender)
 		if self.cur_chapter_num == 1 then

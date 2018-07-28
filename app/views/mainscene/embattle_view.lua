@@ -27,24 +27,36 @@ end
 
 function embattle_view:initInfo()
 	self.gezi_cell_num = 44
+	--竞技场的布局信息
+	self.arena_info = nil
+	--敌人的队伍信息
+	self.enemy_team = nil
+	--当前抓住的棋子
 	self.cur_drag_chesspiece = nil
+	--对准的放置节点
 	self.target_node = nil
+	--棋子是否来源于竞技场
 	self.is_chesspiece_from_arena = false
+	--牌池的有边缘
 	self.pool_right_boder = -460
+	--已经上场的怪物列表
 	self.monster_team = {}
+	--当前添加了事件监听器的卡片列表   优化使用
+	self.card_list = {}
+	--当前的队伍大小
 	self.team_size = 0
+	--将要在下次被清理掉的棋子节点   这里是因为有个动画效果，所以延迟清理
 	self.chesspiece_willbe_removed = nil
-
-	self.monsters_list = Config.Monster
-
+	--已经收集到的怪物卡片列表
+	self.collected_monster_list = self.ctrl:getCollectedMonsterList()
+	--事件分发器
 	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
 
 function embattle_view:initEvents()
 	self:addArenaListener()
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:openAdventureView()
-        self:closeView()
+        self.ctrl:closeEmbattleView()
     end)
 
 end
@@ -58,12 +70,13 @@ function embattle_view:openView()
 	if not self.isInited then
 		self:init()
 	end
-
+	self:resumeMonsterListListener()
 	self:resumeArenaListener()
 	self.root:setPosition(uitool:zero())
 end
 
 function embattle_view:closeView()
+	self:pauseMonsterListListener()
 	self:pauseArenaListener()
 	self.root:setPosition(uitool:farAway())
 end
@@ -73,7 +86,7 @@ end
 
 ------------左边卡池部分开始------------
 function embattle_view:initMonsterLV()
-	local monsters_num = #self.monsters_list
+	local monsters_num = #self.collected_monster_list
 	local mod_num = monsters_num%3
 	local rows_num = monsters_num/3
 
@@ -92,14 +105,15 @@ function embattle_view:initLVItem(item, index)
 	for i=1,3 do
 		local cur_index = i+3*index
 		local cur_monster = {}
-		if self.monsters_list[cur_index] then
+		if self.collected_monster_list[cur_index] then
 			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
-			cur_monster.head_img:loadTexture(self.monsters_list[cur_index].char_img_path)
+			cur_monster.head_img:loadTexture(self.collected_monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
-			cur_monster.border_img:loadTexture(Config.embattle_sprite["card_border_"..self.monsters_list[cur_index].rank])
+			cur_monster.border_img:loadTexture(Config.embattle_sprite["card_border_"..self.collected_monster_list[cur_index].rank])
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
-			cur_monster.type_img:loadTexture(Config.embattle_sprite["attack_type_"..self.monsters_list[cur_index].attack_type])
+			cur_monster.type_img:loadTexture(Config.embattle_sprite["attack_type_"..self.collected_monster_list[cur_index].attack_type])
 			self:addMonsterCardEvent(cur_monster.head_img, cur_index)
+			table.insert(self.card_list,cur_monster.head_img)
 		else
 			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
 			cur_monster.head_img:setVisible(false)
@@ -189,7 +203,7 @@ function embattle_view:selectTheCard(card)
 	selected_sp:setName("selected_sp")
 
 	card:addChild(selected_sp, uitool:top_Z_order())
-
+	card.selected = true
 	selected_sp:setPosition(uitool:getNodeCenterPosition(card))
 end
 
@@ -198,6 +212,22 @@ function embattle_view:unselectTheCard(card)
 
 	if card:getChildByName("selected_sp") then
 		card:removeChildByName("selected_sp")
+	end
+end
+
+function embattle_view:resumeMonsterListListener()
+	for _,v in pairs(self.card_list) do
+		if not v.selected then
+			self.eventDispatcher:resumeEventListenersForTarget(v)
+		end
+	end
+end
+
+function embattle_view:pauseMonsterListListener()
+	for _,v in pairs(self.card_list) do
+		if not v.selected then
+			self.eventDispatcher:pauseEventListenersForTarget(v)
+		end
 	end
 end
 ------------左边卡池部分结束------------
@@ -210,12 +240,12 @@ function embattle_view:createChesspiece(index)
 	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}
 	chesspiece:setBlendFunc(blendfunc)
 	
-	local face_sp = cc.Sprite:create(self.monsters_list[index].char_img_path)
+	local face_sp = cc.Sprite:create(self.collected_monster_list[index].char_img_path)
 	blendfunc = {src = gl.ONE_MINUS_DST_ALPHA, dst = gl.DST_ALPHA}
 	face_sp:setBlendFunc(blendfunc)
 	face_sp:setName("face_sp")
 
-	local hex_border = cc.Sprite:create(Config.embattle_sprite["hex_border_"..self.monsters_list[index].rank])
+	local hex_border = cc.Sprite:create(Config.embattle_sprite["hex_border_"..self.collected_monster_list[index].rank])
 	hex_border:setScale(2.0)
 	hex_border:setName("hex_border")
 	chesspiece:addChild(hex_border, uitool:bottom_Z_order()+5)

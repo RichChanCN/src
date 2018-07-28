@@ -18,7 +18,9 @@ MainScene.RESOURCE_BINDING = {
 	--confirm_view
     ["confirm_view"]		= {["varname"] = "confirm_view"},
 	--embattle_view
-    ["embattle_view"]			= {["varname"] = "embattle_view"},
+    ["embattle_view"]		= {["varname"] = "embattle_view"},
+    --monster_list_view
+    ["monster_list_view"]	= {["varname"] = "monster_list_view"},
 
 }
 
@@ -36,6 +38,7 @@ function MainScene:viewInit()
 	self.adventure_view:init()
 	self.confirm_view:init()
 	self.embattle_view:init()
+	self.monster_list_view:init()
 end
 
 function MainScene:openMainView()
@@ -50,15 +53,45 @@ function MainScene:closeMainView()
 	end
 end
 
+function MainScene:openMonsterListView()
+	if self.monster_list_view then
+		self.main_view:closeView()
+		self.monster_list_view:openView()
+	end
+end
+
+function MainScene:closeMonsterListView()
+	if self.monster_list_view then
+        self.main_view:openView()
+		self.monster_list_view:closeView()
+	end
+end
+
 function MainScene:openAdventureView()
 	if self.adventure_view then
+		self.main_view:closeView()
 		self.adventure_view:openView()
 	end
 end
 
 function MainScene:closeAdventureView()
 	if self.adventure_view then
+        self.main_view:openView()
 		self.adventure_view:closeView()
+	end
+end
+
+function MainScene:openEmbattleView()
+	if self.embattle_view then
+        self.adventure_view:closeView()
+		self.embattle_view:openView()
+	end
+end
+
+function MainScene:closeEmbattleView()
+	if self.embattle_view then
+        self.adventure_view:openView()
+		self.embattle_view:closeView()
 	end
 end
 
@@ -68,15 +101,20 @@ function MainScene:openConfirmView()
 	end
 end
 
+function MainScene:closeConfirmView()
+	if self.confirm_view then
+		self.confirm_view:closeView()
+	end
+end
+
 function MainScene:openSettingView()
 	if self.setting_view then
 		self.setting_view:openView()
 	end
 end
 
-function MainScene:openReadyView()
-	if self.embattle_view then
-		self.embattle_view:openView()
-	end
+function MainScene:getCollectedMonsterList()
+	return Config.Monster
 end
+
 return MainScene

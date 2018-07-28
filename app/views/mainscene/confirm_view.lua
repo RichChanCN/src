@@ -12,12 +12,11 @@ end
 
 function confirm_view:initEvents()
 	self.close_btn:addClickEventListener(function(sender)
-        self:closeView()
+        self.ctrl:closeConfirmView()
     end)
     uitool:makeImgToButton(self.go_img,function(sender)
-    	self:closeView()
-    	self.ctrl:closeAdventureView()
-    	self.ctrl:openReadyView()
+    	self.ctrl:closeConfirmView()
+    	self.ctrl:openEmbattleView()
     end)
 end
 

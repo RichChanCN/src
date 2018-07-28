@@ -4,11 +4,10 @@ function ViewBase:instance()
 	return setmetatable({}, { __index = self })
 end
 
-function ViewBase:new( name, root, ctrl, data )
+function ViewBase:new( name, root, ctrl)
 	self.name = name
 	self.root = root
 	self.ctrl = ctrl
-	self.data = data
 	self.isInited = false
 
 	return self
