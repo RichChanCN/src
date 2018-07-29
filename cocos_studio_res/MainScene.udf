@@ -3,6 +3,7 @@
     <Item Key="GuidesList">
       <Value ctype="GuidesData">
         <HorizontalList>
+          <Guides Direction="Horizontal" Position="-2160.0000" />
           <Guides Direction="Horizontal" Position="-1080.0000" />
           <Guides Direction="Horizontal" Position="0.0000" />
           <Guides Direction="Horizontal" Position="1080.0000" />

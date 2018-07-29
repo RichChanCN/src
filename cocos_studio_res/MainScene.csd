@@ -6,7 +6,7 @@
       <ObjectData Name="Scene" ctype="GameNodeObjectData">
         <Size X="1920.0000" Y="1080.0000" />
         <Children>
-          <AbstractNodeData Name="main_view" ActionTag="-1505955542" Tag="35" IconVisible="False" LeftMargin="-0.0002" RightMargin="0.0002" BottomMargin="-0.0001" TouchEnable="True" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
+          <AbstractNodeData Name="main_view" ActionTag="-1505955542" Tag="35" IconVisible="False" LeftMargin="-0.0002" RightMargin="0.0002" TopMargin="0.0001" BottomMargin="-0.0001" TouchEnable="True" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
               <AbstractNodeData Name="main_bg_img" CanEdit="False" ActionTag="-451187282" Tag="2" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="573.0760" RightMargin="571.9241" TopMargin="352.5000" BottomMargin="352.5000" Scale9Width="775" Scale9Height="375" ctype="ImageViewObjectData">
@@ -253,7 +253,7 @@
                 <PreSize X="0.0156" Y="0.1389" />
                 <FileData Type="Normal" Path="Sprite/main_city_bottom_bg.png" Plist="" />
               </AbstractNodeData>
-              <AbstractNodeData Name="bottom_node" ActionTag="1121148571" Tag="36" IconVisible="True" LeftMargin="1919.1962" RightMargin="0.8038" TopMargin="996.5008" BottomMargin="83.4992" ctype="SingleNodeObjectData">
+              <AbstractNodeData Name="bottom_node" CanEdit="False" ActionTag="1121148571" Tag="36" IconVisible="True" LeftMargin="1919.1962" RightMargin="0.8038" TopMargin="996.5008" BottomMargin="83.4992" ctype="SingleNodeObjectData">
                 <Size X="0.0000" Y="0.0000" />
                 <Children>
                   <AbstractNodeData Name="help_btn" ActionTag="-1530806657" Tag="40" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-133.2652" RightMargin="54.2652" TopMargin="-42.5000" BottomMargin="-42.5000" TouchEnable="True" FontSize="14" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="49" Scale9Height="63" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
@@ -1694,6 +1694,43 @@
               </AbstractNodeData>
               <AbstractNodeData Name="hex_node" CanEdit="False" ActionTag="-1855192684" Tag="229" IconVisible="True" LeftMargin="1300.0000" RightMargin="620.0000" TopMargin="540.0000" BottomMargin="540.0000" ctype="SingleNodeObjectData">
                 <Size X="0.0000" Y="0.0000" />
+                <Children>
+                  <AbstractNodeData Name="chesspiece_template" ActionTag="1753223296" Tag="206" IconVisible="False" LeftMargin="-75.0000" RightMargin="-75.0000" TopMargin="-1279.6974" BottomMargin="1133.6974" ctype="SpriteObjectData">
+                    <Size X="150.0000" Y="146.0000" />
+                    <Children>
+                      <AbstractNodeData Name="face_sp" CanEdit="False" ActionTag="333925701" Tag="205" IconVisible="False" TopMargin="-17.0000" BottomMargin="-17.0000" ctype="SpriteObjectData">
+                        <Size X="150.0000" Y="180.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="73.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.0000" Y="1.2329" />
+                        <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
+                        <BlendFunc Src="773" Dst="772" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="hex_border" CanEdit="False" ActionTag="452062601" Tag="204" IconVisible="False" LeftMargin="30.0000" RightMargin="30.0000" TopMargin="28.0000" BottomMargin="28.0000" ctype="SpriteObjectData">
+                        <Size X="90.0000" Y="90.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="73.0000" />
+                        <Scale ScaleX="2.0000" ScaleY="2.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="0.6000" Y="0.6164" />
+                        <FileData Type="Normal" Path="Sprite/hex_tile_border_1.png" Plist="" />
+                        <BlendFunc Src="1" Dst="771" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position Y="1206.6974" />
+                    <Scale ScaleX="0.5000" ScaleY="0.5000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <FileData Type="Normal" Path="Sprite/header_hex_mask.png" Plist="" />
+                    <BlendFunc Src="771" Dst="771" />
+                  </AbstractNodeData>
+                </Children>
                 <AnchorPoint />
                 <Position X="1300.0000" Y="540.0000" />
                 <Scale ScaleX="1.3500" ScaleY="1.3500" />
@@ -1701,47 +1738,311 @@
                 <PrePosition X="0.6771" Y="0.5000" />
                 <PreSize X="0.0000" Y="0.0000" />
               </AbstractNodeData>
-              <AbstractNodeData Name="chesspiece_template" ActionTag="1753223296" Tag="206" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="1955.8447" RightMargin="-185.8447" TopMargin="-160.7290" BottomMargin="1094.7290" ctype="SpriteObjectData">
-                <Size X="150.0000" Y="146.0000" />
-                <Children>
-                  <AbstractNodeData Name="face_sp" CanEdit="False" ActionTag="333925701" Tag="205" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" TopMargin="-17.0000" BottomMargin="-17.0000" ctype="SpriteObjectData">
-                    <Size X="150.0000" Y="180.0000" />
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="75.0000" Y="73.0000" />
-                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.5000" Y="0.5000" />
-                    <PreSize X="1.0000" Y="1.2329" />
-                    <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
-                    <BlendFunc Src="773" Dst="772" />
-                  </AbstractNodeData>
-                  <AbstractNodeData Name="hex_border" CanEdit="False" ActionTag="452062601" Tag="204" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="30.0000" RightMargin="30.0000" TopMargin="28.0000" BottomMargin="28.0000" ctype="SpriteObjectData">
-                    <Size X="90.0000" Y="90.0000" />
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="75.0000" Y="73.0000" />
-                    <Scale ScaleX="2.0000" ScaleY="2.0000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.5000" Y="0.5000" />
-                    <PreSize X="0.6000" Y="0.6164" />
-                    <FileData Type="Normal" Path="Sprite/hex_tile_border_1.png" Plist="" />
-                    <BlendFunc Src="1" Dst="771" />
-                  </AbstractNodeData>
-                </Children>
-                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="2030.8447" Y="1167.7290" />
-                <Scale ScaleX="0.6750" ScaleY="0.6750" />
-                <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="1.0577" Y="1.0812" />
-                <PreSize X="0.0781" Y="0.1352" />
-                <FileData Type="Normal" Path="Sprite/header_hex_mask.png" Plist="" />
-                <BlendFunc Src="771" Dst="771" />
-              </AbstractNodeData>
             </Children>
             <AnchorPoint />
             <Position X="-0.0001" Y="3240.0002" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
             <PrePosition X="0.0000" Y="3.0000" />
+            <PreSize X="1.0000" Y="1.0000" />
+            <SingleColor A="255" R="18" G="25" B="47" />
+            <FirstColor A="255" R="150" G="200" B="255" />
+            <EndColor A="255" R="255" G="255" B="255" />
+            <ColorVector ScaleY="1.0000" />
+          </AbstractNodeData>
+          <AbstractNodeData Name="monster_list_view" ActionTag="-1391635814" Tag="212" IconVisible="False" TopMargin="2160.0132" BottomMargin="-2160.0132" TouchEnable="True" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
+            <Size X="1920.0000" Y="1080.0000" />
+            <Children>
+              <AbstractNodeData Name="title_text" ActionTag="-1136529744" Tag="210" IconVisible="False" LeftMargin="225.0000" RightMargin="1385.0000" TopMargin="57.5000" BottomMargin="977.5000" FontSize="50" LabelText="Monsters List" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                <Size X="310.0000" Y="45.0000" />
+                <AnchorPoint ScaleY="0.5000" />
+                <Position X="225.0000" Y="1000.0000" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.1172" Y="0.9259" />
+                <PreSize X="0.1615" Y="0.0417" />
+                <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                <OutlineColor A="255" R="0" G="0" B="0" />
+                <ShadowColor A="255" R="110" G="110" B="110" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="back_btn" ActionTag="2070156101" Tag="208" IconVisible="False" LeftMargin="0.0012" RightMargin="1709.9988" TopMargin="0.0061" BottomMargin="959.9940" TouchEnable="True" FontSize="14" LeftEage="15" RightEage="15" TopEage="11" BottomEage="11" Scale9OriginX="15" Scale9OriginY="11" Scale9Width="114" Scale9Height="49" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="ButtonObjectData">
+                <Size X="210.0000" Y="120.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="105.0012" Y="1019.9940" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.0547" Y="0.9444" />
+                <PreSize X="0.1094" Y="0.1111" />
+                <TextColor A="255" R="65" G="65" B="70" />
+                <NormalFileData Type="Normal" Path="Sprite/button_back.png" Plist="" />
+                <OutlineColor A="255" R="255" G="0" B="0" />
+                <ShadowColor A="255" R="110" G="110" B="110" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="monster_lv" ActionTag="591445274" Tag="213" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="0.0001" RightMargin="-0.0001" TopMargin="165.0001" BottomMargin="64.9999" TouchEnable="True" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" IsBounceEnabled="True" ScrollDirectionType="0" DirectionType="Vertical" HorizontalType="Align_HorizontalCenter" ctype="ListViewObjectData">
+                <Size X="1920.0000" Y="850.0000" />
+                <Children>
+                  <AbstractNodeData Name="collected_title_panel" ActionTag="2080715963" Tag="224" IconVisible="False" LeftMargin="210.0000" RightMargin="210.0000" BottomMargin="750.0000" TouchEnable="True" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
+                    <Size X="1500.0000" Y="100.0000" />
+                    <Children>
+                      <AbstractNodeData Name="collected_title_img" ActionTag="-1232321663" Tag="225" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="50.0000" RightMargin="50.0000" TopMargin="6.0000" BottomMargin="34.0000" LeftEage="214" RightEage="214" TopEage="19" BottomEage="19" Scale9OriginX="214" Scale9OriginY="19" Scale9Width="222" Scale9Height="22" ctype="ImageViewObjectData">
+                        <Size X="1400.0000" Y="60.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="750.0000" Y="64.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.6400" />
+                        <PreSize X="0.9333" Y="0.6000" />
+                        <FileData Type="Normal" Path="Sprite/bg_chat_join.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="title_text" ActionTag="-1900294250" Tag="226" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="663.5000" RightMargin="663.5000" TopMargin="17.0000" BottomMargin="47.0000" FontSize="40" LabelText="Collected" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                        <Size X="173.0000" Y="36.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="750.0000" Y="65.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.6500" />
+                        <PreSize X="0.1153" Y="0.3600" />
+                        <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                        <OutlineColor A="255" R="0" G="0" B="0" />
+                        <ShadowColor A="255" R="110" G="110" B="110" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="title_text_0" ActionTag="739530077" Tag="227" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="389.0206" RightMargin="385.9795" TopMargin="70.0000" BottomMargin="2.0000" FontSize="30" LabelText="You can get the collected monsters in all the outputs" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                        <Size X="725.0000" Y="28.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="751.5206" Y="16.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="169" G="203" B="235" />
+                        <PrePosition X="0.5010" Y="0.1600" />
+                        <PreSize X="0.4833" Y="0.2800" />
+                        <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                        <OutlineColor A="255" R="0" G="0" B="0" />
+                        <ShadowColor A="255" R="110" G="110" B="110" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint />
+                    <Position X="210.0000" Y="750.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.1094" Y="0.8824" />
+                    <PreSize X="0.7813" Y="0.1176" />
+                    <SingleColor A="255" R="150" G="200" B="255" />
+                    <FirstColor A="255" R="150" G="200" B="255" />
+                    <EndColor A="255" R="255" G="255" B="255" />
+                    <ColorVector ScaleY="1.0000" />
+                  </AbstractNodeData>
+                </Children>
+                <AnchorPoint ScaleX="0.5005" ScaleY="0.5000" />
+                <Position X="960.9685" Y="489.9999" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.5005" Y="0.4537" />
+                <PreSize X="1.0000" Y="0.7870" />
+                <SingleColor A="255" R="150" G="150" B="255" />
+                <FirstColor A="255" R="150" G="150" B="255" />
+                <EndColor A="255" R="255" G="255" B="255" />
+                <ColorVector ScaleY="1.0000" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="top_line_img" CanEdit="False" ActionTag="-1915310981" Tag="209" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="110.0000" RightMargin="110.0000" TopMargin="115.0000" BottomMargin="915.0000" LeftEage="331" RightEage="331" TopEage="12" BottomEage="12" Scale9OriginX="331" Scale9OriginY="12" Scale9Width="343" Scale9Height="14" ctype="ImageViewObjectData">
+                <Size X="1700.0000" Y="50.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="960.0000" Y="940.0000" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.5000" Y="0.8704" />
+                <PreSize X="0.8854" Y="0.0463" />
+                <FileData Type="Normal" Path="Sprite/line_top.png" Plist="" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="bottom_line_img" CanEdit="False" ActionTag="-1621380496" Tag="212" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="110.0000" RightMargin="110.0000" TopMargin="1020.0000" BottomMargin="10.0000" LeftEage="331" RightEage="331" TopEage="12" BottomEage="12" Scale9OriginX="331" Scale9OriginY="12" Scale9Width="343" Scale9Height="14" ctype="ImageViewObjectData">
+                <Size X="1700.0000" Y="50.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="960.0000" Y="35.0000" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.5000" Y="0.0324" />
+                <PreSize X="0.8854" Y="0.0463" />
+                <FileData Type="Normal" Path="Sprite/line_bottom.png" Plist="" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="template_panel" ActionTag="-1555805412" ZOrder="1" Tag="214" IconVisible="False" LeftMargin="2440.0154" RightMargin="-1920.0154" TopMargin="-0.0468" BottomMargin="730.0468" TouchEnable="True" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
+                <Size X="1400.0000" Y="350.0000" />
+                <Children>
+                  <AbstractNodeData Name="monster_1_img" ActionTag="444743008" Tag="215" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="70.0000" RightMargin="1180.0000" TopMargin="85.0000" BottomMargin="85.0000" TouchEnable="True" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+                    <Size X="150.0000" Y="180.0000" />
+                    <Children>
+                      <AbstractNodeData Name="border_img" CanEdit="False" ActionTag="-469505595" Tag="216" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-17.0000" RightMargin="-17.0000" TopMargin="-18.0000" BottomMargin="-18.0000" Scale9Width="184" Scale9Height="216" ctype="ImageViewObjectData">
+                        <Size X="184.0000" Y="216.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="90.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.2267" Y="1.2000" />
+                        <FileData Type="Normal" Path="Sprite/hero_card_border_1.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="type_img" ActionTag="-273620412" Tag="217" IconVisible="False" LeftMargin="-27.5000" RightMargin="113.5000" TopMargin="-30.0000" BottomMargin="147.0000" Scale9Width="64" Scale9Height="63" ctype="ImageViewObjectData">
+                        <Size X="64.0000" Y="63.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="4.5000" Y="178.5000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.0300" Y="0.9917" />
+                        <PreSize X="0.4267" Y="0.3500" />
+                        <FileData Type="Normal" Path="Sprite/icon_attack_type_1.png" Plist="" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="145.0000" Y="175.0000" />
+                    <Scale ScaleX="1.4500" ScaleY="1.4500" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.1036" Y="0.5000" />
+                    <PreSize X="0.1071" Y="0.5143" />
+                    <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="monster_2_img" ActionTag="-340209581" Tag="218" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="350.0000" RightMargin="900.0000" TopMargin="87.7490" BottomMargin="82.2510" TouchEnable="True" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+                    <Size X="150.0000" Y="180.0000" />
+                    <Children>
+                      <AbstractNodeData Name="border_img" CanEdit="False" ActionTag="-1947309354" Tag="219" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-17.0000" RightMargin="-17.0000" TopMargin="-18.0000" BottomMargin="-18.0000" Scale9Width="184" Scale9Height="216" ctype="ImageViewObjectData">
+                        <Size X="184.0000" Y="216.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="90.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.2267" Y="1.2000" />
+                        <FileData Type="Normal" Path="Sprite/hero_card_border_1.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="type_img" ActionTag="821367242" Tag="220" IconVisible="False" LeftMargin="-27.5000" RightMargin="113.5000" TopMargin="-30.0000" BottomMargin="147.0000" Scale9Width="64" Scale9Height="63" ctype="ImageViewObjectData">
+                        <Size X="64.0000" Y="63.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="4.5000" Y="178.5000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.0300" Y="0.9917" />
+                        <PreSize X="0.4267" Y="0.3500" />
+                        <FileData Type="Normal" Path="Sprite/icon_attack_type_1.png" Plist="" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="425.0000" Y="172.2510" />
+                    <Scale ScaleX="1.4500" ScaleY="1.4500" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.3036" Y="0.4921" />
+                    <PreSize X="0.1071" Y="0.5143" />
+                    <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="monster_3_img" ActionTag="1293003651" Tag="221" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="630.0000" RightMargin="620.0000" TopMargin="85.0000" BottomMargin="85.0000" TouchEnable="True" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+                    <Size X="150.0000" Y="180.0000" />
+                    <Children>
+                      <AbstractNodeData Name="border_img" CanEdit="False" ActionTag="1203201922" Tag="222" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-17.0000" RightMargin="-17.0000" TopMargin="-18.0000" BottomMargin="-18.0000" Scale9Width="184" Scale9Height="216" ctype="ImageViewObjectData">
+                        <Size X="184.0000" Y="216.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="90.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.2267" Y="1.2000" />
+                        <FileData Type="Normal" Path="Sprite/hero_card_border_1.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="type_img" ActionTag="-1216149480" Tag="223" IconVisible="False" LeftMargin="-27.5000" RightMargin="113.5000" TopMargin="-30.0000" BottomMargin="147.0000" Scale9Width="64" Scale9Height="63" ctype="ImageViewObjectData">
+                        <Size X="64.0000" Y="63.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="4.5000" Y="178.5000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.0300" Y="0.9917" />
+                        <PreSize X="0.4267" Y="0.3500" />
+                        <FileData Type="Normal" Path="Sprite/icon_attack_type_1.png" Plist="" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="705.0000" Y="175.0000" />
+                    <Scale ScaleX="1.4500" ScaleY="1.4500" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.5036" Y="0.5000" />
+                    <PreSize X="0.1071" Y="0.5143" />
+                    <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="monster_4_img" ActionTag="-471058733" Tag="228" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="910.0000" RightMargin="340.0000" TopMargin="85.0000" BottomMargin="85.0000" TouchEnable="True" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+                    <Size X="150.0000" Y="180.0000" />
+                    <Children>
+                      <AbstractNodeData Name="border_img" CanEdit="False" ActionTag="-1274221663" Tag="229" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-17.0000" RightMargin="-17.0000" TopMargin="-18.0000" BottomMargin="-18.0000" Scale9Width="184" Scale9Height="216" ctype="ImageViewObjectData">
+                        <Size X="184.0000" Y="216.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="90.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.2267" Y="1.2000" />
+                        <FileData Type="Normal" Path="Sprite/hero_card_border_1.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="type_img" ActionTag="-236152450" Tag="230" IconVisible="False" LeftMargin="-27.5000" RightMargin="113.5000" TopMargin="-30.0000" BottomMargin="147.0000" Scale9Width="64" Scale9Height="63" ctype="ImageViewObjectData">
+                        <Size X="64.0000" Y="63.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="4.5000" Y="178.5000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.0300" Y="0.9917" />
+                        <PreSize X="0.4267" Y="0.3500" />
+                        <FileData Type="Normal" Path="Sprite/icon_attack_type_1.png" Plist="" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="985.0000" Y="175.0000" />
+                    <Scale ScaleX="1.4500" ScaleY="1.4500" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.7036" Y="0.5000" />
+                    <PreSize X="0.1071" Y="0.5143" />
+                    <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="monster_5_img" ActionTag="-894138426" Tag="231" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="1190.0000" RightMargin="60.0000" TopMargin="85.0000" BottomMargin="85.0000" TouchEnable="True" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+                    <Size X="150.0000" Y="180.0000" />
+                    <Children>
+                      <AbstractNodeData Name="border_img" CanEdit="False" ActionTag="-581677736" Tag="232" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-17.0000" RightMargin="-17.0000" TopMargin="-18.0000" BottomMargin="-18.0000" Scale9Width="184" Scale9Height="216" ctype="ImageViewObjectData">
+                        <Size X="184.0000" Y="216.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="90.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.2267" Y="1.2000" />
+                        <FileData Type="Normal" Path="Sprite/hero_card_border_1.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="type_img" ActionTag="-297007875" Tag="233" IconVisible="False" LeftMargin="-27.5000" RightMargin="113.5000" TopMargin="-30.0000" BottomMargin="147.0000" Scale9Width="64" Scale9Height="63" ctype="ImageViewObjectData">
+                        <Size X="64.0000" Y="63.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="4.5000" Y="178.5000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.0300" Y="0.9917" />
+                        <PreSize X="0.4267" Y="0.3500" />
+                        <FileData Type="Normal" Path="Sprite/icon_attack_type_1.png" Plist="" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="1265.0000" Y="175.0000" />
+                    <Scale ScaleX="1.4500" ScaleY="1.4500" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.9036" Y="0.5000" />
+                    <PreSize X="0.1071" Y="0.5143" />
+                    <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
+                  </AbstractNodeData>
+                </Children>
+                <AnchorPoint />
+                <Position X="2440.0154" Y="730.0468" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="1.2708" Y="0.6760" />
+                <PreSize X="0.7292" Y="0.3241" />
+                <SingleColor A="255" R="150" G="200" B="255" />
+                <FirstColor A="255" R="150" G="200" B="255" />
+                <EndColor A="255" R="255" G="255" B="255" />
+                <ColorVector ScaleY="1.0000" />
+              </AbstractNodeData>
+            </Children>
+            <AnchorPoint />
+            <Position Y="-2160.0132" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <PrePosition Y="-2.0000" />
             <PreSize X="1.0000" Y="1.0000" />
             <SingleColor A="255" R="18" G="25" B="47" />
             <FirstColor A="255" R="150" G="200" B="255" />
