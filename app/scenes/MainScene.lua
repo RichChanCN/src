@@ -21,7 +21,8 @@ MainScene.RESOURCE_BINDING = {
     ["embattle_view"]		= {["varname"] = "embattle_view"},
     --monster_list_view
     ["monster_list_view"]	= {["varname"] = "monster_list_view"},
-
+    --monster_info_view
+    ["monster_info_view"]	= {["varname"] = "monster_info_view"},
 }
 
 --面板文件位置
@@ -39,6 +40,7 @@ function MainScene:viewInit()
 	self.confirm_view:init()
 	self.embattle_view:init()
 	self.monster_list_view:init()
+	self.monster_info_view:init()
 end
 
 function MainScene:openMainView()
@@ -64,6 +66,20 @@ function MainScene:closeMonsterListView()
 	if self.monster_list_view then
         self.main_view:openView()
 		self.monster_list_view:closeView()
+	end
+end
+
+function MainScene:openMonsterInfoView(data)
+	if self.monster_info_view then
+		self.monster_list_view:closeView()
+		self.monster_info_view:openView(data)
+	end
+end
+
+function MainScene:closeMonsterInfoView()
+	if self.monster_info_view then
+        self.monster_list_view:openView()
+		self.monster_info_view:closeView()
 	end
 end
 

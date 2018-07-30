@@ -9,15 +9,17 @@ monster_list_view.RESOURCE_BINDING = {
 }
 
 function monster_list_view:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
+	if not self.isInited then
+		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
-	self:initInfo()
+		self:initInfo()
+		self:initEvents()
+		self:initMonsterLV()
 
-	self:initEvents()
-
-	self:initMonsterLV()
-
-	self.isInited = true
+		self.isInited = true
+	else
+		print(self.name.." is inited! scape the init()")
+	end
 end
 
 
@@ -91,11 +93,11 @@ function monster_list_view:initLVItem(item, index)
 			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
 			cur_monster.head_img:loadTexture(self.collected_monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
-			cur_monster.border_img:loadTexture(Config.embattle_sprite["card_border_"..self.collected_monster_list[cur_index].rank])
+			cur_monster.border_img:loadTexture(Config.embattle_sprite["card_border_"..self.collected_monster_list[cur_index].rarity])
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
 			cur_monster.type_img:loadTexture(Config.embattle_sprite["attack_type_"..self.collected_monster_list[cur_index].attack_type])
 			cur_monster.head_img:addClickEventListener(function(sender)
-				print("click!")
+				self.ctrl:openMonsterInfoView(self.collected_monster_list[cur_index])
 			end)
 			table.insert(self.card_list,cur_monster.head_img)
 		else

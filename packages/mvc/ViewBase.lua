@@ -14,12 +14,16 @@ function ViewBase:new( name, root, ctrl)
 end
 
 function ViewBase:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
+	if not self.isInited then
+		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
-	self:initInfo()
-	self:initEvents()
+		self:initInfo()
+		self:initEvents()
 
-	self.isInited = true
+		self.isInited = true
+	else
+		print(self.name.." is inited! scape the init()")
+	end
 end
 
 function ViewBase:initInfo()

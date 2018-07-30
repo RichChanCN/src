@@ -17,12 +17,18 @@ embattle_view.RESOURCE_BINDING = {
 -------------------------------公有方法--------------------------
 ----------------------------------------------------------------
 function embattle_view:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
-	self:initInfo()
-	self:initArena()
-	self:initEvents()
-	self:initMonsterLV()
-	self.isInited = true
+	if not self.isInited then
+		uitool:createUIBinding(self, self.RESOURCE_BINDING)
+
+		self:initInfo()
+		self:initArena()
+		self:initEvents()
+		self:initMonsterLV()
+		
+		self.isInited = true
+	else
+		print(self.name.." is inited! scape the init()")
+	end
 end
 
 function embattle_view:initInfo()
@@ -109,7 +115,7 @@ function embattle_view:initLVItem(item, index)
 			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
 			cur_monster.head_img:loadTexture(self.collected_monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
-			cur_monster.border_img:loadTexture(Config.embattle_sprite["card_border_"..self.collected_monster_list[cur_index].rank])
+			cur_monster.border_img:loadTexture(Config.embattle_sprite["card_border_"..self.collected_monster_list[cur_index].rarity])
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
 			cur_monster.type_img:loadTexture(Config.embattle_sprite["attack_type_"..self.collected_monster_list[cur_index].attack_type])
 			self:addMonsterCardEvent(cur_monster.head_img, cur_index)
@@ -245,7 +251,7 @@ function embattle_view:createChesspiece(index)
 	face_sp:setBlendFunc(blendfunc)
 	face_sp:setName("face_sp")
 
-	local hex_border = cc.Sprite:create(Config.embattle_sprite["hex_border_"..self.collected_monster_list[index].rank])
+	local hex_border = cc.Sprite:create(Config.embattle_sprite["hex_border_"..self.collected_monster_list[index].rarity])
 	hex_border:setScale(2.0)
 	hex_border:setName("hex_border")
 	chesspiece:addChild(hex_border, uitool:bottom_Z_order()+5)

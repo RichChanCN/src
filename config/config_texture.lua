@@ -1,6 +1,7 @@
 Config = Config or {}
-Config.sprite_path = "sprite/"
-Config.monster_img_path = "monster/"
+Config.sprite_path = "Sprite/"
+Config.monster_img_path = "Monster/"
+Config.model_path = "Model/"
 
 Config.embattle_sprite = {
 	gezi_raw = Config.sprite_path.."hex_tile_enabled.png",
