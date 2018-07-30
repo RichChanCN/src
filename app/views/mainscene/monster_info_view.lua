@@ -97,10 +97,11 @@ function monster_info_view:createModel(data)
 	local callback = function(model)
 		--print("load finish")
 		self.model_panel:addChild(model)
-		model:setScale(200)
+		--model:setScale(200)
 		--model:setContentSize(400,300)
 		model:setPosition(uitool:getNodeCenterPosition(self.model_panel))
 		--model:setGlobalZOrder(uitool:mid_Z_order())
+        --model:setCameraMask(2)
 		self.monster_model = model
 		self.is_model_loaded = true
         self:initModelCamera()
@@ -112,11 +113,17 @@ end
 function monster_info_view:initModelCamera()
 	local size = self.model_panel:getContentSize()
 	self.model_camera = cc.Camera:createPerspective(45,size.width/size.height,1,1000)
-	self.model_camera:setPosition3D(cc.vec3(0,0,50))
-	self.model_camera:lookAt(cc.vec3(0,0,0),cc.vec3(0,1,0))
+    --self.model_camera = cc.Camera:createOrthographic(size.width, size.height, 1, 1000);
 
+    self.model_camera:lookAt(cc.vec3(400,300,0))
+    self.model_camera:setPosition3D(cc.vec3(400,300,5))
+    self.model_camera:setCameraFlag(cc.CameraFlag.USER1)
 	self.model_camera:setName("model_camera")
-	self.monster_model:addChild(self.model_camera)
+
+    self.model_panel:addChild(self.model_camera)
+	self.model_panel:setCameraMask(2)
+    local pos = self.monster_model:getPosition3D()
+	print(pos.x,pos.y,pos.z)
 end
 
 function monster_info_view:initModelEvents()
