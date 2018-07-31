@@ -115,9 +115,9 @@ function embattle_view:initLVItem(item, index)
 			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
 			cur_monster.head_img:loadTexture(self.collected_monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
-			cur_monster.border_img:loadTexture(Config.embattle_sprite["card_border_"..self.collected_monster_list[cur_index].rarity])
+			cur_monster.border_img:loadTexture(Config.sprite["card_border_"..self.collected_monster_list[cur_index].rarity])
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
-			cur_monster.type_img:loadTexture(Config.embattle_sprite["attack_type_"..self.collected_monster_list[cur_index].attack_type])
+			cur_monster.type_img:loadTexture(Config.sprite["attack_type_"..self.collected_monster_list[cur_index].attack_type])
 			self:addMonsterCardEvent(cur_monster.head_img, cur_index)
 			table.insert(self.card_list,cur_monster.head_img)
 		else
@@ -205,9 +205,9 @@ end
 
 function embattle_view:selectTheCard(card)
 	self.eventDispatcher:pauseEventListenersForTarget(card)
-	local selected_sp = cc.Sprite:create(Config.embattle_sprite.selected)
+	local selected_sp = cc.Sprite:create(Config.sprite.selected)
 	selected_sp:setName("selected_sp")
-
+	selected_sp:setScale(1.5)
 	card:addChild(selected_sp, uitool:top_Z_order())
 	card.selected = true
 	selected_sp:setPosition(uitool:getNodeCenterPosition(card))
@@ -241,7 +241,7 @@ end
 ------------棋子部分开始------------
 function embattle_view:createChesspiece(index)
 
-	local chesspiece = cc.Sprite:create(Config.embattle_sprite.chesspiece_mask)
+	local chesspiece = cc.Sprite:create(Config.sprite.chesspiece_mask)
 	chesspiece:setScale(0.5)
 	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}
 	chesspiece:setBlendFunc(blendfunc)
@@ -251,7 +251,7 @@ function embattle_view:createChesspiece(index)
 	face_sp:setBlendFunc(blendfunc)
 	face_sp:setName("face_sp")
 
-	local hex_border = cc.Sprite:create(Config.embattle_sprite["hex_border_"..self.collected_monster_list[index].rarity])
+	local hex_border = cc.Sprite:create(Config.sprite["hex_border_"..self.collected_monster_list[index].rarity])
 	hex_border:setScale(2.0)
 	hex_border:setName("hex_border")
 	chesspiece:addChild(hex_border, uitool:bottom_Z_order()+5)
@@ -360,7 +360,7 @@ function embattle_view:initArena()
 				self["gezi_"..i.."_"..j].arena_pos = cc.p(i,j)
 			end
 			if j<3 and self["gezi_"..i.."_"..j] then
-				self["gezi_"..i.."_"..j]:loadTexture(Config.embattle_sprite.gezi_raw)
+				self["gezi_"..i.."_"..j]:loadTexture(Config.sprite.gezi_raw)
 				self["gezi_"..i.."_"..j]:setScaleX(0.9)
 				self["gezi_"..i.."_"..j]:setScaleY(0.8)
 			end

@@ -63,6 +63,18 @@ function uitool:isTouchInNodeRect(node,touch,event,scale)
     return cc.rectContainsPoint(rect, locationInNode)
 end
 
+
+function uitool:isTouchInNodeCircle(node,touch,event,scale)
+    local scale = scale or 1.0
+    local node = event:getCurrentTarget()
+    local locationInNode = node:convertToNodeSpace(touch:getLocation())
+    local x,y = node:getPosition()
+    local radius = math.min(node:getContentSize().width,node:getContentSize().height)
+    
+
+    return math.pow(locationInNode.x-x,2)+math.pow(locationInNode.y-y,2)<math.pow(radius)
+end
+
 function uitool:moveToAndFadeOut(node,pos)
     local children = node:getChildren()
 
@@ -124,3 +136,4 @@ function uitool:makeImgToButton(img,callback)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
+

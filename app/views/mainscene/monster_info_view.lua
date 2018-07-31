@@ -45,7 +45,9 @@ function monster_info_view:initEvents()
 end
 
 function monster_info_view:updateView(data)
-    self:createModel(data)
+	self.title_text:setString("LEVEL "..data.level.." "..data.name)
+    self:updateLeftModelNode(data)
+    self:updateRightInfoNode(data)
 end
 
 function monster_info_view:openView(data)
@@ -66,10 +68,12 @@ end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
+
+--------------------左边相关开始----------------------
 function monster_info_view:initLeftModelNode()
     self.left_btn 			= self.left_node:getChildByName("left_btn")
     self.right_btn 			= self.left_node:getChildByName("right_btn")
-    self.item_bg_img 		= self.left_node:getChildByName("item_bg_img")
+    self.rarity_sp 			= self.left_node:getChildByName("rarity_sp")
     self.type_sp	 		= self.left_node:getChildByName("type_sp")
     self.type_text	 		= self.left_node:getChildByName("type_text")
     self.rarity_text 		= self.left_node:getChildByName("rarity_text")
@@ -80,29 +84,26 @@ function monster_info_view:initLeftModelNode()
     self.model_panel 		= self.left_node:getChildByName("model_panel")
 end
 
-function monster_info_view:initRightInfoNode()
-    self.upgrade_img				= self.left_node:getChildByName("upgrade_img")
-    self.details_btn 				= self.left_node:getChildByName("details_btn")
-    self.video_btn	 				= self.left_node:getChildByName("video_btn")
-    self.hp_text	 				= self.left_node:getChildByName("hp_text")
-    self.demage_text 				= self.left_node:getChildByName("demage_text")
-    self.physical_defense_text 		= self.left_node:getChildByName("physical_defense_text")
-    self.magic_defense_text 		= self.left_node:getChildByName("magic_defense_text")
-    self.initiative_text 			= self.left_node:getChildByName("initiative_text")
-    self.mobility_text 				= self.left_node:getChildByName("mobility_text")
-    self.defense_penetration_text	= self.left_node:getChildByName("defense_penetration_text")
+function monster_info_view:updateLeftModelNode(data)
+    self:createModel(data)
+
+    self.rarity_sp:setTexture(Config.sprite["rarity_sp_"..data.rarity])
+    self.type_sp:setTexture(Config.sprite["attack_type_"..data.attack_type])
+    self.type_text:setString(Config.text["monster_type_"..data.attack_type])
+    self.rarity_text:setString(Config.text["rarity_text_"..data.rarity])
+    self.rarity_text:setTextColor(Config.color["rarity_color_"..data.rarity])
 end
 
 function monster_info_view:createModel(data)
 	local callback = function(model)
 		--print("load finish")
-		self.model_panel:addChild(model)
-		--model:setScale(200)
+		model:setScale(200)
 		--model:setContentSize(400,300)
 		model:setPosition(uitool:getNodeCenterPosition(self.model_panel))
-		--model:setGlobalZOrder(uitool:mid_Z_order())
-        --model:setCameraMask(2)
+		model:setGlobalZOrder(1)
+        model:setCameraMask(cc.CameraFlag.USER1)
 		self.monster_model = model
+		self.model_panel:addChild(model)
 		self.is_model_loaded = true
         self:initModelCamera()
 	end
@@ -115,15 +116,15 @@ function monster_info_view:initModelCamera()
 	self.model_camera = cc.Camera:createPerspective(45,size.width/size.height,1,1000)
     --self.model_camera = cc.Camera:createOrthographic(size.width, size.height, 1, 1000);
 
-    self.model_camera:lookAt(cc.vec3(400,300,0))
-    self.model_camera:setPosition3D(cc.vec3(400,300,5))
+    self.model_camera:setPosition3D(cc.vec3(960,540,-933))
+    self.model_camera:lookAt(cc.vec3(960,540,0))
     self.model_camera:setCameraFlag(cc.CameraFlag.USER1)
 	self.model_camera:setName("model_camera")
 
-    self.model_panel:addChild(self.model_camera)
-	self.model_panel:setCameraMask(2)
-    local pos = self.monster_model:getPosition3D()
-	print(pos.x,pos.y,pos.z)
+	--self.model_panel:setCameraMask(2)
+    self.model_panel:getScene():addChild(self.model_camera)
+    --local pos = self.monster_model:getPosition3D()
+	--print(pos.x,pos.y,pos.z)
 end
 
 function monster_info_view:initModelEvents()
@@ -165,5 +166,31 @@ function monster_info_view:initModelEvents()
 	local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 	eventDispatcher:addEventListenerWithSceneGraphPriority(self.model_panel.listener, self.model_panel)
 end
+--------------------左边相关结束----------------------
+
+--------------------右边相关开始----------------------
+function monster_info_view:initRightInfoNode()
+	self.upgrade_img				= self.info_bg_img:getChildByName("upgrade_img")
+	self.details_btn 				= self.info_bg_img:getChildByName("details_btn")
+	self.video_btn	 				= self.info_bg_img:getChildByName("video_btn")
+	self.hp_text	 				= self.info_bg_img:getChildByName("hp_text")
+	self.damage_text 				= self.info_bg_img:getChildByName("damage_text")
+	self.physical_defense_text 		= self.info_bg_img:getChildByName("physical_defense_text")
+	self.magic_defense_text 		= self.info_bg_img:getChildByName("magic_defense_text")
+	self.initiative_text 			= self.info_bg_img:getChildByName("initiative_text")
+	self.mobility_text 				= self.info_bg_img:getChildByName("mobility_text")
+	self.defense_penetration_text	= self.info_bg_img:getChildByName("defense_penetration_text")
+end
+
+function monster_info_view:updateRightInfoNode(data)
+	self.hp_text:setString(data.hp)
+	self.damage_text:setString(data.damage)
+	self.physical_defense_text:setString(data.physical_defense)
+	self.magic_defense_text:setString(data.magic_defense)
+	self.initiative_text:setString(data.initiative)
+	self.mobility_text:setString(data.mobility)
+	self.defense_penetration_text:setString(data.defense_penetration)
+end
+--------------------右边相关结束----------------------
 
 return monster_info_view

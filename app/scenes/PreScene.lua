@@ -29,7 +29,6 @@ function PreScene:onCreate()
 end
 
 function PreScene:goToMainScene()
-	--self:getApp():enterScene("MainScene",nil,10)
 	
     local scene = cc.Scene:create()
     local layer = self.app_:createView("MainScene")

@@ -5,7 +5,7 @@ require "config.config"
 require "cocos.init"
 require "tool.mytool"
 require "tool.uitool"
-require "config.config_texture"
+require "config.config_ui"
 require "config.config_monster"
 
 local function main()
@@ -16,7 +16,7 @@ local function main()
 	cc.FileUtils:getInstance():addSearchPath("src")
 	cc.FileUtils:getInstance():addSearchPath("res")
 
-    require("app.MyApp"):create():run()
+    require("app.MyApp"):create():run("FightScene")
 end
 
 local status, msg = xpcall(main, __G__TRACKBACK__)

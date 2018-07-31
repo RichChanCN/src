@@ -32,6 +32,10 @@ function MainScene:onCreate()
 	self:viewInit()
 end
 
+function MainScene:onEnter()
+	
+end
+
 function MainScene:viewInit()
 	self.main_view:init()
 	self.title_right_view:init()
