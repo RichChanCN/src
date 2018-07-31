@@ -12,7 +12,6 @@ function map_view:init()
 		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
 		self:initInfo()
-		self:initCamera()
 		self:initArena()
 		self:initEvents()
 
@@ -24,21 +23,13 @@ end
 
 function map_view:initInfo()
 	self.arena_node:setRotation3D(cc.vec3(-30,0,0))
-	self.camera = nil
+    self.camera = self.ctrl:getScene():getDefaultCamera()
 end
 
 function map_view:initEvents()
 
 	local x,y = self.gezi_2_7:getPosition()
-	print(self.gezi_2_7:getBoundingBox())
-	-- print(x,y)
-	-- pos = self.gezi_2_7:convertToWorldSpace(cc.p(x,y))
-	-- print(pos.x,pos.y)
 
-	-- local x,y = self.arena_node:getPosition()
-	-- print(x,y)
-	-- pos = self.arena_node:convertToWorldSpace(cc.p(x,y))
-	-- print(pos.x,pos.y)
 
 	self:addArenaListener(self.gezi_2_7)
 
@@ -52,16 +43,6 @@ end
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 
-function map_view:initCamera()
-	self.camera = self.ctrl:getScene():getDefaultCamera()
-	-- local pos = self.camera:getPosition3D()
-	-- pos.z = pos.z*math.cos(math.pi/6)
-	-- pos.y = pos.y - 2.5*pos.y*math.sin(math.pi/6)
-	-- self.camera:setPosition3D(pos)
-	-- self.camera:setRotation3D(cc.vec3(30,0,0))
-end
-
-
 --------------------------战场部分开始-------------------------
 function map_view:initArena()
 	for i=1,7 do
@@ -70,6 +51,7 @@ function map_view:initArena()
 			self["gezi_"..i.."_"..j] = self.arena_node:getChildByName("gezi_"..i.."_"..j)
 			if self["gezi_"..i.."_"..j] then
 				self["gezi_"..i.."_"..j].arena_pos = cc.p(i,j)
+                
 			end
 		end
 	end
@@ -81,30 +63,9 @@ function map_view:addArenaListener(img,callback)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
 
-        local locationInNode = touch:getLocationInView()
+        local start_location = touch:getLocation()
 
-        local win_size = cc.Director:getInstance():getWinSizeInPixels()
-        local near_p = cc.vec3(locationInNode.x,locationInNode.y,0)
-        local far_p = cc.vec3(locationInNode.x,locationInNode.y,1)
-        print(near_p.x,near_p.y,near_p.z)
-        -- self.camera:unproject(win_size,near_p,near_p)
-        far_p = self.camera:unproject(far_p)
-        near_p = self.camera:unproject(near_p)
-        print(near_p.x,near_p.y,near_p.z)
-        print(far_p.x,far_p.y,far_p.z)
-
-        local dir = cc.vec3sub(far_p,near_p)
-        print(dir.x,dir.y,dir.z)
-        dir = cc.vec3normalize(dir)
-        print(dir.x,dir.y,dir.z)
-
-        local ray = cc.Ray:new(near_p,dir)
-        local rect = node:getBoundingBox()
-        print(ray:intersects(rect))
-        -- if self:isTouchInNodeRect(node,touch,event) then
-        --     node:setScale(1.06)
-        --     return true
-        -- end
+        print(node:hitTest(start_location, self.camera, nil))
 
         return false
     end
@@ -138,5 +99,6 @@ function map_view:addArenaListener(img,callback)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
+--------------------------战场部分结束-------------------------
 
 return map_view

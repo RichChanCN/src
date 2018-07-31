@@ -82,6 +82,8 @@ function monster_info_view:initLeftModelNode()
     self.progress_text 		= self.left_node:getChildByName("progress_text")
     self.up_sp		 		= self.left_node:getChildByName("up_sp")
     self.model_panel 		= self.left_node:getChildByName("model_panel")
+
+    --self:initModelCamera()
 end
 
 function monster_info_view:updateLeftModelNode(data)
@@ -95,17 +97,20 @@ function monster_info_view:updateLeftModelNode(data)
 end
 
 function monster_info_view:createModel(data)
+    if self.monster_model then
+        self.model_panel:removeChild(self.monster_model)
+    end
+
 	local callback = function(model)
 		--print("load finish")
-		model:setScale(200)
+		model:setScale(100)
 		--model:setContentSize(400,300)
 		model:setPosition(uitool:getNodeCenterPosition(self.model_panel))
-		model:setGlobalZOrder(1)
-        model:setCameraMask(cc.CameraFlag.USER1)
+		--model:setGlobalZOrder(1)
+        --model:setCameraMask(cc.CameraFlag.USER1)
 		self.monster_model = model
 		self.model_panel:addChild(model)
 		self.is_model_loaded = true
-        self:initModelCamera()
 	end
     cc.Sprite3D:createAsync(Config.model_path.."cube.obj",callback)
     
@@ -113,18 +118,15 @@ end
 
 function monster_info_view:initModelCamera()
 	local size = self.model_panel:getContentSize()
-	self.model_camera = cc.Camera:createPerspective(45,size.width/size.height,1,1000)
-    --self.model_camera = cc.Camera:createOrthographic(size.width, size.height, 1, 1000);
+	self.model_camera = cc.Camera:createPerspective(45,size.width/size.height,1,5000)
 
-    self.model_camera:setPosition3D(cc.vec3(960,540,-933))
-    self.model_camera:lookAt(cc.vec3(960,540,0))
+    self.model_camera:setPosition3D(cc.vec3(400,500,933))
+    self.model_camera:lookAt(cc.vec3(400,300,0))
     self.model_camera:setCameraFlag(cc.CameraFlag.USER1)
 	self.model_camera:setName("model_camera")
-
-	--self.model_panel:setCameraMask(2)
-    self.model_panel:getScene():addChild(self.model_camera)
-    --local pos = self.monster_model:getPosition3D()
-	--print(pos.x,pos.y,pos.z)
+    self.model_camera:setDepth(1)
+    print(self.model_camera:getDepth())
+    self.model_panel:addChild(self.model_camera)
 end
 
 function monster_info_view:initModelEvents()
