@@ -2870,6 +2870,7 @@
           </Folder>
         </Folder>
         <Project Name="PreScene.csd" Type="Scene" />
+        <Project Name="FightScene.csd" Type="Scene" />
       </RootFolder>
     </Group>
   </SolutionFolder>

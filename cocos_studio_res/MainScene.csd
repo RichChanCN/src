@@ -1498,10 +1498,10 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/hex_tile_disabled.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_6_2" ActionTag="-472949215" Tag="149" IconVisible="False" LeftMargin="-225.0000" RightMargin="135.0000" TopMargin="-190.0000" BottomMargin="100.0000" Scale9Width="90" Scale9Height="90" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_6_2" ActionTag="-472949215" Tag="149" IconVisible="False" LeftMargin="-223.7717" RightMargin="133.7717" TopMargin="-188.7710" BottomMargin="98.7710" Scale9Width="90" Scale9Height="90" ctype="ImageViewObjectData">
                     <Size X="90.0000" Y="90.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="-180.0000" Y="145.0000" />
+                    <Position X="-178.7717" Y="143.7710" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition />
@@ -2311,7 +2311,7 @@
               <AbstractNodeData Name="left_node" ActionTag="-582955849" Tag="243" IconVisible="True" LeftMargin="-545.0000" RightMargin="2465.0000" TopMargin="540.0000" BottomMargin="540.0000" ctype="SingleNodeObjectData">
                 <Size X="0.0000" Y="0.0000" />
                 <Children>
-                  <AbstractNodeData Name="model_panel" ActionTag="1419127663" Tag="291" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-400.0000" RightMargin="-400.0000" TopMargin="-300.0000" BottomMargin="-300.0000" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
+                  <AbstractNodeData Name="model_panel" ActionTag="1419127663" Tag="291" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-400.0000" RightMargin="-400.0000" TopMargin="-300.0000" BottomMargin="-300.0000" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
                     <Size X="800.0000" Y="600.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position />
@@ -2350,7 +2350,7 @@
                     <OutlineColor A="255" R="255" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="item_bg_sp" ActionTag="-1161978076" Tag="244" IconVisible="False" LeftMargin="-526.1552" RightMargin="479.1552" TopMargin="-370.7814" BottomMargin="312.7814" ctype="SpriteObjectData">
+                  <AbstractNodeData Name="rarity_sp" ActionTag="-1161978076" Tag="244" IconVisible="False" LeftMargin="-526.1552" RightMargin="479.1552" TopMargin="-370.7814" BottomMargin="312.7814" ctype="SpriteObjectData">
                     <Size X="47.0000" Y="58.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-502.6552" Y="341.7814" />
@@ -2372,8 +2372,8 @@
                     <FileData Type="Normal" Path="Sprite/icon_attack_type_1.png" Plist="" />
                     <BlendFunc Src="770" Dst="771" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="type_text" ActionTag="1217941223" Tag="246" IconVisible="False" LeftMargin="-425.0000" RightMargin="164.0000" TopMargin="-341.0000" BottomMargin="309.0000" FontSize="35" LabelText="PHYSICAL MELEE" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="261.0000" Y="32.0000" />
+                  <AbstractNodeData Name="type_text" ActionTag="1217941223" Tag="246" IconVisible="False" LeftMargin="-425.0000" RightMargin="25.0000" TopMargin="-341.0000" BottomMargin="309.0000" IsCustomSize="True" FontSize="35" LabelText="PHYSICAL RANGE" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="400.0000" Y="32.0000" />
                     <AnchorPoint ScaleY="0.5000" />
                     <Position X="-425.0000" Y="325.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
@@ -2384,12 +2384,12 @@
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="rarity_text" ActionTag="274952768" Tag="247" IconVisible="False" LeftMargin="-425.0000" RightMargin="-14.0000" TopMargin="-381.0000" BottomMargin="349.0000" FontSize="35" LabelText="RARITY: COMMON MONSTER" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="439.0000" Y="32.0000" />
+                  <AbstractNodeData Name="rarity_text" ActionTag="274952768" Tag="247" IconVisible="False" LeftMargin="-425.0000" RightMargin="-75.0000" TopMargin="-381.0000" BottomMargin="349.0000" IsCustomSize="True" FontSize="35" LabelText="RARITY: COMMON MONSTER" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="500.0000" Y="32.0000" />
                     <AnchorPoint ScaleY="0.5000" />
                     <Position X="-425.0000" Y="365.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                    <CColor A="255" R="92" G="213" B="107" />
+                    <CColor A="255" R="66" G="152" B="76" />
                     <PrePosition />
                     <PreSize X="0.0000" Y="0.0000" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
@@ -2592,14 +2592,14 @@
                         <PreSize X="0.2289" Y="1.1364" />
                         <FileData Type="Normal" Path="Sprite/icon_mercenary_attr_dmg.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="attr_text" ActionTag="-1694524130" Tag="266" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="76.0200" RightMargin="67.9800" TopMargin="3.0000" BottomMargin="27.0000" FontSize="14" LabelText="DEMAGE" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                        <Size X="57.0000" Y="14.0000" />
+                      <AbstractNodeData Name="attr_text" ActionTag="-1694524130" Tag="266" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="75.0200" RightMargin="66.9800" TopMargin="3.0000" BottomMargin="27.0000" FontSize="14" LabelText="DAMAGE" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                        <Size X="59.0000" Y="14.0000" />
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                         <Position X="104.5200" Y="34.0000" />
                         <Scale ScaleX="1.0000" ScaleY="1.0000" />
                         <CColor A="255" R="89" G="57" B="50" />
                         <PrePosition X="0.5200" Y="0.7727" />
-                        <PreSize X="0.2836" Y="0.3182" />
+                        <PreSize X="0.2935" Y="0.3182" />
                         <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                         <OutlineColor A="255" R="0" G="0" B="0" />
                         <ShadowColor A="255" R="110" G="110" B="110" />
@@ -2783,7 +2783,7 @@
                     <PreSize X="0.3350" Y="0.0652" />
                     <FileData Type="Normal" Path="Sprite/item_bg_3.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="hp_text" ActionTag="413621338" Tag="281" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="93.0000" BottomMargin="558.0000" FontSize="25" LabelText="100" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                  <AbstractNodeData Name="hp_text" ActionTag="413621338" Tag="281" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="93.0000" BottomMargin="558.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="49.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="175.0000" Y="570.0000" />
@@ -2795,7 +2795,7 @@
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="demage_text" ActionTag="-2126491947" Tag="282" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="93.0000" BottomMargin="558.0000" FontSize="25" LabelText="100" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                  <AbstractNodeData Name="damage_text" ActionTag="-2126491947" Tag="282" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="93.0000" BottomMargin="558.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="49.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="440.0000" Y="570.0000" />
@@ -2807,7 +2807,7 @@
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="physical_defense_text" ActionTag="-1852398322" Tag="283" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="163.0000" BottomMargin="488.0000" FontSize="25" LabelText="100" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                  <AbstractNodeData Name="physical_defense_text" ActionTag="-1852398322" Tag="283" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="163.0000" BottomMargin="488.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="49.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="175.0000" Y="500.0000" />
@@ -2819,7 +2819,7 @@
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="magic_defense_text" ActionTag="785480532" Tag="284" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="163.0000" BottomMargin="488.0000" FontSize="25" LabelText="100" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                  <AbstractNodeData Name="magic_defense_text" ActionTag="785480532" Tag="284" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="163.0000" BottomMargin="488.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="49.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="440.0000" Y="500.0000" />
@@ -2831,7 +2831,7 @@
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="initiative_text" ActionTag="824727181" Tag="285" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="233.0000" BottomMargin="418.0000" FontSize="25" LabelText="100" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                  <AbstractNodeData Name="initiative_text" ActionTag="824727181" Tag="285" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="233.0000" BottomMargin="418.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="49.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="175.0000" Y="430.0000" />
@@ -2843,7 +2843,7 @@
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="mobility_text" ActionTag="-2022145264" Tag="286" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="233.0000" BottomMargin="418.0000" FontSize="25" LabelText="100" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                  <AbstractNodeData Name="mobility_text" ActionTag="-2022145264" Tag="286" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="233.0000" BottomMargin="418.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="49.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="440.0000" Y="430.0000" />
@@ -2855,7 +2855,7 @@
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="defense_penetration_text" ActionTag="910054041" Tag="287" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="303.0000" BottomMargin="348.0000" FontSize="25" LabelText="100" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                  <AbstractNodeData Name="defense_penetration_text" ActionTag="910054041" Tag="287" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="303.0000" BottomMargin="348.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="49.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="175.0000" Y="360.0000" />
@@ -2876,14 +2876,14 @@
                 <PreSize X="0.3125" Y="0.6250" />
                 <FileData Type="Normal" Path="Sprite/bg_003.png" Plist="" />
               </AbstractNodeData>
-              <AbstractNodeData Name="title_text" ActionTag="1629948851" Tag="237" IconVisible="False" LeftMargin="225.0010" RightMargin="1430.9990" TopMargin="57.4955" BottomMargin="977.5045" FontSize="50" LabelText="LEVEL0 XXX" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                <Size X="264.0000" Y="45.0000" />
+              <AbstractNodeData Name="title_text" ActionTag="1629948851" Tag="237" IconVisible="False" LeftMargin="225.0010" RightMargin="1094.9990" TopMargin="57.4955" BottomMargin="977.5045" IsCustomSize="True" FontSize="50" LabelText="LEVEL0 XXX" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                <Size X="600.0000" Y="45.0000" />
                 <AnchorPoint ScaleY="0.5000" />
                 <Position X="225.0010" Y="1000.0045" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.1172" Y="0.9259" />
-                <PreSize X="0.1375" Y="0.0417" />
+                <PreSize X="0.3125" Y="0.0417" />
                 <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                 <OutlineColor A="255" R="0" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
