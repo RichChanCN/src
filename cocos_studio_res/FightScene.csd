@@ -6,13 +6,13 @@
       <ObjectData Name="Scene" Tag="285" ctype="GameNodeObjectData">
         <Size X="1920.0000" Y="1080.0000" />
         <Children>
-          <AbstractNodeData Name="map_view" ActionTag="-1948909267" Tag="287" IconVisible="False" LeftMargin="-0.0001" BottomMargin="0.0000" TouchEnable="True" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
+          <AbstractNodeData Name="map_view" ActionTag="-1948909267" Tag="287" IconVisible="False" LeftMargin="-0.0001" RightMargin="0.0001" TouchEnable="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
-              <AbstractNodeData Name="map_img" CanEdit="False" ActionTag="1098438273" Tag="288" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-64.0000" RightMargin="-64.0000" TopMargin="-55.5000" BottomMargin="160.4999" Scale9Width="2048" Scale9Height="975" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="map_img" CanEdit="False" ActionTag="1098438273" Tag="288" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-64.0000" RightMargin="-64.0000" TopMargin="-55.5000" BottomMargin="160.5000" Scale9Width="2048" Scale9Height="975" ctype="ImageViewObjectData">
                 <Size X="2048.0000" Y="975.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="960.0000" Y="647.9999" />
+                <Position X="960.0000" Y="648.0000" />
                 <Scale ScaleX="1.5000" ScaleY="1.5000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.5000" Y="0.6000" />
@@ -522,10 +522,10 @@
               </AbstractNodeData>
             </Children>
             <AnchorPoint />
-            <Position X="-0.0001" Y="0.0000" />
+            <Position X="-0.0001" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.0000" Y="0.0000" />
+            <PrePosition X="0.0000" />
             <PreSize X="1.0000" Y="1.0000" />
             <SingleColor A="255" R="150" G="200" B="255" />
             <FirstColor A="255" R="150" G="200" B="255" />
