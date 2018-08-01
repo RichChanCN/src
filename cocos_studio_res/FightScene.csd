@@ -19,7 +19,7 @@
                 <PreSize X="1.0667" Y="0.9028" />
                 <FileData Type="Normal" Path="Sprite/combat_bg_forest.png" Plist="" />
               </AbstractNodeData>
-              <AbstractNodeData Name="arena_node" ActionTag="-462214743" Tag="289" IconVisible="True" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="960.0000" RightMargin="960.0000" TopMargin="507.6000" BottomMargin="572.4000" ctype="SingleNodeObjectData">
+              <AbstractNodeData Name="arena_node" ActionTag="-462214743" Tag="289" IconVisible="True" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="960.0000" RightMargin="960.0000" TopMargin="561.6000" BottomMargin="518.4000" ctype="SingleNodeObjectData">
                 <Size X="0.0000" Y="0.0000" />
                 <Children>
                   <AbstractNodeData Name="gezi_2_7" ActionTag="-1304146789" Tag="357" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
@@ -262,7 +262,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/white.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_4_4" CanEdit="False" ActionTag="-2041665714" Tag="301" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-37.0000" RightMargin="-37.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_4_4" ActionTag="-2041665714" Tag="301" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-37.0000" RightMargin="-37.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position />
@@ -302,10 +302,10 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/white.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_1_3" ActionTag="-620241367" Tag="338" IconVisible="False" LeftMargin="-300.6609" RightMargin="226.6609" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_1_3" ActionTag="-620241367" Tag="338" IconVisible="False" LeftMargin="-299.5000" RightMargin="225.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="-263.6609" Y="-57.0000" />
+                    <Position X="-262.5000" Y="-57.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition />
@@ -514,10 +514,32 @@
                   </AbstractNodeData>
                 </Children>
                 <AnchorPoint />
-                <Position X="960.0000" Y="572.4000" />
-                <Scale ScaleX="2.0000" ScaleY="1.5000" />
+                <Position X="960.0000" Y="518.4000" />
+                <Scale ScaleX="2.0000" ScaleY="2.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.5000" Y="0.5300" />
+                <PrePosition X="0.5000" Y="0.4800" />
+                <PreSize X="0.0000" Y="0.0000" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="arena_up_node" ActionTag="1520623079" Tag="338" IconVisible="True" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="960.0000" RightMargin="960.0000" TopMargin="561.6000" BottomMargin="518.4000" ctype="SingleNodeObjectData">
+                <Size X="0.0000" Y="0.0000" />
+                <Children>
+                  <AbstractNodeData Name="moveto_point_sp" ActionTag="-1418200910" Tag="339" IconVisible="False" LeftMargin="-917.7281" RightMargin="853.7281" TopMargin="-119.5448" BottomMargin="68.5448" ctype="SpriteObjectData">
+                    <Size X="64.0000" Y="51.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="-885.7281" Y="94.0448" />
+                    <Scale ScaleX="0.5000" ScaleY="0.5000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <FileData Type="Normal" Path="Sprite/battle_clickpoint.png" Plist="" />
+                    <BlendFunc Src="770" Dst="771" />
+                  </AbstractNodeData>
+                </Children>
+                <AnchorPoint />
+                <Position X="960.0000" Y="518.4000" />
+                <Scale ScaleX="2.0000" ScaleY="2.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.5000" Y="0.4800" />
                 <PreSize X="0.0000" Y="0.0000" />
               </AbstractNodeData>
             </Children>

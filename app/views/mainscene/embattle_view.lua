@@ -352,17 +352,17 @@ end
 
 ------------右边战场部分开始------------
 function embattle_view:initArena()
-	for i=1,7 do
-		for j=1,8 do
+	for x=1,8 do
+		for y=1,7 do
 			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
-			self["gezi_"..i.."_"..j] = self.arena_node:getChildByName("gezi_"..i.."_"..j)
-			if self["gezi_"..i.."_"..j] then
-				self["gezi_"..i.."_"..j].arena_pos = cc.p(i,j)
+			self["gezi_"..x.."_"..y] = self.arena_node:getChildByName("gezi_"..x.."_"..y)
+			if self["gezi_"..x.."_"..y] then
+				self["gezi_"..x.."_"..y].arena_pos = cc.p(x,y)
 			end
-			if j<3 and self["gezi_"..i.."_"..j] then
-				self["gezi_"..i.."_"..j]:loadTexture(Config.sprite.gezi_raw)
-				self["gezi_"..i.."_"..j]:setScaleX(0.9)
-				self["gezi_"..i.."_"..j]:setScaleY(0.8)
+			if x<3 and self["gezi_"..x.."_"..y] then
+				self["gezi_"..x.."_"..y]:loadTexture(Config.sprite.gezi_raw)
+				self["gezi_"..x.."_"..y]:setScaleX(0.9)
+				self["gezi_"..x.."_"..y]:setScaleY(0.8)
 			end
 		end
 	end
@@ -446,11 +446,11 @@ function embattle_view:addArenaListener()
 	
 	
 	--注意！！！如果一个界面监听的事件很多会导致降帧！
-	for i=1,7 do
-		for j=1,2 do 
-			if self["gezi_"..i.."_"..j] then
-				self["gezi_"..i.."_"..j].listener = listener:clone()
-				self.eventDispatcher:addEventListenerWithSceneGraphPriority(self["gezi_"..i.."_"..j].listener, self["gezi_"..i.."_"..j])
+	for x=1,2 do
+		for y=1,7 do 
+			if self["gezi_"..x.."_"..y] then
+				self["gezi_"..x.."_"..y].listener = listener:clone()
+				self.eventDispatcher:addEventListenerWithSceneGraphPriority(self["gezi_"..x.."_"..y].listener, self["gezi_"..x.."_"..y])
 			end
 		end
 	end
@@ -459,10 +459,10 @@ end
 
 function embattle_view:resumeArenaListener()
 	
-	for i=1,7 do
-		for j=1,2 do 
-			if self["gezi_"..i.."_"..j] then
-				self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..i.."_"..j])
+	for x=1,2 do
+		for y=1,7 do 
+			if self["gezi_"..x.."_"..y] then
+				self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
 			end
 		end
 	end
@@ -470,10 +470,10 @@ end
 
 function embattle_view:pauseArenaListener()
 	
-	for i=1,7 do
-		for j=1,2 do 
-			if self["gezi_"..i.."_"..j] then
-				self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..i.."_"..j])
+	for x=1,2 do
+		for y=1,7 do 
+			if self["gezi_"..x.."_"..y] then
+				self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..x.."_"..y])
 			end
 		end
 	end
@@ -481,10 +481,10 @@ end
 
 function embattle_view:removeArenaListener()
 	
-	for i=1,7 do
-		for j=1,2 do 
-			if self["gezi_"..i.."_"..j] then
-				self.eventDispatcher:removeEventListener(self["gezi_"..i.."_"..j].listener)
+	for x=1,2 do
+		for y=1,7 do 
+			if self["gezi_"..x.."_"..y] then
+				self.eventDispatcher:removeEventListener(self["gezi_"..x.."_"..y].listener)
 			end
 		end
 	end
