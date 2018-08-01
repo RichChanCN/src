@@ -1254,6 +1254,30 @@
           <AbstractNodeData Name="embattle_view" ActionTag="1609529486" Tag="134" IconVisible="False" LeftMargin="-0.0001" RightMargin="0.0001" TopMargin="-3240.0000" BottomMargin="3240.0002" TouchEnable="True" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
+              <AbstractNodeData Name="fight_img" ActionTag="-1593883868" Tag="340" IconVisible="False" LeftMargin="1560.0000" RightMargin="160.0000" TopMargin="942.5000" BottomMargin="62.5000" Scale9Enable="True" LeftEage="25" RightEage="25" TopEage="22" BottomEage="22" Scale9OriginX="25" Scale9OriginY="22" Scale9Width="28" Scale9Height="24" ctype="ImageViewObjectData">
+                <Size X="200.0000" Y="75.0000" />
+                <Children>
+                  <AbstractNodeData Name="fight_img" ActionTag="1123241980" Tag="341" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="43.9998" RightMargin="44.0002" TopMargin="19.5000" BottomMargin="19.5000" FontSize="40" LabelText="Fight!" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="112.0000" Y="36.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="99.9998" Y="37.5000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.5000" Y="0.5000" />
+                    <PreSize X="0.5600" Y="0.4800" />
+                    <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                    <OutlineColor A="255" R="0" G="0" B="0" />
+                    <ShadowColor A="255" R="110" G="110" B="110" />
+                  </AbstractNodeData>
+                </Children>
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <Position X="1660.0000" Y="100.0000" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.8646" Y="0.0926" />
+                <PreSize X="0.1042" Y="0.0694" />
+                <FileData Type="Normal" Path="Sprite/button_002.png" Plist="" />
+              </AbstractNodeData>
               <AbstractNodeData Name="title_text" ActionTag="-1461050950" Tag="194" IconVisible="False" LeftMargin="225.0000" RightMargin="1488.0000" TopMargin="57.5000" BottomMargin="977.5000" FontSize="50" LabelText="Embattle" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                 <Size X="207.0000" Y="45.0000" />
                 <AnchorPoint ScaleY="0.5000" />

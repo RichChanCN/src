@@ -2,10 +2,8 @@
 local MainScene = class("MainScene", cc.load("mvc").SceneBase)
 
 
--- 加载csb文件
 MainScene.RESOURCE_FILENAME = "MainScene.csb"
  
--- 获取UI控件
 MainScene.RESOURCE_BINDING = {
 	--main_view
     ["main_view"]			= {["varname"] = "main_view"},
@@ -25,7 +23,6 @@ MainScene.RESOURCE_BINDING = {
     ["monster_info_view"]	= {["varname"] = "monster_info_view"},
 }
 
---面板文件位置
 MainScene.VIEW_PATH = "app.views.mainscene"
 
 function MainScene:onCreate()
@@ -45,6 +42,16 @@ function MainScene:viewInit()
 	self.embattle_view:init()
 	self.monster_list_view:init()
 	self.monster_info_view:init()
+end
+
+function MainScene:goToFightScene()
+	local scene = cc.Scene:create()
+	local layer = self.app_:createView("FightScene")
+	scene:addChild(layer)
+	if scene then
+		local ts = cc.TransitionFadeTR:create(1.5, scene)
+		cc.Director:getInstance():replaceScene(ts)
+	end	
 end
 
 function MainScene:openMainView()

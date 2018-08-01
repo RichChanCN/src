@@ -29,7 +29,6 @@ function map_view:initInfo()
 	self.arena_up_node:setRotation3D(cc.vec3(-40,0,0))
     self.camera = self.ctrl:getScene():getDefaultCamera()
     self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-    cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 end
 
 function map_view:initEvents()
@@ -76,7 +75,6 @@ function map_view:initArena()
 			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
 			self["gezi_"..x.."_"..y] = self.arena_node:getChildByName("gezi_"..x.."_"..y)
 			if self["gezi_"..x.."_"..y] then
-				print("gezi_"..x.."_"..y)
 				self["gezi_"..x.."_"..y].arena_pos = cc.p(x,y)
                 self:addArenaListener(self["gezi_"..x.."_"..y])
 			end
@@ -104,13 +102,27 @@ function map_view:addArenaListener(gezi)
         	self.target_gezi = node
         elseif self.target_gezi and self.target_gezi:getTag() == node:getTag() then
         	self.moveto_point_sp:setPosition(uitool:farAway())
+            self.target_gezi = nil
         end
 
 
     end
 
     local function touchEnded( touch, event )
+        local node = event:getCurrentTarget()
+        local cur_location = touch:getLocation()
         self.moveto_point_sp:setPosition(uitool:farAway())
+
+        table.print(Judgment:Instance().left_team)
+        if node:hitTest(cur_location, self.camera, nil) then
+            local x,y = node:getPosition()
+            self.test_monster.model:runAction((cc.MoveTo:create(0.5,cc.p(x,y))))
+        end
+        -- if self.target_gezi then
+        --     local x,y = self.target_gezi:getPosition()
+        --     self.test_monster.model:runAction((cc.MoveTo:create(0.5,cc.p(x,y))))
+        -- end
+        
     end
 
     gezi.listener = cc.EventListenerTouchOneByOne:create()

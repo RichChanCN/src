@@ -11,6 +11,7 @@ embattle_view.RESOURCE_BINDING = {
     ["hex_node"]			= {["varname"] = "hex_node"},
     ["select_num_text"]		= {["varname"] = "select_num_text"},
     ["chesspiece_template"]	= {["varname"] = "chesspiece_template"},
+    ["fight_img"]           = {["varname"] = "fight_img"},
 
 }
 ----------------------------------------------------------------
@@ -65,6 +66,11 @@ function embattle_view:initEvents()
         self.ctrl:closeEmbattleView()
     end)
 
+    uitool:makeImgToButton(self.fight_img,function()
+    	local left_team = self:makeTeam()
+    	Judgment:Instance():initGame(left_team,{})
+        self.ctrl:goToFightScene()
+    end)
 end
 
 
@@ -89,7 +95,16 @@ end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
+function embattle_view:makeTeam()
+	local team = {}
+	local MonsterBase = require("app.logic.MonsterBase")
 
+	for _,v in pairs(self.monster_team) do
+		table.insert(team, MonsterBase:new(Config.Monster[v.monster_id],MonsterBase.TeamSide.Left,v.arena_pos))
+	end
+
+	return team
+end
 ------------左边卡池部分开始------------
 function embattle_view:initMonsterLV()
 	local monsters_num = #self.collected_monster_list
@@ -261,6 +276,8 @@ function embattle_view:createChesspiece(index)
 	
 	chesspiece:setName("chesspiece_"..index)
 	self.hex_node:addChild(chesspiece, uitool:bottom_Z_order())
+
+	chesspiece.monster_id = self.collected_monster_list[index].id
 
 	return chesspiece
 end

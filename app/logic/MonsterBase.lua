@@ -13,7 +13,7 @@ MonsterBase.Status = {
 }
 
 MonsterBase.Towards = {
-	[0]		= 1
+	[0]		= 1,
 	[1] 	= 1,
 	[2] 	= 2,
 	[3] 	= 3,
@@ -33,7 +33,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.id 					= data.id
 	self.name 					= data.name
 	self.level 					= data.level
-	self.rarity					= data.ratity
+	self.rarity					= data.rarity
 	self.cur_hp 				= data.hp
 	
 	self.skills_list 			= data.skills_list

@@ -14,10 +14,15 @@ FightScene.RESOURCE_BINDING = {
 FightScene.VIEW_PATH = "app.views.fightscene"
 
 function FightScene:onCreate()
+    cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 end
 
-function FightScene:onEnter( ... )
+function FightScene:onEnter()
 	self:viewInit()
+end
+
+function FightScene:onEnterTransitionFinish()
+    cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 end
 
 function FightScene:viewInit()
