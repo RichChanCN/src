@@ -32,17 +32,27 @@ function map_view:initInfo()
 end
 
 function map_view:initEvents()
-	self.test_monster = {}
-	self:createModel(self.test_monster)
 end
 
 function map_view:updateView()
-	
+	if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+		self:showGuide()
+	else
+		self:hideGuide()
+	end
 end
 
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
+function map_view:showGuide()
+	local gezi_list = Judgment:Instance():getCurActiveMonster():getGeziListCanMoveTo()
+	for k,_ in pairs(gezi_list) do
+		local x,y = math.modf(k/10),k%10
+		self["gezi_"..x.."_"..y.."black"]:setVisible(true)
+	end
+end
+
 
 --------------------------战场部分开始-------------------------
 function map_view:createModel(monster)
@@ -58,15 +68,18 @@ function map_view:createModel(monster)
 		model:setRotation3D(cc.vec3(0,45,0))
 		
 		model:setGlobalZOrder(1)
-
-        local x,y = self.gezi_2_1:getPosition()
+		local pos = monster.start_pos
+        local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
 		model:setPosition(x,y-10)
-		x,y = self.gezi_7_1:getPosition()
 		monster.model = model
 		self.arena_node:addChild(model)
 	end
-    cc.Sprite3D:createAsync(Config.model_path.."cube.obj",callback)
+    cc.Sprite3D:createAsync(monster.model_path,callback)
     
+end
+
+function map_view:updateArenaCanMoveTo()
+	
 end
 
 function map_view:initArena()
@@ -74,6 +87,7 @@ function map_view:initArena()
 		for y=1,7 do
 			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
 			self["gezi_"..x.."_"..y] = self.arena_node:getChildByName("gezi_"..x.."_"..y)
+			self["gezi_"..x.."_"..y.."black"] = self.arena_up_node:getChildByName("gezi_"..x.."_"..y)
 			if self["gezi_"..x.."_"..y] then
 				self["gezi_"..x.."_"..y].arena_pos = cc.p(x,y)
                 self:addArenaListener(self["gezi_"..x.."_"..y])
@@ -113,10 +127,8 @@ function map_view:addArenaListener(gezi)
         local cur_location = touch:getLocation()
         self.moveto_point_sp:setPosition(uitool:farAway())
 
-        table.print(Judgment:Instance().left_team)
         if node:hitTest(cur_location, self.camera, nil) then
             local x,y = node:getPosition()
-            self.test_monster.model:runAction((cc.MoveTo:create(0.5,cc.p(x,y))))
         end
         -- if self.target_gezi then
         --     local x,y = self.target_gezi:getPosition()

@@ -100,7 +100,7 @@ function embattle_view:makeTeam()
 	local MonsterBase = require("app.logic.MonsterBase")
 
 	for _,v in pairs(self.monster_team) do
-		table.insert(team, MonsterBase:new(Config.Monster[v.monster_id],MonsterBase.TeamSide.Left,v.arena_pos))
+		table.insert(team, MonsterBase:instance():new(Config.Monster[v.monster_id],MonsterBase.TeamSide.Left,v.arena_cell.pos))
 	end
 
 	return team
@@ -374,7 +374,7 @@ function embattle_view:initArena()
 			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
 			self["gezi_"..x.."_"..y] = self.arena_node:getChildByName("gezi_"..x.."_"..y)
 			if self["gezi_"..x.."_"..y] then
-				self["gezi_"..x.."_"..y].arena_pos = cc.p(x,y)
+				self["gezi_"..x.."_"..y].pos = cc.p(x,y)
 			end
 			if x<3 and self["gezi_"..x.."_"..y] then
 				self["gezi_"..x.."_"..y]:loadTexture(Config.sprite.gezi_raw)

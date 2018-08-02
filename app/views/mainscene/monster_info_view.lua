@@ -111,7 +111,7 @@ function monster_info_view:createModel(data)
 		self.model_panel:addChild(model)
 		self.is_model_loaded = true
 	end
-    cc.Sprite3D:createAsync(Config.model_path.."cube.obj",callback)
+    cc.Sprite3D:createAsync(data.model_path,callback)
     
 end
 
@@ -124,7 +124,6 @@ function monster_info_view:initModelCamera()
     self.model_camera:setCameraFlag(cc.CameraFlag.USER1)
 	self.model_camera:setName("model_camera")
     self.model_camera:setDepth(1)
-    print(self.model_camera:getDepth())
     self.model_panel:addChild(self.model_camera)
 end
 

@@ -22,10 +22,11 @@ MonsterBase.Towards = {
 	[6] 	= 6,
 }
 
+function MonsterBase:instance()
+	return setmetatable({}, { __index = self })
+end
+
 function MonsterBase:new( data,team_side,arena_pos )
-	o = {}
-	setmetatable(o, self)
-	self.__index = self
 
 	team_side = team_side or self.TeamSide.NONE
 	pos = pos or cc.p(1,1)
@@ -35,6 +36,8 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.level 					= data.level
 	self.rarity					= data.rarity
 	self.cur_hp 				= data.hp
+
+	self.model_path 			= data.model_path
 	
 	self.skills_list 			= data.skills_list
 
@@ -63,7 +66,10 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.status 				= MonsterBase.Status.ALIVE
 	self.buff_list				= {}
 	self.debuff_list			= {}
-	return o
+
+	self.tag = self.id*100+self.start_pos.x*10+self.start_pos.y
+	
+	return self
 end
 
 function MonsterBase:reset()
@@ -84,6 +90,63 @@ function MonsterBase:reset()
 	self.debuff_list			= {}
 end
 
+function MonsterBase:getGeziListCanMoveTo()
+	if self.cur_mobility < 1 then
+		print("can't move!")
+	end
+
+	local temp_list = {}
+	local return_list = {}
+	local findGezi = function(pos)
+		if pos.x < 1 or pos.x > 8 or pos.y < 1 or pos.y > 7 then
+			return
+		end
+		return_list[(pos.x+1)*10+pos.y] = true
+		return_list[(pos.x-1)*10+pos.y] = true
+		return_list[pos.x*10+(pos.y+1)] = true
+		return_list[pos.x*10+(pos.y-1)] = true
+		return_list[(pos.x+1)*10+(pos.y+1)] = true
+		return_list[(pos.x+1)*10+(pos.y-1)] = true
+	end
+
+	findGezi(self.cur_pos)
+	for k,v in pairs(return_list) do
+		table.insert(temp_list,k)
+	end
+
+	for i=2,self.cur_mobility do
+		for _,v in pairs(temp_list) do
+			local x,_ = math.modf(v/10)
+			findGezi(cc.p(x,v%10))
+
+			temp_list = {}
+
+			for k,v in pairs(return_list) do
+				table.insert(temp_list,k)
+			end
+		end
+	end
+
+	return_list[self.cur_pos.x*10+self.cur_pos.y] = nil
+
+	return return_list
+end
+
+function MonsterBase:isDead()
+	return self.status == MonsterBase.Status.DEAD
+end
+
+function MonsterBase:onActive()
+	local ac1 = self.model:runAction(cc.RotateBy:create(1, cc.vec3(0,360,0)))
+	local callback = function()
+		Judgment:Instance():changeGameStatus(Judgment.GameStatus.WAIT_ORDER)
+	end
+	local callback = cc.CallFunc:create(handler(Judgment:Instance(),Judgment:Instance():changeGameStatus(Judgment.GameStatus.WAIT_ORDER)))
+	local seq = cc.Sequence:create(ac1,callback)
+	
+	self.model:runAction(seq)
+end
+
 function MonsterBase:moveTo(pos)
 	
 end
@@ -96,7 +159,7 @@ function MonsterBase:wait()
 
 end
 
-function MonsterBase:defense()
+function MonsterBase:defend()
 
 end
 
