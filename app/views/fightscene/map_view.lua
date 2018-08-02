@@ -32,6 +32,7 @@ function map_view:initInfo()
 end
 
 function map_view:initEvents()
+	self:pauseArenaListener()
 end
 
 function map_view:updateView()
@@ -49,8 +50,15 @@ function map_view:showGuide()
 	local gezi_list = Judgment:Instance():getCurActiveMonster():getGeziListCanMoveTo()
 	for k,_ in pairs(gezi_list) do
 		local x,y = math.modf(k/10),k%10
-		self["gezi_"..x.."_"..y.."black"]:setVisible(true)
-	end
+        if self["gezi_"..x.."_"..y.."_black"] then 
+        	self["gezi_"..x.."_"..y.."_black"]:setVisible(true)
+        	self["gezi_"..x.."_"..y.."_black"]:setScale(0.2)
+        	local time = math.random()/3+0.1
+			self["gezi_"..x.."_"..y.."_black"]:runAction(cc.FadeIn:create(time))
+			self["gezi_"..x.."_"..y.."_black"]:runAction(cc.ScaleTo:create(time,1))
+			self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
+	    end
+    end
 end
 
 
@@ -78,16 +86,12 @@ function map_view:createModel(monster)
     
 end
 
-function map_view:updateArenaCanMoveTo()
-	
-end
-
 function map_view:initArena()
 	for x=1,8 do
 		for y=1,7 do
 			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
 			self["gezi_"..x.."_"..y] = self.arena_node:getChildByName("gezi_"..x.."_"..y)
-			self["gezi_"..x.."_"..y.."black"] = self.arena_up_node:getChildByName("gezi_"..x.."_"..y)
+			self["gezi_"..x.."_"..y.."_black"] = self.arena_up_node:getChildByName("gezi_"..x.."_"..y)
 			if self["gezi_"..x.."_"..y] then
 				self["gezi_"..x.."_"..y].arena_pos = cc.p(x,y)
                 self:addArenaListener(self["gezi_"..x.."_"..y])

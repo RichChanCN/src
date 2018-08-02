@@ -138,10 +138,10 @@ end
 
 function MonsterBase:onActive()
 	local ac1 = self.model:runAction(cc.RotateBy:create(1, cc.vec3(0,360,0)))
-	local callback = function()
+	local cb = function()
 		Judgment:Instance():changeGameStatus(Judgment.GameStatus.WAIT_ORDER)
 	end
-	local callback = cc.CallFunc:create(handler(Judgment:Instance(),Judgment:Instance():changeGameStatus(Judgment.GameStatus.WAIT_ORDER)))
+	local callback = cc.CallFunc:create(cb)
 	local seq = cc.Sequence:create(ac1,callback)
 	
 	self.model:runAction(seq)

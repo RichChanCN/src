@@ -523,7 +523,7 @@
               <AbstractNodeData Name="arena_up_node" ActionTag="-1601532710" Tag="57" IconVisible="True" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="960.0000" RightMargin="960.0000" TopMargin="561.6000" BottomMargin="518.4000" ctype="SingleNodeObjectData">
                 <Size X="0.0000" Y="0.0000" />
                 <Children>
-                  <AbstractNodeData Name="gezi_2_7" ActionTag="1546340895" VisibleForFrame="False" Tag="58" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_2_7" ActionTag="1546340895" VisibleForFrame="False" Alpha="0" Tag="58" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-187.5000" Y="171.0000" />
@@ -533,7 +533,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_3_7" ActionTag="-966498208" VisibleForFrame="False" Tag="59" IconVisible="False" LeftMargin="-149.5000" RightMargin="75.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_3_7" ActionTag="-966498208" VisibleForFrame="False" Alpha="0" Tag="59" IconVisible="False" LeftMargin="-149.5000" RightMargin="75.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-112.5000" Y="171.0000" />
@@ -543,7 +543,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_4_7" ActionTag="-1396198843" VisibleForFrame="False" Tag="60" IconVisible="False" LeftMargin="-74.5000" RightMargin="0.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_4_7" ActionTag="-1396198843" VisibleForFrame="False" Alpha="0" Tag="60" IconVisible="False" LeftMargin="-74.5000" RightMargin="0.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-37.5000" Y="171.0000" />
@@ -553,7 +553,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_5_7" ActionTag="273898114" VisibleForFrame="False" Tag="61" IconVisible="False" LeftMargin="0.5000" RightMargin="-74.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_5_7" ActionTag="273898114" VisibleForFrame="False" Alpha="0" Tag="61" IconVisible="False" LeftMargin="0.5000" RightMargin="-74.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="37.5000" Y="171.0000" />
@@ -563,7 +563,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_6_7" ActionTag="726903667" VisibleForFrame="False" Tag="62" IconVisible="False" LeftMargin="75.5000" RightMargin="-149.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_6_7" ActionTag="726903667" VisibleForFrame="False" Alpha="0" Tag="62" IconVisible="False" LeftMargin="75.5000" RightMargin="-149.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="112.5000" Y="171.0000" />
@@ -573,7 +573,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_7_7" ActionTag="1599562201" VisibleForFrame="False" Tag="63" IconVisible="False" LeftMargin="150.5000" RightMargin="-224.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_7_7" ActionTag="1599562201" VisibleForFrame="False" Alpha="0" Tag="63" IconVisible="False" LeftMargin="150.5000" RightMargin="-224.5000" TopMargin="-208.0000" BottomMargin="134.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="187.5000" Y="171.0000" />
@@ -583,7 +583,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_1_6" ActionTag="1416593640" VisibleForFrame="False" Tag="64" IconVisible="False" LeftMargin="-262.0000" RightMargin="188.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_1_6" ActionTag="1416593640" VisibleForFrame="False" Alpha="0" Tag="64" IconVisible="False" LeftMargin="-262.0000" RightMargin="188.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-225.0000" Y="114.0000" />
@@ -593,7 +593,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_2_6" ActionTag="-1808045476" VisibleForFrame="False" Tag="65" IconVisible="False" LeftMargin="-187.0000" RightMargin="113.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_2_6" ActionTag="-1808045476" VisibleForFrame="False" Alpha="0" Tag="65" IconVisible="False" LeftMargin="-187.0000" RightMargin="113.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-150.0000" Y="114.0000" />
@@ -603,7 +603,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_3_6" ActionTag="-454047491" VisibleForFrame="False" Tag="66" IconVisible="False" LeftMargin="-112.0000" RightMargin="38.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_3_6" ActionTag="-454047491" VisibleForFrame="False" Alpha="0" Tag="66" IconVisible="False" LeftMargin="-112.0000" RightMargin="38.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-75.0000" Y="114.0000" />
@@ -613,7 +613,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_4_6" ActionTag="1346769009" VisibleForFrame="False" Tag="67" IconVisible="False" LeftMargin="-37.0000" RightMargin="-37.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_4_6" ActionTag="1346769009" VisibleForFrame="False" Alpha="0" Tag="67" IconVisible="False" LeftMargin="-37.0000" RightMargin="-37.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position Y="114.0000" />
@@ -623,7 +623,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_5_6" ActionTag="-1107137317" VisibleForFrame="False" Tag="68" IconVisible="False" LeftMargin="38.0000" RightMargin="-112.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_5_6" ActionTag="-1107137317" VisibleForFrame="False" Alpha="0" Tag="68" IconVisible="False" LeftMargin="38.0000" RightMargin="-112.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="75.0000" Y="114.0000" />
@@ -633,7 +633,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_6_6" ActionTag="-500729294" VisibleForFrame="False" Tag="69" IconVisible="False" LeftMargin="113.0000" RightMargin="-187.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_6_6" ActionTag="-500729294" VisibleForFrame="False" Alpha="0" Tag="69" IconVisible="False" LeftMargin="113.0000" RightMargin="-187.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="150.0000" Y="114.0000" />
@@ -643,7 +643,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_7_6" ActionTag="207826827" VisibleForFrame="False" Tag="70" IconVisible="False" LeftMargin="188.0000" RightMargin="-262.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_7_6" ActionTag="207826827" VisibleForFrame="False" Alpha="0" Tag="70" IconVisible="False" LeftMargin="188.0000" RightMargin="-262.0000" TopMargin="-151.0000" BottomMargin="77.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="225.0000" Y="114.0000" />
@@ -653,7 +653,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_1_5" ActionTag="1908280798" VisibleForFrame="False" Tag="71" IconVisible="False" LeftMargin="-299.5000" RightMargin="225.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_1_5" ActionTag="1908280798" VisibleForFrame="False" Alpha="0" Tag="71" IconVisible="False" LeftMargin="-299.5000" RightMargin="225.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-262.5000" Y="57.0000" />
@@ -663,7 +663,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_2_5" ActionTag="1904013477" VisibleForFrame="False" Tag="72" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_2_5" ActionTag="1904013477" VisibleForFrame="False" Alpha="0" Tag="72" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-187.5000" Y="57.0000" />
@@ -673,7 +673,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_3_5" ActionTag="1054688971" VisibleForFrame="False" Tag="73" IconVisible="False" LeftMargin="-149.5000" RightMargin="75.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_3_5" ActionTag="1054688971" VisibleForFrame="False" Alpha="0" Tag="73" IconVisible="False" LeftMargin="-149.5000" RightMargin="75.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-112.5000" Y="57.0000" />
@@ -683,7 +683,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_4_5" ActionTag="1811003012" VisibleForFrame="False" Tag="74" IconVisible="False" LeftMargin="-74.5000" RightMargin="0.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_4_5" ActionTag="1811003012" VisibleForFrame="False" Alpha="0" Tag="74" IconVisible="False" LeftMargin="-74.5000" RightMargin="0.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-37.5000" Y="57.0000" />
@@ -693,7 +693,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_5_5" ActionTag="234094065" VisibleForFrame="False" Tag="75" IconVisible="False" LeftMargin="0.5000" RightMargin="-74.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_5_5" ActionTag="234094065" VisibleForFrame="False" Alpha="0" Tag="75" IconVisible="False" LeftMargin="0.5000" RightMargin="-74.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="37.5000" Y="57.0000" />
@@ -703,7 +703,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_6_5" ActionTag="-840836519" VisibleForFrame="False" Tag="76" IconVisible="False" LeftMargin="75.5000" RightMargin="-149.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_6_5" ActionTag="-840836519" VisibleForFrame="False" Alpha="0" Tag="76" IconVisible="False" LeftMargin="75.5000" RightMargin="-149.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="112.5000" Y="57.0000" />
@@ -713,7 +713,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_7_5" ActionTag="-1248798731" VisibleForFrame="False" Tag="77" IconVisible="False" LeftMargin="150.5000" RightMargin="-224.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_7_5" ActionTag="-1248798731" VisibleForFrame="False" Alpha="0" Tag="77" IconVisible="False" LeftMargin="150.5000" RightMargin="-224.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="187.5000" Y="57.0000" />
@@ -723,7 +723,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_8_5" ActionTag="1179099031" VisibleForFrame="False" Tag="78" IconVisible="False" LeftMargin="225.5000" RightMargin="-299.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_8_5" ActionTag="1179099031" VisibleForFrame="False" Alpha="0" Tag="78" IconVisible="False" LeftMargin="225.5000" RightMargin="-299.5000" TopMargin="-94.0000" BottomMargin="20.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="262.5000" Y="57.0000" />
@@ -733,7 +733,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_1_4" ActionTag="-1511969633" VisibleForFrame="False" Tag="79" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-262.0000" RightMargin="188.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_1_4" ActionTag="-1511969633" VisibleForFrame="False" Alpha="0" Tag="79" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-262.0000" RightMargin="188.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-225.0000" />
@@ -743,7 +743,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_2_4" ActionTag="-198824834" VisibleForFrame="False" Tag="80" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-187.0000" RightMargin="113.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_2_4" ActionTag="-198824834" VisibleForFrame="False" Alpha="0" Tag="80" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-187.0000" RightMargin="113.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-150.0000" />
@@ -753,7 +753,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_3_4" ActionTag="1166669740" VisibleForFrame="False" Tag="81" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-112.0000" RightMargin="38.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_3_4" ActionTag="1166669740" VisibleForFrame="False" Alpha="0" Tag="81" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-112.0000" RightMargin="38.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-75.0000" />
@@ -763,7 +763,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_4_4" ActionTag="-1802972160" VisibleForFrame="False" Tag="82" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-37.0000" RightMargin="-37.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_4_4" ActionTag="-1802972160" VisibleForFrame="False" Alpha="0" Tag="82" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-37.0000" RightMargin="-37.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position />
@@ -773,7 +773,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_5_4" ActionTag="-1665030382" VisibleForFrame="False" Tag="83" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="38.0000" RightMargin="-112.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_5_4" ActionTag="-1665030382" VisibleForFrame="False" Alpha="0" Tag="83" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="38.0000" RightMargin="-112.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="75.0000" />
@@ -783,7 +783,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_6_4" ActionTag="105687756" VisibleForFrame="False" Tag="84" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-187.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_6_4" ActionTag="105687756" VisibleForFrame="False" Alpha="0" Tag="84" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="113.0000" RightMargin="-187.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="150.0000" />
@@ -793,7 +793,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_7_4" ActionTag="1591256792" VisibleForFrame="False" Tag="85" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="188.0000" RightMargin="-262.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_7_4" ActionTag="1591256792" VisibleForFrame="False" Alpha="0" Tag="85" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="188.0000" RightMargin="-262.0000" TopMargin="-37.0000" BottomMargin="-37.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="225.0000" />
@@ -803,7 +803,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_1_3" ActionTag="272953851" VisibleForFrame="False" Tag="86" IconVisible="False" LeftMargin="-299.5000" RightMargin="225.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_1_3" ActionTag="272953851" VisibleForFrame="False" Alpha="0" Tag="86" IconVisible="False" LeftMargin="-299.5000" RightMargin="225.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-262.5000" Y="-57.0000" />
@@ -813,7 +813,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_2_3" ActionTag="-517824472" VisibleForFrame="False" Tag="87" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="20.0001" BottomMargin="-94.0001" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_2_3" ActionTag="-517824472" VisibleForFrame="False" Alpha="0" Tag="87" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="20.0001" BottomMargin="-94.0001" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-187.5000" Y="-57.0001" />
@@ -823,7 +823,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_3_3" ActionTag="1737089955" VisibleForFrame="False" Tag="88" IconVisible="False" LeftMargin="-149.5000" RightMargin="75.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_3_3" ActionTag="1737089955" VisibleForFrame="False" Alpha="0" Tag="88" IconVisible="False" LeftMargin="-149.5000" RightMargin="75.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-112.5000" Y="-57.0000" />
@@ -833,7 +833,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_4_3" ActionTag="1370906791" VisibleForFrame="False" Tag="89" IconVisible="False" LeftMargin="-74.5000" RightMargin="0.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_4_3" ActionTag="1370906791" VisibleForFrame="False" Alpha="0" Tag="89" IconVisible="False" LeftMargin="-74.5000" RightMargin="0.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-37.5000" Y="-57.0000" />
@@ -843,7 +843,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_5_3" ActionTag="1223005871" VisibleForFrame="False" Tag="90" IconVisible="False" LeftMargin="0.5000" RightMargin="-74.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_5_3" ActionTag="1223005871" VisibleForFrame="False" Alpha="0" Tag="90" IconVisible="False" LeftMargin="0.5000" RightMargin="-74.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="37.5000" Y="-57.0000" />
@@ -853,7 +853,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_6_3" ActionTag="422842566" VisibleForFrame="False" Tag="91" IconVisible="False" LeftMargin="75.5000" RightMargin="-149.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_6_3" ActionTag="422842566" VisibleForFrame="False" Alpha="0" Tag="91" IconVisible="False" LeftMargin="75.5000" RightMargin="-149.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="112.5000" Y="-57.0000" />
@@ -863,7 +863,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_7_3" ActionTag="1964937004" VisibleForFrame="False" Tag="92" IconVisible="False" LeftMargin="150.5000" RightMargin="-224.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_7_3" ActionTag="1964937004" VisibleForFrame="False" Alpha="0" Tag="92" IconVisible="False" LeftMargin="150.5000" RightMargin="-224.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="187.5000" Y="-57.0000" />
@@ -873,7 +873,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_8_3" ActionTag="324599541" VisibleForFrame="False" Tag="93" IconVisible="False" LeftMargin="225.5000" RightMargin="-299.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_8_3" ActionTag="324599541" VisibleForFrame="False" Alpha="0" Tag="93" IconVisible="False" LeftMargin="225.5000" RightMargin="-299.5000" TopMargin="20.0000" BottomMargin="-94.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="262.5000" Y="-57.0000" />
@@ -883,7 +883,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_1_2" ActionTag="-654560479" VisibleForFrame="False" Tag="94" IconVisible="False" LeftMargin="-262.0000" RightMargin="188.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_1_2" ActionTag="-654560479" VisibleForFrame="False" Alpha="0" Tag="94" IconVisible="False" LeftMargin="-262.0000" RightMargin="188.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-225.0000" Y="-114.0000" />
@@ -893,7 +893,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_2_2" ActionTag="-1450006810" VisibleForFrame="False" Tag="95" IconVisible="False" LeftMargin="-187.0000" RightMargin="113.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_2_2" ActionTag="-1450006810" VisibleForFrame="False" Alpha="0" Tag="95" IconVisible="False" LeftMargin="-187.0000" RightMargin="113.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-150.0000" Y="-114.0000" />
@@ -903,7 +903,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_3_2" ActionTag="1815512739" VisibleForFrame="False" Tag="96" IconVisible="False" LeftMargin="-112.0000" RightMargin="38.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_3_2" ActionTag="1815512739" VisibleForFrame="False" Alpha="0" Tag="96" IconVisible="False" LeftMargin="-112.0000" RightMargin="38.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-75.0000" Y="-114.0000" />
@@ -913,7 +913,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_4_2" ActionTag="-472124854" VisibleForFrame="False" Tag="97" IconVisible="False" LeftMargin="-37.0000" RightMargin="-37.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_4_2" ActionTag="-472124854" VisibleForFrame="False" Alpha="0" Tag="97" IconVisible="False" LeftMargin="-37.0000" RightMargin="-37.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position Y="-114.0000" />
@@ -923,7 +923,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_5_2" ActionTag="1718564981" VisibleForFrame="False" Tag="98" IconVisible="False" LeftMargin="38.0000" RightMargin="-112.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_5_2" ActionTag="1718564981" VisibleForFrame="False" Alpha="0" Tag="98" IconVisible="False" LeftMargin="38.0000" RightMargin="-112.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="75.0000" Y="-114.0000" />
@@ -933,7 +933,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_6_2" ActionTag="261249173" VisibleForFrame="False" Tag="99" IconVisible="False" LeftMargin="113.0000" RightMargin="-187.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_6_2" ActionTag="261249173" VisibleForFrame="False" Alpha="0" Tag="99" IconVisible="False" LeftMargin="113.0000" RightMargin="-187.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="150.0000" Y="-114.0000" />
@@ -943,7 +943,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_7_2" ActionTag="1869994812" VisibleForFrame="False" Tag="100" IconVisible="False" LeftMargin="188.0000" RightMargin="-262.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_7_2" ActionTag="1869994812" VisibleForFrame="False" Alpha="0" Tag="100" IconVisible="False" LeftMargin="188.0000" RightMargin="-262.0000" TopMargin="77.0000" BottomMargin="-151.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="225.0000" Y="-114.0000" />
@@ -953,7 +953,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_2_1" ActionTag="1256007162" VisibleForFrame="False" Tag="101" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_2_1" ActionTag="1256007162" VisibleForFrame="False" Alpha="0" Tag="101" IconVisible="False" LeftMargin="-224.5000" RightMargin="150.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-187.5000" Y="-171.0000" />
@@ -963,7 +963,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_3_1" ActionTag="145429638" VisibleForFrame="False" Tag="102" IconVisible="False" LeftMargin="-149.5000" RightMargin="75.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_3_1" ActionTag="145429638" VisibleForFrame="False" Alpha="0" Tag="102" IconVisible="False" LeftMargin="-149.5000" RightMargin="75.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-112.5000" Y="-171.0000" />
@@ -973,7 +973,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_4_1" ActionTag="-1248011977" VisibleForFrame="False" Tag="103" IconVisible="False" LeftMargin="-74.5000" RightMargin="0.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_4_1" ActionTag="-1248011977" VisibleForFrame="False" Alpha="0" Tag="103" IconVisible="False" LeftMargin="-74.5000" RightMargin="0.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="-37.5000" Y="-171.0000" />
@@ -983,7 +983,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_5_1" ActionTag="-910128601" VisibleForFrame="False" Tag="104" IconVisible="False" LeftMargin="0.5000" RightMargin="-74.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_5_1" ActionTag="-910128601" VisibleForFrame="False" Alpha="0" Tag="104" IconVisible="False" LeftMargin="0.5000" RightMargin="-74.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="37.5000" Y="-171.0000" />
@@ -993,7 +993,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_6_1" ActionTag="126637995" VisibleForFrame="False" Tag="105" IconVisible="False" LeftMargin="74.7728" RightMargin="-148.7728" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_6_1" ActionTag="126637995" VisibleForFrame="False" Alpha="0" Tag="105" IconVisible="False" LeftMargin="74.7728" RightMargin="-148.7728" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="111.7728" Y="-171.0000" />
@@ -1003,7 +1003,7 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/black.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="gezi_7_1" ActionTag="-1272072331" VisibleForFrame="False" Tag="106" IconVisible="False" LeftMargin="150.5000" RightMargin="-224.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="gezi_7_1" ActionTag="-1272072331" VisibleForFrame="False" Alpha="0" Tag="106" IconVisible="False" LeftMargin="150.5000" RightMargin="-224.5000" TopMargin="134.0000" BottomMargin="-208.0000" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="187.5000" Y="-171.0000" />

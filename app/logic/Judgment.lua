@@ -51,16 +51,16 @@ function Judgment:new()
 
 	return o
 end
-
-function Judgment:setScene(scene)
-	self.scene = scene
-end
  
 function Judgment:Instance()
 	if self.instance == nil then
 		self.instance = self:new()
 	end
 	return self.instance
+end
+
+function Judgment:setScene(scene)
+	self.scene = scene
 end
 
 function Judgment:initGame(left_team,right_team)

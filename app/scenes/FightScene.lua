@@ -37,8 +37,8 @@ function FightScene:onEnterTransitionFinish()
 end
 
 function FightScene:startGame()
-	Judgment:Instance():startGame()
 	Judgment:Instance():setScene(self)
+	Judgment:Instance():startGame()
 end
 
 function FightScene:initModel()
