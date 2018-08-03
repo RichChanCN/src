@@ -4,8 +4,11 @@ local map_view = view:instance()
 
 map_view.RESOURCE_BINDING = {
     ["map_img"]				= {["varname"] = "map_img"},
-    ["arena_node"]			= {["varname"] = "arena_node"},
-    ["arena_up_node"]		= {["varname"] = "arena_up_node"},
+    ["arena_show_node"]		= {["varname"] = "arena_show_node"},
+    ["arena_bottom_node"]	= {["varname"] = "arena_bottom_node"},
+    ["arena_event_node"]	= {["varname"] = "arena_event_node"},
+    ["model_panel"]			= {["varname"] = "model_panel"},
+    ["arena_top_node"]		= {["varname"] = "arena_top_node"},
 }
 
 function map_view:init()
@@ -14,7 +17,7 @@ function map_view:init()
 
 		self:initInfo()
 		self:initArena()
-		self:initArenaUpNode()
+		self:initArenaBottomNode()
 		self:initEvents()
 
 		self.isInited = true
@@ -25,8 +28,11 @@ end
 
 function map_view:initInfo()
 	self.monster_model_list = {}
-	self.arena_node:setRotation3D(cc.vec3(-40,0,0))
-	self.arena_up_node:setRotation3D(cc.vec3(-40,0,0))
+	self.arena_event_node:setRotation3D(cc.vec3(-40,0,0))
+	self.arena_show_node:setRotation3D(cc.vec3(-40,0,0))
+	self.arena_bottom_node:setRotation3D(cc.vec3(-40,0,0))
+	self.arena_top_node:setRotation3D(cc.vec3(-40,0,0))
+	self.model_panel:setRotation3D(cc.vec3(-40,0,0))
     self.camera = self.ctrl:getScene():getDefaultCamera()
     self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
@@ -47,40 +53,85 @@ end
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 function map_view:showGuide()
-	local gezi_list = Judgment:Instance():getCurActiveMonster():getGeziListCanMoveTo()
-	for k,_ in pairs(gezi_list) do
-		local x,y = math.modf(k/10),k%10
-        if self["gezi_"..x.."_"..y.."_black"] then 
-        	self["gezi_"..x.."_"..y.."_black"]:setVisible(true)
-        	self["gezi_"..x.."_"..y.."_black"]:setScale(0.2)
-        	local time = math.random()/3+0.1
-			self["gezi_"..x.."_"..y.."_black"]:runAction(cc.FadeIn:create(time))
-			self["gezi_"..x.."_"..y.."_black"]:runAction(cc.ScaleTo:create(time,1))
-			self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
-	    end
+	local cur_active_monster = Judgment:Instance():getCurActiveMonster()
+	local gezi_list = cur_active_monster:getGeziListCanMoveTo()
+	
+	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
+	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
+	
+	for k,v in pairs(gezi_list) do
+		if v == Judgment.MapItem.ENEMY then
+			self:showEnemy(k)
+		else
+			self:showCanMoveToGezi(k)
+		end
     end
 end
 
+function map_view:showEnemy(num)
+	local cur_active_monster = Judgment:Instance():getCurActiveMonster()
+	local atk_img
+	
+	if cur_active_monster:isMelee() then
+		atk_img = self.close_attack_img:clone()
+	else
+		atk_img = self.far_attack_img:clone()
+	end
 
+	local x,y = math.modf(num/10),num%10
+	atk_img:setPosition(self["gezi_"..x.."_"..y]:getPosition())
+
+	self.arena_top_node:addChild(atk_img)
+	uitool:repeatFadeInAndOut(atk_img)
+
+	local img = atk_img:getChildByName("img")
+	uitool:makeImgToButtonHT(img,self.camera,function()
+		Judgment:Instance():selectTarget(num)
+	end)
+end
+
+function map_view:showCanMoveToGezi(num)
+	local x,y = math.modf(num/10),num%10
+	if self["gezi_"..x.."_"..y.."_black"] then 
+		self["gezi_"..x.."_"..y.."_black"]:setVisible(true)
+		self["gezi_"..x.."_"..y.."_black"]:setScale(0.2)
+		local time = math.random()/3+0.1
+		self["gezi_"..x.."_"..y.."_black"]:runAction(cc.FadeIn:create(time))
+		self["gezi_"..x.."_"..y.."_black"]:runAction(cc.ScaleTo:create(time,1))
+		self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
+	end
+end
+
+function map_view:hideGuide()
+	self.arena_top_node:removeAllChildren()
+	self.cur_monster_pos_sp:setPosition(uitool:farAway())
+    for x=1,8 do
+    	for y=1,7 do
+    		if self["gezi_"..x.."_"..y.."_black"] then 
+    			self["gezi_"..x.."_"..y.."_black"]:setOpacity(0)
+    			self["gezi_"..x.."_"..y.."_black"]:setVisible(false)
+    			self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..x.."_"..y])
+    		end
+    	end
+    end
+end
 --------------------------战场部分开始-------------------------
 function map_view:createModel(monster)
     if monster.model then
-        self.arena_node:removeChild(monster.model)
+        self.model_panel:removeChild(monster.model)
         monster.model = nil
     end
 
 	local callback = function(model)
-		model:setScaleX(30)
-		model:setScaleY(30)
-		model:setScaleZ(30)
+		model:setScale(30)
 		model:setRotation3D(cc.vec3(0,45,0))
 		
-		model:setGlobalZOrder(1)
+		--model:setGlobalZOrder(1)
 		local pos = monster.start_pos
         local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
 		model:setPosition(x,y-10)
 		monster.model = model
-		self.arena_node:addChild(model)
+		self.model_panel:addChild(model)
 	end
     cc.Sprite3D:createAsync(monster.model_path,callback)
     
@@ -90,8 +141,8 @@ function map_view:initArena()
 	for x=1,8 do
 		for y=1,7 do
 			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
-			self["gezi_"..x.."_"..y] = self.arena_node:getChildByName("gezi_"..x.."_"..y)
-			self["gezi_"..x.."_"..y.."_black"] = self.arena_up_node:getChildByName("gezi_"..x.."_"..y)
+			self["gezi_"..x.."_"..y] = self.arena_event_node:getChildByName("gezi_"..x.."_"..y)
+			self["gezi_"..x.."_"..y.."_black"] = self.arena_bottom_node:getChildByName("gezi_"..x.."_"..y)
 			if self["gezi_"..x.."_"..y] then
 				self["gezi_"..x.."_"..y].arena_pos = cc.p(x,y)
                 self:addArenaListener(self["gezi_"..x.."_"..y])
@@ -106,8 +157,16 @@ function map_view:addArenaListener(gezi)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
 		local start_location = touch:getLocation()
-
-        return true
+		if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+        	if node:hitTest(start_location, self.camera, nil) then
+        		local x,y = node:getPosition()
+        		self.moveto_point_sp:setPosition(x,y)
+        		self.target_gezi = node
+        	end
+        	return true
+        else
+        	return false
+        end
     end
 
     local function touchMoved( touch, event )
@@ -122,8 +181,6 @@ function map_view:addArenaListener(gezi)
         	self.moveto_point_sp:setPosition(uitool:farAway())
             self.target_gezi = nil
         end
-
-
     end
 
     local function touchEnded( touch, event )
@@ -133,12 +190,8 @@ function map_view:addArenaListener(gezi)
 
         if node:hitTest(cur_location, self.camera, nil) then
             local x,y = node:getPosition()
+            Judgment:Instance():selectPos(cc.p(x,y),node)
         end
-        -- if self.target_gezi then
-        --     local x,y = self.target_gezi:getPosition()
-        --     self.test_monster.model:runAction((cc.MoveTo:create(0.5,cc.p(x,y))))
-        -- end
-        
     end
 
     gezi.listener = cc.EventListenerTouchOneByOne:create()
@@ -171,8 +224,11 @@ function map_view:pauseArenaListener()
 	end
 end
 
-function map_view:initArenaUpNode()
-	self.moveto_point_sp = self.arena_up_node:getChildByName("moveto_point_sp")
+function map_view:initArenaBottomNode()
+	self.moveto_point_sp 		= self.arena_bottom_node:getChildByName("moveto_point_sp")
+	self.cur_monster_pos_sp 	= self.arena_bottom_node:getChildByName("cur_monster_pos_sp")
+	self.far_attack_img 		= self.arena_bottom_node:getChildByName("far_attack_img")
+	self.close_attack_img 		= self.arena_bottom_node:getChildByName("close_attack_img")
 end
 
 --------------------------战场部分结束-------------------------

@@ -36,6 +36,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.level 					= data.level
 	self.rarity					= data.rarity
 	self.cur_hp 				= data.hp
+	self.attack_type			= data.attack_type
 
 	self.model_path 			= data.model_path
 	
@@ -95,29 +96,41 @@ function MonsterBase:getGeziListCanMoveTo()
 		print("can't move!")
 	end
 
+	local map_info = Judgment:Instance():getMapInfo()
+
 	local temp_list = {}
 	local return_list = {}
 	local findGezi = function(pos)
-		if pos.x < 1 or pos.x > 8 or pos.y < 1 or pos.y > 7 then
+		if pos < 10 or pos > 85 or pos%10>7 then
 			return
 		end
-		return_list[(pos.x+1)*10+pos.y] = true
-		return_list[(pos.x-1)*10+pos.y] = true
-		return_list[pos.x*10+(pos.y+1)] = true
-		return_list[pos.x*10+(pos.y-1)] = true
-		return_list[(pos.x+1)*10+(pos.y+1)] = true
-		return_list[(pos.x+1)*10+(pos.y-1)] = true
+		if pos%2 == 0 then
+			return_list[pos+10] = Judgment.MapItem.EMPTY
+			return_list[pos-10] = Judgment.MapItem.EMPTY
+			return_list[pos+1] 	= Judgment.MapItem.EMPTY
+			return_list[pos-1] 	= Judgment.MapItem.EMPTY
+			return_list[pos+11] = Judgment.MapItem.EMPTY
+			return_list[pos+9] 	= Judgment.MapItem.EMPTY
+		else
+			return_list[pos+10] = Judgment.MapItem.EMPTY
+			return_list[pos-10] = Judgment.MapItem.EMPTY
+			return_list[pos+1] 	= Judgment.MapItem.EMPTY
+			return_list[pos-1] 	= Judgment.MapItem.EMPTY
+			return_list[pos-11] = Judgment.MapItem.EMPTY
+			return_list[pos-9] 	= Judgment.MapItem.EMPTY
+		end
 	end
 
-	findGezi(self.cur_pos)
+	findGezi(gtool:ccpToInt(self.cur_pos))
 	for k,v in pairs(return_list) do
 		table.insert(temp_list,k)
 	end
 
 	for i=2,self.cur_mobility do
 		for _,v in pairs(temp_list) do
-			local x,_ = math.modf(v/10)
-			findGezi(cc.p(x,v%10))
+			if not map_info[v] then
+				findGezi(v)
+			end
 
 			temp_list = {}
 
@@ -127,13 +140,27 @@ function MonsterBase:getGeziListCanMoveTo()
 		end
 	end
 
-	return_list[self.cur_pos.x*10+self.cur_pos.y] = nil
-
+	for k,v in pairs(map_info) do
+		if type(v) == type({}) and v.team_side ~= self.team_side then
+			return_list[k] = Judgment.MapItem.ENEMY
+		else
+			return_list[k] = nil
+		end
+	end
+	return_list[0] = self.cur_pos
 	return return_list
+end
+
+function MonsterBase:isMonster()
+	return true
 end
 
 function MonsterBase:isDead()
 	return self.status == MonsterBase.Status.DEAD
+end
+
+function MonsterBase:isMelee()
+	return self.attack_type < Config.Monster_attack_type.SHOOTER
 end
 
 function MonsterBase:onActive()
@@ -148,11 +175,43 @@ function MonsterBase:onActive()
 end
 
 function MonsterBase:moveTo(pos)
+	local ac1 = self.model:runAction(cc.MoveTo:create(0.5,pos))
+	local cb = function()
+		Judgment:Instance():nextMonsterActivate()
+	end
+	local callback = cc.CallFunc:create(cb)
+	local seq = cc.Sequence:create(ac1,callback)
 	
+	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
+	
+	self.model:runAction(seq)
 end
 
 function MonsterBase:attack(target)
+	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	
+	self.model:runAction(cc.RotateBy:create(0.5, cc.vec3(0,360,0)))
+
+	target:beAttacked(self)
+end
+
+function MonsterBase:beAttacked(murderer)
+	self.cur_hp = self.cur_hp - murderer.cur_damage
+	print("self.cur_hp "..self.cur_hp)
+	if self.cur_hp < 0 then
+		self:die()
+	else
+		local ac1 = self.model:runAction(cc.ScaleTo:create(0.5,30*self.cur_hp/self.max_hp))
+		local cb = function()
+			Judgment:Instance():nextMonsterActivate()
+		end
+		local callback = cc.CallFunc:create(cb)
+		local seq = cc.Sequence:create(ac1,callback)
+		
+		Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
+		
+		self.model:runAction(seq)
+	end
 end
 
 function MonsterBase:wait()
@@ -163,7 +222,19 @@ function MonsterBase:defend()
 
 end
 
-function MonsterBase:dead()
+function MonsterBase:die()
+	self.status = MonsterBase.Status.DEAD
+	local ac1 = self.model:runAction(cc.ScaleTo:create(0.5,30))
+	local ac2 = self.model:runAction(cc.FadeOut:create(1))
+	local cb = function()
+		Judgment:Instance():checkGameOver()
+	end
+	local callback = cc.CallFunc:create(cb)
+	local seq = cc.Sequence:create(ac1,ac2,callback)
+	
+	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
+	
+	self.model:runAction(seq)
 
 end
 

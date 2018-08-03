@@ -40,3 +40,17 @@ function debugPrintTable(table)
         print(k,v:getName())
     end
 end
+
+gtool = {}
+
+function gtool:ccpToInt(pos)
+    return pos.x*10+pos.y 
+end
+
+function gtool:intToCcp(num)
+    return cc.p(math.modf(num/10),num%10) 
+end
+
+function gtool:getTwoPosDistanceInt(a,b)
+    
+end

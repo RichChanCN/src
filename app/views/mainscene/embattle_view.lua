@@ -68,7 +68,8 @@ function embattle_view:initEvents()
 
     uitool:makeImgToButton(self.fight_img,function()
     	local left_team = self:makeTeam()
-    	Judgment:Instance():initGame(left_team,{})
+    	local right_team = self:makeEnemyTeam()
+    	Judgment:Instance():initGame(left_team,right_team)
         self.ctrl:goToFightScene()
     end)
 end
@@ -102,6 +103,16 @@ function embattle_view:makeTeam()
 	for _,v in pairs(self.monster_team) do
 		table.insert(team, MonsterBase:instance():new(Config.Monster[v.monster_id],MonsterBase.TeamSide.Left,v.arena_cell.pos))
 	end
+
+	return team
+end
+
+function embattle_view:makeEnemyTeam()
+	local team = {}
+	local MonsterBase = require("app.logic.MonsterBase")
+
+	table.insert(team, MonsterBase:instance():new(Config.Monster[1],MonsterBase.TeamSide.RIGHT,cc.p(8,3)))
+	table.insert(team, MonsterBase:instance():new(Config.Monster[1],MonsterBase.TeamSide.RIGHT,cc.p(8,5)))
 
 	return team
 end

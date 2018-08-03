@@ -41,8 +41,20 @@ function FightScene:startGame()
 	Judgment:Instance():startGame()
 end
 
+function FightScene:gameOver()
+	local ac1 = self.map_view.root:runAction(cc.ScaleTo:create(1,1))
+	local ac2 = self.map_view.root:runAction(cc.ScaleTo:create(0.3,0.75))
+	
+	--local callback = cc.CallFunc:create(handler(self,self.startGame))
+
+	local seq1 = cc.Sequence:create(ac1,ac2)
+		
+	self.map_view.root:runAction(seq1)
+end
+
 function FightScene:initModel()
-	for _,v in pairs(Judgment:Instance().left_team) do
+	local all_monster = Judgment:Instance():getAllMonsters()
+	for _,v in pairs(all_monster) do
 		self.map_view:createModel(v)
 	end
 end

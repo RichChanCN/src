@@ -95,6 +95,23 @@ function uitool:moveToAndFadeOut(node,pos)
     node:runAction(seq1)
 end
 
+function uitool:repeatFadeInAndOut(node)
+    local children = node:getChildren()
+
+    if #children > 0 then
+        for i=1, #children do
+            self:repeatFadeInAndOut(children[i])
+        end
+    end
+
+    local ac1 = node:runAction(cc.FadeOut:create(2)) 
+    local ac2 = node:runAction(cc.FadeIn:create(1.5))
+
+    local seq1 = cc.Sequence:create(ac1,ac2)
+    
+    node:runAction(cc.Repeat:create(seq1,9999))
+end
+
 function uitool:makeImgToButton(img,callback)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
@@ -137,3 +154,34 @@ function uitool:makeImgToButton(img,callback)
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
+
+function uitool:makeImgToButtonHT(img,camera,callback)
+    local function touchBegan( touch, event )
+        local node = event:getCurrentTarget()
+        local start_location = touch:getLocation()
+
+        if node:hitTest(start_location, camera, nil) then
+            return true
+        end
+
+        return false
+    end
+
+    local function touchEnded( touch, event )
+        local node = event:getCurrentTarget()
+        local end_location = touch:getLocation()
+
+        if node:hitTest(end_location, camera, nil) then
+            if callback then
+                callback()
+            end
+        end
+    end
+
+    img.listener = cc.EventListenerTouchOneByOne:create()
+    img.listener:setSwallowTouches(true)
+    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
+    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+end
