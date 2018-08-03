@@ -63,19 +63,19 @@ function battle_info_view:initRightBottom()
 end
 
 function battle_info_view:initRightBottomEvents()
-    uitool:makeImgToButton(self.defend_img, function()
+    uitool:makeImgToButtonNoScale(self.defend_img, function()
         if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
             Judgment:Instance():requestDefend()
         end
     end)
 
-    uitool:makeImgToButton(self.wait_img, function()
+    uitool:makeImgToButtonNoScale(self.wait_img, function()
         if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
             Judgment:Instance():requestWait()
         end
     end)
 
-    uitool:makeImgToButton(self.auto_img, function()
+    uitool:makeImgToButtonNoScale(self.auto_img, function()
         if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
             Judgment:Instance():requestAuto()
         end

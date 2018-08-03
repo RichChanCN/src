@@ -154,6 +154,34 @@ function uitool:makeImgToButton(img,callback)
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
+function uitool:makeImgToButtonNoScale(img,callback)
+    local function touchBegan( touch, event )
+        local node = event:getCurrentTarget()
+
+        if self:isTouchInNodeRect(node,touch,event) then
+            return true
+        end
+
+        return false
+    end
+
+    local function touchEnded( touch, event )
+        local node = event:getCurrentTarget()
+        
+        if self:isTouchInNodeRect(node,touch,event) then
+            if callback then
+                callback()
+            end
+        end
+    end
+
+    img.listener = cc.EventListenerTouchOneByOne:create()
+    img.listener:setSwallowTouches(true)
+    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
+    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+end
 
 function uitool:makeImgToButtonHT(img,camera,callback)
     local function touchBegan( touch, event )
