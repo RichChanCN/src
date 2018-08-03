@@ -9,6 +9,7 @@ map_view.RESOURCE_BINDING = {
     ["arena_event_node"]	= {["varname"] = "arena_event_node"},
     ["model_panel"]			= {["varname"] = "model_panel"},
     ["arena_top_node"]		= {["varname"] = "arena_top_node"},
+    ["mask_img"]			= {["varname"] = "mask_img"},
 }
 
 function map_view:init()
@@ -114,6 +115,24 @@ function map_view:hideGuide()
     		end
     	end
     end
+end
+
+function map_view:showMask()
+	local ac1 = self.mask_img:runAction(cc.FadeOut:create(self.ctrl.Wait_Time))
+	local ac2 = self.mask_img:runAction(cc.FadeIn:create(self.ctrl.Action_Time))
+
+	local seq = cc.Sequence:create(ac1,ac2)
+	
+	self.mask_img:runAction(seq)
+end
+
+function map_view:hideMask()
+	local ac1 = self.mask_img:runAction(cc.FadeIn:create(self.ctrl.Wait_Time))
+	local ac2 = self.mask_img:runAction(cc.FadeOut:create(self.ctrl.Action_Time))
+
+	local seq = cc.Sequence:create(ac1,ac2)
+	
+	self.mask_img:runAction(seq)
 end
 --------------------------战场部分开始-------------------------
 function map_view:createModel(monster)

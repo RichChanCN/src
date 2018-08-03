@@ -8,10 +8,15 @@ FightScene.RESOURCE_FILENAME = "FightScene.csb"
 FightScene.RESOURCE_BINDING = {
 	--map_view
     ["map_view"]			= {["varname"] = "map_view"},
+	--map_view
+    ["battle_info_view"]	= {["varname"] = "battle_info_view"},
  }
 
 --面板文件位置
 FightScene.VIEW_PATH = "app.views.fightscene"
+
+FightScene.Wait_Time = 1
+FightScene.Action_Time = 0.3
 
 function FightScene:onCreate()
     cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
@@ -27,29 +32,33 @@ end
 function FightScene:onEnterTransitionFinish()
     cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 
-    local ac1 = self.map_view.root:runAction(cc.ScaleTo:create(1,0.75))
-    local ac2 = self.map_view.root:runAction(cc.ScaleTo:create(0.3,1))
+    local ac1 = self.map_view.root:runAction(cc.ScaleTo:create(self.Wait_Time,0.75))
+    local ac2 = self.map_view.root:runAction(cc.ScaleTo:create(self.Action_Time,1))
     local callback = cc.CallFunc:create(handler(self,self.startGame))
 
-    local seq1 = cc.Sequence:create(ac1,ac2,callback)
+    local seq = cc.Sequence:create(ac1,ac2,callback)
 	
-	self.map_view.root:runAction(seq1)
+	self.map_view:showMask()
+	self.map_view.root:runAction(seq)
 end
 
 function FightScene:startGame()
 	Judgment:Instance():setScene(self)
 	Judgment:Instance():startGame()
+	self.battle_info_view:openView()
 end
 
 function FightScene:gameOver()
-	local ac1 = self.map_view.root:runAction(cc.ScaleTo:create(1,1))
-	local ac2 = self.map_view.root:runAction(cc.ScaleTo:create(0.3,0.75))
+	local ac1 = self.map_view.root:runAction(cc.ScaleTo:create(self.Wait_Time,1))
+	local ac2 = self.map_view.root:runAction(cc.ScaleTo:create(self.Action_Time,0.75))
 	
 	--local callback = cc.CallFunc:create(handler(self,self.startGame))
 
-	local seq1 = cc.Sequence:create(ac1,ac2)
+	local seq = cc.Sequence:create(ac1,ac2)
 		
-	self.map_view.root:runAction(seq1)
+	self.map_view.root:runAction(seq)
+	self.battle_info_view:closeView()
+	self.map_view:hideMask()
 end
 
 function FightScene:initModel()
@@ -61,6 +70,7 @@ end
 
 function FightScene:viewInit()
 	self.map_view:init()
+	self.battle_info_view:init()
 end
 
 function FightScene:updateMapView()

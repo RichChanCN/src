@@ -198,7 +198,7 @@ end
 function MonsterBase:beAttacked(murderer)
 	self.cur_hp = self.cur_hp - murderer.cur_damage
 	print("self.cur_hp "..self.cur_hp)
-	if self.cur_hp < 0 then
+	if self.cur_hp < 1 then
 		self:die()
 	else
 		local ac1 = self.model:runAction(cc.ScaleTo:create(0.5,30*self.cur_hp/self.max_hp))
@@ -215,11 +215,18 @@ function MonsterBase:beAttacked(murderer)
 end
 
 function MonsterBase:wait()
-
+	if self.is_waited then
+		print("you has been waited!")
+	else
+		self.is_waited = true
+		Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
+		Judgment:Instance():nextMonsterActivate(true)
+	end
 end
 
 function MonsterBase:defend()
-
+	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
+	Judgment:Instance():nextMonsterActivate()
 end
 
 function MonsterBase:die()

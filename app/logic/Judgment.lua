@@ -73,6 +73,8 @@ function Judgment:setScene(scene)
 end
 
 function Judgment:initGame(left_team,right_team)
+	self.game_speed = 1
+
 	self.left_team = left_team
 	self.right_team = right_team
 
@@ -100,9 +102,13 @@ function Judgment:gameOver()
 	self.scene:gameOver()
 end
 
-function Judgment:nextMonsterActivate()
+function Judgment:nextMonsterActivate(is_wait)
 	if not self.cur_active_monster:isDead() then
-		table.insert(self.next_round_monster_queue,self.cur_active_monster)
+		if not is_wait then
+			table.insert(self.next_round_monster_queue,self.cur_active_monster)
+		else
+			table.insert(self.cur_round_monster_queue,self.cur_active_monster)
+		end
 	end
 
 	self.cur_active_monster = self:getNextMonster()
@@ -172,6 +178,19 @@ function Judgment:selectTarget(num)
 	if self.map_info[num] and self.map_info[num]:isMonster() then
 		self:runGame(Judgment.Order.ATTACK, self.map_info[num])
 	end
+end
+
+function Judgment:requestDefend()
+	self:runGame(Judgment.Order.DEFEND)
+end
+
+function Judgment:requestWait()
+	self:runGame(Judgment.Order.WAIT)
+
+end
+
+function Judgment:requestAuto()
+	
 end
 
 function Judgment:setGameStatus(status)
