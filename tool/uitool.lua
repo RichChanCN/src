@@ -25,6 +25,11 @@ function uitool:getNodeCenterPosition(node)
     return cc.p(size.width/2,size.height/2)
 end
 
+function uitool:getNodeBottomCenterPosition(node)
+    local size = node:getContentSize()
+    return cc.p(size.width/2,0)
+end
+
 function uitool:createUIBinding(panel,binding)
     assert(panel.root, "uitool:createResourceBinding() - not load resource node")
 	for nodeName, nodeBinding in pairs(binding) do
@@ -107,9 +112,9 @@ function uitool:repeatFadeInAndOut(node)
     local ac1 = node:runAction(cc.FadeOut:create(2)) 
     local ac2 = node:runAction(cc.FadeIn:create(1.5))
 
-    local seq1 = cc.Sequence:create(ac1,ac2)
+    local seq = cc.Sequence:create(ac1,ac2)
     
-    node:runAction(cc.Repeat:create(seq1,9999))
+    node:runAction(cc.RepeatForever:create(seq))
 end
 
 function uitool:makeImgToButton(img,callback)

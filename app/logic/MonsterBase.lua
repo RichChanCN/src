@@ -61,6 +61,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	
 	self.team_side				= team_side
 	self.towards				= MonsterBase.Towards[team_side]
+	self.cur_towads				= self.towards
 	self.is_waited				= false
 	self.start_pos 				= arena_pos
 	self.cur_pos 				= arena_pos
@@ -74,6 +75,9 @@ function MonsterBase:new( data,team_side,arena_pos )
 end
 
 function MonsterBase:reset()
+	if not self.model then
+		return
+	end
 	self.cur_hp 					= self.max_hp
 	self.cur_pos    				= self.start_pos
 	self.status 					= MonsterBase.Status.ALIVE
@@ -86,12 +90,14 @@ function MonsterBase:reset()
 	self.cur_mobility 				= self.mobility 			
 	self.cur_initiative 			= self.initiative 		
 	self.cur_defense_penetration 	= self.defense_penetration
-
+	self.cur_towads					= self.towards
 	self.buff_list				= {}
 	self.debuff_list			= {}
+
+	self:towardTo(self.cur_towads)
 end
 
-function MonsterBase:getGeziListCanMoveTo()
+function MonsterBase:getAroundInfo()
 	if self.cur_mobility < 1 then
 		print("can't move!")
 	end
@@ -99,30 +105,26 @@ function MonsterBase:getGeziListCanMoveTo()
 	local map_info = Judgment:Instance():getMapInfo()
 
 	local temp_list = {}
-	local return_list = {}
+	self.around_info = {}
 	local findGezi = function(pos)
 		if pos < 10 or pos > 85 or pos%10>7 then
 			return
 		end
+		self:pathFindHelp(pos,pos+10)
+		self:pathFindHelp(pos,pos-10)
+		self:pathFindHelp(pos,pos+1)
+		self:pathFindHelp(pos,pos-1)
 		if pos%2 == 0 then
-			return_list[pos+10] = Judgment.MapItem.EMPTY
-			return_list[pos-10] = Judgment.MapItem.EMPTY
-			return_list[pos+1] 	= Judgment.MapItem.EMPTY
-			return_list[pos-1] 	= Judgment.MapItem.EMPTY
-			return_list[pos+11] = Judgment.MapItem.EMPTY
-			return_list[pos+9] 	= Judgment.MapItem.EMPTY
+			self:pathFindHelp(pos,pos+11)
+			self:pathFindHelp(pos,pos+9)
 		else
-			return_list[pos+10] = Judgment.MapItem.EMPTY
-			return_list[pos-10] = Judgment.MapItem.EMPTY
-			return_list[pos+1] 	= Judgment.MapItem.EMPTY
-			return_list[pos-1] 	= Judgment.MapItem.EMPTY
-			return_list[pos-11] = Judgment.MapItem.EMPTY
-			return_list[pos-9] 	= Judgment.MapItem.EMPTY
+			self:pathFindHelp(pos,pos-11)
+			self:pathFindHelp(pos,pos-9)
 		end
 	end
 
 	findGezi(gtool:ccpToInt(self.cur_pos))
-	for k,v in pairs(return_list) do
+	for k,v in pairs(self.around_info) do
 		table.insert(temp_list,k)
 	end
 
@@ -134,7 +136,7 @@ function MonsterBase:getGeziListCanMoveTo()
 
 			temp_list = {}
 
-			for k,v in pairs(return_list) do
+			for k,v in pairs(self.around_info) do
 				table.insert(temp_list,k)
 			end
 		end
@@ -142,13 +144,21 @@ function MonsterBase:getGeziListCanMoveTo()
 
 	for k,v in pairs(map_info) do
 		if type(v) == type({}) and v.team_side ~= self.team_side then
-			return_list[k] = Judgment.MapItem.ENEMY
+			if not self:isMelee() or self:canAttack(k) then
+				self.around_info[k] = Judgment.MapItem.ENEMY
+			end
 		else
-			return_list[k] = nil
+			self.around_info[k] = nil
 		end
 	end
-	return_list[0] = self.cur_pos
-	return return_list
+	self.around_info[0] = self.cur_pos
+	return self.around_info
+end
+
+function MonsterBase:pathFindHelp(pos, num)
+	if not self.around_info[num] then
+		self.around_info[num] = pos
+	end
 end
 
 function MonsterBase:isMonster()
@@ -175,6 +185,7 @@ function MonsterBase:onActive()
 end
 
 function MonsterBase:moveTo(pos)
+	pos.y = pos.y - 10
 	local ac1 = self.model:runAction(cc.MoveTo:create(0.5,pos))
 	local cb = function()
 		Judgment:Instance():nextMonsterActivate()
@@ -251,6 +262,44 @@ end
 
 function MonsterBase:turnToTarget(target)
 	
+end
+
+function MonsterBase:towardTo(num)
+	self.model:setRotation3D(cc.vec3(0,(num-1)*60,0))
+end
+
+function MonsterBase:canAttack(num)
+	if num%2 == 0 then
+		if self.around_info[num+10]
+			or self.around_info[num-10]
+			or self.around_info[num+1]
+			or self.around_info[num-1]
+			or self.around_info[num+11]
+			or self.around_info[num+9] then
+			
+			return true
+		end
+	else
+		if self.around_info[num+10]
+			or self.around_info[num-10]
+			or self.around_info[num+1]
+			or self.around_info[num-1]
+			or self.around_info[num-11]
+			or self.around_info[num-9] then
+			
+			return true
+		end
+	end
+
+	return false
+end
+
+function MonsterBase:distanceBetweenPos(num1,num2)
+	local min = math.min(num1,num2)
+	local max = math.min(num1,num2)
+	if max - min == 0 then
+		return 0
+	end
 end
 
 function MonsterBase:updateCurAttribute()

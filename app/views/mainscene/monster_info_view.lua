@@ -103,9 +103,16 @@ function monster_info_view:createModel(data)
 
 	local callback = function(model)
 		--print("load finish")
-		model:setScale(100)
-		model:setPosition(uitool:getNodeCenterPosition(self.model_panel))
-		--model:setGlobalZOrder(1)
+		model:setScale(4)
+        model:setRotation3D(cc.vec3(0,-90,0))
+		model:setPosition(uitool:getNodeBottomCenterPosition(self.model_panel))
+        
+        self.animation = cc.Animation3D:create(data.model_path)
+        if self.animation then
+            local animate = cc.Animate3D:createWithFrames(self.animation,1,52)
+            model:runAction(cc.RepeatForever:create(animate))
+        end
+        --model:setGlobalZOrder(1)
         --model:setCameraMask(cc.CameraFlag.USER1)
 		self.monster_model = model
 		self.model_panel:addChild(model)

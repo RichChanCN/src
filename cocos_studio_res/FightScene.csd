@@ -515,7 +515,7 @@
                 </Children>
                 <AnchorPoint />
                 <Position X="960.0000" Y="518.4000" />
-                <Scale ScaleX="2.0000" ScaleY="2.0000" />
+                <Scale ScaleX="2.2000" ScaleY="3.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.5000" Y="0.4800" />
                 <PreSize X="0.0000" Y="0.0000" />
@@ -1082,7 +1082,7 @@
                 </Children>
                 <AnchorPoint />
                 <Position X="960.0000" Y="518.4000" />
-                <Scale ScaleX="2.0000" ScaleY="2.0000" />
+                <Scale ScaleX="2.2000" ScaleY="3.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.5000" Y="0.4800" />
                 <PreSize X="0.0000" Y="0.0000" />
@@ -1583,16 +1583,16 @@
                 </Children>
                 <AnchorPoint />
                 <Position X="960.0000" Y="518.4000" />
-                <Scale ScaleX="2.0000" ScaleY="2.0000" />
+                <Scale ScaleX="2.2000" ScaleY="3.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.5000" Y="0.4800" />
                 <PreSize X="0.0000" Y="0.0000" />
               </AbstractNodeData>
-              <AbstractNodeData Name="model_panel" ActionTag="-1215873286" Tag="156" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="960.0000" RightMargin="760.0000" TopMargin="361.6000" BottomMargin="518.4000" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
+              <AbstractNodeData Name="model_panel" ActionTag="-1215873286" Tag="156" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="960.0000" RightMargin="760.0000" TopMargin="361.6000" BottomMargin="518.4000" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
                 <Size X="200.0000" Y="200.0000" />
                 <AnchorPoint />
                 <Position X="960.0000" Y="518.4000" />
-                <Scale ScaleX="2.0000" ScaleY="2.0000" />
+                <Scale ScaleX="2.2000" ScaleY="3.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.5000" Y="0.4800" />
                 <PreSize X="0.1042" Y="0.1852" />
@@ -1605,7 +1605,7 @@
                 <Size X="0.0000" Y="0.0000" />
                 <AnchorPoint />
                 <Position X="960.0000" Y="518.4000" />
-                <Scale ScaleX="2.0000" ScaleY="2.0000" />
+                <Scale ScaleX="2.2000" ScaleY="3.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.5000" Y="0.4800" />
                 <PreSize X="0.0000" Y="0.0000" />
@@ -1632,16 +1632,16 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="battle_info_view" ActionTag="-443919855" Tag="500" IconVisible="False" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
+          <AbstractNodeData Name="battle_info_view" ActionTag="-443919855" Tag="500" IconVisible="False" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
-              <AbstractNodeData Name="left_bottom_img" ActionTag="554916194" Tag="503" IconVisible="False" LeftMargin="0.0000" RightMargin="1220.0000" TopMargin="1433.0000" BottomMargin="-530.0000" Scale9Enable="True" LeftEage="315" RightEage="207" TopEage="58" BottomEage="58" Scale9OriginX="315" Scale9OriginY="58" Scale9Width="107" Scale9Height="61" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="left_bottom_img" ActionTag="554916194" Tag="503" IconVisible="False" RightMargin="1220.0000" TopMargin="1433.0000" BottomMargin="-530.0000" Scale9Enable="True" LeftEage="315" RightEage="207" TopEage="58" BottomEage="58" Scale9OriginX="315" Scale9OriginY="58" Scale9Width="107" Scale9Height="61" ctype="ImageViewObjectData">
                 <Size X="700.0000" Y="177.0000" />
                 <AnchorPoint />
-                <Position X="0.0000" Y="-530.0000" />
+                <Position Y="-530.0000" />
                 <Scale ScaleX="1.2000" ScaleY="1.2000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.0000" Y="-0.4907" />
+                <PrePosition Y="-0.4907" />
                 <PreSize X="0.3646" Y="0.1639" />
                 <FileData Type="Normal" Path="Sprite/battleArray_bg_blue.png" Plist="" />
               </AbstractNodeData>

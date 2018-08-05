@@ -29,11 +29,12 @@ end
 
 function map_view:initInfo()
 	self.monster_model_list = {}
-	self.arena_event_node:setRotation3D(cc.vec3(-40,0,0))
-	self.arena_show_node:setRotation3D(cc.vec3(-40,0,0))
-	self.arena_bottom_node:setRotation3D(cc.vec3(-40,0,0))
-	self.arena_top_node:setRotation3D(cc.vec3(-40,0,0))
-	self.model_panel:setRotation3D(cc.vec3(-40,0,0))
+	self.skew_angle = 60
+	self.arena_event_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
+	self.arena_show_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
+	self.arena_bottom_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
+	self.arena_top_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
+	self.model_panel:setRotation3D(cc.vec3(self.skew_angle,0,0))
     self.camera = self.ctrl:getScene():getDefaultCamera()
     self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
@@ -55,7 +56,7 @@ end
 ----------------------------------------------------------------
 function map_view:showGuide()
 	local cur_active_monster = Judgment:Instance():getCurActiveMonster()
-	local gezi_list = cur_active_monster:getGeziListCanMoveTo()
+	local gezi_list = cur_active_monster:getAroundInfo()
 	
 	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
 	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
@@ -142,14 +143,15 @@ function map_view:createModel(monster)
     end
 
 	local callback = function(model)
-		model:setScale(30)
-		model:setRotation3D(cc.vec3(0,45,0))
-		
-		--model:setGlobalZOrder(1)
+		model:setScale(0.6)
+		--model:setRotation3D(cc.vec3(90,0,0))
+		local z = math.modf(gtool:ccpToInt(monster.cur_pos)/10)
+		model:setGlobalZOrder(10 - z)
 		local pos = monster.start_pos
         local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
-		model:setPosition(x,y-10)
+        model:setPosition(x,y-10)
 		monster.model = model
+		monster:reset()
 		self.model_panel:addChild(model)
 	end
     cc.Sprite3D:createAsync(monster.model_path,callback)
