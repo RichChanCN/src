@@ -29,6 +29,7 @@ end
 
 function map_view:initInfo()
 	self.monster_model_list = {}
+	self.monster_loaded_num = 0
 	self.skew_angle = 60
 	self.arena_event_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
 	self.arena_show_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
@@ -51,6 +52,22 @@ function map_view:updateView()
 	end
 end
 
+function map_view:beginAnimation()
+    local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time,0.75))
+    local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,1))
+    local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.startGame))
+
+    local seq = cc.Sequence:create(ac1,ac2,callback)
+	
+	self:showMask()
+	self.root:runAction(seq)
+end
+
+function map_view:getPositionByInt(num)
+	local pos = gtool:intToCcp(num)
+	local a,b = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
+	return cc.p(a,b)
+end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
@@ -144,15 +161,22 @@ function map_view:createModel(monster)
 
 	local callback = function(model)
 		model:setScale(0.6)
-		--model:setRotation3D(cc.vec3(90,0,0))
-		local z = math.modf(gtool:ccpToInt(monster.cur_pos)/10)
-		model:setGlobalZOrder(10 - z)
+		
 		local pos = monster.start_pos
         local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
-        model:setPosition(x,y-10)
+        if not monster:isFly() then
+        	model:setPosition(x,y-10)
+        else
+        	model:setPosition(x,y+10)
+        end
+
 		monster.model = model
+		monster.animation = cc.Animation3D:create(monster.model_path)
 		monster:reset()
 		self.model_panel:addChild(model)
+		
+		self.monster_loaded_num = self.monster_loaded_num + 1
+		
 	end
     cc.Sprite3D:createAsync(monster.model_path,callback)
     

@@ -42,6 +42,7 @@ function MainScene:viewInit()
 	self.embattle_view:init()
 	self.monster_list_view:init()
 	self.monster_info_view:init()
+	print("main scene inited")
 end
 
 function MainScene:goToFightScene()

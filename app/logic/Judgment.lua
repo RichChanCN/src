@@ -28,8 +28,8 @@ Judgment.FSM = {
 		Judgment:Instance().cur_active_monster:onActive()
 	end,
 
-	[1] = function(pos)
-		Judgment:Instance().cur_active_monster:moveTo(pos)
+	[1] = function(pos,arena_pos)
+		Judgment:Instance().cur_active_monster:moveTo(pos,arena_pos)
 	end,
 
 	[2] = function(target)
@@ -93,13 +93,24 @@ function Judgment:startGame()
 	self:runGame(Judgment.Order.ACTIVATE)
 end
 
-function Judgment:runGame(order, param)
+function Judgment:runGame(order, param1, param2)
 	local action = Judgment.FSM[order]
-	action(param)
+	action(param1,param2)
 end
 
-function Judgment:gameOver()
+function Judgment:gameOver(win_side)
 	self.scene:gameOver()
+	if win_side == 1 then
+		local table = self:getLeftMonstersNotDead()
+		for k,v in pairs(table) do
+			v:repeatAnimation("victory")
+		end
+	else
+		local table = self:getRightMonstersNotDead()
+		for k,v in pairs(table) do
+			v:repeatAnimation("victory")
+		end
+	end
 end
 
 function Judgment:nextMonsterActivate(is_wait)
@@ -161,16 +172,15 @@ end
 
 function Judgment:changeGameStatus(status)
 	self.cur_game_status = status
-	self.scene:updateMapView()
 	self:updateMapInfo()
+	self.scene:updateMapView()
 end
 
 function Judgment:selectPos(pos,node)
 	if self.map_info[gtool:ccpToInt(node.arena_pos)] then
 		print("you can't do that!")
 	else
-		self.cur_active_monster.cur_pos = node.arena_pos
-		self:runGame(Judgment.Order.MOVE, pos)
+		self:runGame(Judgment.Order.MOVE, pos, node.arena_pos)
 	end
 end
 
@@ -201,16 +211,22 @@ function Judgment:getGameStatus()
 	return self.cur_game_status
 end
 
+function Judgment:setGameSpeed(speed)
+	self.game_speed = speed
+end
+
+function Judgment:getGameSpeed()
+	return self.game_speed
+end
+
 function Judgment:checkGameOver()
 	local right = self:getRightMonstersNotDead()
 	local left = self:getLeftMonstersNotDead()
 	
 	if #right < 1 then
-		print("left win")
-		self:gameOver()
+		self:gameOver(1)
 	elseif #left < 1 then
-		print("right win")
-		self:gameOver()
+		self:gameOver(4)
 	else
 		self:nextMonsterActivate()
 	end
@@ -292,4 +308,8 @@ function Judgment:sortAllMonstersByInitiative()
 	end
 
 	table.sort(self.all_monsters,sort_by_initiative)
+end
+
+function Judgment:getPositionByInt(num)
+	return self.scene.map_view:getPositionByInt(num)
 end

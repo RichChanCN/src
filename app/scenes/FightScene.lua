@@ -30,16 +30,8 @@ function FightScene:onEnter()
 end
 
 function FightScene:onEnterTransitionFinish()
-    cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
-
-    local ac1 = self.map_view.root:runAction(cc.ScaleTo:create(self.Wait_Time,0.75))
-    local ac2 = self.map_view.root:runAction(cc.ScaleTo:create(self.Action_Time,1))
-    local callback = cc.CallFunc:create(handler(self,self.startGame))
-
-    local seq = cc.Sequence:create(ac1,ac2,callback)
-	
-	self.map_view:showMask()
-	self.map_view.root:runAction(seq)
+	cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
+	self.map_view:beginAnimation()
 end
 
 function FightScene:startGame()

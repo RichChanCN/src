@@ -10,6 +10,11 @@ PreScene.RESOURCE_BINDING = {
  }
 
 function PreScene:onCreate()
+	self:beginAnimation()
+	self:preLoadMainScene()
+end
+
+function PreScene:beginAnimation()
 	local ac1 = self.cocos_logo_sp:runAction(cc.FadeIn:create(2))
 	local ac2 = self.cocos_logo_sp:runAction(cc.DelayTime:create(1))
 	local ac3 = self.cocos_logo_sp:runAction(cc.FadeOut:create(1))
@@ -21,17 +26,32 @@ function PreScene:onCreate()
 	
 	local callback = cc.CallFunc:create(handler(self,self.goToMainScene))
 
+	-- local cb = function()
+	-- 	self:goToMainScene()
+	-- end
+	
+	-- local callback = cc.CallFunc:create(handler(self,cb))
+	
 	local seq1 = cc.Sequence:create(ac0,ac1,ac2,ac3)
 	self.cocos_logo_sp:runAction(seq1)
 	local seq2 = cc.Sequence:create(ac4,ac5,ac6,ac7,callback)
 	self.game_logo_sp:runAction(seq2)
+end
 
+function PreScene:preLoadMainScene()
+	local starttime = os.clock();
+    self.app_:createView("MainScene")
+	local endtime = os.clock();
+
+	print(string.format("cost time  : %.4f", endtime - starttime))
 end
 
 function PreScene:goToMainScene()
-	
-    local scene = cc.Scene:create()
-    local layer = self.app_:createView("MainScene")
+	local starttime = os.clock();
+	local layer = self.app_:createView("MainScene")
+	local endtime = os.clock();
+	print(string.format("cost time  : %.4f", endtime - starttime))
+	local scene = cc.Scene:create()
     scene:addChild(layer)
 	if scene then
 		local ts = cc.TransitionFade:create(0.5, scene)

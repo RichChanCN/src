@@ -37,7 +37,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.rarity					= data.rarity
 	self.cur_hp 				= data.hp
 	self.attack_type			= data.attack_type
-
+	self.move_type 				= data.move_type
 	self.model_path 			= data.model_path
 	
 	self.skills_list 			= data.skills_list
@@ -75,9 +75,10 @@ function MonsterBase:new( data,team_side,arena_pos )
 end
 
 function MonsterBase:reset()
-	if not self.model then
+	if not self.model and self.animation then
 		return
 	end
+
 	self.cur_hp 					= self.max_hp
 	self.cur_pos    				= self.start_pos
 	self.status 					= MonsterBase.Status.ALIVE
@@ -95,6 +96,8 @@ function MonsterBase:reset()
 	self.debuff_list			= {}
 
 	self:towardTo(self.cur_towads)
+
+	self:toStand()
 end
 
 function MonsterBase:getAroundInfo()
@@ -107,7 +110,7 @@ function MonsterBase:getAroundInfo()
 	local temp_list = {}
 	self.around_info = {}
 	local findGezi = function(pos)
-		if pos < 10 or pos > 85 or pos%10>7 then
+		if pos < 10 or pos > 85 or pos%10>7 or pos == 84 then
 			return
 		end
 		self:pathFindHelp(pos,pos+10)
@@ -142,15 +145,21 @@ function MonsterBase:getAroundInfo()
 		end
 	end
 
+	local can_attack_table = {}
 	for k,v in pairs(map_info) do
 		if type(v) == type({}) and v.team_side ~= self.team_side then
 			if not self:isMelee() or self:canAttack(k) then
-				self.around_info[k] = Judgment.MapItem.ENEMY
+				table.insert(can_attack_table,k)
 			end
 		else
 			self.around_info[k] = nil
 		end
 	end
+
+	for k,v in pairs(can_attack_table) do
+		self.around_info[v] = Judgment.MapItem.ENEMY
+	end
+
 	self.around_info[0] = self.cur_pos
 	return self.around_info
 end
@@ -163,6 +172,10 @@ end
 
 function MonsterBase:isMonster()
 	return true
+end
+
+function MonsterBase:isFly()
+	return self.move_type == Config.Monster_move_type.FLY
 end
 
 function MonsterBase:isDead()
@@ -184,25 +197,70 @@ function MonsterBase:onActive()
 	self.model:runAction(seq)
 end
 
-function MonsterBase:moveTo(pos)
-	pos.y = pos.y - 10
-	local ac1 = self.model:runAction(cc.MoveTo:create(0.5,pos))
+function MonsterBase:moveTo(pos,arena_pos)
+	self:repeatAnimation("walk")
 	local cb = function()
+		self.cur_pos = arena_pos
+		self:toStand()
 		Judgment:Instance():nextMonsterActivate()
 	end
-	local callback = cc.CallFunc:create(cb)
-	local seq = cc.Sequence:create(ac1,callback)
-	
+	local callback = cc.CallFunc:create(handler(self,cb))
+
+	if self:isFly() then 
+		local ac1 = self.model:runAction(cc.MoveTo:create(0.5,pos+10))
+		local seq = cc.Sequence:create(ac1,callback)
+		self.model:runAction(seq)
+	else
+		self:moveFollowPath(arena_pos,callback)
+	end
+
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	
-	self.model:runAction(seq)
+end
+
+function MonsterBase:moveFollowPath(arena_pos,callback_final)
+	local num = gtool:ccpToInt(arena_pos)
+	local path = self:getPathToPos(num)
+	local ac_table  = {}
+	local next_pos
+	for i=#path,1,-1 do
+		local pos = Judgment:Instance():getPositionByInt(path[i])
+		if self:isFly() then
+			pos.y = pos.y+10
+		else
+			pos.y = pos.y-10
+		end
+		local action = self.model:runAction(cc.MoveTo:create(0.5,pos))
+		self.model:stopAction(action)
+		local cb = function()
+			self:towardToIntPos(path[i],path[i-1])
+		end
+		local callback = cc.CallFunc:create(handler(self,cb))
+		local seq = cc.Sequence:create(action,callback)
+		table.insert(ac_table,seq)
+	end
+	table.insert(ac_table,callback_final)
+
+	local all_seq = cc.Sequence:create(unpack(ac_table))
+	self:towardToIntPos(gtool:ccpToInt(self.cur_pos),path[#path])
+	self.model:runAction(all_seq)
+end
+
+function MonsterBase:getPathToPos(num, path_table)
+	path_table = path_table or {}
+	table.insert(path_table,num)
+	local last_geizi = self.around_info[num]
+	if gtool:ccpToInt(self.cur_pos) == last_geizi then
+		return path_table
+	else
+		return self:getPathToPos(last_geizi,path_table)
+	end
 end
 
 function MonsterBase:attack(target)
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
+	self:doAnimation("attack1")
 	
-	self.model:runAction(cc.RotateBy:create(0.5, cc.vec3(0,360,0)))
-
 	target:beAttacked(self)
 end
 
@@ -212,16 +270,13 @@ function MonsterBase:beAttacked(murderer)
 	if self.cur_hp < 1 then
 		self:die()
 	else
-		local ac1 = self.model:runAction(cc.ScaleTo:create(0.5,30*self.cur_hp/self.max_hp))
 		local cb = function()
 			Judgment:Instance():nextMonsterActivate()
 		end
 		local callback = cc.CallFunc:create(cb)
-		local seq = cc.Sequence:create(ac1,callback)
+		self:doAnimation("beattacked", callback)
 		
 		Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
-		
-		self.model:runAction(seq)
 	end
 end
 
@@ -242,18 +297,15 @@ end
 
 function MonsterBase:die()
 	self.status = MonsterBase.Status.DEAD
-	local ac1 = self.model:runAction(cc.ScaleTo:create(0.5,30))
 	local ac2 = self.model:runAction(cc.FadeOut:create(1))
 	local cb = function()
 		Judgment:Instance():checkGameOver()
 	end
 	local callback = cc.CallFunc:create(cb)
-	local seq = cc.Sequence:create(ac1,ac2,callback)
+	local seq = cc.Sequence:create(ac2,callback)
+	self:doAnimation("die", seq)
 	
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
-	
-	self.model:runAction(seq)
-
 end
 
 function MonsterBase:useSkill(index, target)
@@ -265,7 +317,43 @@ function MonsterBase:turnToTarget(target)
 end
 
 function MonsterBase:towardTo(num)
-	self.model:setRotation3D(cc.vec3(0,(num-1)*60,0))
+	self.model:setRotation3D(cc.vec3(0,(1-num)*60,0))
+end
+
+function MonsterBase:towardToIntPos(cur_num,to_num)
+	if not to_num then 
+		return
+	end
+	local deta = to_num - cur_num
+	if cur_num%2 == 0 then
+		if deta == 10 then
+			self:towardTo(1)
+		elseif deta == 9 then
+			self:towardTo(2)
+		elseif deta == -1 then
+			self:towardTo(3)
+		elseif deta == -10 then
+			self:towardTo(4)
+		elseif deta == 1 then
+			self:towardTo(5)
+		elseif deta == 11 then
+			self:towardTo(6)
+		end
+	else
+		if deta == 10 then
+			self:towardTo(1)
+		elseif deta == -1 then
+			self:towardTo(2)
+		elseif deta == -11 then
+			self:towardTo(3)
+		elseif deta == -10 then
+			self:towardTo(4)
+		elseif deta == -9 then
+			self:towardTo(5)
+		elseif deta == 1 then
+			self:towardTo(6)
+		end
+	end
 end
 
 function MonsterBase:canAttack(num)
@@ -304,6 +392,35 @@ end
 
 function MonsterBase:updateCurAttribute()
 	
+end
+
+function MonsterBase:toStand()
+	self:repeatAnimation("stand")
+end
+
+function MonsterBase:repeatAnimation(name)
+	if Config.Monster_animate[self.id][name] then
+    	local animate = Config.Monster_animate[self.id][name](self.animation)
+		self.model:stopAllActions()
+        self.model:runAction(cc.RepeatForever:create(animate))
+    end
+end
+
+function MonsterBase:doAnimation(name,cb)
+	if Config.Monster_animate[self.id][name] then
+    	local animate = Config.Monster_animate[self.id][name](self.animation)
+		local callback = cc.CallFunc:create(handler(self,self.toStand))
+		self.model:stopAllActions()
+		local seq
+		if self:isDead() then
+			seq = cc.Sequence:create(animate,cb)
+        else
+        	seq = cc.Sequence:create(animate,callback,cb)
+        end
+        self.model:runAction(seq)
+    elseif cb then
+    	self.model:runAction(cb)
+    end
 end
 
 return MonsterBase

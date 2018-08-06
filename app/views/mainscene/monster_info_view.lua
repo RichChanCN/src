@@ -31,6 +31,7 @@ function monster_info_view:initInfo()
     self.right_node_start_pos = cc.p(2350,500)
     self.right_node_final_pos = cc.p(1490,500)
 
+    self.next_animate = 2
     self.is_model_loaded = false
     self.monster_model = nil
     self.model_camera = nil
@@ -103,18 +104,23 @@ function monster_info_view:createModel(data)
 
 	local callback = function(model)
 		--print("load finish")
-		model:setScale(4)
+		model:setScale(4.5)
         model:setRotation3D(cc.vec3(0,-90,0))
-		model:setPosition(uitool:getNodeBottomCenterPosition(self.model_panel))
+        if data.move_type == Config.Monster_move_type.FLY then
+            model:setPosition(uitool:getNodeCenterPosition(self.model_panel))
+        else
+            model:setPosition(uitool:getNodeBottomCenterPosition(self.model_panel))
+        end
         
         self.animation = cc.Animation3D:create(data.model_path)
         if self.animation then
-            local animate = cc.Animate3D:createWithFrames(self.animation,1,52)
+            local animate = Config.Monster_animate[data.id].stand(self.animation)
             model:runAction(cc.RepeatForever:create(animate))
         end
         --model:setGlobalZOrder(1)
         --model:setCameraMask(cc.CameraFlag.USER1)
 		self.monster_model = model
+        self.cur_monster_id = data.id
 		self.model_panel:addChild(model)
 		self.is_model_loaded = true
 	end
@@ -161,7 +167,7 @@ function monster_info_view:initModelEvents()
 	    local start_pos = node:convertToNodeSpace(touch:getStartLocation())
 	    
 	    if cur_pos.x - start_pos.x < 10 and cur_pos.y - start_pos.y then
-	    	print("click model")
+	    	self:playAnAnimation()
 	    end
 	end
 
@@ -172,6 +178,19 @@ function monster_info_view:initModelEvents()
 	self.model_panel.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
 	local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 	eventDispatcher:addEventListenerWithSceneGraphPriority(self.model_panel.listener, self.model_panel)
+end
+
+function monster_info_view:playAnAnimation()
+    self.monster_model:stopAllActions()
+    local animate = Config.Monster_animate[self.cur_monster_id][self.next_animate](self.animation)
+    -- local ac1 = self.monster_model:runAction(animate)
+    -- animate = Config.Monster_animate[self.cur_monster_id].stand(self.animation)
+    -- local ac2 = self.monster_model:runAction(cc.RepeatForever:create(animate))
+    self.monster_model:runAction(cc.RepeatForever:create(animate))
+    -- local seq = cc.Sequence:create(ac1,ac2)
+    -- self.monster_model:runAction(seq)
+
+    self.next_animate = self.next_animate % Config.Monster_animate[self.cur_monster_id].show_num + 1
 end
 --------------------左边相关结束----------------------
 
