@@ -63,6 +63,17 @@ function map_view:beginAnimation()
 	self.root:runAction(seq)
 end
 
+function map_view:endAnimation()
+	local ac1 = self.root:runAction(cc.ScaleTo:create(self.Wait_Time,1))
+	local ac2 = self.root:runAction(cc.ScaleTo:create(self.Action_Time,0.75))
+
+	local seq = cc.Sequence:create(ac1,ac2)
+		
+	self.root:runAction(seq)
+	self:hideMask()
+	self.ctrl:closeBattleInfoView()
+end
+
 function map_view:getPositionByInt(num)
 	local pos = gtool:intToCcp(num)
 	local a,b = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
@@ -234,8 +245,7 @@ function map_view:addArenaListener(gezi)
         self.moveto_point_sp:setPosition(uitool:farAway())
 
         if node:hitTest(cur_location, self.camera, nil) then
-            local x,y = node:getPosition()
-            Judgment:Instance():selectPos(cc.p(x,y),node)
+            Judgment:Instance():selectPos(node)
         end
     end
 

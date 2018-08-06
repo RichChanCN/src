@@ -166,7 +166,7 @@ function monster_info_view:initModelEvents()
 	    local cur_pos = node:convertToNodeSpace(touch:getLocation())
 	    local start_pos = node:convertToNodeSpace(touch:getStartLocation())
 	    
-	    if cur_pos.x - start_pos.x < 10 and cur_pos.y - start_pos.y then
+	    if cur_pos.x - start_pos.x < 5 and cur_pos.y - start_pos.y < 5 then
 	    	self:playAnAnimation()
 	    end
 	end

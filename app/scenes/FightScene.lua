@@ -26,7 +26,6 @@ function FightScene:onEnter()
 	self:viewInit()
 	self:initModel()
 	self.map_view.root:setScale(0.75)
-	--cc.Camera:getDefaultCamera():setPosition3D(cc.vec3(960,540,1200))
 end
 
 function FightScene:onEnterTransitionFinish()
@@ -41,16 +40,7 @@ function FightScene:startGame()
 end
 
 function FightScene:gameOver()
-	local ac1 = self.map_view.root:runAction(cc.ScaleTo:create(self.Wait_Time,1))
-	local ac2 = self.map_view.root:runAction(cc.ScaleTo:create(self.Action_Time,0.75))
-	
-	--local callback = cc.CallFunc:create(handler(self,self.startGame))
-
-	local seq = cc.Sequence:create(ac1,ac2)
-		
-	self.map_view.root:runAction(seq)
-	self.battle_info_view:closeView()
-	self.map_view:hideMask()
+	self.map_view:endAnimation()
 end
 
 function FightScene:initModel()
@@ -67,6 +57,10 @@ end
 
 function FightScene:updateMapView()
 	self.map_view:updateView()
+end
+
+function FightScene:closeBattleInfoView()
+	self.battle_info_view:closeView()
 end
 
 return FightScene

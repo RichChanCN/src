@@ -28,8 +28,8 @@ Judgment.FSM = {
 		Judgment:Instance().cur_active_monster:onActive()
 	end,
 
-	[1] = function(pos,arena_pos)
-		Judgment:Instance().cur_active_monster:moveTo(pos,arena_pos)
+	[1] = function(arena_pos)
+		Judgment:Instance().cur_active_monster:moveTo(arena_pos)
 	end,
 
 	[2] = function(target)
@@ -101,12 +101,12 @@ end
 function Judgment:gameOver(win_side)
 	self.scene:gameOver()
 	if win_side == 1 then
-		local table = self:getLeftMonstersNotDead()
+		local table = self:getLeftAliveMonsters()
 		for k,v in pairs(table) do
 			v:repeatAnimation("victory")
 		end
 	else
-		local table = self:getRightMonstersNotDead()
+		local table = self:getRightAliveMonsters()
 		for k,v in pairs(table) do
 			v:repeatAnimation("victory")
 		end
@@ -115,13 +115,13 @@ end
 
 function Judgment:nextMonsterActivate(is_wait)
 	if not self.cur_active_monster:isDead() then
-		if not is_wait then
-			table.insert(self.next_round_monster_queue,self.cur_active_monster)
-		else
+		if is_wait then
 			table.insert(self.cur_round_monster_queue,self.cur_active_monster)
 		end
 	end
-
+	if not self.cur_active_monster:isWaited() then
+		table.insert(self.next_round_monster_queue,self.cur_active_monster)
+	end
 	self.cur_active_monster = self:getNextMonster()
 
 	if not self.cur_active_monster then
@@ -139,10 +139,20 @@ function Judgment:startNextRound()
 	self.cur_monster_index = 1
 	self.cur_round_monster_queue = self.next_round_monster_queue
 	self.next_round_monster_queue = {}
+	
+	self:aliveMonsterEnterNewRound()
+
 	self.cur_active_monster = self.cur_round_monster_queue[self.cur_monster_index]
 	self.cur_game_status = Judgment.GameStatus.ACTIVE
 	self:updateMapInfo()
 	self:runGame(Judgment.Order.ACTIVATE)
+end
+
+function Judgment:aliveMonsterEnterNewRound()
+	local all_alive_monster = self:getAllAliveMonsters()
+	for k,v in pairs(all_alive_monster) do
+		v:onEnterNewRound()
+	end
 end
 
 function Judgment:getNextMonster()
@@ -164,7 +174,7 @@ end
 
 function Judgment:updateMapInfo()
 	self.map_info = self.map or {}
-	local monsters = self:getAllMonstersNotDead()
+	local monsters = self:getAllAliveMonsters()
 	for k,v in pairs(monsters) do
 		self.map_info[gtool:ccpToInt(v.cur_pos)] = v
 	end
@@ -176,11 +186,11 @@ function Judgment:changeGameStatus(status)
 	self.scene:updateMapView()
 end
 
-function Judgment:selectPos(pos,node)
+function Judgment:selectPos(node)
 	if self.map_info[gtool:ccpToInt(node.arena_pos)] then
 		print("you can't do that!")
 	else
-		self:runGame(Judgment.Order.MOVE, pos, node.arena_pos)
+		self:runGame(Judgment.Order.MOVE, node.arena_pos)
 	end
 end
 
@@ -220,8 +230,8 @@ function Judgment:getGameSpeed()
 end
 
 function Judgment:checkGameOver()
-	local right = self:getRightMonstersNotDead()
-	local left = self:getLeftMonstersNotDead()
+	local right = self:getRightAliveMonsters()
+	local left = self:getLeftAliveMonsters()
 	
 	if #right < 1 then
 		self:gameOver(1)
@@ -252,7 +262,7 @@ function Judgment:getAllMonsters()
 end
 
 
-function Judgment:getAllMonstersNotDead()
+function Judgment:getAllAliveMonsters()
 	local all = {}
 	
 	for _,v in pairs(self.left_team) do
@@ -270,7 +280,7 @@ function Judgment:getAllMonstersNotDead()
 	return all
 end
 
-function Judgment:getLeftMonstersNotDead()
+function Judgment:getLeftAliveMonsters()
 	local all = {}
 	
 	for _,v in pairs(self.left_team) do
@@ -282,7 +292,7 @@ function Judgment:getLeftMonstersNotDead()
 	return all
 end
 
-function Judgment:getRightMonstersNotDead()
+function Judgment:getRightAliveMonsters()
 	local all = {}
 	
 	for _,v in pairs(self.right_team) do

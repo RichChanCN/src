@@ -66,6 +66,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.start_pos 				= arena_pos
 	self.cur_pos 				= arena_pos
 	self.status 				= MonsterBase.Status.ALIVE
+	self.steps 					= self.cur_mobility
 	self.buff_list				= {}
 	self.debuff_list			= {}
 
@@ -92,6 +93,7 @@ function MonsterBase:reset()
 	self.cur_initiative 			= self.initiative 		
 	self.cur_defense_penetration 	= self.defense_penetration
 	self.cur_towads					= self.towards
+	self.steps 						= self.cur_mobility
 	self.buff_list				= {}
 	self.debuff_list			= {}
 
@@ -101,14 +103,30 @@ function MonsterBase:reset()
 end
 
 function MonsterBase:getAroundInfo()
-	if self.cur_mobility < 1 then
-		print("can't move!")
-	end
-
 	local map_info = Judgment:Instance():getMapInfo()
-
 	local temp_list = {}
 	self.around_info = {}
+
+	if self.steps < 1 then
+		local can_attack_table = {}
+		for k,v in pairs(map_info) do
+			if type(v) == type({}) and v.team_side ~= self.team_side then
+				if not self:isMelee() or self:canAttack(k) then
+					table.insert(can_attack_table,k)
+				end
+			else
+				self.around_info[k] = nil
+			end
+		end
+
+		for k,v in pairs(can_attack_table) do
+			self.around_info[v] = Judgment.MapItem.ENEMY
+		end
+
+		self.around_info[0] = self.cur_pos
+		return self.around_info
+	end
+
 	local findGezi = function(pos)
 		if pos < 10 or pos > 85 or pos%10>7 or pos == 84 then
 			return
@@ -131,9 +149,11 @@ function MonsterBase:getAroundInfo()
 		table.insert(temp_list,k)
 	end
 
-	for i=2,self.cur_mobility do
+	for i=2,self.steps do
 		for _,v in pairs(temp_list) do
-			if not map_info[v] then
+			if self:isFly() then
+				findGezi(v)
+			elseif not map_info[v] then
 				findGezi(v)
 			end
 
@@ -186,6 +206,15 @@ function MonsterBase:isMelee()
 	return self.attack_type < Config.Monster_attack_type.SHOOTER
 end
 
+function MonsterBase:isWaited()
+	return self.is_waited
+end
+
+function MonsterBase:onEnterNewRound()
+	self.is_waited = false
+	self.steps = self.cur_mobility
+end
+
 function MonsterBase:onActive()
 	local ac1 = self.model:runAction(cc.RotateBy:create(1, cc.vec3(0,360,0)))
 	local cb = function()
@@ -197,39 +226,47 @@ function MonsterBase:onActive()
 	self.model:runAction(seq)
 end
 
-function MonsterBase:moveTo(pos,arena_pos)
+function MonsterBase:moveTo(arena_pos,target)
 	self:repeatAnimation("walk")
 	local cb = function()
 		self.cur_pos = arena_pos
-		self:toStand()
-		Judgment:Instance():nextMonsterActivate()
+		if target and target.isMonster then
+			self:attack(target)
+		else
+			self:toStand()
+			if self:nothingCanDo() then
+				Judgment:Instance():nextMonsterActivate()
+			else
+				Judgment:Instance():changeGameStatus(Judgment.GameStatus.WAIT_ORDER)
+			end
+		end
 	end
 	local callback = cc.CallFunc:create(handler(self,cb))
 
-	if self:isFly() then 
-		local ac1 = self.model:runAction(cc.MoveTo:create(0.5,pos+10))
-		local seq = cc.Sequence:create(ac1,callback)
-		self.model:runAction(seq)
-	else
-		self:moveFollowPath(arena_pos,callback)
-	end
+	self:moveFollowPath(arena_pos,callback)
 
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	
 end
 
 function MonsterBase:moveFollowPath(arena_pos,callback_final)
+	
 	local num = gtool:ccpToInt(arena_pos)
 	local path = self:getPathToPos(num)
+	self.steps = self.steps - #path
+	
 	local ac_table  = {}
 	local next_pos
+
 	for i=#path,1,-1 do
 		local pos = Judgment:Instance():getPositionByInt(path[i])
+		
 		if self:isFly() then
 			pos.y = pos.y+10
 		else
 			pos.y = pos.y-10
 		end
+		
 		local action = self.model:runAction(cc.MoveTo:create(0.5,pos))
 		self.model:stopAction(action)
 		local cb = function()
@@ -239,6 +276,7 @@ function MonsterBase:moveFollowPath(arena_pos,callback_final)
 		local seq = cc.Sequence:create(action,callback)
 		table.insert(ac_table,seq)
 	end
+	
 	table.insert(ac_table,callback_final)
 
 	local all_seq = cc.Sequence:create(unpack(ac_table))
@@ -257,11 +295,25 @@ function MonsterBase:getPathToPos(num, path_table)
 	end
 end
 
+function MonsterBase:moveAndAttack(target)
+	local num = gtool:ccpToInt(target.cur_pos)
+	local pos = gtool:intToCcp(self:getNearPos(num))
+
+	self:moveTo(pos,target)
+end
+
 function MonsterBase:attack(target)
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
-	self:doAnimation("attack1")
-	
-	target:beAttacked(self)
+		
+	if self:isMelee() and not self:isNear(gtool:ccpToInt(target.cur_pos)) then
+		self:moveAndAttack(target)
+	else
+		local cur_num = gtool:ccpToInt(self.cur_pos)
+		local to_num = gtool:ccpToInt(target.cur_pos)
+		self:towardToIntPos(cur_num,to_num)
+		self:doAnimation("attack1")
+		target:beAttacked(self)
+	end
 end
 
 function MonsterBase:beAttacked(murderer)
@@ -356,30 +408,101 @@ function MonsterBase:towardToIntPos(cur_num,to_num)
 	end
 end
 
+function MonsterBase:nothingCanDo()
+	if not self:isMelee() then
+		return false
+	else
+		self:getAroundInfo()
+		
+		local count = 0
+		for k,v in pairs(self.around_info) do
+		    count = count + 1
+		    if count > 1 then
+		    	return false
+		    end
+		end
+		return true
+	end
+end
+
 function MonsterBase:canAttack(num)
+	if self:isNear(num) then
+		return true
+	end
 	if num%2 == 0 then
-		if self.around_info[num+10]
+		return self.around_info[num+10]
 			or self.around_info[num-10]
 			or self.around_info[num+1]
 			or self.around_info[num-1]
 			or self.around_info[num+11]
-			or self.around_info[num+9] then
-			
-			return true
-		end
+			or self.around_info[num+9]
 	else
-		if self.around_info[num+10]
+		return self.around_info[num+10]
 			or self.around_info[num-10]
 			or self.around_info[num+1]
 			or self.around_info[num-1]
 			or self.around_info[num-11]
-			or self.around_info[num-9] then
+			or self.around_info[num-9]
+	end
+end
+
+function MonsterBase:isNear(num)
+	local cur = gtool:ccpToInt(self.cur_pos)
+	if num%2 == 0 then
+		if cur == num+10
+			or cur == num-10
+			or cur == num+1
+			or cur == num-1
+			or cur == num+11
+			or cur == num+9 then
+			
+			return true
+		end
+	else
+		if cur == num+10
+			or cur == num-10
+			or cur == num+1
+			or cur == num-1
+			or cur == num-11
+			or cur == num-9 then
 			
 			return true
 		end
 	end
 
 	return false
+end
+
+function MonsterBase:getNearPos(num)
+	if num%2 == 0 then
+		if self.around_info[num+10]		then
+			return num+10
+		elseif self.around_info[num-10]	then
+			return num-10
+		elseif self.around_info[num+1]	then
+			return num+1
+		elseif self.around_info[num-1]	then
+			return num-1
+		elseif self.around_info[num+11]	then
+			return num+11
+		elseif self.around_info[num+9]	then
+			return num+9
+		end
+	else
+		if self.around_info[num+10]		then
+			return num+10
+		elseif self.around_info[num-10]	then
+			return num-10
+		elseif self.around_info[num+1]	then
+			return num+1
+		elseif self.around_info[num-1]	then
+			return num-1
+		elseif self.around_info[num-11]	then
+			return num-11
+		elseif self.around_info[num-9]	then
+			return num-9
+		end
+	end
 end
 
 function MonsterBase:distanceBetweenPos(num1,num2)
