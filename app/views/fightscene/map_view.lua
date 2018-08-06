@@ -64,8 +64,8 @@ function map_view:beginAnimation()
 end
 
 function map_view:endAnimation()
-	local ac1 = self.root:runAction(cc.ScaleTo:create(self.Wait_Time,1))
-	local ac2 = self.root:runAction(cc.ScaleTo:create(self.Action_Time,0.75))
+	local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time,1))
+	local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,0.75))
 
 	local seq = cc.Sequence:create(ac1,ac2)
 		

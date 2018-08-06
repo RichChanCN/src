@@ -23,7 +23,7 @@ Judgment.Order = {
 	WAIT 		= 4,
 }
 
-Judgment.FSM = {
+Judgment.OPERATE = {
 	[0] = function()
 		Judgment:Instance().cur_active_monster:onActive()
 	end,
@@ -94,7 +94,7 @@ function Judgment:startGame()
 end
 
 function Judgment:runGame(order, param1, param2)
-	local action = Judgment.FSM[order]
+	local action = Judgment.OPERATE[order]
 	action(param1,param2)
 end
 
@@ -117,6 +117,7 @@ function Judgment:nextMonsterActivate(is_wait)
 	if not self.cur_active_monster:isDead() then
 		if is_wait then
 			table.insert(self.cur_round_monster_queue,self.cur_active_monster)
+			table.insert(self.next_round_monster_queue,self.cur_active_monster)
 		end
 	end
 	if not self.cur_active_monster:isWaited() then

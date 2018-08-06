@@ -101,12 +101,12 @@ function MonsterBase:reset()
 
 	self:toStand()
 end
-
+--获取可活动范围内的格子信息
 function MonsterBase:getAroundInfo()
 	local map_info = Judgment:Instance():getMapInfo()
 	local temp_list = {}
 	self.around_info = {}
-
+	--如果剩余步数不足，则只检查是否有课攻击对象
 	if self.steps < 1 then
 		local can_attack_table = {}
 		for k,v in pairs(map_info) do
@@ -127,6 +127,7 @@ function MonsterBase:getAroundInfo()
 		return self.around_info
 	end
 
+	--广度优先算法
 	local findGezi = function(pos)
 		if pos < 10 or pos > 85 or pos%10>7 or pos == 84 then
 			return
@@ -151,8 +152,10 @@ function MonsterBase:getAroundInfo()
 
 	for i=2,self.steps do
 		for _,v in pairs(temp_list) do
+			--如果是飞行，则不考虑阻挡带来的移动消耗
 			if self:isFly() then
 				findGezi(v)
+			--否则去除阻挡
 			elseif not map_info[v] then
 				findGezi(v)
 			end
@@ -165,31 +168,36 @@ function MonsterBase:getAroundInfo()
 		end
 	end
 
+	--可攻击对象更新
 	local can_attack_table = {}
 	for k,v in pairs(map_info) do
 		if type(v) == type({}) and v.team_side ~= self.team_side then
 			if not self:isMelee() or self:canAttack(k) then
 				table.insert(can_attack_table,k)
 			end
-		else
+		else --既不是可攻击对象，有存在地图上面，所以就是友军和障碍物，设置为不可到达区域
 			self.around_info[k] = nil
 		end
 	end
 
+	--要在后面设置可攻击对象，否则在可攻击对象一排是会出现攻击范围异常的情况
 	for k,v in pairs(can_attack_table) do
 		self.around_info[v] = Judgment.MapItem.ENEMY
 	end
-
+	--因为around信息的索引是以int来决定的，最小的是11，所以前10位可以灵活使用
+	--这里第0位代表自身位置
 	self.around_info[0] = self.cur_pos
 	return self.around_info
 end
 
+--寻路辅助函数，记录每个点的上一个路径点
 function MonsterBase:pathFindHelp(pos, num)
 	if not self.around_info[num] then
 		self.around_info[num] = pos
 	end
 end
 
+--快速判断函数
 function MonsterBase:isMonster()
 	return true
 end
@@ -210,11 +218,13 @@ function MonsterBase:isWaited()
 	return self.is_waited
 end
 
+--进入一个新的回合会触发的函数
 function MonsterBase:onEnterNewRound()
 	self.is_waited = false
 	self.steps = self.cur_mobility
 end
 
+--行动之前触发的函数
 function MonsterBase:onActive()
 	local ac1 = self.model:runAction(cc.RotateBy:create(1, cc.vec3(0,360,0)))
 	local cb = function()
@@ -225,7 +235,7 @@ function MonsterBase:onActive()
 	
 	self.model:runAction(seq)
 end
-
+--移动函数，第二个参数是移动攻击时候使用
 function MonsterBase:moveTo(arena_pos,target)
 	self:repeatAnimation("walk")
 	local cb = function()
@@ -248,7 +258,7 @@ function MonsterBase:moveTo(arena_pos,target)
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	
 end
-
+--顺着路径到达目的地
 function MonsterBase:moveFollowPath(arena_pos,callback_final)
 	
 	local num = gtool:ccpToInt(arena_pos)
@@ -283,7 +293,7 @@ function MonsterBase:moveFollowPath(arena_pos,callback_final)
 	self:towardToIntPos(gtool:ccpToInt(self.cur_pos),path[#path])
 	self.model:runAction(all_seq)
 end
-
+--获取路径
 function MonsterBase:getPathToPos(num, path_table)
 	path_table = path_table or {}
 	table.insert(path_table,num)
@@ -294,20 +304,21 @@ function MonsterBase:getPathToPos(num, path_table)
 		return self:getPathToPos(last_geizi,path_table)
 	end
 end
-
+--移动并且攻击
 function MonsterBase:moveAndAttack(target)
 	local num = gtool:ccpToInt(target.cur_pos)
 	local pos = gtool:intToCcp(self:getNearPos(num))
 
 	self:moveTo(pos,target)
 end
-
+--攻击
 function MonsterBase:attack(target)
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
-		
+	
+	--若是近战切目标不在周围则移动到目标附近再攻击	
 	if self:isMelee() and not self:isNear(gtool:ccpToInt(target.cur_pos)) then
 		self:moveAndAttack(target)
-	else
+	else--否则直接攻击
 		local cur_num = gtool:ccpToInt(self.cur_pos)
 		local to_num = gtool:ccpToInt(target.cur_pos)
 		self:towardToIntPos(cur_num,to_num)
@@ -315,7 +326,7 @@ function MonsterBase:attack(target)
 		target:beAttacked(self)
 	end
 end
-
+--被攻击时候触发
 function MonsterBase:beAttacked(murderer)
 	self.cur_hp = self.cur_hp - murderer.cur_damage
 	print("self.cur_hp "..self.cur_hp)
@@ -331,7 +342,7 @@ function MonsterBase:beAttacked(murderer)
 		Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	end
 end
-
+--等待
 function MonsterBase:wait()
 	if self.is_waited then
 		print("you has been waited!")
@@ -341,7 +352,7 @@ function MonsterBase:wait()
 		Judgment:Instance():nextMonsterActivate(true)
 	end
 end
-
+--防御
 function MonsterBase:defend()
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	Judgment:Instance():nextMonsterActivate()
@@ -368,10 +379,11 @@ function MonsterBase:turnToTarget(target)
 	
 end
 
+--转向
 function MonsterBase:towardTo(num)
 	self.model:setRotation3D(cc.vec3(0,(1-num)*60,0))
 end
-
+--根据自身位置转向一个位置，参数是已经转换为int的位置信息
 function MonsterBase:towardToIntPos(cur_num,to_num)
 	if not to_num then 
 		return
@@ -408,12 +420,14 @@ function MonsterBase:towardToIntPos(cur_num,to_num)
 	end
 end
 
+--判断目前是否可以强制结束回合
 function MonsterBase:nothingCanDo()
+	--目前如果是远程，游戏没结束，那么肯定存在可攻击对象
 	if not self:isMelee() then
 		return false
 	else
 		self:getAroundInfo()
-		
+		--否则如果周围可行动信息中只有自身位置的话，则可以结束
 		local count = 0
 		for k,v in pairs(self.around_info) do
 		    count = count + 1
@@ -425,10 +439,12 @@ function MonsterBase:nothingCanDo()
 	end
 end
 
+--可以攻击到数值为num的位置吗
 function MonsterBase:canAttack(num)
 	if self:isNear(num) then
 		return true
 	end
+	--只要这个位置周围有一个可以移动的点，则认为可以攻击到
 	if num%2 == 0 then
 		return self.around_info[num+10]
 			or self.around_info[num-10]
@@ -446,6 +462,7 @@ function MonsterBase:canAttack(num)
 	end
 end
 
+--判断目前位置是否在数值为num的位置附近
 function MonsterBase:isNear(num)
 	local cur = gtool:ccpToInt(self.cur_pos)
 	if num%2 == 0 then
@@ -473,6 +490,8 @@ function MonsterBase:isNear(num)
 	return false
 end
 
+--获取数值为num位置点的并且可到达的附近点，移动并攻击中使用
+--判断顺序影响攻击位置
 function MonsterBase:getNearPos(num)
 	if num%2 == 0 then
 		if self.around_info[num+10]		then
@@ -505,6 +524,7 @@ function MonsterBase:getNearPos(num)
 	end
 end
 
+--两个位置之间的距离，暂时没有完成，目前只想到了在射手伤害根据距离减少方面有用
 function MonsterBase:distanceBetweenPos(num1,num2)
 	local min = math.min(num1,num2)
 	local max = math.min(num1,num2)
@@ -517,10 +537,12 @@ function MonsterBase:updateCurAttribute()
 	
 end
 
+--转换到站立动作并重复
 function MonsterBase:toStand()
 	self:repeatAnimation("stand")
 end
 
+--转换到并一直重复某一动作
 function MonsterBase:repeatAnimation(name)
 	if Config.Monster_animate[self.id][name] then
     	local animate = Config.Monster_animate[self.id][name](self.animation)
@@ -529,6 +551,7 @@ function MonsterBase:repeatAnimation(name)
     end
 end
 
+--做一个动作
 function MonsterBase:doAnimation(name,cb)
 	if Config.Monster_animate[self.id][name] then
     	local animate = Config.Monster_animate[self.id][name](self.animation)
