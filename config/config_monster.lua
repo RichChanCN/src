@@ -22,6 +22,8 @@ Config.Monster = {
 	{id = 3		,name = "Jaina"				,rarity = 3	,level = 7		,attack_type = Config.Monster_attack_type.FAR_MAG	,move_type = Config.Monster_move_type.WALK	,hp = 50	,damage = 40	,physical_defense = 5	,magic_defense = 5	,mobility = 3	,initiative = 50	,defense_penetration = 0	,skills_list = {1001,	1002,	1003,}	,face_img_path = Config.monster_img_path.."face_frostarcher.png"	,char_img_path = Config.monster_img_path.."char_frostarcher.png"	,model_path = Config.model_path.."jaina.c3b"		,description = "This is a monster used to test!"	,},
 	{id = 4		,name = "Skeleton"			,rarity = 2	,level = 4		,attack_type = Config.Monster_attack_type.WARRIOR	,move_type = Config.Monster_move_type.WALK	,hp = 50	,damage = 50	,physical_defense = 5	,magic_defense = 5	,mobility = 3	,initiative = 50	,defense_penetration = 0	,skills_list = {1001,	1002,	1003,}	,face_img_path = Config.monster_img_path.."face_skeleton.png"		,char_img_path = Config.monster_img_path.."char_skeleton.png"		,model_path = Config.model_path.."skeleton.c3b"		,description = "This is a monster used to test!"	,},
 	{id = 5		,name = "Red Dragon"		,rarity = 4	,level = 9		,attack_type = Config.Monster_attack_type.WARRIOR	,move_type = Config.Monster_move_type.FLY	,hp = 200	,damage = 30	,physical_defense = 5	,magic_defense = 5	,mobility = 4	,initiative = 50	,defense_penetration = 0	,skills_list = {1001,	1002,	1003,}	,face_img_path = Config.monster_img_path.."face_firedragon.png"		,char_img_path = Config.monster_img_path.."char_firedragon.png"		,model_path = Config.model_path.."reddragon.c3b"	,description = "This is a monster used to test!"	,},
+	{id = 6		,name = "The Captain"		,rarity = 2	,level = 5		,attack_type = Config.Monster_attack_type.WARRIOR	,move_type = Config.Monster_move_type.WALK	,hp = 100	,damage = 50	,physical_defense = 5	,magic_defense = 5	,mobility = 4	,initiative = 50	,defense_penetration = 0	,skills_list = {1001,	1002,	1003,}	,face_img_path = Config.monster_img_path.."face_paladin.png"		,char_img_path = Config.monster_img_path.."char_paladin.png"		,model_path = Config.model_path.."captain.c3b"		,description = "This is a monster used to test!"	,},
+	{id = 7		,name = "Tauren"			,rarity = 2	,level = 6		,attack_type = Config.Monster_attack_type.WARRIOR	,move_type = Config.Monster_move_type.WALK	,hp = 120	,damage = 40	,physical_defense = 5	,magic_defense = 5	,mobility = 4	,initiative = 50	,defense_penetration = 0	,skills_list = {1001,	1002,	1003,}	,face_img_path = Config.monster_img_path.."face_tauren.png"			,char_img_path = Config.monster_img_path.."char_tauren.png"			,model_path = Config.model_path.."tauren.c3b"		,description = "This is a monster used to test!"	,},
 }
 
 Config.Monster_animate = {
@@ -117,5 +119,54 @@ Config.Monster_animate = {
 		walk	 	= function(animation) return cc.Animate3D:createWithFrames(animation,121,142) end,
 		stand2		= function(animation) return cc.Animate3D:createWithFrames(animation,143,244) end,
 		walk2		= function(animation) return cc.Animate3D:createWithFrames(animation,245,272) end,
+	},
+
+	[6] = {
+
+		[1]		= function(animation) return cc.Animate3D:createWithFrames(animation,0,45) end,
+		[2] 	= function(animation) return cc.Animate3D:createWithFrames(animation,46,76) end,
+		[3] 	= function(animation) return cc.Animate3D:createWithFrames(animation,77,107) end,
+		[4]	 	= function(animation) return cc.Animate3D:createWithFrames(animation,108,138) end,
+		[5]		= function(animation) return cc.Animate3D:createWithFrames(animation,139,170) end,
+		[6]		= function(animation) return cc.Animate3D:createWithFrames(animation,171,246) end,
+		[7]	 	= function(animation) return cc.Animate3D:createWithFrames(animation,247,405) end,
+		[8]		= function(animation) return cc.Animate3D:createWithFrames(animation,406,477) end,
+		[9]		= function(animation) return cc.Animate3D:createWithFrames(animation,478,502) end,
+		[10]	= function(animation) return cc.Animate3D:createWithFrames(animation,503,536) end,
+		[11]	= function(animation) return cc.Animate3D:createWithFrames(animation,537,572) end,
+		show_num = 11,
+
+		stand		= function(animation) return cc.Animate3D:createWithFrames(animation,0,45) end,
+		attack1 	= function(animation) return cc.Animate3D:createWithFrames(animation,46,76) end,
+		attack2 	= function(animation) return cc.Animate3D:createWithFrames(animation,77,107) end,
+		attack3	 	= function(animation) return cc.Animate3D:createWithFrames(animation,108,138) end,
+		defend		= function(animation) return cc.Animate3D:createWithFrames(animation,139,170) end,
+		stand2		= function(animation) return cc.Animate3D:createWithFrames(animation,171,246) end,
+		stand3	 	= function(animation) return cc.Animate3D:createWithFrames(animation,247,405) end,
+		defend		= function(animation) return cc.Animate3D:createWithFrames(animation,406,477) end,
+		walk		= function(animation) return cc.Animate3D:createWithFrames(animation,478,502) end,
+		walk2		= function(animation) return cc.Animate3D:createWithFrames(animation,503,536) end,
+		die			= function(animation) return cc.Animate3D:createWithFrames(animation,537,572) end,
+	},
+
+	[7] = {
+		[1]		= function(animation) return cc.Animate3D:createWithFrames(animation,0,80) end,
+		[2] 	= function(animation) return cc.Animate3D:createWithFrames(animation,81,120) end,
+		[3]	 	= function(animation) return cc.Animate3D:createWithFrames(animation,121,353) end,
+		[4]	 	= function(animation) return cc.Animate3D:createWithFrames(animation,354,444) end,
+		[5]		= function(animation) return cc.Animate3D:createWithFrames(animation,445,475) end,
+		[6]		= function(animation) return cc.Animate3D:createWithFrames(animation,476,537) end,
+		[7]	 	= function(animation) return cc.Animate3D:createWithFrames(animation,538,578) end,
+		[8]		= function(animation) return cc.Animate3D:createWithFrames(animation,580,675) end,
+		show_num = 8,
+
+		stand		= function(animation) return cc.Animate3D:createWithFrames(animation,0,80) end,
+		attack2 	= function(animation) return cc.Animate3D:createWithFrames(animation,81,120) end,
+		stand2	 	= function(animation) return cc.Animate3D:createWithFrames(animation,121,353) end,
+		victory	 	= function(animation) return cc.Animate3D:createWithFrames(animation,354,444) end,
+		walk		= function(animation) return cc.Animate3D:createWithFrames(animation,445,475) end,
+		stand3		= function(animation) return cc.Animate3D:createWithFrames(animation,476,537) end,
+		attack1	 	= function(animation) return cc.Animate3D:createWithFrames(animation,538,578) end,
+		die			= function(animation) return cc.Animate3D:createWithFrames(animation,580,675) end,
 	},
 }
