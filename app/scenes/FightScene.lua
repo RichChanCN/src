@@ -72,4 +72,16 @@ function FightScene:closeBattleInfoView()
 	self.battle_info_view:closeView()
 end
 
+function FightScene:showGuide()
+	self.map_view:showGuide()
+end
+
+function FightScene:showOtherAroundInfo(monster)
+	self.map_view:showOtherAroundInfo(monster)
+end
+
+function FightScene:hideOtherAroundInfo()
+	self.map_view:hideOtherAroundInfo()
+end
+
 return FightScene

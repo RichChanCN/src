@@ -61,7 +61,6 @@ function Judgment:new()
 	self.map_info = {}
 	self.cur_round_monster_queue = {}
 	self.next_round_monster_queue = {}
-
 	return o
 end
  
@@ -73,7 +72,9 @@ function Judgment:Instance()
 end
 
 function Judgment:setScene(scene)
+	self.action_node = cc.Node:create()
 	self.scene = scene
+	self.scene:addChild(self.action_node)
 end
 
 function Judgment:initGame(left_team,right_team)
@@ -96,6 +97,7 @@ function Judgment:startGame()
 end
 
 function Judgment:runGame(order, param)
+	self.action_node:removeAllChildren()
 	local action = Judgment.OPERATE[order]
 	action(param)
 end
@@ -227,6 +229,10 @@ end
 
 function Judgment:getMapInfo()
 	return self.map_info
+end
+
+function Judgment:getActionNode()
+	return self.action_node
 end
 
 function Judgment:setGameStatus(status)

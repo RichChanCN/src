@@ -133,7 +133,33 @@ function battle_info_view:updateLVItem(item,monster)
     item.child.border_img:loadTexture(Config.sprite["team_border_"..monster.team_side])
     item.child.level_text:setString(monster.level)
 
+    self:addQueueItemEvent(item)
     self:updateAnger(item)
+end
+
+function battle_info_view:addQueueItemEvent(img)
+    local function touchBegan( touch, event )
+        local node = event:getCurrentTarget()
+        if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+            if uitool:isTouchInNodeRect(node,touch,event) then
+                self.ctrl:showOtherAroundInfo(node.monster)
+            end
+            return true
+        else
+            return false
+        end
+    end
+
+    local function touchEnded( touch, event )
+        self.ctrl:hideOtherAroundInfo()
+    end
+
+    img.listener = cc.EventListenerTouchOneByOne:create()
+    --img.listener:setSwallowTouches(true)
+    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
+    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
 function battle_info_view:updateAnger(item)

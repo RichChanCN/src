@@ -100,6 +100,39 @@ function map_view:showGuide()
     end
 end
 
+function map_view:showOtherAroundInfo(monster)
+	self:hideGuide()
+	local gezi_list = monster:getAroundInfo()
+	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
+	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
+	
+	for k,v in pairs(gezi_list) do
+		if k > 10 and v > 10 then
+			local x,y = math.modf(k/10),k%10
+			if self["gezi_"..x.."_"..y.."_black"] then 
+				self["gezi_"..x.."_"..y.."_black"]:setVisible(true)
+				self["gezi_"..x.."_"..y.."_black"]:setScale(0.1)
+				local time = math.random()/3+0.1
+				self["gezi_"..x.."_"..y.."_black"]:runAction(cc.FadeIn:create(time))
+				self["gezi_"..x.."_"..y.."_black"]:runAction(cc.ScaleTo:create(time,1))
+			end
+		end
+    end
+end
+
+function map_view:hideOtherAroundInfo()
+	self.cur_monster_pos_sp:setPosition(uitool:farAway())
+	for x=1,8 do
+		for y=1,7 do
+			if self["gezi_"..x.."_"..y.."_black"] then 
+				self["gezi_"..x.."_"..y.."_black"]:setOpacity(0)
+				self["gezi_"..x.."_"..y.."_black"]:setVisible(false)
+			end
+		end
+	end
+	self:showGuide()
+end
+
 function map_view:showEnemy(num)
 	local cur_active_monster = Judgment:Instance():getCurActiveMonster()
 	local atk_img
@@ -126,7 +159,7 @@ function map_view:showCanMoveToGezi(num)
 	local x,y = math.modf(num/10),num%10
 	if self["gezi_"..x.."_"..y.."_black"] then 
 		self["gezi_"..x.."_"..y.."_black"]:setVisible(true)
-		self["gezi_"..x.."_"..y.."_black"]:setScale(0.2)
+		self["gezi_"..x.."_"..y.."_black"]:setScale(0.1)
 		local time = math.random()/3+0.1
 		self["gezi_"..x.."_"..y.."_black"]:runAction(cc.FadeIn:create(time))
 		self["gezi_"..x.."_"..y.."_black"]:runAction(cc.ScaleTo:create(time,1))
