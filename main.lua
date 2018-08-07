@@ -5,7 +5,9 @@ require "config.config"
 require "cocos.init"
 require "tool.mytool"
 require "tool.uitool"
-require "config.config_texture"
+require "config.config_ui"
+require "config.config_monster"
+require "app.logic.Judgment"
 
 local function main()
 	collectgarbage("collect")

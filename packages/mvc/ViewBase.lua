@@ -4,23 +4,26 @@ function ViewBase:instance()
 	return setmetatable({}, { __index = self })
 end
 
-function ViewBase:new( name, root, ctrl, data )
+function ViewBase:new( name, root, ctrl)
 	self.name = name
 	self.root = root
 	self.ctrl = ctrl
-	self.data = data
 	self.isInited = false
 
 	return self
 end
 
 function ViewBase:init()
-	uitool:createUIBinding(self, self.RESOURCE_BINDING)
+	if not self.isInited then
+		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
-	self:initInfo()
-	self:initEvents()
+		self:initInfo()
+		self:initEvents()
 
-	self.isInited = true
+		self.isInited = true
+	else
+		print(self.name.." is inited! scape the init()")
+	end
 end
 
 function ViewBase:initInfo()

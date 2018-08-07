@@ -4,15 +4,11 @@ local main_view = view:instance()
 
 main_view.RESOURCE_BINDING = {
 	["title_left_node"]		= {["varname"] = "title_left_node"},
-    ["title_face_sp"]		= {["varname"] = "title_face_sp"},
     ["title_btn"]			= {["varname"] = "title_btn"},
-    ["flag_sp"]				= {["varname"] = "flag_sp"},
-    ["nick_name_text"]		= {["varname"] = "nick_name_text"},
-    ["mail_btn"]			= {["varname"] = "mail_btn"},
-    ["exp_now_img"]			= {["varname"] = "exp_now_img"},
-    ["level_text"]			= {["varname"] = "level_text"},
 	["adventure_img"]		= {["varname"] = "adventure_img"},
 	["train_img"]			= {["varname"] = "train_img"},
+    ["bottom_node"]         = {["varname"] = "bottom_node"},
+    ["monster_btn"]         = {["varname"] = "monster_btn"},
 }
 
 function main_view:initInfo()
@@ -27,14 +23,25 @@ function main_view:initEvents()
     end)
 
     uitool:makeImgToButton(self.train_img,nil)
-
 	self.title_btn:addClickEventListener(function(sender)
         self.ctrl:openSettingView()
     end)
+
+    self:initRightBottomBtnEvents()
 end
 
 function main_view:updateView()
 
+end
+
+----------------------------------------------------------------
+-------------------------------私有方法--------------------------
+----------------------------------------------------------------
+
+function main_view:initRightBottomBtnEvents()
+    self.monster_btn:addClickEventListener(function(sender)
+        self.ctrl:openMonsterListView()
+    end)
 end
 
 return main_view
