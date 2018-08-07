@@ -38,10 +38,13 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.cur_hp 				= data.hp
 	self.attack_type			= data.attack_type
 	self.move_type 				= data.move_type
-	self.model_path 			= data.model_path
 	
+	self.model_path 			= data.model_path
+	self.char_img_path			= data.char_img_path
+
 	self.skills_list 			= data.skills_list
 
+	self.max_anger				= data.anger
 	self.max_hp 				= data.hp
 	self.damage 				= data.damage
 	self.physical_defense 		= data.physical_defense
@@ -50,6 +53,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.initiative 			= data.initiative
 	self.defense_penetration 	= data.defense_penetration
 
+	self.cur_anger					= 0
 	self.cur_max_hp 				= self.max_hp 			
 	self.cur_damage 				= self.damage 			
 	self.cur_physical_defense 		= self.physical_defense 	
@@ -80,6 +84,7 @@ function MonsterBase:reset()
 		return
 	end
 
+	self.cur_anger					= 0
 	self.cur_hp 					= self.max_hp
 	self.cur_pos    				= self.start_pos
 	self.status 					= MonsterBase.Status.ALIVE
@@ -127,21 +132,32 @@ function MonsterBase:getAroundInfo()
 		return self.around_info
 	end
 
+	local isLegalPos = function(pos)
+		if pos < 10 or pos > 85 or pos%10>7 or pos%10 == 0
+			or pos == 11 or pos == 17 or pos == 84 or pos == 81 or pos == 82 then
+			return false
+		end
+		return true
+	end
+	--寻路辅助函数，记录每个点的上一个路径点
+	local pathFindHelp = function(pos, num)
+		if not self.around_info[num] and ((not map_info[num]) or self:isFly()) and isLegalPos(num) then
+			
+			self.around_info[num] = pos
+		end
+	end
 	--广度优先算法
 	local findGezi = function(pos)
-		if pos < 10 or pos > 85 or pos%10>7 or pos == 84 then
-			return
-		end
-		self:pathFindHelp(pos,pos+10)
-		self:pathFindHelp(pos,pos-10)
-		self:pathFindHelp(pos,pos+1)
-		self:pathFindHelp(pos,pos-1)
+		pathFindHelp(pos,pos+10)
+		pathFindHelp(pos,pos-10)
+		pathFindHelp(pos,pos+1)
+		pathFindHelp(pos,pos-1)
 		if pos%2 == 0 then
-			self:pathFindHelp(pos,pos+11)
-			self:pathFindHelp(pos,pos+9)
+			pathFindHelp(pos,pos+11)
+			pathFindHelp(pos,pos+9)
 		else
-			self:pathFindHelp(pos,pos-11)
-			self:pathFindHelp(pos,pos-9)
+			pathFindHelp(pos,pos-11)
+			pathFindHelp(pos,pos-9)
 		end
 	end
 
@@ -152,14 +168,9 @@ function MonsterBase:getAroundInfo()
 
 	for i=2,self.steps do
 		for _,v in pairs(temp_list) do
-			--如果是飞行，则不考虑阻挡带来的移动消耗
-			if self:isFly() then
-				findGezi(v)
-			--否则去除阻挡
-			elseif not map_info[v] then
-				findGezi(v)
-			end
 
+			findGezi(v)
+			
 			temp_list = {}
 
 			for k,v in pairs(self.around_info) do
@@ -168,12 +179,26 @@ function MonsterBase:getAroundInfo()
 		end
 	end
 
+	self.fly_path = {}
+	if self:isFly() then
+		for k,v in pairs(self.around_info) do
+			table.insert(self.fly_path,k,v)
+		end
+	end
+
+	for k,v in pairs(map_info) do
+		if v.team_side == self.team_side then
+			self.around_info[k] = Judgment.MapItem.FRIEND
+		end
+	end
 	--可攻击对象更新
 	local can_attack_table = {}
 	for k,v in pairs(map_info) do
 		if type(v) == type({}) and v.team_side ~= self.team_side then
 			if not self:isMelee() or self:canAttack(k) then
 				table.insert(can_attack_table,k)
+			else
+				self.around_info[k] = nil
 			end
 		else --既不是可攻击对象，有存在地图上面，所以就是友军和障碍物，设置为不可到达区域
 			self.around_info[k] = nil
@@ -188,13 +213,6 @@ function MonsterBase:getAroundInfo()
 	--这里第0位代表自身位置
 	self.around_info[0] = self.cur_pos
 	return self.around_info
-end
-
---寻路辅助函数，记录每个点的上一个路径点
-function MonsterBase:pathFindHelp(pos, num)
-	if not self.around_info[num] then
-		self.around_info[num] = pos
-	end
 end
 
 --快速判断函数
@@ -297,7 +315,13 @@ end
 function MonsterBase:getPathToPos(num, path_table)
 	path_table = path_table or {}
 	table.insert(path_table,num)
-	local last_geizi = self.around_info[num]
+	local last_geizi
+	if self:isFly() then 
+		last_geizi = self.fly_path[num]
+	else
+		last_geizi = self.around_info[num]
+	end
+
 	if gtool:ccpToInt(self.cur_pos) == last_geizi then
 		return path_table
 	else
@@ -307,6 +331,7 @@ end
 --移动并且攻击
 function MonsterBase:moveAndAttack(target)
 	local num = gtool:ccpToInt(target.cur_pos)
+	print(self:getNearPos(num))
 	local pos = gtool:intToCcp(self:getNearPos(num))
 
 	self:moveTo(pos,target)
@@ -444,22 +469,24 @@ function MonsterBase:canAttack(num)
 	if self:isNear(num) then
 		return true
 	end
+
+	return self:getNearPos(num)
 	--只要这个位置周围有一个可以移动的点，则认为可以攻击到
-	if num%2 == 0 then
-		return self.around_info[num+10]
-			or self.around_info[num-10]
-			or self.around_info[num+1]
-			or self.around_info[num-1]
-			or self.around_info[num+11]
-			or self.around_info[num+9]
-	else
-		return self.around_info[num+10]
-			or self.around_info[num-10]
-			or self.around_info[num+1]
-			or self.around_info[num-1]
-			or self.around_info[num-11]
-			or self.around_info[num-9]
-	end
+	-- if num%2 == 0 then
+	-- 	return self.around_info[num+10]
+	-- 		or self.around_info[num-10]
+	-- 		or self.around_info[num+1]
+	-- 		or self.around_info[num-1]
+	-- 		or self.around_info[num+11]
+	-- 		or self.around_info[num+9]
+	-- else
+	-- 	return self.around_info[num+10]
+	-- 		or self.around_info[num-10]
+	-- 		or self.around_info[num+1]
+	-- 		or self.around_info[num-1]
+	-- 		or self.around_info[num-11]
+	-- 		or self.around_info[num-9]
+	-- end
 end
 
 --判断目前位置是否在数值为num的位置附近
@@ -493,35 +520,40 @@ end
 --获取数值为num位置点的并且可到达的附近点，移动并攻击中使用
 --判断顺序影响攻击位置
 function MonsterBase:getNearPos(num)
+	local help = function (a)
+		return self.around_info[a] and self.around_info[a] > 10
+	end
 	if num%2 == 0 then
-		if self.around_info[num+10]		then
+		if help(num+10) then
 			return num+10
-		elseif self.around_info[num-10]	then
+		elseif help(num-10) then
 			return num-10
-		elseif self.around_info[num+1]	then
+		elseif help(num+1) then
 			return num+1
-		elseif self.around_info[num-1]	then
+		elseif help(num-1) then
 			return num-1
-		elseif self.around_info[num+11]	then
+		elseif help(num+11) then
 			return num+11
-		elseif self.around_info[num+9]	then
+		elseif help(num+9) then
 			return num+9
 		end
 	else
-		if self.around_info[num+10]		then
+		if help(num+10) then
 			return num+10
-		elseif self.around_info[num-10]	then
+		elseif help(num-10) then
 			return num-10
-		elseif self.around_info[num+1]	then
+		elseif help(num+1) then
 			return num+1
-		elseif self.around_info[num-1]	then
+		elseif help(num-1) then
 			return num-1
-		elseif self.around_info[num-11]	then
+		elseif help(num-11) then
 			return num-11
-		elseif self.around_info[num-9]	then
+		elseif help(num-9) then
 			return num-9
 		end
 	end
+
+	return false
 end
 
 --两个位置之间的距离，暂时没有完成，目前只想到了在射手伤害根据距离减少方面有用

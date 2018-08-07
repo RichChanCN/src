@@ -13,7 +13,7 @@ map_view.RESOURCE_BINDING = {
 }
 
 function map_view:init()
-	if not self.isInited then
+	if not self.is_inited then
 		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
 		self:initInfo()
@@ -21,7 +21,7 @@ function map_view:init()
 		self:initArenaBottomNode()
 		self:initEvents()
 
-		self.isInited = true
+		self.is_inited = true
 	else
 		print(self.name.." is inited! scape the init()")
 	end
@@ -90,10 +90,12 @@ function map_view:showGuide()
 	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
 	
 	for k,v in pairs(gezi_list) do
-		if v == Judgment.MapItem.ENEMY then
-			self:showEnemy(k)
-		else
+		if k > 10 and v > 10 then
 			self:showCanMoveToGezi(k)
+		else
+			if v == Judgment.MapItem.ENEMY then
+				self:showEnemy(k)
+			end
 		end
     end
 end

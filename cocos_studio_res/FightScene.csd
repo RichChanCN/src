@@ -1635,14 +1635,293 @@
           <AbstractNodeData Name="battle_info_view" ActionTag="-443919855" Tag="500" IconVisible="False" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
-              <AbstractNodeData Name="left_bottom_img" ActionTag="554916194" Tag="503" IconVisible="False" RightMargin="1220.0000" TopMargin="1433.0000" BottomMargin="-530.0000" Scale9Enable="True" LeftEage="315" RightEage="207" TopEage="58" BottomEage="58" Scale9OriginX="315" Scale9OriginY="58" Scale9Width="107" Scale9Height="61" ctype="ImageViewObjectData">
-                <Size X="700.0000" Y="177.0000" />
+              <AbstractNodeData Name="left_bottom_img" ActionTag="554916194" Tag="503" IconVisible="False" RightMargin="1000.0000" TopMargin="1340.0000" BottomMargin="-530.0000" LeftEage="315" RightEage="207" TopEage="58" BottomEage="58" Scale9OriginX="315" Scale9OriginY="58" Scale9Width="107" Scale9Height="61" ctype="ImageViewObjectData">
+                <Size X="920.0000" Y="270.0000" />
+                <Children>
+                  <AbstractNodeData Name="round_img" ActionTag="-476865924" Tag="219" IconVisible="False" LeftMargin="-739.0925" RightMargin="1529.0925" TopMargin="127.1013" BottomMargin="-15.1013" Scale9Width="86" Scale9Height="94" ctype="ImageViewObjectData">
+                    <Size X="130.0000" Y="158.0000" />
+                    <Children>
+                      <AbstractNodeData Name="round_text" ActionTag="-167981358" Tag="220" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="34.9000" RightMargin="40.1000" TopMargin="27.7000" BottomMargin="59.3000" FontSize="80" LabelText="2" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                        <Size X="55.0000" Y="71.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="62.4000" Y="94.8000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.4800" Y="0.6000" />
+                        <PreSize X="0.4231" Y="0.4494" />
+                        <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                        <OutlineColor A="255" R="0" G="0" B="0" />
+                        <ShadowColor A="255" R="110" G="110" B="110" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="-674.0925" Y="63.8987" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="-0.7327" Y="0.2367" />
+                    <PreSize X="0.1413" Y="0.5852" />
+                    <FileData Type="Normal" Path="Sprite/battleArray_round.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="round_text" ActionTag="-1357394053" Tag="191" IconVisible="False" RightMargin="720.0000" TopMargin="-46.0000" BottomMargin="284.0000" IsCustomSize="True" FontSize="35" LabelText="ROUND 1" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="200.0000" Y="32.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="100.0000" Y="300.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.1087" Y="1.1111" />
+                    <PreSize X="0.2174" Y="0.1185" />
+                    <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                    <OutlineColor A="255" R="0" G="0" B="0" />
+                    <ShadowColor A="255" R="110" G="110" B="110" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="queue_default" ActionTag="811425581" Tag="178" IconVisible="False" LeftMargin="-920.7939" RightMargin="1690.7939" TopMargin="111.0992" BottomMargin="-21.0992" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+                    <Size X="150.0000" Y="180.0000" />
+                    <Children>
+                      <AbstractNodeData Name="border_img" ActionTag="1046310950" Tag="177" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-22.5000" RightMargin="-22.5000" TopMargin="-23.0000" BottomMargin="-23.0000" Scale9Width="195" Scale9Height="226" ctype="ImageViewObjectData">
+                        <Size X="195.0000" Y="226.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="90.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.3000" Y="1.2556" />
+                        <FileData Type="Normal" Path="Sprite/hero_border_self.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="level_text" ActionTag="-1536201926" Tag="179" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="59.0000" RightMargin="59.0000" TopMargin="144.0000" BottomMargin="0.0000" FontSize="40" LabelText="0" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                        <Size X="32.0000" Y="36.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="18.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.1000" />
+                        <PreSize X="0.2133" Y="0.2000" />
+                        <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                        <OutlineColor A="255" R="0" G="0" B="0" />
+                        <ShadowColor A="255" R="110" G="110" B="110" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="anger_img_1" ActionTag="-1618968325" Tag="193" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="-24.0000" RightMargin="48.0000" TopMargin="123.0000" BottomMargin="-77.0000" Scale9Width="126" Scale9Height="134" ctype="ImageViewObjectData">
+                        <Size X="126.0000" Y="134.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="39.0000" Y="-10.0000" />
+                        <Scale ScaleX="0.2000" ScaleY="0.2000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.2600" Y="-0.0556" />
+                        <PreSize X="0.8400" Y="0.7444" />
+                        <FileData Type="Normal" Path="Sprite/battleButtonBack_new.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="anger_img_2" ActionTag="1744283880" Tag="194" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="0.0000" RightMargin="24.0000" TopMargin="123.0000" BottomMargin="-77.0000" Scale9Width="126" Scale9Height="134" ctype="ImageViewObjectData">
+                        <Size X="126.0000" Y="134.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="63.0000" Y="-10.0000" />
+                        <Scale ScaleX="0.2000" ScaleY="0.2000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.4200" Y="-0.0556" />
+                        <PreSize X="0.8400" Y="0.7444" />
+                        <FileData Type="Normal" Path="Sprite/battleButtonBack_new.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="anger_img_3" ActionTag="-936958856" Tag="195" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="24.0000" TopMargin="123.0000" BottomMargin="-77.0000" Scale9Width="126" Scale9Height="134" ctype="ImageViewObjectData">
+                        <Size X="126.0000" Y="134.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="87.0000" Y="-10.0000" />
+                        <Scale ScaleX="0.2000" ScaleY="0.2000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5800" Y="-0.0556" />
+                        <PreSize X="0.8400" Y="0.7444" />
+                        <FileData Type="Normal" Path="Sprite/battleButtonBack_new.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="anger_img_4" ActionTag="-859410408" Tag="196" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="48.0000" RightMargin="-24.0000" TopMargin="123.0000" BottomMargin="-77.0000" Scale9Width="126" Scale9Height="134" ctype="ImageViewObjectData">
+                        <Size X="126.0000" Y="134.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="111.0000" Y="-10.0000" />
+                        <Scale ScaleX="0.2000" ScaleY="0.2000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.7400" Y="-0.0556" />
+                        <PreSize X="0.8400" Y="0.7444" />
+                        <FileData Type="Normal" Path="Sprite/battleButtonBack_new.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="star_img_1" ActionTag="1226653686" VisibleForFrame="False" Tag="204" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="30.0000" RightMargin="102.0000" TopMargin="182.5000" BottomMargin="-17.5000" BottomEage="2" Scale9Width="9" Scale9Height="4" ctype="ImageViewObjectData">
+                        <Size X="18.0000" Y="15.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="39.0000" Y="-10.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.2600" Y="-0.0556" />
+                        <PreSize X="0.1200" Y="0.0833" />
+                        <FileData Type="Normal" Path="Sprite/battleArray_engry_bar.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="star_img_2" ActionTag="-1140864842" VisibleForFrame="False" Tag="205" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="54.0000" RightMargin="78.0000" TopMargin="182.5000" BottomMargin="-17.5000" BottomEage="2" Scale9Width="9" Scale9Height="4" ctype="ImageViewObjectData">
+                        <Size X="18.0000" Y="15.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="63.0000" Y="-10.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.4200" Y="-0.0556" />
+                        <PreSize X="0.1200" Y="0.0833" />
+                        <FileData Type="Normal" Path="Sprite/battleArray_engry_bar.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="star_img_3" ActionTag="-1159818927" VisibleForFrame="False" Tag="206" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="78.0000" RightMargin="54.0000" TopMargin="182.5000" BottomMargin="-17.5000" BottomEage="2" Scale9Width="9" Scale9Height="4" ctype="ImageViewObjectData">
+                        <Size X="18.0000" Y="15.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="87.0000" Y="-10.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5800" Y="-0.0556" />
+                        <PreSize X="0.1200" Y="0.0833" />
+                        <FileData Type="Normal" Path="Sprite/battleArray_engry_bar.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="star_img_4" ActionTag="235889112" VisibleForFrame="False" Tag="207" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="102.0000" RightMargin="30.0000" TopMargin="182.5000" BottomMargin="-17.5000" BottomEage="2" Scale9Width="9" Scale9Height="4" ctype="ImageViewObjectData">
+                        <Size X="18.0000" Y="15.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="111.0000" Y="-10.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.7400" Y="-0.0556" />
+                        <PreSize X="0.1200" Y="0.0833" />
+                        <FileData Type="Normal" Path="Sprite/battleArray_engry_bar.png" Plist="" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="-845.7939" Y="68.9008" />
+                    <Scale ScaleX="0.7000" ScaleY="0.7000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="-0.9193" Y="0.2552" />
+                    <PreSize X="0.1630" Y="0.6667" />
+                    <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="queue_lv" ActionTag="1019366565" Tag="176" IconVisible="False" LeftMargin="225.0000" RightMargin="65.0000" TopMargin="100.0000" BottomMargin="10.0000" TouchEnable="True" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" IsBounceEnabled="True" ScrollDirectionType="0" VerticalType="Align_VerticalCenter" ctype="ListViewObjectData">
+                    <Size X="630.0000" Y="160.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="540.0000" Y="90.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.5870" Y="0.3333" />
+                    <PreSize X="0.6848" Y="0.5926" />
+                    <SingleColor A="255" R="150" G="150" B="255" />
+                    <FirstColor A="255" R="150" G="150" B="255" />
+                    <EndColor A="255" R="255" G="255" B="255" />
+                    <ColorVector ScaleY="1.0000" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="cur_monster_img" ActionTag="-244943555" Tag="208" IconVisible="False" LeftMargin="30.0000" RightMargin="740.0000" TopMargin="50.0000" BottomMargin="40.0000" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+                    <Size X="150.0000" Y="180.0000" />
+                    <Children>
+                      <AbstractNodeData Name="border_img" ActionTag="-658079558" Tag="209" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-22.5000" RightMargin="-22.5000" TopMargin="-23.0000" BottomMargin="-23.0000" Scale9Width="195" Scale9Height="226" ctype="ImageViewObjectData">
+                        <Size X="195.0000" Y="226.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="90.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.3000" Y="1.2556" />
+                        <FileData Type="Normal" Path="Sprite/hero_border_self.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="level_text" ActionTag="575190798" Tag="210" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="59.0000" RightMargin="59.0000" TopMargin="144.0000" BottomMargin="0.0000" FontSize="40" LabelText="0" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                        <Size X="32.0000" Y="36.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="75.0000" Y="18.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.1000" />
+                        <PreSize X="0.2133" Y="0.2000" />
+                        <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                        <OutlineColor A="255" R="0" G="0" B="0" />
+                        <ShadowColor A="255" R="110" G="110" B="110" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="anger_img_1" ActionTag="2039668425" Tag="211" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="-24.0000" RightMargin="48.0000" TopMargin="123.0000" BottomMargin="-77.0000" Scale9Width="126" Scale9Height="134" ctype="ImageViewObjectData">
+                        <Size X="126.0000" Y="134.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="39.0000" Y="-10.0000" />
+                        <Scale ScaleX="0.2000" ScaleY="0.2000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.2600" Y="-0.0556" />
+                        <PreSize X="0.8400" Y="0.7444" />
+                        <FileData Type="Normal" Path="Sprite/battleButtonBack_new.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="anger_img_2" ActionTag="-921179425" Tag="212" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="0.0000" RightMargin="24.0000" TopMargin="123.0000" BottomMargin="-77.0000" Scale9Width="126" Scale9Height="134" ctype="ImageViewObjectData">
+                        <Size X="126.0000" Y="134.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="63.0000" Y="-10.0000" />
+                        <Scale ScaleX="0.2000" ScaleY="0.2000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.4200" Y="-0.0556" />
+                        <PreSize X="0.8400" Y="0.7444" />
+                        <FileData Type="Normal" Path="Sprite/battleButtonBack_new.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="anger_img_3" ActionTag="-1288661852" Tag="213" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="24.0000" TopMargin="123.0000" BottomMargin="-77.0000" Scale9Width="126" Scale9Height="134" ctype="ImageViewObjectData">
+                        <Size X="126.0000" Y="134.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="87.0000" Y="-10.0000" />
+                        <Scale ScaleX="0.2000" ScaleY="0.2000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5800" Y="-0.0556" />
+                        <PreSize X="0.8400" Y="0.7444" />
+                        <FileData Type="Normal" Path="Sprite/battleButtonBack_new.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="anger_img_4" ActionTag="388919609" Tag="214" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="48.0000" RightMargin="-24.0000" TopMargin="123.0000" BottomMargin="-77.0000" Scale9Width="126" Scale9Height="134" ctype="ImageViewObjectData">
+                        <Size X="126.0000" Y="134.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="111.0000" Y="-10.0000" />
+                        <Scale ScaleX="0.2000" ScaleY="0.2000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.7400" Y="-0.0556" />
+                        <PreSize X="0.8400" Y="0.7444" />
+                        <FileData Type="Normal" Path="Sprite/battleButtonBack_new.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="star_img_1" ActionTag="-1790939582" VisibleForFrame="False" Tag="215" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="30.0000" RightMargin="102.0000" TopMargin="182.5000" BottomMargin="-17.5000" BottomEage="2" Scale9Width="9" Scale9Height="4" ctype="ImageViewObjectData">
+                        <Size X="18.0000" Y="15.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="39.0000" Y="-10.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.2600" Y="-0.0556" />
+                        <PreSize X="0.1200" Y="0.0833" />
+                        <FileData Type="Normal" Path="Sprite/battleArray_engry_bar.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="star_img_2" ActionTag="441208037" VisibleForFrame="False" Tag="216" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="54.0000" RightMargin="78.0000" TopMargin="182.5000" BottomMargin="-17.5000" BottomEage="2" Scale9Width="9" Scale9Height="4" ctype="ImageViewObjectData">
+                        <Size X="18.0000" Y="15.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="63.0000" Y="-10.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.4200" Y="-0.0556" />
+                        <PreSize X="0.1200" Y="0.0833" />
+                        <FileData Type="Normal" Path="Sprite/battleArray_engry_bar.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="star_img_3" ActionTag="-732397756" VisibleForFrame="False" Tag="217" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="78.0000" RightMargin="54.0000" TopMargin="182.5000" BottomMargin="-17.5000" BottomEage="2" Scale9Width="9" Scale9Height="4" ctype="ImageViewObjectData">
+                        <Size X="18.0000" Y="15.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="87.0000" Y="-10.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5800" Y="-0.0556" />
+                        <PreSize X="0.1200" Y="0.0833" />
+                        <FileData Type="Normal" Path="Sprite/battleArray_engry_bar.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="star_img_4" ActionTag="497581893" VisibleForFrame="False" Tag="218" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="102.0000" RightMargin="30.0000" TopMargin="182.5000" BottomMargin="-17.5000" BottomEage="2" Scale9Width="9" Scale9Height="4" ctype="ImageViewObjectData">
+                        <Size X="18.0000" Y="15.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="111.0000" Y="-10.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.7400" Y="-0.0556" />
+                        <PreSize X="0.1200" Y="0.0833" />
+                        <FileData Type="Normal" Path="Sprite/battleArray_engry_bar.png" Plist="" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="105.0000" Y="130.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.1141" Y="0.4815" />
+                    <PreSize X="0.1630" Y="0.6667" />
+                    <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
+                  </AbstractNodeData>
+                </Children>
                 <AnchorPoint />
                 <Position Y="-530.0000" />
-                <Scale ScaleX="1.2000" ScaleY="1.2000" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition Y="-0.4907" />
-                <PreSize X="0.3646" Y="0.1639" />
+                <PreSize X="0.4792" Y="0.2500" />
                 <FileData Type="Normal" Path="Sprite/battleArray_bg_blue.png" Plist="" />
               </AbstractNodeData>
               <AbstractNodeData Name="right_bottom_node" ActionTag="1213194181" Tag="502" IconVisible="True" LeftMargin="1750.0000" RightMargin="170.0000" TopMargin="1480.0000" BottomMargin="-400.0000" ctype="SingleNodeObjectData">

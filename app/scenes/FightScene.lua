@@ -36,7 +36,7 @@ end
 function FightScene:startGame()
 	Judgment:Instance():setScene(self)
 	Judgment:Instance():startGame()
-	self.battle_info_view:openView()
+	self:openBattleInfoView()
 end
 
 function FightScene:gameOver()
@@ -52,11 +52,20 @@ end
 
 function FightScene:viewInit()
 	self.map_view:init()
-	self.battle_info_view:init()
+	--self.battle_info_view:init()
 end
 
 function FightScene:updateMapView()
 	self.map_view:updateView()
+end
+
+
+function FightScene:updateBattleQueue(is_wait)
+	self.battle_info_view:updateRightBottomQueue(is_wait)
+end
+
+function FightScene:openBattleInfoView()
+	self.battle_info_view:openView()
 end
 
 function FightScene:closeBattleInfoView()

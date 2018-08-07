@@ -9,14 +9,14 @@ monster_list_view.RESOURCE_BINDING = {
 }
 
 function monster_list_view:init()
-	if not self.isInited then
+	if not self.is_inited then
 		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
 		self:initInfo()
 		self:initEvents()
 		self:initMonsterLV()
 
-		self.isInited = true
+		self.is_inited = true
 	else
 		print(self.name.." is inited! scape the init()")
 	end
@@ -41,7 +41,7 @@ function monster_list_view:updateView()
 end
 
 function monster_list_view:openView()
-	if not self.isInited then
+	if not self.is_inited then
 		self:init()
 	end
 

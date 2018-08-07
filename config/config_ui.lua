@@ -19,6 +19,10 @@ Config.sprite = {
 	rarity_sp_3 = Config.monster_img_path.."item_bg_1_3.png",
 	rarity_sp_4 = Config.monster_img_path.."item_bg_1_4.png",
 
+	team_border_1  = Config.monster_img_path.."hero_border_self.png",
+	team_border_4 = Config.monster_img_path.."hero_border_other.png",
+	boss_border  = Config.monster_img_path.."hero_border_boss.png",
+	
 	card_border_0 = Config.monster_img_path.."hero_card_border_0.png",
 	card_border_1 = Config.monster_img_path.."hero_card_border_1.png",
 	card_border_2 = Config.monster_img_path.."hero_card_border_2.png",

@@ -6,6 +6,7 @@ Judgment.MapItem = {
 	ENEMY			= 3,
 	LEFT_MONSTER 	= 1,
 	RIGHT_MONSTER 	= 4,
+	FRIEND			= 5,
 }
 
 Judgment.GameStatus = {
@@ -24,7 +25,10 @@ Judgment.Order = {
 }
 
 Judgment.OPERATE = {
-	[0] = function()
+	[0] = function(is_wait)
+		if Judgment:Instance().scene.battle_info_view:isInited() then
+			Judgment:Instance().scene:updateBattleQueue(is_wait)
+		end
 		Judgment:Instance().cur_active_monster:onActive()
 	end,
 
@@ -78,24 +82,22 @@ function Judgment:initGame(left_team,right_team)
 	self.left_team = left_team
 	self.right_team = right_team
 
-	self.all_monsters = self:getAllMonsters()
 	self:sortAllMonstersByInitiative()
+	self.cur_round_monster_queue = self:getAllMonsters()
 end
 
 function Judgment:startGame()
 	self.cur_round_num = 1
-	self.cur_monster_index = 1
-	self.cur_round_monster_queue = self.all_monsters
-	self.all_monsters = nil
-	self.cur_active_monster = self.cur_round_monster_queue[self.cur_monster_index]
+	self.cur_active_monster_index = 1
+	self.cur_active_monster = self.cur_round_monster_queue[self.cur_active_monster_index]
 	self.cur_game_status = Judgment.GameStatus.ACTIVE
 	self:updateMapInfo()
 	self:runGame(Judgment.Order.ACTIVATE)
 end
 
-function Judgment:runGame(order, param1, param2)
+function Judgment:runGame(order, param)
 	local action = Judgment.OPERATE[order]
-	action(param1,param2)
+	action(param)
 end
 
 function Judgment:gameOver(win_side)
@@ -130,20 +132,20 @@ function Judgment:nextMonsterActivate(is_wait)
 	elseif self.cur_active_monster:isDead() then
 		self:nextMonsterActivate()
 	else
-		self:runGame(Judgment.Order.ACTIVATE)
+		self:runGame(Judgment.Order.ACTIVATE,is_wait)
 	end
 end
 
 function Judgment:startNextRound()
 	print("round "..self.cur_round_num.."finish")
 	self.cur_round_num = self.cur_round_num + 1
-	self.cur_monster_index = 1
+	self.cur_active_monster_index = 1
 	self.cur_round_monster_queue = self.next_round_monster_queue
 	self.next_round_monster_queue = {}
 	
 	self:aliveMonsterEnterNewRound()
 
-	self.cur_active_monster = self.cur_round_monster_queue[self.cur_monster_index]
+	self.cur_active_monster = self.cur_round_monster_queue[self.cur_active_monster_index]
 	self.cur_game_status = Judgment.GameStatus.ACTIVE
 	self:updateMapInfo()
 	self:runGame(Judgment.Order.ACTIVATE)
@@ -157,22 +159,9 @@ function Judgment:aliveMonsterEnterNewRound()
 end
 
 function Judgment:getNextMonster()
-	self.cur_monster_index = self.cur_monster_index + 1
-	return self.cur_round_monster_queue[self.cur_monster_index]
+	self.cur_active_monster_index = self.cur_active_monster_index + 1
+	return self.cur_round_monster_queue[self.cur_active_monster_index]
 end
-
-function Judgment:setMap(map)
-	self.map = map
-end
-
-function Judgment:getMap()
-	return self.map
-end
-
-function Judgment:getMapInfo()
-	return self.map_info
-end
-
 function Judgment:updateMapInfo()
 	self.map_info = self.map or {}
 	local monsters = self:getAllAliveMonsters()
@@ -214,6 +203,32 @@ function Judgment:requestAuto()
 	
 end
 
+function Judgment:checkGameOver()
+	local right = self:getRightAliveMonsters()
+	local left = self:getLeftAliveMonsters()
+	
+	if #right < 1 then
+		self:gameOver(1)
+	elseif #left < 1 then
+		self:gameOver(4)
+	else
+		self:nextMonsterActivate()
+	end
+
+end
+
+function Judgment:setMap(map)
+	self.map = map
+end
+
+function Judgment:getMap()
+	return self.map
+end
+
+function Judgment:getMapInfo()
+	return self.map_info
+end
+
 function Judgment:setGameStatus(status)
 	self.cur_game_status = status
 end
@@ -230,22 +245,24 @@ function Judgment:getGameSpeed()
 	return self.game_speed
 end
 
-function Judgment:checkGameOver()
-	local right = self:getRightAliveMonsters()
-	local left = self:getLeftAliveMonsters()
-	
-	if #right < 1 then
-		self:gameOver(1)
-	elseif #left < 1 then
-		self:gameOver(4)
-	else
-		self:nextMonsterActivate()
-	end
+function Judgment:getCurRoundNum()
+	return self.cur_round_num
+end
 
+function Judgment:getCurActiveMonsterIndex()
+	return self.cur_active_monster_index
 end
 
 function Judgment:getCurActiveMonster()
 	return self.cur_active_monster
+end
+
+function Judgment:getCurRoundMonsterQueue()
+	return self.cur_round_monster_queue
+end
+
+function Judgment:getNextRoundMonsterQueue()
+	return self.next_round_monster_queue
 end
 
 function Judgment:getAllMonsters()

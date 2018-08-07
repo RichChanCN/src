@@ -9,15 +9,15 @@ battle_info_view.RESOURCE_BINDING = {
 }
 
 function battle_info_view:init()
-    if not self.isInited then
+    if not self.is_inited then
         uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
+        self:initInfo()
         self:initRightBottom()
         self:initLeftBottom()
-        self:initInfo()
         self:initEvents()
 
-        self.isInited = true
+        self.is_inited = true
     else
         print(self.name.." is inited! scape the init()")
     end
@@ -28,20 +28,30 @@ function battle_info_view:initInfo()
     self.left_bottom_img_end_pos   = cc.p(0,0)
     self.right_bottom_node_start_pos = cc.p(1750,-400)
     self.right_bottom_node_end_pos   = cc.p(1750,150)
+
+    self:updateInfo()
 end
 
 function battle_info_view:initEvents()
     self:initRightBottomEvents()
 end
 
-function battle_info_view:updateView()
+function battle_info_view:updateInfo()
+    self.cur_active_index = Judgment:Instance():getCurActiveMonsterIndex()
+    self.cur_round = Judgment:Instance():getCurRoundNum()
+    self.cur_queue = Judgment:Instance():getCurRoundMonsterQueue()
+    self.next_queue = Judgment:Instance():getNextRoundMonsterQueue()
+end
 
+function battle_info_view:updateView()
+    self:updateInfo()
 end
 
 function battle_info_view:openView()
-    if not self.isInited then
+    if not self.is_inited then
         self:init()
     end
+    self:updateView()
     self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self.left_bottom_img_end_pos))
     self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self.right_bottom_node_end_pos))
 end
@@ -54,6 +64,7 @@ end
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 
+-----------------------右下按钮节点开始-----------------------
 function battle_info_view:initRightBottom()
     self.defend_img     = self.right_bottom_node:getChildByName("defend_img")
     self.wait_img       = self.right_bottom_node:getChildByName("wait_img")
@@ -82,8 +93,101 @@ function battle_info_view:initRightBottomEvents()
     end)
 end
 
-function battle_info_view:initLeftBottom()
+-----------------------右下按钮节点结束-----------------------
 
+-----------------------左下队列节点开始-----------------------
+
+function battle_info_view:initLeftBottom()
+    self.round_text = self.left_bottom_img:getChildByName("round_text")
+    self.queue_lv = self.left_bottom_img:getChildByName("queue_lv")
+    self.queue_default = self.left_bottom_img:getChildByName("queue_default")
+    self.cur_monster_img = self.left_bottom_img:getChildByName("cur_monster_img")
+    self.round_img = self.left_bottom_img:getChildByName("round_img")
+    self:initQueueLV()
 end
 
+function battle_info_view:initQueueLV()
+    self.queue = {}
+    for i=1,#self.cur_queue do
+        if i == 1 then
+            self.queue[i] = self.cur_monster_img
+            self:updateLVItem(self.queue[i],self.cur_queue[i])
+        else
+            self.queue[i] = self.queue_default:clone()
+            self:updateLVItem(self.queue[i],self.cur_queue[i])
+            self.queue_lv:pushBackCustomItem(self.queue[i])
+        end
+    end
+
+    self.next_round_in_queue = self.round_img:clone()
+    self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
+end
+
+function battle_info_view:updateLVItem(item,monster)
+    item.monster = monster 
+    item.child = {}
+    item.child.border_img = item:getChildByName("border_img")
+    item.child.level_text = item:getChildByName("level_text")
+    
+    item:loadTexture(monster.char_img_path)
+    item.child.border_img:loadTexture(Config.sprite["team_border_"..monster.team_side])
+    item.child.level_text:setString(monster.level)
+
+    self:updateAnger(item)
+end
+
+function battle_info_view:updateAnger(item)
+    for i=1,item.monster.max_anger do
+        local star = item:getChildByName("star_img_"..i)
+        if not (i>item.monster.cur_anger) then
+            star:setVisible(true)
+        else
+            star:setVisible(false)
+        end
+    end
+end
+
+function battle_info_view:updateAllAnger()
+    for k,v in pairs(self.queue) do
+        self:updateAnger(v)
+    end
+end
+
+function battle_info_view:updateRightBottomQueue(is_wait)
+    self:updateInfo()
+
+    local last_item = self.queue_default:clone()
+    self:updateLVItem(last_item,self.queue[1].monster)
+
+    if not is_wait then
+        if not self.queue_lv:getItem(0).monster then
+            self.queue_lv:removeItem(0)
+
+            self:updateLVItem(self.queue[1],self.queue_lv:getItem(0).monster)
+            self.queue_lv:removeItem(0)
+            self.queue_lv:pushBackCustomItem(last_item)
+
+            self.next_round_in_queue = self.round_img:clone()
+            local text = self.next_round_in_queue:getChildByName("round_text")
+            text:setString(self.cur_round+1)
+            self.round_text:setString("ROUND "..self.cur_round)
+            self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
+        
+        else
+            self:updateLVItem(self.queue[1],self.queue_lv:getItem(0).monster)
+            self.queue_lv:removeItem(0)
+            self.queue_lv:pushBackCustomItem(last_item)
+        end
+    else
+        if not self.queue_lv:getItem(0).monster then
+            return
+        end
+        self:updateLVItem(self.queue[1],self.queue_lv:getItem(0).monster)
+        self.queue_lv:removeItem(0)
+        local index = self.queue_lv:getIndex(self.next_round_in_queue)
+        self.queue_lv:insertCustomItem(last_item,index)
+    end
+
+end
+-----------------------左下队列节点开始-----------------------
 return battle_info_view

@@ -18,7 +18,7 @@ embattle_view.RESOURCE_BINDING = {
 -------------------------------公有方法--------------------------
 ----------------------------------------------------------------
 function embattle_view:init()
-	if not self.isInited then
+	if not self.is_inited then
 		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
 		self:initInfo()
@@ -26,7 +26,7 @@ function embattle_view:init()
 		self:initEvents()
 		self:initMonsterLV()
 		
-		self.isInited = true
+		self.is_inited = true
 	else
 		print(self.name.." is inited! scape the init()")
 	end
@@ -80,7 +80,7 @@ function embattle_view:updateView()
 end
 
 function embattle_view:openView()
-	if not self.isInited then
+	if not self.is_inited then
 		self:init()
 	end
 	self:resumeMonsterListListener()
@@ -101,7 +101,7 @@ function embattle_view:makeTeam()
 	local MonsterBase = require("app.logic.MonsterBase")
 
 	for _,v in pairs(self.monster_team) do
-		table.insert(team, MonsterBase:instance():new(Config.Monster[v.monster_id],MonsterBase.TeamSide.Left,v.arena_cell.pos))
+		table.insert(team, MonsterBase:instance():new(Config.Monster[v.monster_id],MonsterBase.TeamSide.LEFT,v.arena_cell.pos))
 	end
 
 	return team
@@ -127,9 +127,9 @@ function embattle_view:initMonsterLV()
 	end
 
 	for i = 1, rows_num do
-		local test_item = self.template_panel:clone()
-		self:initLVItem(test_item, i-1) --这里-1是为了里面好计算正真的索引值
-		self.monster_lv:pushBackCustomItem(test_item)
+		local item = self.template_panel:clone()
+		self:initLVItem(item, i-1) --这里-1是为了里面好计算正真的索引值
+		self.monster_lv:pushBackCustomItem(item)
 	end
 end
 

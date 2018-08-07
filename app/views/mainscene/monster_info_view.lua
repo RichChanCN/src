@@ -11,7 +11,7 @@ monster_info_view.RESOURCE_BINDING = {
 }
 
 function monster_info_view:init()
-    if not self.isInited then
+    if not self.is_inited then
         uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
         self:initLeftModelNode()
@@ -19,7 +19,7 @@ function monster_info_view:init()
         self:initInfo()
         self:initEvents()
         
-        self.isInited = true
+        self.is_inited = true
     else
         print(self.name.." is inited! scape the init()")
     end
@@ -35,6 +35,12 @@ function monster_info_view:initInfo()
     self.is_model_loaded = false
     self.monster_model = nil
     self.model_camera = nil
+    self.monster_model = nil
+end
+
+function monster_info_view:updateInfo()
+    self.next_animate = 2
+    self.is_model_loaded = false
 end
 
 function monster_info_view:initEvents()
@@ -47,12 +53,13 @@ end
 
 function monster_info_view:updateView(data)
 	self.title_text:setString("LEVEL "..data.level.." "..data.name)
+    self:updateInfo()
     self:updateLeftModelNode(data)
     self:updateRightInfoNode(data)
 end
 
 function monster_info_view:openView(data)
-    if not self.isInited then
+    if not self.is_inited then
         self:init()
     end
     self:updateView(data)
