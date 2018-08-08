@@ -105,7 +105,7 @@ end
 
 function map_view:showOtherAroundInfo(monster)
 	self:hideGuide()
-	local gezi_list = monster:getAroundInfo()
+	local gezi_list = monster:getAroundInfoToShow()
 	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
 	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
 	

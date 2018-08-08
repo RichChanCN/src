@@ -108,15 +108,15 @@ function battle_info_view:initLeftBottom()
 end
 
 function battle_info_view:initQueueLV()
-    self.queue = {}
+    --self.queue = {}
     for i=1,#self.cur_queue do
         if i == 1 then
-            self.queue[i] = self.cur_monster_img
-            self:updateLVItem(self.queue[i],self.cur_queue[i])
+            self.queue_first = self.cur_monster_img
+            self:updateLVItem(self.queue_first,self.cur_queue[i])
         else
-            self.queue[i] = self.queue_template:clone()
-            self:updateLVItem(self.queue[i],self.cur_queue[i])
-            self.queue_lv:pushBackCustomItem(self.queue[i])
+            local item = self.queue_template:clone()
+            self:updateLVItem(item,self.cur_queue[i])
+            self.queue_lv:pushBackCustomItem(item)
         end
     end
 
@@ -193,47 +193,63 @@ function battle_info_view:updateAnger(item)
     end
 end
 
-function battle_info_view:updateAllAnger()
-    for k,v in pairs(self.queue) do
-        self:updateAnger(v)
-    end
-end
-
 function battle_info_view:updateRightBottomQueue(is_wait)
     self:updateInfo()
 
     local last_item = self.queue_template:clone()
-    self:updateLVItem(last_item,self.queue[1].monster)
-
+    self:updateLVItem(last_item,self.queue_first.monster)
+    
+    if self.animate_card then 
+        self.left_bottom_img:removeChild(self.animate_card)
+    end
+    self.animate_card = last_item:clone()
+    self:updateLVItem(self.animate_card,self.queue_first.monster)
+    
+    self.left_bottom_img:addChild(self.animate_card)
+    self.animate_card:setPosition(self.queue_first:getPosition())
+    local x,y = self.animate_card:getPosition()
+    self.animate_card:runAction(cc.JumpTo:create(0.3, cc.p(x+700,y), 300, 1))
+    self.animate_card:runAction(cc.FadeOut:create(0.3))
+    self.animate_card:runAction(cc.ScaleTo:create(0.7,0.3))
     if not is_wait then
         if not self.queue_lv:getItem(0).monster then
             self.queue_lv:removeItem(0)
 
-            self:updateLVItem(self.queue[1],self.queue_lv:getItem(0).monster)
+            self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
             self.queue_lv:pushBackCustomItem(last_item)
+
+            last_item:setOpacity(0)
+            last_item:runAction(cc.FadeIn:create(0.3))
 
             self.next_round_in_queue = self.round_img:clone()
             local text = self.next_round_in_queue:getChildByName("round_text")
             text:setString(self.cur_round+1)
             self.round_text:setString("ROUND "..self.cur_round)
+            
             self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
-        
+            
         else
-            self:updateLVItem(self.queue[1],self.queue_lv:getItem(0).monster)
+            self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
             self.queue_lv:pushBackCustomItem(last_item)
+            
+            last_item:setOpacity(0)
+            last_item:runAction(cc.FadeIn:create(0.3))
         end
     else
         if not self.queue_lv:getItem(0).monster then
             return
         end
-        self:updateLVItem(self.queue[1],self.queue_lv:getItem(0).monster)
+        self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
         self.queue_lv:removeItem(0)
         local index = self.queue_lv:getIndex(self.next_round_in_queue)
         self.queue_lv:insertCustomItem(last_item,index)
     end
+end
 
+function battle_info_view:addCardToQueue()
+    -- body
 end
 -----------------------左下队列节点开始-----------------------
 return battle_info_view

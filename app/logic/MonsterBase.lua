@@ -113,6 +113,99 @@ function MonsterBase:reset()
 
 	self:toStand()
 end
+
+function MonsterBase:getAroundInfoToShow()
+	local map_info = Judgment:Instance():getMapInfo()
+	local temp_list = {}
+	self.around_info = {}
+	local steps = self.steps
+	if steps < 1 then
+		steps = self.cur_mobility
+	end
+	--寻路辅助函数，由于地图不规则，所以要判断点是否合法
+	local isLegalPos = function(pos)
+		if pos < 10 or pos > 85 or pos%10>7 or pos%10 == 0
+			or pos == 11 or pos == 17 or pos == 84 or pos == 81 or pos == 82 then
+			return false
+		end
+		return true
+	end
+	--寻路辅助函数，记录每个点的上一个路径点
+	local pathFindHelp = function(pos, num)
+		if not self.around_info[num] and ((not map_info[num]) or self:isFly()) and isLegalPos(num) then
+			
+			self.around_info[num] = pos
+		end
+	end
+	--广度优先算法
+	local findGezi = function(pos)
+		pathFindHelp(pos,pos+10)
+		pathFindHelp(pos,pos-10)
+		pathFindHelp(pos,pos+1)
+		pathFindHelp(pos,pos-1)
+		if pos%2 == 0 then
+			pathFindHelp(pos,pos+11)
+			pathFindHelp(pos,pos+9)
+		else
+			pathFindHelp(pos,pos-11)
+			pathFindHelp(pos,pos-9)
+		end
+	end
+
+	findGezi(gtool:ccpToInt(self.cur_pos))
+	for k,v in pairs(self.around_info) do
+		table.insert(temp_list,k)
+	end
+
+	for i=2,steps do
+		for _,v in pairs(temp_list) do
+
+			findGezi(v)
+			
+			temp_list = {}
+
+			for k,v in pairs(self.around_info) do
+				table.insert(temp_list,k)
+			end
+		end
+	end
+
+	self.fly_path = {}
+	if self:isFly() then
+		for k,v in pairs(self.around_info) do
+			table.insert(self.fly_path,k,v)
+		end
+	end
+
+	for k,v in pairs(map_info) do
+		if v.team_side == self.team_side then
+			self.around_info[k] = Judgment.MapItem.FRIEND
+		end
+	end
+	--可攻击对象更新
+	local can_attack_table = {}
+	for k,v in pairs(map_info) do
+		if type(v) == type({}) and v.team_side ~= self.team_side then
+			if not self:isMelee() or self:canAttack(k) then
+				table.insert(can_attack_table,k)
+			else--既不是可攻击对象，有存在地图上面，所以就是友军和障碍物，设置为不可到达区域
+				self.around_info[k] = nil
+			end
+		else --既不是可攻击对象，有存在地图上面，所以就是友军和障碍物，设置为不可到达区域
+			self.around_info[k] = nil
+		end
+	end
+
+	--要在后面设置可攻击对象，否则在可攻击对象一排是会出现攻击范围异常的情况
+	for k,v in pairs(can_attack_table) do
+		self.around_info[v] = Judgment.MapItem.ENEMY
+	end
+	--因为around信息的索引是以int来决定的，最小的是11，所以前10位可以灵活使用
+	--这里第0位代表自身位置
+	self.around_info[0] = self.cur_pos
+	return self.around_info
+end
+
 --获取可活动范围内的格子信息
 function MonsterBase:getAroundInfo()
 	local map_info = Judgment:Instance():getMapInfo()
@@ -221,7 +314,6 @@ function MonsterBase:getAroundInfo()
 	self.around_info[0] = self.cur_pos
 	return self.around_info
 end
-
 --快速判断函数
 function MonsterBase:isMonster()
 	return true
