@@ -52,6 +52,7 @@ function battle_info_view:openView()
         self:init()
     end
     self:updateView()
+    self.root:setPosition(uitool:zero())
     self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self.left_bottom_img_end_pos))
     self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self.right_bottom_node_end_pos))
 end
@@ -100,7 +101,7 @@ end
 function battle_info_view:initLeftBottom()
     self.round_text = self.left_bottom_img:getChildByName("round_text")
     self.queue_lv = self.left_bottom_img:getChildByName("queue_lv")
-    self.queue_default = self.left_bottom_img:getChildByName("queue_default")
+    self.queue_template = self.left_bottom_img:getChildByName("queue_template")
     self.cur_monster_img = self.left_bottom_img:getChildByName("cur_monster_img")
     self.round_img = self.left_bottom_img:getChildByName("round_img")
     self:initQueueLV()
@@ -113,7 +114,7 @@ function battle_info_view:initQueueLV()
             self.queue[i] = self.cur_monster_img
             self:updateLVItem(self.queue[i],self.cur_queue[i])
         else
-            self.queue[i] = self.queue_default:clone()
+            self.queue[i] = self.queue_template:clone()
             self:updateLVItem(self.queue[i],self.cur_queue[i])
             self.queue_lv:pushBackCustomItem(self.queue[i])
         end
@@ -130,9 +131,29 @@ function battle_info_view:updateLVItem(item,monster)
     item.child.level_text = item:getChildByName("level_text")
     
     item:loadTexture(monster.char_img_path)
-    item.child.border_img:loadTexture(Config.sprite["team_border_"..monster.team_side])
+    item.child.border_img:loadTexture(Config.sprite["team_card_border_"..monster.team_side])
     item.child.level_text:setString(monster.level)
 
+    local update = function(anger)
+        for i=1,item.monster.max_anger do
+            local star = item:getChildByName("star_img_"..i)
+            if not (i>anger) then
+                star:setVisible(true)
+            else
+                star:setVisible(false)
+            end
+        end
+    end
+
+    local removeSelf = function()
+        local index = self.queue_lv:getIndex(item)
+        self.queue_lv:removeItem(index)
+    end
+
+    item.update = update
+    item.removeSelf = removeSelf
+
+    monster.card = item
     self:addQueueItemEvent(item)
     self:updateAnger(item)
 end
@@ -143,11 +164,10 @@ function battle_info_view:addQueueItemEvent(img)
         if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
             if uitool:isTouchInNodeRect(node,touch,event) then
                 self.ctrl:showOtherAroundInfo(node.monster)
+                return true
             end
-            return true
-        else
-            return false
         end
+        return false
     end
 
     local function touchEnded( touch, event )
@@ -182,7 +202,7 @@ end
 function battle_info_view:updateRightBottomQueue(is_wait)
     self:updateInfo()
 
-    local last_item = self.queue_default:clone()
+    local last_item = self.queue_template:clone()
     self:updateLVItem(last_item,self.queue[1].monster)
 
     if not is_wait then

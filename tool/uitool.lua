@@ -38,7 +38,6 @@ function uitool:createUIBinding(panel,binding)
             panel[nodeBinding.varname] = node
         end
     end
-    
 end
 
 function uitool:seekChildNode(node, name)
@@ -109,12 +108,32 @@ function uitool:repeatFadeInAndOut(node)
         end
     end
 
-    local ac1 = node:runAction(cc.FadeOut:create(2)) 
-    local ac2 = node:runAction(cc.FadeIn:create(1.5))
+    local ac1 = node:runAction(cc.FadeTo:create(1,155)) 
+    local ac2 = node:runAction(cc.FadeTo:create(1,255))
 
     local seq = cc.Sequence:create(ac1,ac2)
     
     node:runAction(cc.RepeatForever:create(seq))
+end
+
+function uitool:setProgressBar(img,percent)
+    if not img.raw_size then
+        img.row_size = img:getContentSize()
+    end
+    img:setContentSize(img.row_size.width*percent,img.row_size.height)
+end
+
+function uitool:setNodeToGlobalTop(node,z)
+    z = z or self:top_Z_order()
+    local children = node:getChildren()
+
+    if #children > 0 then
+        for i=1, #children do
+            self:setNodeToGlobalTop(children[i])
+        end
+    end
+
+    node:setGlobalZOrder(z)
 end
 
 function uitool:makeImgToButton(img,callback)
@@ -143,17 +162,17 @@ function uitool:makeImgToButton(img,callback)
         local node = event:getCurrentTarget()
         
         if self:isTouchInNodeRect(node,touch,event) then
-            node:setScale(1.0)
             if callback then
                 callback()
             end
         end
+        node:setScale(1.0)
     end
 
     img.listener = cc.EventListenerTouchOneByOne:create()
     img.listener:setSwallowTouches(true)
     img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    img.listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
+    --img.listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
     img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
@@ -217,4 +236,7 @@ function uitool:makeImgToButtonHT(img,camera,callback)
     img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+end
+
+function uitool:createFlyWords(label,pos)
 end

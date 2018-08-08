@@ -118,11 +118,9 @@ function Judgment:gameOver(win_side)
 end
 
 function Judgment:nextMonsterActivate(is_wait)
-	if not self.cur_active_monster:isDead() then
-		if is_wait then
-			table.insert(self.cur_round_monster_queue,self.cur_active_monster)
-			table.insert(self.next_round_monster_queue,self.cur_active_monster)
-		end
+	if is_wait then
+		table.insert(self.cur_round_monster_queue,self.cur_active_monster)
+		table.insert(self.next_round_monster_queue,self.cur_active_monster)
 	end
 	if not self.cur_active_monster:isWaited() then
 		table.insert(self.next_round_monster_queue,self.cur_active_monster)
@@ -146,8 +144,11 @@ function Judgment:startNextRound()
 	self.next_round_monster_queue = {}
 	
 	self:aliveMonsterEnterNewRound()
-
+	
 	self.cur_active_monster = self.cur_round_monster_queue[self.cur_active_monster_index]
+	while self.cur_active_monster:isDead() do
+		self.cur_active_monster = self:getNextMonster()
+	end
 	self.cur_game_status = Judgment.GameStatus.ACTIVE
 	self:updateMapInfo()
 	self:runGame(Judgment.Order.ACTIVATE)
@@ -346,4 +347,24 @@ end
 
 function Judgment:getPositionByInt(num)
 	return self.scene.map_view:getPositionByInt(num)
+end
+
+function Judgment:clearAllMonsters()
+	for k,v in pairs(self.left_team) do
+		v.node:removeAllChildren()
+		v.model = nil
+		v.animation = nil
+		v = nil
+	end
+
+	self.left_team = {}
+
+	for k,v in pairs(self.right_team) do
+		v.node:removeAllChildren()
+		v.model = nil
+		v.animation = nil
+		v = nil
+	end
+
+	self.right_team = {}
 end

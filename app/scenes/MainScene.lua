@@ -51,7 +51,7 @@ function MainScene:goToFightScene()
 	scene:addChild(layer)
 	if scene then
 		local ts = cc.TransitionFadeTR:create(1.5, scene)
-		cc.Director:getInstance():replaceScene(ts)
+		cc.Director:getInstance():pushScene(ts)
 	end	
 end
 

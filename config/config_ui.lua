@@ -7,6 +7,13 @@ Config.sprite = {
 	gezi_raw = Config.sprite_path.."hex_tile_enabled.png",
 	selected = Config.sprite_path.."icon_selected_1.png",
 	chesspiece_mask = Config.sprite_path.."header_hex_mask.png",
+	
+	team_hp_img_1  = Config.sprite_path.."battle_bloodbar_1.png",
+	team_hp_img_4 = Config.sprite_path.."battle_bloodbar_2.png",
+	
+	team_card_border_1  = Config.sprite_path.."hero_border_self.png",
+	team_card_border_4 = Config.sprite_path.."hero_border_other.png",
+	boss_card_border  = Config.sprite_path.."hero_border_boss.png",
 
 	hex_border_0 = Config.monster_img_path.."hex_tile_border_0.png",
 	hex_border_1 = Config.monster_img_path.."hex_tile_border_1.png",
@@ -19,10 +26,6 @@ Config.sprite = {
 	rarity_sp_3 = Config.monster_img_path.."item_bg_1_3.png",
 	rarity_sp_4 = Config.monster_img_path.."item_bg_1_4.png",
 
-	team_border_1  = Config.monster_img_path.."hero_border_self.png",
-	team_border_4 = Config.monster_img_path.."hero_border_other.png",
-	boss_border  = Config.monster_img_path.."hero_border_boss.png",
-	
 	card_border_0 = Config.monster_img_path.."hero_card_border_0.png",
 	card_border_1 = Config.monster_img_path.."hero_card_border_1.png",
 	card_border_2 = Config.monster_img_path.."hero_card_border_2.png",
@@ -40,6 +43,11 @@ Config.color = {
 	rarity_color_2 = cc.c4b(74,154,219,255),
 	rarity_color_3 = cc.c4b(193,78,242,255),
 	rarity_color_4 = cc.c4b(243,146,46,255),
+
+	--common_damage_color
+	damage_1 = cc.c4b(255,255,255,255),
+	--critical_damage_color
+	damage_2 = cc.c4b(255,165,0,255),
 }
 
 Config.text = {

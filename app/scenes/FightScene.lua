@@ -10,11 +10,12 @@ FightScene.RESOURCE_BINDING = {
     ["map_view"]			= {["varname"] = "map_view"},
 	--map_view
     ["battle_info_view"]	= {["varname"] = "battle_info_view"},
+ 	--result_view
+ 	["result_view"]			= {["varname"] = "result_view"},
  }
 
 --面板文件位置
 FightScene.VIEW_PATH = "app.views.fightscene"
-
 FightScene.Wait_Time = 1
 FightScene.Action_Time = 0.3
 
@@ -26,6 +27,11 @@ function FightScene:onEnter()
 	self:viewInit()
 	self:initModel()
 	self.map_view.root:setScale(0.75)
+end
+
+function FightScene:onExit()
+	Judgment:Instance():clearAllMonsters()
+	self.map_view:clearModelPanel()
 end
 
 function FightScene:onEnterTransitionFinish()
@@ -41,6 +47,10 @@ end
 
 function FightScene:gameOver()
 	self.map_view:endAnimation()
+end
+
+function FightScene:goToMainScene()
+	cc.Director:getInstance():popScene()
 end
 
 function FightScene:initModel()
@@ -70,6 +80,14 @@ end
 
 function FightScene:closeBattleInfoView()
 	self.battle_info_view:closeView()
+end
+
+function FightScene:openResultView(reslut_table)
+	self.result_view:openView()
+end
+
+function FightScene:closeResultView()
+	self.result_view:closeView()
 end
 
 function FightScene:showGuide()

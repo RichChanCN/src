@@ -10,6 +10,8 @@ map_view.RESOURCE_BINDING = {
     ["model_panel"]			= {["varname"] = "model_panel"},
     ["arena_top_node"]		= {["varname"] = "arena_top_node"},
     ["mask_img"]			= {["varname"] = "mask_img"},
+    ["blood_template"]		= {["varname"] = "blood_template"},
+    ["fly_word_template"]	= {["varname"] = "fly_word_template"},
 }
 
 function map_view:init()
@@ -66,8 +68,9 @@ end
 function map_view:endAnimation()
 	local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time,1))
 	local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,0.75))
+	local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.openResultView))
 
-	local seq = cc.Sequence:create(ac1,ac2)
+	local seq = cc.Sequence:create(ac1,ac2,callback)
 		
 	self.root:runAction(seq)
 	self:hideMask()
@@ -206,26 +209,87 @@ function map_view:createModel(monster)
     end
 
 	local callback = function(model)
-		model:setScale(0.6)
+		local node = cc.Node:create()
+		model:setScale(0.5)
 		
 		local pos = monster.start_pos
         local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
         if not monster:isFly() then
-        	model:setPosition(x,y-10)
+        	node:setPosition(x,y-10)
         else
-        	model:setPosition(x,y+10)
+        	node:setPosition(x,y+10)
         end
+		node:addChild(model)
+        monster.node = node
+		local blood_bar = self:initBloodBar(node,monster)
+		self.model_panel:addChild(node)
 
 		monster.model = model
 		monster.animation = cc.Animation3D:create(monster.model_path)
 		monster:reset()
-		self.model_panel:addChild(model)
+
 		
 		self.monster_loaded_num = self.monster_loaded_num + 1
 		
 	end
     cc.Sprite3D:createAsync(monster.model_path,callback)
     
+end
+
+function map_view:initBloodBar(node,monster)
+	local blood_bar = self.blood_template:clone()
+	blood_bar.child = {}
+	blood_bar.child.blood_img = blood_bar:getChildByName("blood_img")
+	blood_bar.child.level_text = blood_bar:getChildByName("level_text")
+
+	blood_bar.child.blood_img:loadTexture(Config.sprite["team_hp_img_"..monster.team_side])
+	blood_bar.child.level_text:setString(monster.level)
+
+	local updateHP = function(percent,damage,type)
+		self:createDamageFlyWords(damage,monster,type)
+		uitool:setProgressBar(blood_bar.child.blood_img,percent)
+	end
+
+	local updateAnger = function(anger)
+		for i=1,4 do
+			if not (i>anger) then
+				blood_bar:getChildByName("star_"..i):setVisible(true)
+			else
+				blood_bar:getChildByName("star_"..i):setVisible(false)
+			end
+		end
+	end
+
+	blood_bar.updateHP = updateHP
+	blood_bar.updateAnger = updateAnger
+	blood_bar:setPosition(0,75)
+	uitool:setNodeToGlobalTop(blood_bar)
+	blood_bar:setName("blood_bar")
+	monster.blood_bar = blood_bar
+	node:addChild(blood_bar)
+end
+
+function map_view:createDamageFlyWords(damage,monster,type)
+	local fly_word = self.fly_word_template:clone()
+	fly_word:setString(damage)
+	fly_word:setTextColor(Config.color["damage_"..type])
+	local x,y = monster.node:getPosition()
+
+	fly_word:setPosition(x,y+60)
+	fly_word:setScale(0.2)
+
+	self.arena_top_node:addChild(fly_word)
+
+	local ac1 = fly_word:runAction(cc.ScaleTo:create(0.2,1))
+	fly_word:stopAction(ac1)
+	local ac2 = fly_word:runAction(cc.MoveTo:create(0.5,cc.p(x,y+80)))
+	fly_word:stopAction(ac2)
+	local ac3 = fly_word:runAction(cc.FadeOut:create(0.1))
+	fly_word:stopAction(ac3)
+	
+	local seq = cc.Sequence:create(ac1,ac2,ac3)
+
+	fly_word:runAction(seq)
 end
 
 function map_view:initArena()
@@ -319,6 +383,10 @@ function map_view:initArenaBottomNode()
 	self.cur_monster_pos_sp 	= self.arena_bottom_node:getChildByName("cur_monster_pos_sp")
 	self.far_attack_img 		= self.arena_bottom_node:getChildByName("far_attack_img")
 	self.close_attack_img 		= self.arena_bottom_node:getChildByName("close_attack_img")
+end
+
+function map_view:clearModelPanel()
+	self.model_panel:removeAllChildren()
 end
 
 --------------------------战场部分结束-------------------------
