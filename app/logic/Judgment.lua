@@ -123,7 +123,7 @@ function Judgment:getGameResult(win_side)
 	local result = {}
 	local star_num = 0
 
-	if win_side = 1 then
+	if win_side == 1 then
 		star_num = star_num + 1
 		if self.cur_round_num < 6 then
 			star_num = star_num + 1
@@ -136,6 +136,18 @@ function Judgment:getGameResult(win_side)
 	result.star_num = star_num 
 
 	return result
+end
+
+function Judgment:getDeadMonsterNum()
+	local num = 0
+
+	for k,v in pairs(self.left_team) do
+		if v:isDead() then
+			num = num + 1
+		end
+	end
+
+	return num
 end
 
 function Judgment:nextMonsterActivate(is_wait)

@@ -30,6 +30,8 @@ MonsterBase.Towards = {
 	[6] 	= 6,
 }
 
+
+
 function MonsterBase:instance()
 	return setmetatable({}, { __index = self })
 end
@@ -802,7 +804,6 @@ function MonsterBase:moveCloseToLowestHpEnemy(enemy_list,map_info)
 	local near_pos = self:getNearPosPlus(pos_num,map_info)
 	local all_path = self:getPathInfoToTarget(map_info,near_pos)
 
-	self:updateDistancePathInfo()
 	all_path[pos_num] = near_pos
 
 	local path = self:getPathToPosPlus(pos_num, all_path)

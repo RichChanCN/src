@@ -34,13 +34,15 @@ end
 
 function result_view:setResult(result)
     self.result = result
+
+    table.print(self.result)
 end
 
 function result_view:openView()
 	if not self.is_inited then
 		self:init()
 	end
-    if self.result and type(self.result) = type({}) then
+    if self.result and type(self.result) == type({}) then
 	   self:updateView()
     end
 	self.root:setPosition(uitool:zero())
