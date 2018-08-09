@@ -99,13 +99,13 @@ function Judgment:startGame()
 end
 
 function Judgment:runGame(order, param1, param2)
-	self.action_node:removeAllChildren()
 	local action = Judgment.OPERATE[order]
 	action(param1,param2)
 end
 
 function Judgment:gameOver(win_side)
-	self.scene:gameOver()
+	local result = self:getGameResult(win_side)
+	self.scene:gameOver(result)
 	if win_side == 1 then
 		local table = self:getLeftAliveMonsters()
 		for k,v in pairs(table) do
@@ -117,6 +117,25 @@ function Judgment:gameOver(win_side)
 			v:repeatAnimation("victory")
 		end
 	end
+end
+
+function Judgment:getGameResult(win_side)
+	local result = {}
+	local star_num = 0
+
+	if win_side = 1 then
+		star_num = star_num + 1
+		if self.cur_round_num < 6 then
+			star_num = star_num + 1
+		end
+		if self:getDeadMonsterNum() < 1 then
+			star_num = star_num + 1
+		end
+	end
+
+	result.star_num = star_num 
+
+	return result
 end
 
 function Judgment:nextMonsterActivate(is_wait)
@@ -205,10 +224,15 @@ function Judgment:requestWait()
 end
 
 function Judgment:requestAuto()
-	self:setAuto(not self:getAuto())
+	self:setAuto(true)
 	if self:getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
-		self.cur_active_monster:requireAI()
+		self.cur_active_monster:runAI()
 	end
+	self:setGameStatus(Judgment.GameStatus.AUTO)
+end
+
+function Judgment:stopAuto()
+	self:setAuto(false)
 end
 
 function Judgment:checkGameOver()
@@ -365,7 +389,7 @@ end
 
 function Judgment:clearAllMonsters()
 	for k,v in pairs(self.left_team) do
-		v.node:removeAllChildren()
+		--v.node:release()
 		v.model = nil
 		v.animation = nil
 		v = nil
@@ -374,7 +398,7 @@ function Judgment:clearAllMonsters()
 	self.left_team = {}
 
 	for k,v in pairs(self.right_team) do
-		v.node:removeAllChildren()
+		--v.node:release()
 		v.model = nil
 		v.animation = nil
 		v = nil

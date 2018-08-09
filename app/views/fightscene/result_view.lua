@@ -28,16 +28,21 @@ function result_view:initEvents()
     end)
 end
 
-function result_view:updateView(reslut_table)
+function result_view:updateView()
 
 end
 
+function result_view:setResult(result)
+    self.result = result
+end
 
-function result_view:openView(reslut_table)
+function result_view:openView()
 	if not self.is_inited then
 		self:init()
 	end
-	self:updateView(reslut_table)
+    if self.result and type(self.result) = type({}) then
+	   self:updateView()
+    end
 	self.root:setPosition(uitool:zero())
 end
 

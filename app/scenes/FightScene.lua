@@ -30,8 +30,8 @@ function FightScene:onEnter()
 end
 
 function FightScene:onExit()
-	-- Judgment:Instance():clearAllMonsters()
-	-- self.map_view:clearModelPanel()
+	Judgment:Instance():clearAllMonsters()
+	self.map_view:clearModelPanel()
 end
 
 function FightScene:onEnterTransitionFinish()
@@ -45,7 +45,8 @@ function FightScene:startGame()
 	self:openBattleInfoView()
 end
 
-function FightScene:gameOver()
+function FightScene:gameOver(result)
+	self:setResult(result)
 	self.map_view:endAnimation()
 end
 
@@ -82,7 +83,11 @@ function FightScene:closeBattleInfoView()
 	self.battle_info_view:closeView()
 end
 
-function FightScene:openResultView(reslut_table)
+function FightScene:setResult(result)
+	self.result_view:setResult(result)
+end
+
+function FightScene:openResultView()
 	self.result_view:openView()
 end
 

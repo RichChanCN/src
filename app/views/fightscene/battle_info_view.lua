@@ -90,6 +90,8 @@ function battle_info_view:initRightBottomEvents()
     uitool:makeImgToButtonNoScale(self.auto_img, function()
         if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
             Judgment:Instance():requestAuto()
+        elseif Judgment:Instance():getGameStatus() ~= Judgment.GameStatus.WAIT_ORDER then
+            Judgment:Instance():stopAuto()
         end
     end)
 end

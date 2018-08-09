@@ -31,6 +31,7 @@ end
 
 function map_view:initInfo()
 	self.monster_model_list = {}
+	self.model_node_list = {}
 	self.monster_loaded_num = 0
 	self.skew_angle = 60
 	self.arena_event_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
@@ -188,16 +189,18 @@ function map_view:createModel(monster)
         monster.model = nil
     end
 
+	self.model_node_list[monster:getTag()] = cc.Node:create()
+	self.model_node_list[monster:getTag()]:retain()
+	
 	local callback = function(model)
-		local node = cc.Sprite:create()
 		model:setScale(0.5)
-		
+		local node = self.model_node_list[monster:getTag()]
 		local pos = monster.start_pos
         local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
-        if not monster:isFly() then
-        	node:setPosition(x,y-10)
-        else
+        if monster:isFly() then
         	node:setPosition(x,y+10)
+        else
+        	node:setPosition(x,y-10)
         end
 		node:addChild(model)
         monster.node = node
