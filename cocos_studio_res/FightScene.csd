@@ -1171,6 +1171,28 @@
                     <FileData Type="Normal" Path="Sprite/yellow.png" Plist="" />
                     <BlendFunc Src="770" Dst="771" />
                   </AbstractNodeData>
+                  <AbstractNodeData Name="too_far_attack_img" ActionTag="-1934315964" Tag="227" IconVisible="False" LeftMargin="-1037.3003" RightMargin="963.3004" TopMargin="74.5907" BottomMargin="-148.5907" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                    <Size X="74.0000" Y="74.0000" />
+                    <Children>
+                      <AbstractNodeData Name="img" ActionTag="1266855433" Tag="228" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="1.0000" RightMargin="1.0000" TopMargin="1.0000" BottomMargin="1.0000" Scale9Width="72" Scale9Height="72" ctype="ImageViewObjectData">
+                        <Size X="72.0000" Y="72.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="37.0000" Y="37.0000" />
+                        <Scale ScaleX="0.9000" ScaleY="0.9000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="0.9730" Y="0.9730" />
+                        <FileData Type="Normal" Path="Sprite/attackTarget16666.png" Plist="" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="-1000.3004" Y="-111.5907" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition />
+                    <PreSize X="0.0000" Y="0.0000" />
+                    <FileData Type="Normal" Path="Sprite/red3.png" Plist="" />
+                  </AbstractNodeData>
                   <AbstractNodeData Name="far_attack_img" ActionTag="-1681551281" Tag="498" IconVisible="False" LeftMargin="-941.6273" RightMargin="867.6273" TopMargin="75.6284" BottomMargin="-149.6284" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <Children>
@@ -2202,7 +2224,7 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="result_view" ActionTag="-2008413329" Tag="240" IconVisible="False" LeftMargin="-0.0103" RightMargin="0.0103" TopMargin="2229.9966" BottomMargin="-2229.9966" TouchEnable="True" BackColorAlpha="153" ComboBoxIndex="1" ColorAngle="90.0000" ctype="PanelObjectData">
+          <AbstractNodeData Name="result_view" ActionTag="-2008413329" Tag="240" IconVisible="False" LeftMargin="-0.0103" RightMargin="0.0103" TopMargin="2229.9966" BottomMargin="-2229.9966" TouchEnable="True" BackColorAlpha="153" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
               <AbstractNodeData Name="result_bg_img" ActionTag="-425464410" Tag="242" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="730.8000" RightMargin="769.2000" TopMargin="159.0000" BottomMargin="679.0000" Scale9Width="420" Scale9Height="242" ctype="ImageViewObjectData">
