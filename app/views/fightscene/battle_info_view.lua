@@ -124,7 +124,7 @@ function battle_info_view:initQueueLV()
     self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
 end
 
-function battle_info_view:updateLVItem(item,monster)
+function battle_info_view:updateLVItem(item,monster,update_only)
     item.monster = monster 
     item.child = {}
     item.child.border_img = item:getChildByName("border_img")
@@ -133,6 +133,11 @@ function battle_info_view:updateLVItem(item,monster)
     item:loadTexture(monster.char_img_path)
     item.child.border_img:loadTexture(Config.sprite["team_card_border_"..monster.team_side])
     item.child.level_text:setString(monster.level)
+
+    self:updateAnger(item)
+    if update_only then
+        return
+    end
 
     local update = function(anger)
         for i=1,item.monster.max_anger do
@@ -155,7 +160,6 @@ function battle_info_view:updateLVItem(item,monster)
 
     monster.card = item
     self:addQueueItemEvent(item)
-    self:updateAnger(item)
 end
 
 function battle_info_view:addQueueItemEvent(img)
@@ -203,7 +207,7 @@ function battle_info_view:updateRightBottomQueue(is_wait)
         self.left_bottom_img:removeChild(self.animate_card)
     end
     self.animate_card = last_item:clone()
-    self:updateLVItem(self.animate_card,self.queue_first.monster)
+    self:updateLVItem(self.animate_card,self.queue_first.monster,true)
     
     self.left_bottom_img:addChild(self.animate_card)
     self.animate_card:setPosition(self.queue_first:getPosition())
@@ -211,6 +215,7 @@ function battle_info_view:updateRightBottomQueue(is_wait)
     self.animate_card:runAction(cc.JumpTo:create(0.3, cc.p(x+700,y), 300, 1))
     self.animate_card:runAction(cc.FadeOut:create(0.3))
     self.animate_card:runAction(cc.ScaleTo:create(0.7,0.3))
+    
     if not is_wait then
         if not self.queue_lv:getItem(0).monster then
             self.queue_lv:removeItem(0)
@@ -246,10 +251,6 @@ function battle_info_view:updateRightBottomQueue(is_wait)
         local index = self.queue_lv:getIndex(self.next_round_in_queue)
         self.queue_lv:insertCustomItem(last_item,index)
     end
-end
-
-function battle_info_view:addCardToQueue()
-    -- body
 end
 -----------------------左下队列节点开始-----------------------
 return battle_info_view

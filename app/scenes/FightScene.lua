@@ -30,8 +30,8 @@ function FightScene:onEnter()
 end
 
 function FightScene:onExit()
-	Judgment:Instance():clearAllMonsters()
-	self.map_view:clearModelPanel()
+	-- Judgment:Instance():clearAllMonsters()
+	-- self.map_view:clearModelPanel()
 end
 
 function FightScene:onEnterTransitionFinish()

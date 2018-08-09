@@ -14,6 +14,7 @@ Judgment.GameStatus = {
 	RUN_ACTION		= 1,
 	WAIT_ORDER		= 2,
 	OVER 			= 3,
+	AUTO 			= 4,
 }
 
 Judgment.Order = {
@@ -36,8 +37,8 @@ Judgment.OPERATE = {
 		Judgment:Instance().cur_active_monster:moveTo(arena_pos)
 	end,
 
-	[2] = function(target)
-		Judgment:Instance().cur_active_monster:attack(target)
+	[2] = function(target,distance)
+		Judgment:Instance().cur_active_monster:attack(target,distance)
 	end,
 
 	[3] = function()
@@ -88,6 +89,7 @@ function Judgment:initGame(left_team,right_team)
 end
 
 function Judgment:startGame()
+	self.is_auto = false
 	self.cur_round_num = 1
 	self.cur_active_monster_index = 1
 	self.cur_active_monster = self.cur_round_monster_queue[self.cur_active_monster_index]
@@ -96,10 +98,10 @@ function Judgment:startGame()
 	self:runGame(Judgment.Order.ACTIVATE)
 end
 
-function Judgment:runGame(order, param)
+function Judgment:runGame(order, param1, param2)
 	self.action_node:removeAllChildren()
 	local action = Judgment.OPERATE[order]
-	action(param)
+	action(param1,param2)
 end
 
 function Judgment:gameOver(win_side)
@@ -187,9 +189,9 @@ function Judgment:selectPos(node)
 	end
 end
 
-function Judgment:selectTarget(num)
+function Judgment:selectTarget(num,distance)
 	if self.map_info[num] and self.map_info[num]:isMonster() then
-		self:runGame(Judgment.Order.ATTACK, self.map_info[num])
+		self:runGame(Judgment.Order.ATTACK, self.map_info[num],distance)
 	end
 end
 
@@ -203,7 +205,10 @@ function Judgment:requestWait()
 end
 
 function Judgment:requestAuto()
-	
+	self:setAuto(not self:getAuto())
+	if self:getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+		self.cur_active_monster:requireAI()
+	end
 end
 
 function Judgment:checkGameOver()
@@ -220,6 +225,14 @@ function Judgment:checkGameOver()
 
 end
 
+function Judgment:setAuto(is_auto)
+	self.is_auto = is_auto
+end
+
+function Judgment:getAuto()
+	return self.is_auto
+end
+
 function Judgment:setMap(map)
 	self.map = map
 end
@@ -229,6 +242,7 @@ function Judgment:getMap()
 end
 
 function Judgment:getMapInfo()
+	self:updateMapInfo()
 	return self.map_info
 end
 

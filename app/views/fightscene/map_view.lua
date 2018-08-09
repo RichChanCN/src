@@ -85,63 +85,43 @@ end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
-function map_view:showGuide()
-	local cur_active_monster = Judgment:Instance():getCurActiveMonster()
-	local gezi_list = cur_active_monster:getAroundInfo()
-	
-	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
-	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
-	
-	for k,v in pairs(gezi_list) do
-		if k > 10 and v > 10 then
-			self:showCanMoveToGezi(k)
-		else
-			if v == Judgment.MapItem.ENEMY then
-				self:showEnemy(k)
-			end
-		end
-    end
-end
-
 function map_view:showOtherAroundInfo(monster)
 	self:hideGuide()
-	local gezi_list = monster:getAroundInfoToShow()
-	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
-	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
-	
-	for k,v in pairs(gezi_list) do
-		if k > 10 and v > 10 then
-			local x,y = math.modf(k/10),k%10
-			if self["gezi_"..x.."_"..y.."_black"] then 
-				self["gezi_"..x.."_"..y.."_black"]:setVisible(true)
-				self["gezi_"..x.."_"..y.."_black"]:setScale(0.1)
-				local time = math.random()/3+0.1
-				self["gezi_"..x.."_"..y.."_black"]:runAction(cc.FadeIn:create(time))
-				self["gezi_"..x.."_"..y.."_black"]:runAction(cc.ScaleTo:create(time,1))
-			end
-		end
-    end
+	self:showGuide(monster)
 end
 
 function map_view:hideOtherAroundInfo()
-	self.cur_monster_pos_sp:setPosition(uitool:farAway())
-	for x=1,8 do
-		for y=1,7 do
-			if self["gezi_"..x.."_"..y.."_black"] then 
-				self["gezi_"..x.."_"..y.."_black"]:setOpacity(0)
-				self["gezi_"..x.."_"..y.."_black"]:setVisible(false)
-			end
-		end
-	end
+	self:hideGuide()
 	self:showGuide()
 end
 
-function map_view:showEnemy(num)
-	local cur_active_monster = Judgment:Instance():getCurActiveMonster()
+function map_view:showGuide(monster)
+	local cur_active_monster = monster or Judgment:Instance():getCurActiveMonster()
+	
+	local gezi_list = cur_active_monster:getAroundInfo(monster)
+
+	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
+	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
+	
+	for k,v in pairs(gezi_list) do
+		if k>10 and v<100 and v>10 then
+			self:showCanMoveToGezi(k)
+		elseif k>10 and v>100 then
+			if math.floor(v/100) == Judgment.MapItem.ENEMY then
+				self:showEnemy(k,monster,v%100)
+			end
+		end
+    end
+end
+
+function map_view:showEnemy(num,monster,distance)
+	local cur_active_monster = monster or Judgment:Instance():getCurActiveMonster()
 	local atk_img
 	
 	if cur_active_monster:isMelee() then
 		atk_img = self.close_attack_img:clone()
+	elseif distance>5 or distance < 3 then
+		atk_img = self.too_far_attack_img:clone()
 	else
 		atk_img = self.far_attack_img:clone()
 	end
@@ -154,7 +134,7 @@ function map_view:showEnemy(num)
 
 	local img = atk_img:getChildByName("img")
 	uitool:makeImgToButtonHT(img,self.camera,function()
-		Judgment:Instance():selectTarget(num)
+		Judgment:Instance():selectTarget(num,distance)
 	end)
 end
 
@@ -209,7 +189,7 @@ function map_view:createModel(monster)
     end
 
 	local callback = function(model)
-		local node = cc.Node:create()
+		local node = cc.Sprite:create()
 		model:setScale(0.5)
 		
 		local pos = monster.start_pos
@@ -382,6 +362,7 @@ function map_view:initArenaBottomNode()
 	self.moveto_point_sp 		= self.arena_bottom_node:getChildByName("moveto_point_sp")
 	self.cur_monster_pos_sp 	= self.arena_bottom_node:getChildByName("cur_monster_pos_sp")
 	self.far_attack_img 		= self.arena_bottom_node:getChildByName("far_attack_img")
+	self.too_far_attack_img 		= self.arena_bottom_node:getChildByName("too_far_attack_img")
 	self.close_attack_img 		= self.arena_bottom_node:getChildByName("close_attack_img")
 end
 

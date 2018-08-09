@@ -16,7 +16,8 @@ MonsterBase.DamageType = {
 MonsterBase.Status = {
 	ALIVE 	= 1,
 	DEAD 	= 2,
-
+	DEFEND 	= 3,
+	WAITING = 4,
 }
 
 MonsterBase.Towards = {
@@ -42,7 +43,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.name 					= data.name
 	self.level 					= data.level
 	self.rarity					= data.rarity
-	self.cur_hp 				= data.hp
+	self.max_hp 				= data.hp
 	self.attack_type			= data.attack_type
 	self.move_type 				= data.move_type
 	
@@ -60,24 +61,17 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.initiative 			= data.initiative
 	self.defense_penetration 	= data.defense_penetration
 
-	self.cur_anger					= 0
-	self.cur_max_hp 				= self.max_hp 			
-	self.cur_damage 				= self.damage 			
-	self.cur_physical_defense 		= self.physical_defense 	
-	self.cur_magic_defense 			= self.magic_defense 		
-	self.cur_mobility 				= self.mobility 			
-	self.cur_initiative 			= self.initiative 		
-	self.cur_defense_penetration 	= self.defense_penetration
-	
+	self.cur_anger				= 0
+	self.cur_hp 				= self.max_hp
+	self.steps 					= self.cur_mobility
+	self.cur_towards				= self.towards
 	
 	self.team_side				= team_side
 	self.towards				= MonsterBase.Towards[team_side]
-	self.cur_towads				= self.towards
 	self.is_waited				= false
 	self.start_pos 				= arena_pos
 	self.cur_pos 				= arena_pos
 	self.status 				= MonsterBase.Status.ALIVE
-	self.steps 					= self.cur_mobility
 	self.buff_list				= {}
 	self.debuff_list			= {}
 
@@ -86,235 +80,146 @@ function MonsterBase:new( data,team_side,arena_pos )
 	return self
 end
 
+function MonsterBase:getCurDamage()
+	local cur_damage = self.damage
+
+	return cur_damage
+end
+
+function MonsterBase:getCurMaxHp()
+	local cur_max_hp = self.max_hp
+
+	return cur_max_hp
+end
+
+function MonsterBase:getCurPysicalDefense()
+	local cur_physical_defense = self.physical_defense
+
+	return cur_physical_defense
+end
+
+function MonsterBase:getCurMagicDefense()
+	local cur_magic_defense = self.magic_defense
+
+	return cur_magic_defense
+end
+
+function MonsterBase:getCurMobility()
+	local cur_mobility = self.mobility
+
+	return cur_mobility
+end
+
+function MonsterBase:getCurInitiative()
+	local cur_initiative = self.initiative
+
+	return cur_initiative
+end
+
+function MonsterBase:getCurDefensePenetration()
+	local cur_defense_penetration = self.defense_penetration
+
+	return cur_defense_penetration
+end
+
 function MonsterBase:reset()
-	if not self.model and self.animation then
+	if not self.model and self.animation and self.node then
 		return
 	end
 
 	self.cur_anger					= 0
 	self.cur_hp 					= self.max_hp
 	self.cur_pos    				= self.start_pos
+	self.cur_towards				= self.towards
+
 	self.status 					= MonsterBase.Status.ALIVE
 	self.is_waited					= false
 
-	self.cur_max_hp 				= self.max_hp 			
-	self.cur_damage 				= self.damage 			
-	self.cur_physical_defense 		= self.physical_defense 	
-	self.cur_magic_defense 			= self.magic_defense 		
-	self.cur_mobility 				= self.mobility 			
-	self.cur_initiative 			= self.initiative 		
-	self.cur_defense_penetration 	= self.defense_penetration
-	self.cur_towads					= self.towards
-	self.steps 						= self.cur_mobility
+	self.steps 						= self.mobility
 	self.buff_list				= {}
 	self.debuff_list			= {}
 
-	self:towardTo(self.cur_towads)
+	self:towardTo(self.cur_towards)
 
 	self:toStand()
 end
-
-function MonsterBase:getAroundInfoToShow()
-	local map_info = Judgment:Instance():getMapInfo()
-	local temp_list = {}
-	self.around_info = {}
+--»ñÈ¡¿É»î¶¯·¶Î§ÄÚµÄ¸ñ×ÓĞÅÏ¢
+function MonsterBase:getAroundInfo(is_to_show)
 	local steps = self.steps
-	if steps < 1 then
-		steps = self.cur_mobility
-	end
-	--å¯»è·¯è¾…åŠ©å‡½æ•°ï¼Œç”±äºåœ°å›¾ä¸è§„åˆ™ï¼Œæ‰€ä»¥è¦åˆ¤æ–­ç‚¹æ˜¯å¦åˆæ³•
-	local isLegalPos = function(pos)
-		if pos < 10 or pos > 85 or pos%10>7 or pos%10 == 0
-			or pos == 11 or pos == 17 or pos == 84 or pos == 81 or pos == 82 then
-			return false
-		end
-		return true
-	end
-	--å¯»è·¯è¾…åŠ©å‡½æ•°ï¼Œè®°å½•æ¯ä¸ªç‚¹çš„ä¸Šä¸€ä¸ªè·¯å¾„ç‚¹
-	local pathFindHelp = function(pos, num)
-		if not self.around_info[num] and ((not map_info[num]) or self:isFly()) and isLegalPos(num) then
-			
-			self.around_info[num] = pos
-		end
-	end
-	--å¹¿åº¦ä¼˜å…ˆç®—æ³•
-	local findGezi = function(pos)
-		pathFindHelp(pos,pos+10)
-		pathFindHelp(pos,pos-10)
-		pathFindHelp(pos,pos+1)
-		pathFindHelp(pos,pos-1)
-		if pos%2 == 0 then
-			pathFindHelp(pos,pos+11)
-			pathFindHelp(pos,pos+9)
-		else
-			pathFindHelp(pos,pos-11)
-			pathFindHelp(pos,pos-9)
+	if is_to_show then
+		if steps < 1 and not self:isWaited() then
+			steps = self:getCurMobility()
 		end
 	end
 
-	findGezi(gtool:ccpToInt(self.cur_pos))
-	for k,v in pairs(self.around_info) do
-		table.insert(temp_list,k)
-	end
-
-	for i=2,steps do
-		for _,v in pairs(temp_list) do
-
-			findGezi(v)
-			
-			temp_list = {}
-
-			for k,v in pairs(self.around_info) do
-				table.insert(temp_list,k)
-			end
-		end
-	end
-
-	self.fly_path = {}
-	if self:isFly() then
-		for k,v in pairs(self.around_info) do
-			table.insert(self.fly_path,k,v)
-		end
-	end
-
-	for k,v in pairs(map_info) do
-		if v.team_side == self.team_side then
-			self.around_info[k] = Judgment.MapItem.FRIEND
-		end
-	end
-	--å¯æ”»å‡»å¯¹è±¡æ›´æ–°
-	local can_attack_table = {}
-	for k,v in pairs(map_info) do
-		if type(v) == type({}) and v.team_side ~= self.team_side then
-			if not self:isMelee() or self:canAttack(k) then
-				table.insert(can_attack_table,k)
-			else--æ—¢ä¸æ˜¯å¯æ”»å‡»å¯¹è±¡ï¼Œæœ‰å­˜åœ¨åœ°å›¾ä¸Šé¢ï¼Œæ‰€ä»¥å°±æ˜¯å‹å†›å’Œéšœç¢ç‰©ï¼Œè®¾ç½®ä¸ºä¸å¯åˆ°è¾¾åŒºåŸŸ
-				self.around_info[k] = nil
-			end
-		else --æ—¢ä¸æ˜¯å¯æ”»å‡»å¯¹è±¡ï¼Œæœ‰å­˜åœ¨åœ°å›¾ä¸Šé¢ï¼Œæ‰€ä»¥å°±æ˜¯å‹å†›å’Œéšœç¢ç‰©ï¼Œè®¾ç½®ä¸ºä¸å¯åˆ°è¾¾åŒºåŸŸ
-			self.around_info[k] = nil
-		end
-	end
-
-	--è¦åœ¨åé¢è®¾ç½®å¯æ”»å‡»å¯¹è±¡ï¼Œå¦åˆ™åœ¨å¯æ”»å‡»å¯¹è±¡ä¸€æ’æ˜¯ä¼šå‡ºç°æ”»å‡»èŒƒå›´å¼‚å¸¸çš„æƒ…å†µ
-	for k,v in pairs(can_attack_table) do
-		self.around_info[v] = Judgment.MapItem.ENEMY
-	end
-	--å› ä¸ºaroundä¿¡æ¯çš„ç´¢å¼•æ˜¯ä»¥intæ¥å†³å®šçš„ï¼Œæœ€å°çš„æ˜¯11ï¼Œæ‰€ä»¥å‰10ä½å¯ä»¥çµæ´»ä½¿ç”¨
-	--è¿™é‡Œç¬¬0ä½ä»£è¡¨è‡ªèº«ä½ç½®
-	self.around_info[0] = self.cur_pos
-	return self.around_info
-end
-
---è·å–å¯æ´»åŠ¨èŒƒå›´å†…çš„æ ¼å­ä¿¡æ¯
-function MonsterBase:getAroundInfo()
 	local map_info = Judgment:Instance():getMapInfo()
-	local temp_list = {}
 	self.around_info = {}
-	--å¦‚æœå‰©ä½™æ­¥æ•°ä¸è¶³ï¼Œåˆ™åªæ£€æŸ¥æ˜¯å¦æœ‰è¯¾æ”»å‡»å¯¹è±¡
-	if self.steps < 1 then
-		local can_attack_table = {}
-		for k,v in pairs(map_info) do
-			if type(v) == type({}) and v.team_side ~= self.team_side then
-				if not self:isMelee() or self:canAttack(k) then
-					table.insert(can_attack_table,k)
-				end
-			else
-				self.around_info[k] = nil
-			end
-		end
 
-		for k,v in pairs(can_attack_table) do
-			self.around_info[v] = Judgment.MapItem.ENEMY
-		end
+	--Èç¹ûÊ£Óà²½Êı²»×ã ÔòÌø¹ıÑ°Â· Ö»¼ì²éÊÇ·ñÓĞ¿Î¹¥»÷¶ÔÏó
+	if steps>0 then
+		self.around_info = self:getPathFindingAreaInfo(gtool:ccpToInt(self.cur_pos),map_info,steps)
 
-		self.around_info[0] = self.cur_pos
-		return self.around_info
-	end
-	--å¯»è·¯è¾…åŠ©å‡½æ•°ï¼Œç”±äºåœ°å›¾ä¸è§„åˆ™ï¼Œæ‰€ä»¥è¦åˆ¤æ–­ç‚¹æ˜¯å¦åˆæ³•
-	local isLegalPos = function(pos)
-		if pos < 10 or pos > 85 or pos%10>7 or pos%10 == 0
-			or pos == 11 or pos == 17 or pos == 84 or pos == 81 or pos == 82 then
-			return false
-		end
-		return true
-	end
-	--å¯»è·¯è¾…åŠ©å‡½æ•°ï¼Œè®°å½•æ¯ä¸ªç‚¹çš„ä¸Šä¸€ä¸ªè·¯å¾„ç‚¹
-	local pathFindHelp = function(pos, num)
-		if not self.around_info[num] and ((not map_info[num]) or self:isFly()) and isLegalPos(num) then
-			
-			self.around_info[num] = pos
-		end
-	end
-	--å¹¿åº¦ä¼˜å…ˆç®—æ³•
-	local findGezi = function(pos)
-		pathFindHelp(pos,pos+10)
-		pathFindHelp(pos,pos-10)
-		pathFindHelp(pos,pos+1)
-		pathFindHelp(pos,pos-1)
-		if pos%2 == 0 then
-			pathFindHelp(pos,pos+11)
-			pathFindHelp(pos,pos+9)
-		else
-			pathFindHelp(pos,pos-11)
-			pathFindHelp(pos,pos-9)
-		end
-	end
-
-	findGezi(gtool:ccpToInt(self.cur_pos))
-	for k,v in pairs(self.around_info) do
-		table.insert(temp_list,k)
-	end
-
-	for i=2,self.steps do
-		for _,v in pairs(temp_list) do
-
-			findGezi(v)
-			
-			temp_list = {}
-
+		self.fly_path = {}
+		if self:isFly() then
 			for k,v in pairs(self.around_info) do
-				table.insert(temp_list,k)
+				table.insert(self.fly_path,k,v)
+			end
+		end
+
+		for k,v in pairs(map_info) do
+			if v.team_side == self.team_side then
+				self.around_info[k] = Judgment.MapItem.FRIEND
 			end
 		end
 	end
 
-	self.fly_path = {}
-	if self:isFly() then
-		for k,v in pairs(self.around_info) do
-			table.insert(self.fly_path,k,v)
-		end
-	end
-
-	for k,v in pairs(map_info) do
-		if v.team_side == self.team_side then
-			self.around_info[k] = Judgment.MapItem.FRIEND
-		end
-	end
-	--å¯æ”»å‡»å¯¹è±¡æ›´æ–°
+	--¿É¹¥»÷¶ÔÏó¸üĞÂ
 	local can_attack_table = {}
 	for k,v in pairs(map_info) do
 		if type(v) == type({}) and v.team_side ~= self.team_side then
 			if not self:isMelee() or self:canAttack(k) then
 				table.insert(can_attack_table,k)
-			else--æ—¢ä¸æ˜¯å¯æ”»å‡»å¯¹è±¡ï¼Œæœ‰å­˜åœ¨åœ°å›¾ä¸Šé¢ï¼Œæ‰€ä»¥å°±æ˜¯å‹å†›å’Œéšœç¢ç‰©ï¼Œè®¾ç½®ä¸ºä¸å¯åˆ°è¾¾åŒºåŸŸ
+			else--¼È²»ÊÇ¿É¹¥»÷¶ÔÏó£¬ÓĞ´æÔÚµØÍ¼ÉÏÃæ£¬ËùÒÔ¾ÍÊÇÓÑ¾üºÍÕÏ°­Îï£¬ÉèÖÃÎª²»¿Éµ½´ïÇøÓò
 				self.around_info[k] = nil
 			end
-		else --æ—¢ä¸æ˜¯å¯æ”»å‡»å¯¹è±¡ï¼Œæœ‰å­˜åœ¨åœ°å›¾ä¸Šé¢ï¼Œæ‰€ä»¥å°±æ˜¯å‹å†›å’Œéšœç¢ç‰©ï¼Œè®¾ç½®ä¸ºä¸å¯åˆ°è¾¾åŒºåŸŸ
+		else --¼È²»ÊÇ¿É¹¥»÷¶ÔÏó£¬ÓĞ´æÔÚµØÍ¼ÉÏÃæ£¬ËùÒÔ¾ÍÊÇÓÑ¾üºÍÕÏ°­Îï£¬ÉèÖÃÎª²»¿Éµ½´ïÇøÓò
 			self.around_info[k] = nil
 		end
 	end
 
-	--è¦åœ¨åé¢è®¾ç½®å¯æ”»å‡»å¯¹è±¡ï¼Œå¦åˆ™åœ¨å¯æ”»å‡»å¯¹è±¡ä¸€æ’æ˜¯ä¼šå‡ºç°æ”»å‡»èŒƒå›´å¼‚å¸¸çš„æƒ…å†µ
+	--ÒªÔÚºóÃæÉèÖÃ¿É¹¥»÷¶ÔÏó£¬·ñÔòÔÚ¿É¹¥»÷¶ÔÏóÒ»ÅÅÊÇ»á³öÏÖ¹¥»÷·¶Î§Òì³£µÄÇé¿ö
+	self:updateDistancePathInfo()
 	for k,v in pairs(can_attack_table) do
-		self.around_info[v] = Judgment.MapItem.ENEMY
+		self.around_info[v] = Judgment.MapItem.ENEMY*100 + self:getDistanceToPos(v)
 	end
-	--å› ä¸ºaroundä¿¡æ¯çš„ç´¢å¼•æ˜¯ä»¥intæ¥å†³å®šçš„ï¼Œæœ€å°çš„æ˜¯11ï¼Œæ‰€ä»¥å‰10ä½å¯ä»¥çµæ´»ä½¿ç”¨
-	--è¿™é‡Œç¬¬0ä½ä»£è¡¨è‡ªèº«ä½ç½®
+	
+	--ÒòÎªaroundĞÅÏ¢µÄË÷ÒıÊÇÒÔintÀ´¾ö¶¨µÄ£¬×îĞ¡µÄÊÇ11£¬ËùÒÔÇ°10Î»¿ÉÒÔÁé»îÊ¹ÓÃ
+	--ÕâÀïµÚ0Î»´ú±í×ÔÉíÎ»ÖÃ
 	self.around_info[0] = self.cur_pos
 	return self.around_info
 end
---å¿«é€Ÿåˆ¤æ–­å‡½æ•°
+
+function MonsterBase:updateDistancePathInfo()
+	local steps = math.abs(self.cur_pos.x - 4) + math.abs(self.cur_pos.y - 4) + 4
+	if steps > 8 then 
+		steps = 8 
+	end
+	self.distance_path_info = self:getPathFindingAreaInfo(gtool:ccpToInt(self.cur_pos),{},steps)
+end
+
+function MonsterBase:getPathInfoToTarget(map_info,target)
+	return self:getPathFindingAreaInfo(gtool:ccpToInt(self.cur_pos),map_info,target)
+end
+
+function MonsterBase:getPathFindingAreaInfo(center_pos_num,map_info,steps)
+	if steps < 10 then
+		return self:getPathFindingByStep(center_pos_num,map_info,steps)
+	else
+		return self:getPathFindingByTarget(center_pos_num,map_info,steps)
+	end
+end
+
+--¿ìËÙÅĞ¶Ïº¯Êı
 function MonsterBase:isMonster()
 	return true
 end
@@ -325,6 +230,10 @@ end
 
 function MonsterBase:isDead()
 	return self.status == MonsterBase.Status.DEAD
+end
+
+function MonsterBase:isDefend()
+	return self.status == MonsterBase.Status.DEFNED
 end
 
 function MonsterBase:isMelee()
@@ -339,15 +248,19 @@ function MonsterBase:isWaited()
 	return self.is_waited
 end
 
+function MonsterBase:isPlayer()
+	return self.team_side == MonsterBase.TeamSide.LEFT
+end
+
 function MonsterBase:isBeBackAttacked(murderer)
-	return self.cur_towads == murderer.cur_towads
+	return self.cur_towards == murderer.cur_towards
 end
 
 function MonsterBase:isBeSideAttacked(murderer)
-	return self.cur_towads+1 == murderer.cur_towads
-			or self.cur_towads+1 == murderer.cur_towads + 6
-			or self.cur_towads-1 == murderer.cur_towads
-			or self.cur_towads-1 == murderer.cur_towads - 6
+	return self.cur_towards+1 == murderer.cur_towards
+			or self.cur_towards+1 == murderer.cur_towards + 6
+			or self.cur_towards-1 == murderer.cur_towards
+			or self.cur_towards-1 == murderer.cur_towards - 6
 end
 
 function MonsterBase:canCounterAttack(murderer)
@@ -357,26 +270,38 @@ function MonsterBase:canCounterAttack(murderer)
 			and not(self:isBeSideAttacked(murderer) or self:isBeBackAttacked(murderer))
 end
 
---è¿›å…¥ä¸€ä¸ªæ–°çš„å›åˆä¼šè§¦å‘çš„å‡½æ•°
+--½øÈëÒ»¸öĞÂµÄ»ØºÏ»á´¥·¢µÄº¯Êı
 function MonsterBase:onEnterNewRound()
 	self.is_waited = false
-	self.steps = self.cur_mobility
+	self.steps = self:getCurMobility()
 end
 
---è¡ŒåŠ¨ä¹‹å‰è§¦å‘çš„å‡½æ•°
+--ĞĞ¶¯Ö®Ç°´¥·¢µÄº¯Êı
 function MonsterBase:onActive()
-	local ac1 = self.node:runAction(cc.Blink:create(0.5, 2))
-	self.node:stopAction(ac1)
-	local cb = function()
-		self.node:setVisible(true)
-		Judgment:Instance():changeGameStatus(Judgment.GameStatus.WAIT_ORDER)
-	end
-	local callback = cc.CallFunc:create(cb)
-	local seq = cc.Sequence:create(ac1,callback)
+	-- local ac1 = self.node:runAction(cc.Blink:create(0.5, 2))
+	-- self.node:stopAction(ac1)
+	-- local cb = function()
+	-- 	self.node:setVisible(true)
+	-- 	if self:isPlayer() and not Judgment:Instance():getAuto() then
+	-- 		self:toStand()
+	-- 		Judgment:Instance():changeGameStatus(Judgment.GameStatus.WAIT_ORDER)
+	-- 	else
+	-- 		self:requireAI()
+	-- 	end
+	-- end
+	-- local callback = cc.CallFunc:create(cb)
+	-- local seq = cc.Sequence:create(ac1,callback)
 	
-	self.node:runAction(seq)
+	-- self.node:runAction(seq)
+
+	if self:isPlayer() and not Judgment:Instance():getAuto() then
+		self:toStand()
+		Judgment:Instance():changeGameStatus(Judgment.GameStatus.WAIT_ORDER)
+	else
+		self:requireAI()
+	end
 end
---ç§»åŠ¨å‡½æ•°ï¼Œç¬¬äºŒä¸ªå‚æ•°æ˜¯ç§»åŠ¨æ”»å‡»æ—¶å€™ä½¿ç”¨
+--ÒÆ¶¯º¯Êı£¬µÚ¶ş¸ö²ÎÊıÊÇÒÆ¶¯¹¥»÷Ê±ºòÊ¹ÓÃ
 function MonsterBase:moveTo(arena_pos,target)
 	self:repeatAnimation("walk")
 	local cb = function()
@@ -399,9 +324,8 @@ function MonsterBase:moveTo(arena_pos,target)
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	
 end
---é¡ºç€è·¯å¾„åˆ°è¾¾ç›®çš„åœ°
+--Ë³×ÅÂ·¾¶µ½´ïÄ¿µÄµØ
 function MonsterBase:moveFollowPath(arena_pos,callback_final)
-	
 	local num = gtool:ccpToInt(arena_pos)
 	local path = self:getPathToPos(num)
 	self.steps = self.steps - #path
@@ -434,7 +358,7 @@ function MonsterBase:moveFollowPath(arena_pos,callback_final)
 	self:towardToIntPos(gtool:ccpToInt(self.cur_pos),path[#path])
 	self.node:runAction(all_seq)
 end
---è·å–è·¯å¾„
+--»ñÈ¡Â·¾¶
 function MonsterBase:getPathToPos(num, path_table)
 	path_table = path_table or {}
 	table.insert(path_table,num)
@@ -451,27 +375,27 @@ function MonsterBase:getPathToPos(num, path_table)
 		return self:getPathToPos(last_geizi,path_table)
 	end
 end
---ç§»åŠ¨å¹¶ä¸”æ”»å‡»
-function MonsterBase:moveAndAttack(target)
+--ÒÆ¶¯²¢ÇÒ¹¥»÷
+function MonsterBase:moveAndAttack(target,is_ai)
 	local num = gtool:ccpToInt(target.cur_pos)
 	local pos = gtool:intToCcp(self:getNearPos(num))
 
 	self:moveTo(pos,target)
 end
---æ”»å‡»
-function MonsterBase:attack(target)
+--¹¥»÷
+function MonsterBase:attack(target,distance,is_ai)
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	
-	--è‹¥æ˜¯è¿‘æˆ˜åˆ‡ç›®æ ‡ä¸åœ¨å‘¨å›´åˆ™ç§»åŠ¨åˆ°ç›®æ ‡é™„è¿‘å†æ”»å‡»
+	--ÈôÊÇ½üÕ½ÇĞÄ¿±ê²»ÔÚÖÜÎ§ÔòÒÆ¶¯µ½Ä¿±ê¸½½üÔÙ¹¥»÷
 	if self:isMelee() and not self:isNear(gtool:ccpToInt(target.cur_pos)) then
-		self:moveAndAttack(target)
-	else--å¦åˆ™ç›´æ¥æ”»å‡»
+		self:moveAndAttack(target,is_ai)
+	else--·ñÔòÖ±½Ó¹¥»÷
 		self:addAnger()
 		local cur_num = gtool:ccpToInt(self.cur_pos)
 		local to_num = gtool:ccpToInt(target.cur_pos)
 		self:towardToIntPos(cur_num,to_num)
 		self:doAnimation("attack1")
-		target:beAttacked(self)
+		target:beAttacked(self,false,distance)
 	end
 end
 
@@ -483,11 +407,11 @@ function MonsterBase:getDamageType(murderer)
 	end
 end
 
---è¢«æ”»å‡»æ—¶å€™è§¦å‘ï¼Œè‹¥å·²ç»æ˜¯åå‡»ï¼Œç¬¬äºŒä¸ªå‚æ•°ä¸ºtrueï¼Œåˆ™ä¸å†å‡ºå‘åå‡»
-function MonsterBase:beAttacked(murderer, is_counter_attack)
-	self:minusHP(self:getFinalAttackDamage(murderer),self:getDamageType(murderer))
+--±»¹¥»÷Ê±ºò´¥·¢£¬ÈôÒÑ¾­ÊÇ·´»÷£¬µÚ¶ş¸ö²ÎÊıÎªtrue£¬Ôò²»ÔÙ³ö·¢·´»÷
+function MonsterBase:beAttacked(murderer, is_counter_attack,distance)
+	self:minusHP(self:getFinalAttackDamage(murderer,distance),self:getDamageType(murderer))
 	self:addAnger()
-	--self.cur_hp = self.cur_hp - murderer.cur_damage
+
 	if self.cur_hp < 1 then
 		self:die()
 	else
@@ -508,27 +432,38 @@ function MonsterBase:beAttacked(murderer, is_counter_attack)
 		Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	end
 end
---è®¡ç®—æ”»å‡»æœ€åä¼¤å®³
-function MonsterBase:getFinalAttackDamage(murderer)
-	local damage = murderer.cur_damage
-	--è®¡ç®—å·è¢­åŠ æˆ
+--¼ÆËã¹¥»÷×îºóÉËº¦
+function MonsterBase:getFinalAttackDamage(murderer,distance)
+	local damage = murderer:getCurDamage()
+	--¼ÆËãÍµÏ®¼Ó³É
 	if self:isBeBackAttacked(murderer) then
 		damage = damage * 1.5
 	elseif self:isBeSideAttacked(murderer) then
 		damage = damage * 1.2
 	end
 
-	--è®¡ç®—é˜²å¾¡å’Œç ´é˜²
+	--¼ÆËã·ÀÓùºÍÆÆ·À
 	local defense
 	if murderer:isPhysical() then
-		defense = self.cur_physical_defense - murderer.cur_defense_penetration
+		defense = self:getCurPysicalDefense() - murderer:getCurDefensePenetration()
 	else
-		defense = self.cur_magic_defense - murderer.cur_defense_penetration
+		defense = self:getCurMagicDefense() - murderer:getCurDefensePenetration()
+	end
+
+	--Ô¶³ÌµÄ¾àÀë³Í·£
+	if not murderer:isMelee() then
+		if distance > 5 then
+			damage = damage * (1 - (distance - 5)*2/10)
+		elseif distance < 3 then
+			damage = damage * (1 - (3 - distance)/10)
+		else
+			damage = damage * 1.2
+		end
 	end
 
 	damage = damage * (1 - defense/(defense + 10))
 
-	--å¢åŠ  +/-5çš„ä¸ç¨³å®šæƒ…å†µ
+	--Ôö¼Ó +/-5µÄ²»ÎÈ¶¨Çé¿ö
 	damage = damage + (math.random() - 0.5) * 10
 
 	if damage < 1 then
@@ -538,7 +473,7 @@ function MonsterBase:getFinalAttackDamage(murderer)
 	return math.floor(damage)
 end
 
---è¡€é‡æ€’æ°”çš„ç›¸å…³æ“ä½œ
+--ÑªÁ¿Å­ÆøµÄÏà¹Ø²Ù×÷
 function MonsterBase:minusHP(damage,damage_type)
 	local hp = self.cur_hp - damage
 
@@ -554,8 +489,9 @@ function MonsterBase:setHP(hp)
 	if hp<0 then
 		hp = 0
 	end
-	if hp>self.cur_max_hp then
-		hp = self.cur_max_hp
+	local max_hp = self:getCurMaxHp()
+	if hp>max_hp then
+		hp = max_hp
 	end
 	self.cur_hp = hp
 
@@ -567,10 +503,10 @@ function MonsterBase:addAnger(num)
 	end
 	num = num or 1
 
-	self:setAngle(self.cur_anger + num)
+	self:setAnger(self.cur_anger + num)
 end
 
-function MonsterBase:setAngle(angle)
+function MonsterBase:setAnger(angle)
 	self.cur_anger = angle
 
 	local cb = function()
@@ -582,7 +518,7 @@ function MonsterBase:setAngle(angle)
 	self:doSomethingLater(callback,0.5)
 end
 
---åå‡»
+--·´»÷
 function MonsterBase:counterAttack(target)
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	
@@ -594,7 +530,7 @@ function MonsterBase:counterAttack(target)
 	target:beAttacked(self,true)
 
 end
---ç­‰å¾…
+--µÈ´ı
 function MonsterBase:wait()
 	if self.is_waited then
 		print("you has been waited!")
@@ -604,12 +540,13 @@ function MonsterBase:wait()
 		Judgment:Instance():nextMonsterActivate(true)
 	end
 end
---é˜²å¾¡
+--·ÀÓù
 function MonsterBase:defend()
+	self:repeatAnimation("defend")
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUN_ACTION)
 	Judgment:Instance():nextMonsterActivate()
 end
---æ­»äº¡
+--ËÀÍö
 function MonsterBase:die()
 	self.status = MonsterBase.Status.DEAD
 	local ac = self.model:runAction(cc.FadeOut:create(1))
@@ -633,16 +570,38 @@ function MonsterBase:turnToTarget(target)
 	
 end
 
---è½¬å‘
+--×ªÏò
 function MonsterBase:towardTo(num)
-	self.cur_towads = num
+	self.cur_towards = num
 	self.model:setRotation3D(cc.vec3(0,(1-num)*60,0))
 end
---æ ¹æ®è‡ªèº«ä½ç½®è½¬å‘ä¸€ä¸ªä½ç½®ï¼Œå‚æ•°æ˜¯å·²ç»è½¬æ¢ä¸ºintçš„ä½ç½®ä¿¡æ¯
+--¸ù¾İ×ÔÉíÎ»ÖÃ×ªÏòÒ»¸öÎ»ÖÃ£¬²ÎÊıÊÇÒÑ¾­×ª»»ÎªintµÄÎ»ÖÃĞÅÏ¢
 function MonsterBase:towardToIntPos(cur_num,to_num)
 	if not to_num then 
 		return
 	end
+	local towardToHelp = function ()
+		local to_pos = gtool:intToCcp(to_num)
+		local cur_pos = gtool:intToCcp(cur_num)
+		if to_num > cur_num then
+			if to_pos.x-cur_pos.x>math.abs(to_pos.y-cur_pos.y) then
+				self:towardTo(1)
+			elseif to_pos.y>cur_pos.y then
+				self:towardTo(6)
+			else
+				self:towardTo(2)
+			end
+		else
+			if cur_pos.x-to_pos.x>math.abs(to_pos.y-cur_pos.y) then
+				self:towardTo(4)
+			elseif to_pos.y>cur_pos.y then
+				self:towardTo(5)
+			else
+				self:towardTo(3)
+			end
+		end
+	end
+
 	local deta = to_num - cur_num
 	if cur_num%2 == 0 then
 		if deta == 10 then
@@ -657,6 +616,8 @@ function MonsterBase:towardToIntPos(cur_num,to_num)
 			self:towardTo(5)
 		elseif deta == 11 then
 			self:towardTo(6)
+		else
+			towardToHelp()
 		end
 	else
 		if deta == 10 then
@@ -671,18 +632,20 @@ function MonsterBase:towardToIntPos(cur_num,to_num)
 			self:towardTo(5)
 		elseif deta == 1 then
 			self:towardTo(6)
+		else
+			towardToHelp()
 		end
 	end
 end
 
---åˆ¤æ–­ç›®å‰æ˜¯å¦å¯ä»¥å¼ºåˆ¶ç»“æŸå›åˆ
+--ÅĞ¶ÏÄ¿Ç°ÊÇ·ñ¿ÉÒÔÇ¿ÖÆ½áÊø»ØºÏ
 function MonsterBase:nothingCanDo()
-	--ç›®å‰å¦‚æœæ˜¯è¿œç¨‹ï¼Œæ¸¸æˆæ²¡ç»“æŸï¼Œé‚£ä¹ˆè‚¯å®šå­˜åœ¨å¯æ”»å‡»å¯¹è±¡
+	--Ä¿Ç°Èç¹ûÊÇÔ¶³Ì£¬ÓÎÏ·Ã»½áÊø£¬ÄÇÃ´¿Ï¶¨´æÔÚ¿É¹¥»÷¶ÔÏó
 	if not self:isMelee() then
 		return false
 	else
 		self:getAroundInfo()
-		--å¦åˆ™å¦‚æœå‘¨å›´å¯è¡ŒåŠ¨ä¿¡æ¯ä¸­åªæœ‰è‡ªèº«ä½ç½®çš„è¯ï¼Œåˆ™å¯ä»¥ç»“æŸ
+		--·ñÔòÈç¹ûÖÜÎ§¿ÉĞĞ¶¯ĞÅÏ¢ÖĞÖ»ÓĞ×ÔÉíÎ»ÖÃµÄ»°£¬Ôò¿ÉÒÔ½áÊø
 		local count = 0
 		for k,v in pairs(self.around_info) do
 		    count = count + 1
@@ -694,14 +657,14 @@ function MonsterBase:nothingCanDo()
 	end
 end
 
---å¯ä»¥æ”»å‡»åˆ°æ•°å€¼ä¸ºnumçš„ä½ç½®å—
+--¿ÉÒÔ¹¥»÷µ½ÊıÖµÎªnumµÄÎ»ÖÃÂğ
 function MonsterBase:canAttack(num)
 	if self:isNear(num) then
 		return true
 	end
 
 	return self:getNearPos(num)
-	--åªè¦è¿™ä¸ªä½ç½®å‘¨å›´æœ‰ä¸€ä¸ªå¯ä»¥ç§»åŠ¨çš„ç‚¹ï¼Œåˆ™è®¤ä¸ºå¯ä»¥æ”»å‡»åˆ°ï¼ˆç­‰ä»·ä¸ºä¸Šé¢é‚£å¥è¯ï¼‰
+	--Ö»ÒªÕâ¸öÎ»ÖÃÖÜÎ§ÓĞÒ»¸ö¿ÉÒÔÒÆ¶¯µÄµã£¬ÔòÈÏÎª¿ÉÒÔ¹¥»÷µ½£¨µÈ¼ÛÎªÉÏÃæÄÇ¾ä»°£©
 	-- if num%2 == 0 then
 	-- 	return self.around_info[num+10]
 	-- 		or self.around_info[num-10]
@@ -719,7 +682,7 @@ function MonsterBase:canAttack(num)
 	-- end
 end
 
---åˆ¤æ–­ç›®å‰ä½ç½®æ˜¯å¦åœ¨æ•°å€¼ä¸ºnumçš„ä½ç½®é™„è¿‘
+--ÅĞ¶ÏÄ¿Ç°Î»ÖÃÊÇ·ñÔÚÊıÖµÎªnumµÄÎ»ÖÃ¸½½ü
 function MonsterBase:isNear(num)
 	local cur = gtool:ccpToInt(self.cur_pos)
 	if num%2 == 0 then
@@ -747,8 +710,8 @@ function MonsterBase:isNear(num)
 	return false
 end
 
---è·å–æ•°å€¼ä¸ºnumä½ç½®ç‚¹çš„å¹¶ä¸”å¯åˆ°è¾¾çš„é™„è¿‘ç‚¹ï¼Œç§»åŠ¨å¹¶æ”»å‡»ä¸­ä½¿ç”¨
---åˆ¤æ–­é¡ºåºå½±å“æ”»å‡»ä½ç½®
+--»ñÈ¡ÊıÖµÎªnumÎ»ÖÃµãµÄ²¢ÇÒ¿Éµ½´ïµÄ¸½½üµã£¬ÒÆ¶¯²¢¹¥»÷ÖĞÊ¹ÓÃ
+--ÅĞ¶ÏË³ĞòÓ°Ïì¹¥»÷Î»ÖÃ
 function MonsterBase:getNearPos(num)
 	local help = function (a)
 		return self.around_info[a] and self.around_info[a] > 10
@@ -786,12 +749,25 @@ function MonsterBase:getNearPos(num)
 	return false
 end
 
---ä¸¤ä¸ªä½ç½®ä¹‹é—´çš„è·ç¦»ï¼Œæš‚æ—¶æ²¡æœ‰å®Œæˆï¼Œç›®å‰åªæƒ³åˆ°äº†åœ¨å°„æ‰‹ä¼¤å®³æ ¹æ®è·ç¦»å‡å°‘æ–¹é¢æœ‰ç”¨
-function MonsterBase:distanceBetweenPos(num1,num2)
-	local min = math.min(num1,num2)
-	local max = math.min(num1,num2)
-	if max - min == 0 then
-		return 0
+--µ½Î»ÖÃµÄ¾àÀë (ÂùÁ¦£¬¹ã¶ÈÓÅÏÈ)
+function MonsterBase:getDistanceToPos(num,update_distance_path_info)
+	local cur_num = gtool:ccpToInt(self.cur_pos)
+	if update_distance_path_info then
+		self:updateDistancePathInfo()
+	end
+	local path = self:getPathForDistance(num,path_table)
+	return #path
+end
+
+function MonsterBase:getPathForDistance(num,path_table)
+	path_table = path_table or {}
+	table.insert(path_table,num)
+	local last_geizi = self.distance_path_info[num]
+
+	if gtool:ccpToInt(self.cur_pos) == last_geizi then
+		return path_table
+	else
+		return self:getPathForDistance(last_geizi,path_table)
 	end
 end
 
@@ -799,12 +775,12 @@ function MonsterBase:updateCurAttribute()
 	
 end
 
---è½¬æ¢åˆ°ç«™ç«‹åŠ¨ä½œå¹¶é‡å¤
+--×ª»»µ½Õ¾Á¢¶¯×÷²¢ÖØ¸´
 function MonsterBase:toStand()
 	self:repeatAnimation("stand")
 end
 
---è½¬æ¢åˆ°å¹¶ä¸€ç›´é‡å¤æŸä¸€åŠ¨ä½œ
+--×ª»»µ½²¢Ò»Ö±ÖØ¸´Ä³Ò»¶¯×÷
 function MonsterBase:repeatAnimation(name)
 	if Config.Monster_animate[self.id][name] then
     	local animate = Config.Monster_animate[self.id][name](self.animation)
@@ -813,7 +789,7 @@ function MonsterBase:repeatAnimation(name)
     end
 end
 
---åšä¸€ä¸ªåŠ¨ä½œ
+--×öÒ»¸ö¶¯×÷
 function MonsterBase:doAnimation(name,cb)
 	if Config.Monster_animate[self.id][name] then
     	local animate = Config.Monster_animate[self.id][name](self.animation)
@@ -826,7 +802,7 @@ function MonsterBase:doAnimation(name,cb)
         	seq = cc.Sequence:create(animate,callback,cb)
         end
         self.model:runAction(seq)
-    elseif cb then --å¦‚æœæ²¡æœ‰è¯¥åŠ¨ä½œï¼Œåˆ™å»¶æ—¶ä¹‹åè°ƒç”¨å›è°ƒï¼Œå»¶æ—¶ä½¿ç”¨ä¸€ä¸ªæ–°å»ºçš„nodeæ¥å¤„ç†ï¼Œå¦åˆ™ä¼šåŠ¨ä½œå†²çªå›è°ƒä¸æˆåŠŸ
+    elseif cb then --Èç¹ûÃ»ÓĞ¸Ã¶¯×÷£¬ÔòÑÓÊ±Ö®ºóµ÷ÓÃ»Øµ÷£¬ÑÓÊ±Ê¹ÓÃÒ»¸öĞÂ½¨µÄnodeÀ´´¦Àí£¬·ñÔò»á¶¯×÷³åÍ»»Øµ÷²»³É¹¦
     	self:doSomethingLater(cb,1)
     end
 end
@@ -837,6 +813,314 @@ function MonsterBase:doSomethingLater(callback,time)
     local default_ac = ac_node:runAction(cc.ScaleTo:create(time,1))
     local seq = cc.Sequence:create(default_ac,callback)
     ac_node:runAction(seq)
+end
+
+function MonsterBase:requireAI()
+	local enemy_list
+	if self:isPlayer() then
+		enemy_list = Judgment:Instance():getRightAliveMonsters()
+	else
+		enemy_list = Judgment:Instance():getLeftAliveMonsters()
+	end
+
+	local map_info = Judgment:Instance():getMapInfo()
+	self.around_info = self:getAroundInfo()
+	
+	local target_enemy = self:getEnemyCanAttack(enemy_list)
+	if target_enemy then
+		local pos_num = gtool:ccpToInt(target_enemy.cur_pos)
+		local distance = self:getDistanceToPos(pos_num,true)
+		self:attack(target_enemy, distance, is_ai)
+	else
+		self:moveCloseToLowestHpEnemy(enemy_list,map_info)
+	end
+end
+
+function MonsterBase:getEnemyCanAttack(enemy_list)
+	local can_attack_list = {}
+	for k,v in pairs(enemy_list) do
+		if self:canAttack(gtool:ccpToInt(v.cur_pos)) then
+			table.insert(can_attack_list,v)
+		end
+	end
+	
+	return self:getLowestHpEnemy(can_attack_list)
+end
+
+function MonsterBase:getLowestHpEnemy(enemy_list)
+	local sort_by_hp = function(a,b)
+		return a.cur_hp < b.cur_hp
+	end
+
+	if #enemy_list>2 then
+		table.sort(enemy_list,sort_by_hp)
+	end
+	
+	return enemy_list[1]
+end
+
+function MonsterBase:moveCloseToLowestHpEnemy(enemy_list,map_info)
+	local enemy = self:getLowestHpEnemy(enemy_list)
+
+	local pos_num = gtool:ccpToInt(enemy.cur_pos)
+
+	local near_pos = self:getNearPosPlus(pos_num,map_info)
+	local all_path = self:getPathInfoToTarget(map_info,near_pos)
+
+	self:updateDistancePathInfo()
+	all_path[pos_num] = near_pos
+
+	local path = self:getPathToPosPlus(pos_num, all_path)
+
+	local index
+	for i,v in ipairs(path) do
+		if self.around_info[v] and self.around_info[v]<100 and self.around_info[v]>10 then
+			index = i
+			break
+		end
+	end
+
+	self:moveTo(gtool:intToCcp(path[index]))
+end
+--»ñÈ¡Â·¾¶
+function MonsterBase:getPathToPosPlus(num, all_path, path_table)
+	path_table = path_table or {}
+	table.insert(path_table,num)
+	local last_geizi
+	if self:isFly() then 
+		last_geizi = self.distance_path_info[num]
+	else
+		last_geizi = all_path[num]
+	end
+
+	if gtool:ccpToInt(self.cur_pos) == last_geizi then
+		return path_table
+	else
+		return self:getPathToPosPlus(last_geizi,all_path,path_table)
+	end
+end
+
+function MonsterBase:getBackFirstNearPos(num,target_toward)
+	local help = function (a)
+		return self.around_info[a] and self.around_info[a] > 10
+	end
+
+	local temp_table
+	if num%2 == 0 then
+		temp_table = {
+			[1] = num+10,
+			[2] = num-1,
+			[3] = num-11,
+			[4] = num-10,
+			[5] = num+9,
+			[6] = num+1,
+		}
+	else
+		temp_table = {
+			[1] = num+10,
+			[2] = num+9,
+			[3] = num-1,
+			[4] = num-10,
+			[5] = num-9,
+			[6] = num+11,
+		}
+	end
+
+	local first = target_toward - 3
+	if first < 1 then
+		first = first + 6
+	end
+
+	if help(temp_table[first]) then
+		return temp_table[first]
+	end
+
+	for i=1,2 do
+		first = target_toward - i
+		if first < 1 then
+			first = first + 6
+		end
+		if help(temp_table[first]) then
+			return temp_table[first]
+		end
+		first = target_toward + i
+		if first > 6 then
+			first = first - 6
+		end
+		if help(temp_table[first]) then
+			return temp_table[first]
+		end
+	end
+
+	if help(temp_table[target_toward]) then
+		return temp_table[target_toward]
+	end
+end
+
+function MonsterBase:getNearPosPlus(num)
+	--ÅĞ¶ÏµãÊÇ·ñºÏ·¨
+	local help = function(pos)
+		if pos < 10 or pos > 85 or pos%10>7 or pos%10 == 0
+			or pos == 11 or pos == 17 or pos == 84 or pos == 81 or pos == 82 then
+			return false
+		end
+		return true
+	end
+	if num%2 == 0 then
+		if help(num+10) then
+			return num+10
+		elseif help(num-10) then
+			return num-10
+		elseif help(num+1) then
+			return num+1
+		elseif help(num-1) then
+			return num-1
+		elseif help(num+11) then
+			return num+11
+		elseif help(num+9) then
+			return num+9
+		end
+	else
+		if help(num+10) then
+			return num+10
+		elseif help(num-10) then
+			return num-10
+		elseif help(num+1) then
+			return num+1
+		elseif help(num-1) then
+			return num-1
+		elseif help(num-11) then
+			return num-11
+		elseif help(num-9) then
+			return num-9
+		end
+	end
+
+	return false
+end
+function MonsterBase:getPathFindingByStep(center_pos_num,map_info,steps)
+    local area_table = {}
+    local temp_list = {}
+    --Ñ°Â·¸¨Öúº¯Êı£¬ÓÉÓÚµØÍ¼²»¹æÔò£¬ËùÒÔÒªÅĞ¶ÏµãÊÇ·ñºÏ·¨
+    local isLegalPos = function(pos)
+        if pos < 10 or pos > 85 or pos%10>7 or pos%10 == 0
+            or pos == 11 or pos == 17 or pos == 84 or pos == 81 or pos == 82 then
+            return false
+        end
+        return true
+    end
+    --Ñ°Â·¸¨Öúº¯Êı£¬¼ÇÂ¼Ã¿¸öµãµÄÉÏÒ»¸öÂ·¾¶µã
+    local pathFindHelp = function(pos, num)
+        if not area_table[num] and isLegalPos(num) and ((not map_info[num]) or self:isFly()) then
+            
+            area_table[num] = pos
+        end
+    end
+    --¹ã¶ÈÓÅÏÈËã·¨
+    local findGezi = function(pos)
+        pathFindHelp(pos,pos+10)
+        pathFindHelp(pos,pos-10)
+        pathFindHelp(pos,pos+1)
+        pathFindHelp(pos,pos-1)
+        if pos%2 == 0 then
+            pathFindHelp(pos,pos+11)
+            pathFindHelp(pos,pos+9)
+        else
+            pathFindHelp(pos,pos-11)
+            pathFindHelp(pos,pos-9)
+        end
+    end
+
+    findGezi(center_pos_num)
+    for k,v in pairs(area_table) do
+        table.insert(temp_list,k)
+    end
+
+    for i=2,steps do
+        for _,v in pairs(temp_list) do
+
+            findGezi(v)
+            
+            temp_list = {}
+
+            for k,v in pairs(area_table) do
+                table.insert(temp_list,k)
+            end
+        end
+    end
+
+    return area_table
+end
+
+function MonsterBase:getPathFindingByTarget(center_pos_num,map_info,target)
+    local area_table = {}
+    local temp_list = {}
+    --Ñ°Â·¸¨Öúº¯Êı£¬ÓÉÓÚµØÍ¼²»¹æÔò£¬ËùÒÔÒªÅĞ¶ÏµãÊÇ·ñºÏ·¨
+    local isLegalPos = function(pos)
+        if pos < 10 or pos > 85 or pos%10>7 or pos%10 == 0
+            or pos == 11 or pos == 17 or pos == 84 or pos == 81 or pos == 82 then
+            return false
+        end
+        return true
+    end
+    --Ñ°Â·¸¨Öúº¯Êı£¬¼ÇÂ¼Ã¿¸öµãµÄÉÏÒ»¸öÂ·¾¶µã
+    local pathFindHelp = function(pos, num)
+        if num == target then
+            area_table[num] = pos
+            return true
+        end
+        if not area_table[num] and isLegalPos(num) and ((not map_info[num]) or self:isFly()) then
+            area_table[num] = pos
+        end
+
+        return false
+    end
+    --¹ã¶ÈÓÅÏÈËã·¨
+    local findGezi = function(pos)
+        if pathFindHelp(pos,pos+10)
+            or pathFindHelp(pos,pos-10)
+            or pathFindHelp(pos,pos+1)
+            or pathFindHelp(pos,pos-1) then
+            return true
+        end
+        if pos%2 == 0 then
+            if pathFindHelp(pos,pos+11)
+                or pathFindHelp(pos,pos+9) then
+
+                return true
+            end
+        else
+            if pathFindHelp(pos,pos-11)
+                or pathFindHelp(pos,pos-9) then
+
+                return true
+            end
+        end
+
+        return false
+    end
+
+    findGezi(center_pos_num)
+    for k,v in pairs(area_table) do
+        table.insert(temp_list,k)
+    end
+
+    for i=2,20 do
+        for _,v in pairs(temp_list) do
+
+            if findGezi(v) then
+                return area_table
+            end
+            
+            temp_list = {}
+
+            for k,v in pairs(area_table) do
+                table.insert(temp_list,k)
+            end
+        end
+    end
+
+    return area_table
 end
 
 return MonsterBase
