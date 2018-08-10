@@ -155,6 +155,17 @@
                 <PreSize X="1.0667" Y="0.9028" />
                 <FileData Type="Normal" Path="Sprite/combat_bg_forest.png" Plist="" />
               </AbstractNodeData>
+              <AbstractNodeData Name="fire_paticle" ActionTag="-104904487" Tag="521" IconVisible="True" LeftMargin="1838.8152" RightMargin="81.1848" TopMargin="463.5554" BottomMargin="616.4446" ctype="ParticleObjectData">
+                <Size X="0.0000" Y="0.0000" />
+                <AnchorPoint />
+                <Position X="1838.8152" Y="616.4446" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.9577" Y="0.5708" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <FileData Type="Normal" Path="Particle/fire.plist" Plist="" />
+                <BlendFunc Src="770" Dst="1" />
+              </AbstractNodeData>
               <AbstractNodeData Name="arena_show_node" ActionTag="508851443" Tag="105" IconVisible="True" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="960.0000" RightMargin="960.0000" TopMargin="561.6000" BottomMargin="518.4000" ctype="SingleNodeObjectData">
                 <Size X="0.0000" Y="0.0000" />
                 <Children>
@@ -1171,7 +1182,7 @@
                     <FileData Type="Normal" Path="Sprite/yellow.png" Plist="" />
                     <BlendFunc Src="770" Dst="771" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="too_far_attack_img" ActionTag="-1934315964" Tag="227" IconVisible="False" LeftMargin="-1037.3003" RightMargin="963.3004" TopMargin="74.5907" BottomMargin="-148.5907" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="too_far_attack_img" ActionTag="-1934315964" Tag="227" IconVisible="False" LeftMargin="-1037.3004" RightMargin="963.3004" TopMargin="74.5907" BottomMargin="-148.5907" Scale9Width="74" Scale9Height="74" ctype="ImageViewObjectData">
                     <Size X="74.0000" Y="74.0000" />
                     <Children>
                       <AbstractNodeData Name="img" ActionTag="1266855433" Tag="228" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="1.0000" RightMargin="1.0000" TopMargin="1.0000" BottomMargin="1.0000" Scale9Width="72" Scale9Height="72" ctype="ImageViewObjectData">

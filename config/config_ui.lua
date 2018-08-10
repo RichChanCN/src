@@ -4,7 +4,10 @@ Config.monster_img_path = "Monster/"
 Config.model_path = "Model/"
 
 Config.sprite = {
-	gezi_raw = Config.sprite_path.."hex_tile_enabled.png",
+	gezi_enable = Config.sprite_path.."hex_tile_enabled.png",
+	gezi_barrier = Config.sprite_path.."hex_tile_barrier.png",
+	gezi_disable = Config.sprite_path.."hex_tile_disabled.png",
+	
 	selected = Config.sprite_path.."icon_selected_1.png",
 	chesspiece_mask = Config.sprite_path.."header_hex_mask.png",
 	

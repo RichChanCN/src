@@ -17,6 +17,7 @@ function ViewBase:init()
 	if not self.is_inited then
 		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
+		self:initUI()
 		self:initInfo()
 		self:initEvents()
 
@@ -24,6 +25,10 @@ function ViewBase:init()
 	else
 		print(self.name.." is inited! scape the init()")
 	end
+end
+
+function ViewBase:initUI()
+	print("warning! you should implement initUI() in instance!---"..self.name)
 end
 
 function ViewBase:initInfo()

@@ -10,19 +10,9 @@ monster_info_view.RESOURCE_BINDING = {
 
 }
 
-function monster_info_view:init()
-    if not self.is_inited then
-        uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-        self:initLeftModelNode()
-        self:initRightInfoNode()
-        self:initInfo()
-        self:initEvents()
-        
-        self.is_inited = true
-    else
-        print(self.name.." is inited! scape the init()")
-    end
+function monster_info_view:initUI()
+    self:initLeftModelNode()
+    self:initRightInfoNode()
 end
 
 function monster_info_view:initInfo()
@@ -31,6 +21,7 @@ function monster_info_view:initInfo()
     self.right_node_start_pos = cc.p(2350,500)
     self.right_node_final_pos = cc.p(1490,500)
 
+    self.monster_list = {}
     self.next_animate = 2
     self.is_model_loaded = false
     self.monster_model = nil
@@ -38,31 +29,51 @@ function monster_info_view:initInfo()
     self.monster_model = nil
 end
 
-function monster_info_view:updateInfo()
+function monster_info_view:updateInfo(monster_list,index)
     self.next_animate = 2
     self.is_model_loaded = false
+    self.monster_list = monster_list
+    self.cur_index = index
+
+    self.last_index = self.cur_index - 1
+    if self.last_index < 1 then
+        self.last_index = #self.monster_list
+    end
+
+    self.next_index = self.cur_index + 1
+    if self.next_index > #self.monster_list then
+        self.next_index = 1
+    end
 end
 
 function monster_info_view:initEvents()
 	self.back_btn:addClickEventListener(function(sender)
         self.ctrl:closeMonsterInfoView()
     end)
+
+    self.left_btn:addClickEventListener(function(sender)
+        self:updateView(self.monster_list,self.next_index)
+    end)
+
+    self.right_btn:addClickEventListener(function(sender)
+        self:updateView(self.monster_list,self.last_index)
+    end)
     --------------左边节点事件-------------
     self:initModelEvents()
 end
 
-function monster_info_view:updateView(data)
-	self.title_text:setString("LEVEL "..data.level.." "..data.name)
-    self:updateInfo()
-    self:updateLeftModelNode(data)
-    self:updateRightInfoNode(data)
+function monster_info_view:updateView(monster_list,index)
+	self.title_text:setString("LEVEL "..monster_list[index].level.." "..monster_list[index].name)
+    self:updateInfo(monster_list,index)
+    self:updateLeftModelNode(monster_list[index])
+    self:updateRightInfoNode(monster_list[index])
 end
 
-function monster_info_view:openView(data)
+function monster_info_view:openView(monster_list,index)
     if not self.is_inited then
         self:init()
     end
-    self:updateView(data)
+    self:updateView(monster_list,index)
     self.root:setPosition(uitool:zero())
     self.left_node:runAction(cc.MoveTo:create(0.2,self.left_node_final_pos))
     self.info_bg_img:runAction(cc.MoveTo:create(0.2,self.right_node_final_pos))
@@ -110,7 +121,7 @@ function monster_info_view:createModel(data)
     end
 
 	local callback = function(model)
-		--print("load finish")
+
 		model:setScale(4.5)
         model:setRotation3D(cc.vec3(0,-90,0))
         if data.move_type == Config.Monster_move_type.FLY then
@@ -124,8 +135,7 @@ function monster_info_view:createModel(data)
             local animate = Config.Monster_animate[data.id].stand(self.animation)
             model:runAction(cc.RepeatForever:create(animate))
         end
-        --model:setGlobalZOrder(1)
-        --model:setCameraMask(cc.CameraFlag.USER1)
+
 		self.monster_model = model
         self.cur_monster_id = data.id
 		self.model_panel:addChild(model)
@@ -190,12 +200,8 @@ end
 function monster_info_view:playAnAnimation()
     self.monster_model:stopAllActions()
     local animate = Config.Monster_animate[self.cur_monster_id][self.next_animate](self.animation)
-    -- local ac1 = self.monster_model:runAction(animate)
-    -- animate = Config.Monster_animate[self.cur_monster_id].stand(self.animation)
-    -- local ac2 = self.monster_model:runAction(cc.RepeatForever:create(animate))
+
     self.monster_model:runAction(cc.RepeatForever:create(animate))
-    -- local seq = cc.Sequence:create(ac1,ac2)
-    -- self.monster_model:runAction(seq)
 
     self.next_animate = self.next_animate % Config.Monster_animate[self.cur_monster_id].show_num + 1
 end

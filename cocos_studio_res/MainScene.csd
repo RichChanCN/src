@@ -732,13 +732,13 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="adventure_view" ActionTag="1867228251" Tag="86" IconVisible="False" TopMargin="-2159.9963" BottomMargin="2159.9963" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
+          <AbstractNodeData Name="adventure_view" ActionTag="1867228251" Tag="86" IconVisible="False" LeftMargin="0.0007" RightMargin="-0.0007" TopMargin="-2159.9983" BottomMargin="2159.9983" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
               <AbstractNodeData Name="chapter_sv" CanEdit="False" ActionTag="-253173483" Tag="90" IconVisible="False" PositionPercentXEnabled="True" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ScrollDirectionType="Horizontal" ctype="ScrollViewObjectData">
                 <Size X="1920.0000" Y="1080.0000" />
                 <Children>
-                  <AbstractNodeData Name="chapter1_node" CanEdit="False" ActionTag="477514697" Tag="96" IconVisible="True" LeftMargin="960.0000" RightMargin="4800.0000" TopMargin="590.0000" BottomMargin="490.0000" ctype="SingleNodeObjectData">
+                  <AbstractNodeData Name="chapter_1_node" ActionTag="477514697" Tag="96" IconVisible="True" LeftMargin="960.0000" RightMargin="4800.0000" TopMargin="590.0000" BottomMargin="490.0000" ctype="SingleNodeObjectData">
                     <Size X="0.0000" Y="0.0000" />
                     <Children>
                       <AbstractNodeData Name="bg_img" CanEdit="False" ActionTag="-1361917019" Tag="88" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-800.0000" RightMargin="-800.0000" TopMargin="-450.0000" BottomMargin="-450.0000" LeftEage="355" RightEage="355" TopEage="211" BottomEage="211" Scale9OriginX="355" Scale9OriginY="211" Scale9Width="367" Scale9Height="220" ctype="ImageViewObjectData">
@@ -993,30 +993,6 @@
                         <PreSize X="0.0000" Y="0.0000" />
                         <FileData Type="Normal" Path="Sprite/style01.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="site_1_img" ActionTag="-829032727" Tag="123" IconVisible="False" LeftMargin="-372.9122" RightMargin="269.9122" TopMargin="-286.8007" BottomMargin="210.8007" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
-                        <Size X="103.0000" Y="76.0000" />
-                        <Children>
-                          <AbstractNodeData Name="num_text" ActionTag="304385212" Tag="124" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="37.1946" RightMargin="45.8054" TopMargin="10.3252" BottomMargin="29.6748" FontSize="40" LabelText="1" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                            <Size X="20.0000" Y="36.0000" />
-                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                            <Position X="47.1946" Y="47.6748" />
-                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                            <CColor A="255" R="255" G="255" B="255" />
-                            <PrePosition X="0.4582" Y="0.6273" />
-                            <PreSize X="0.1942" Y="0.4737" />
-                            <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
-                            <OutlineColor A="255" R="0" G="0" B="0" />
-                            <ShadowColor A="255" R="110" G="110" B="110" />
-                          </AbstractNodeData>
-                        </Children>
-                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="-321.4122" Y="248.8007" />
-                        <Scale ScaleX="1.3000" ScaleY="1.3000" />
-                        <CColor A="255" R="255" G="255" B="255" />
-                        <PrePosition />
-                        <PreSize X="0.0000" Y="0.0000" />
-                        <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
-                      </AbstractNodeData>
                       <AbstractNodeData Name="chapter_img" ActionTag="482221933" Tag="101" IconVisible="False" LeftMargin="-713.5000" RightMargin="546.5000" TopMargin="-419.0000" BottomMargin="261.0000" Scale9Width="167" Scale9Height="158" ctype="ImageViewObjectData">
                         <Size X="167.0000" Y="158.0000" />
                         <Children>
@@ -1053,6 +1029,126 @@
                         <PreSize X="0.0000" Y="0.0000" />
                         <FileData Type="Normal" Path="Sprite/chapter_name_bg.png" Plist="" />
                       </AbstractNodeData>
+                      <AbstractNodeData Name="site_1_1_img" ActionTag="-829032727" Tag="123" IconVisible="False" LeftMargin="-372.9122" RightMargin="269.9122" TopMargin="-286.8007" BottomMargin="210.8007" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                        <Size X="103.0000" Y="76.0000" />
+                        <Children>
+                          <AbstractNodeData Name="num_text" ActionTag="304385212" Tag="124" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="36.7517" RightMargin="46.2483" TopMargin="8.9116" BottomMargin="31.0884" FontSize="40" LabelText="1" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="20.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="46.7517" Y="49.0884" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4539" Y="0.6459" />
+                            <PreSize X="0.1942" Y="0.4737" />
+                            <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                            <OutlineColor A="255" R="0" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="-321.4122" Y="248.8007" />
+                        <Scale ScaleX="1.3000" ScaleY="1.3000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition />
+                        <PreSize X="0.0000" Y="0.0000" />
+                        <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="site_1_2_img" ActionTag="303326266" Tag="515" IconVisible="False" LeftMargin="-66.3796" RightMargin="-36.6204" TopMargin="-261.6946" BottomMargin="185.6946" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                        <Size X="103.0000" Y="76.0000" />
+                        <Children>
+                          <AbstractNodeData Name="num_text" ActionTag="990968603" Tag="516" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="35.3567" RightMargin="37.6433" TopMargin="7.9464" BottomMargin="32.0536" FontSize="40" LabelText="2" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="30.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.3567" Y="50.0536" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4889" Y="0.6586" />
+                            <PreSize X="0.2913" Y="0.4737" />
+                            <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                            <OutlineColor A="255" R="0" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="-14.8796" Y="223.6946" />
+                        <Scale ScaleX="1.3000" ScaleY="1.3000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition />
+                        <PreSize X="0.0000" Y="0.0000" />
+                        <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="site_1_3_img" ActionTag="67756405" Tag="517" IconVisible="False" LeftMargin="230.4012" RightMargin="-333.4012" TopMargin="-238.3664" BottomMargin="162.3664" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                        <Size X="103.0000" Y="76.0000" />
+                        <Children>
+                          <AbstractNodeData Name="num_text" ActionTag="-1978435218" Tag="518" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="37.4429" RightMargin="36.5571" TopMargin="7.1560" BottomMargin="32.8440" FontSize="40" LabelText="3" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="29.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="51.9429" Y="50.8440" />
+                            <Scale ScaleX="1.0546" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.5043" Y="0.6690" />
+                            <PreSize X="0.2816" Y="0.4737" />
+                            <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                            <OutlineColor A="255" R="0" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="281.9012" Y="200.3664" />
+                        <Scale ScaleX="1.3000" ScaleY="1.3000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition />
+                        <PreSize X="0.0000" Y="0.0000" />
+                        <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="site_1_4_img" ActionTag="1019941593" Tag="519" IconVisible="False" LeftMargin="519.1789" RightMargin="-622.1789" TopMargin="-277.3591" BottomMargin="201.3591" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                        <Size X="103.0000" Y="76.0000" />
+                        <Children>
+                          <AbstractNodeData Name="num_text" ActionTag="645889237" Tag="520" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="35.8670" RightMargin="38.1330" TopMargin="9.5348" BottomMargin="30.4652" FontSize="40" LabelText="4" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="29.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.3670" Y="48.4652" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4890" Y="0.6377" />
+                            <PreSize X="0.2816" Y="0.4737" />
+                            <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                            <OutlineColor A="255" R="0" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="570.6789" Y="239.3591" />
+                        <Scale ScaleX="1.3000" ScaleY="1.3000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition />
+                        <PreSize X="0.0000" Y="0.0000" />
+                        <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="site_1_5_img" ActionTag="983308199" Tag="521" IconVisible="False" LeftMargin="488.0582" RightMargin="-591.0582" TopMargin="-39.7142" BottomMargin="-36.2858" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                        <Size X="103.0000" Y="76.0000" />
+                        <Children>
+                          <AbstractNodeData Name="num_text" ActionTag="845365913" Tag="522" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="37.4429" RightMargin="36.5571" TopMargin="8.7444" BottomMargin="31.2556" FontSize="40" LabelText="5" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="29.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="51.9429" Y="49.2556" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.5043" Y="0.6481" />
+                            <PreSize X="0.2816" Y="0.4737" />
+                            <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                            <OutlineColor A="255" R="0" G="0" B="0" />
+                            <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                        </Children>
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="539.5582" Y="1.7142" />
+                        <Scale ScaleX="1.3000" ScaleY="1.3000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition />
+                        <PreSize X="0.0000" Y="0.0000" />
+                        <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
+                      </AbstractNodeData>
                     </Children>
                     <AnchorPoint />
                     <Position X="960.0000" Y="490.0000" />
@@ -1061,7 +1157,7 @@
                     <PrePosition X="0.1667" Y="0.4537" />
                     <PreSize X="0.0000" Y="0.0000" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="chapter2_node" ActionTag="1918994066" Tag="97" IconVisible="True" PositionPercentXEnabled="True" LeftMargin="2880.0000" RightMargin="2880.0000" TopMargin="590.0000" BottomMargin="490.0000" ctype="SingleNodeObjectData">
+                  <AbstractNodeData Name="chapter_2_node" ActionTag="1918994066" Tag="97" IconVisible="True" PositionPercentXEnabled="True" LeftMargin="2880.0000" RightMargin="2880.0000" TopMargin="590.0000" BottomMargin="490.0000" ctype="SingleNodeObjectData">
                     <Size X="0.0000" Y="0.0000" />
                     <Children>
                       <AbstractNodeData Name="bg_img" ActionTag="1853360503" Tag="93" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-800.0000" RightMargin="-800.0000" TopMargin="-450.0000" BottomMargin="-450.0000" Scale9Width="1073" Scale9Height="638" ctype="ImageViewObjectData">
@@ -1118,7 +1214,7 @@
                     <PrePosition X="0.5000" Y="0.4537" />
                     <PreSize X="0.0000" Y="0.0000" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="chapter3_node" ActionTag="-1842001751" Tag="99" IconVisible="True" LeftMargin="4800.0000" RightMargin="960.0000" TopMargin="590.0000" BottomMargin="490.0000" ctype="SingleNodeObjectData">
+                  <AbstractNodeData Name="chapter_3_node" ActionTag="-1842001751" Tag="99" IconVisible="True" LeftMargin="4800.0000" RightMargin="960.0000" TopMargin="590.0000" BottomMargin="490.0000" ctype="SingleNodeObjectData">
                     <Size X="0.0000" Y="0.0000" />
                     <Children>
                       <AbstractNodeData Name="bg_img" ActionTag="-582424126" Tag="95" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-800.0000" RightMargin="-800.0000" TopMargin="-450.0000" BottomMargin="-450.0000" Scale9Width="1073" Scale9Height="638" ctype="ImageViewObjectData">
@@ -1241,10 +1337,10 @@
               </AbstractNodeData>
             </Children>
             <AnchorPoint />
-            <Position Y="2159.9963" />
+            <Position X="0.0007" Y="2159.9983" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition Y="2.0000" />
+            <PrePosition X="0.0000" Y="2.0000" />
             <PreSize X="1.0000" Y="1.0000" />
             <SingleColor A="255" R="19" G="29" B="57" />
             <FirstColor A="255" R="150" G="200" B="255" />
@@ -1257,10 +1353,10 @@
               <AbstractNodeData Name="fight_img" ActionTag="-1593883868" Tag="340" IconVisible="False" LeftMargin="1560.0000" RightMargin="160.0000" TopMargin="942.5000" BottomMargin="62.5000" Scale9Enable="True" LeftEage="25" RightEage="25" TopEage="22" BottomEage="22" Scale9OriginX="25" Scale9OriginY="22" Scale9Width="28" Scale9Height="24" ctype="ImageViewObjectData">
                 <Size X="200.0000" Y="75.0000" />
                 <Children>
-                  <AbstractNodeData Name="fight_img" ActionTag="1123241980" Tag="341" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="43.9998" RightMargin="44.0002" TopMargin="19.5000" BottomMargin="19.5000" FontSize="40" LabelText="Fight!" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                  <AbstractNodeData Name="fight_img" ActionTag="1123241980" Tag="341" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="44.0000" RightMargin="44.0000" TopMargin="19.5000" BottomMargin="19.5000" FontSize="40" LabelText="Fight!" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="112.0000" Y="36.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="99.9998" Y="37.5000" />
+                    <Position X="100.0000" Y="37.5000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition X="0.5000" Y="0.5000" />
@@ -1974,43 +2070,6 @@
               </AbstractNodeData>
               <AbstractNodeData Name="hex_node" CanEdit="False" ActionTag="-1855192684" Tag="229" IconVisible="True" LeftMargin="1300.0000" RightMargin="620.0000" TopMargin="540.0000" BottomMargin="540.0000" ctype="SingleNodeObjectData">
                 <Size X="0.0000" Y="0.0000" />
-                <Children>
-                  <AbstractNodeData Name="chesspiece_template" ActionTag="1753223296" Tag="206" IconVisible="False" LeftMargin="-75.0000" RightMargin="-75.0000" TopMargin="-1279.6974" BottomMargin="1133.6974" ctype="SpriteObjectData">
-                    <Size X="150.0000" Y="146.0000" />
-                    <Children>
-                      <AbstractNodeData Name="face_sp" CanEdit="False" ActionTag="333925701" Tag="205" IconVisible="False" TopMargin="-17.0000" BottomMargin="-17.0000" ctype="SpriteObjectData">
-                        <Size X="150.0000" Y="180.0000" />
-                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="75.0000" Y="73.0000" />
-                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                        <CColor A="255" R="255" G="255" B="255" />
-                        <PrePosition X="0.5000" Y="0.5000" />
-                        <PreSize X="1.0000" Y="1.2329" />
-                        <FileData Type="Normal" Path="Sprite/char_infantry.png" Plist="" />
-                        <BlendFunc Src="773" Dst="772" />
-                      </AbstractNodeData>
-                      <AbstractNodeData Name="hex_border" CanEdit="False" ActionTag="452062601" Tag="204" IconVisible="False" LeftMargin="30.0000" RightMargin="30.0000" TopMargin="28.0000" BottomMargin="28.0000" ctype="SpriteObjectData">
-                        <Size X="90.0000" Y="90.0000" />
-                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="75.0000" Y="73.0000" />
-                        <Scale ScaleX="2.0000" ScaleY="2.0000" />
-                        <CColor A="255" R="255" G="255" B="255" />
-                        <PrePosition X="0.5000" Y="0.5000" />
-                        <PreSize X="0.6000" Y="0.6164" />
-                        <FileData Type="Normal" Path="Sprite/hex_tile_border_1.png" Plist="" />
-                        <BlendFunc Src="1" Dst="771" />
-                      </AbstractNodeData>
-                    </Children>
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position Y="1206.6974" />
-                    <Scale ScaleX="0.5000" ScaleY="0.5000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition />
-                    <PreSize X="0.0000" Y="0.0000" />
-                    <FileData Type="Normal" Path="Sprite/header_hex_mask.png" Plist="" />
-                    <BlendFunc Src="771" Dst="771" />
-                  </AbstractNodeData>
-                </Children>
                 <AnchorPoint />
                 <Position X="1300.0000" Y="540.0000" />
                 <Scale ScaleX="1.3500" ScaleY="1.3500" />
@@ -2807,86 +2866,86 @@
                     <PreSize X="0.3350" Y="0.0652" />
                     <FileData Type="Normal" Path="Sprite/item_bg_3.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="hp_text" ActionTag="413621338" Tag="281" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="93.0000" BottomMargin="558.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="49.0000" Y="24.0000" />
+                  <AbstractNodeData Name="hp_text" ActionTag="413621338" Tag="281" IconVisible="False" LeftMargin="125.0000" RightMargin="375.0000" TopMargin="93.0000" BottomMargin="558.0000" IsCustomSize="True" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="100.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="175.0000" Y="570.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition X="0.2917" Y="0.8444" />
-                    <PreSize X="0.0817" Y="0.0356" />
+                    <PreSize X="0.1667" Y="0.0356" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="damage_text" ActionTag="-2126491947" Tag="282" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="93.0000" BottomMargin="558.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="49.0000" Y="24.0000" />
+                  <AbstractNodeData Name="damage_text" ActionTag="-2126491947" Tag="282" IconVisible="False" LeftMargin="390.0000" RightMargin="110.0000" TopMargin="93.0000" BottomMargin="558.0000" IsCustomSize="True" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="100.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="440.0000" Y="570.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition X="0.7333" Y="0.8444" />
-                    <PreSize X="0.0817" Y="0.0356" />
+                    <PreSize X="0.1667" Y="0.0356" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="physical_defense_text" ActionTag="-1852398322" Tag="283" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="163.0000" BottomMargin="488.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="49.0000" Y="24.0000" />
+                  <AbstractNodeData Name="physical_defense_text" ActionTag="-1852398322" Tag="283" IconVisible="False" LeftMargin="125.0000" RightMargin="375.0000" TopMargin="163.0000" BottomMargin="488.0000" IsCustomSize="True" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="100.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="175.0000" Y="500.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition X="0.2917" Y="0.7407" />
-                    <PreSize X="0.0817" Y="0.0356" />
+                    <PreSize X="0.1667" Y="0.0356" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="magic_defense_text" ActionTag="785480532" Tag="284" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="163.0000" BottomMargin="488.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="49.0000" Y="24.0000" />
+                  <AbstractNodeData Name="magic_defense_text" ActionTag="785480532" Tag="284" IconVisible="False" LeftMargin="390.0000" RightMargin="110.0000" TopMargin="163.0000" BottomMargin="488.0000" IsCustomSize="True" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="100.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="440.0000" Y="500.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition X="0.7333" Y="0.7407" />
-                    <PreSize X="0.0817" Y="0.0356" />
+                    <PreSize X="0.1667" Y="0.0356" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="initiative_text" ActionTag="824727181" Tag="285" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="233.0000" BottomMargin="418.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="49.0000" Y="24.0000" />
+                  <AbstractNodeData Name="initiative_text" ActionTag="824727181" Tag="285" IconVisible="False" LeftMargin="125.0000" RightMargin="375.0000" TopMargin="233.0000" BottomMargin="418.0000" IsCustomSize="True" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="100.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="175.0000" Y="430.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition X="0.2917" Y="0.6370" />
-                    <PreSize X="0.0817" Y="0.0356" />
+                    <PreSize X="0.1667" Y="0.0356" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="mobility_text" ActionTag="-2022145264" Tag="286" IconVisible="False" LeftMargin="415.5000" RightMargin="135.5000" TopMargin="233.0000" BottomMargin="418.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="49.0000" Y="24.0000" />
+                  <AbstractNodeData Name="mobility_text" ActionTag="-2022145264" Tag="286" IconVisible="False" LeftMargin="390.0000" RightMargin="110.0000" TopMargin="233.0000" BottomMargin="418.0000" IsCustomSize="True" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="100.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="440.0000" Y="430.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition X="0.7333" Y="0.6370" />
-                    <PreSize X="0.0817" Y="0.0356" />
+                    <PreSize X="0.1667" Y="0.0356" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="defense_penetration_text" ActionTag="910054041" Tag="287" IconVisible="False" LeftMargin="150.5000" RightMargin="400.5000" TopMargin="303.0000" BottomMargin="348.0000" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="49.0000" Y="24.0000" />
+                  <AbstractNodeData Name="defense_penetration_text" ActionTag="910054041" Tag="287" IconVisible="False" LeftMargin="125.0000" RightMargin="375.0000" TopMargin="303.0000" BottomMargin="348.0000" IsCustomSize="True" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="100.0000" Y="24.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position X="175.0000" Y="360.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
                     <PrePosition X="0.2917" Y="0.5333" />
-                    <PreSize X="0.0817" Y="0.0356" />
+                    <PreSize X="0.1667" Y="0.0356" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />

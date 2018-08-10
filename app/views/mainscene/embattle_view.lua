@@ -10,7 +10,6 @@ embattle_view.RESOURCE_BINDING = {
     ["template_panel"]		= {["varname"] = "template_panel"},
     ["hex_node"]			= {["varname"] = "hex_node"},
     ["select_num_text"]		= {["varname"] = "select_num_text"},
-    ["chesspiece_template"]	= {["varname"] = "chesspiece_template"},
     ["fight_img"]           = {["varname"] = "fight_img"},
 
 }
@@ -20,12 +19,10 @@ embattle_view.RESOURCE_BINDING = {
 function embattle_view:init()
 	if not self.is_inited then
 		uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-		self:initInfo()
-		self:initArena()
-		self:initEvents()
-		self:initMonsterLV()
 		
+		self:initArena()
+		self:initInfo()
+
 		self.is_inited = true
 	else
 		print(self.name.." is inited! scape the init()")
@@ -33,11 +30,20 @@ function embattle_view:init()
 end
 
 function embattle_view:initInfo()
-	self.gezi_cell_num = 44
+	self.enable_gezi = {}
+	self.barrier_gezi = {}
+end
+
+function embattle_view:updateInfo(map_data)
+	--上场怪物数量限制
+	self.monster_num_limit = map_data.monster_num_limit
+	--可以使用的怪物信息
+	self.can_use_monster_list = map_data.can_use_monster_list or self.ctrl:getCollectedMonsterList()
 	--竞技场的布局信息
-	self.arena_info = nil
+	self.enable_gezi = map_data.enable_gezi
+	self.barrier_gezi = map_data.barrier_gezi
 	--敌人的队伍信息
-	self.enemy_team = nil
+	self.enemy_team = map_data.enemy_team
 	--当前抓住的棋子
 	self.cur_drag_chesspiece = nil
 	--对准的放置节点
@@ -54,8 +60,6 @@ function embattle_view:initInfo()
 	self.team_size = 0
 	--将要在下次被清理掉的棋子节点   这里是因为有个动画效果，所以延迟清理
 	self.chesspiece_willbe_removed = nil
-	--已经收集到的怪物卡片列表
-	self.collected_monster_list = self.ctrl:getCollectedMonsterList()
 	--事件分发器
 	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
@@ -67,30 +71,49 @@ function embattle_view:initEvents()
     end)
 
     uitool:makeImgToButton(self.fight_img,function()
+    	if self.team_size < 1 then
+    		return
+    	end
     	local left_team = self:makeTeam()
-    	local right_team = self:makeEnemyTeam()
-    	Judgment:Instance():initGame(left_team,right_team)
+    	Judgment:Instance():initGame(left_team,self.enemy_team)
         self.ctrl:goToFightScene()
     end)
 end
 
+function embattle_view:updateView(map_data)
+		self:updateInfo(map_data)
+		self:updateArena()
+		self:initEvents()
+		self:initMonsterLV()
 
-function embattle_view:updateView()
-	self.select_num_text:setString("MonsterSelect ("..self.team_size.."/5)")
+		self.is_updated = true 
 end
 
-function embattle_view:openView()
+function embattle_view:updateMonstersNum()
+	self.select_num_text:setString("MonsterSelect ("..self.team_size.."/"..self.monster_num_limit..")")
+end
+
+function embattle_view:openView(map_data)
 	if not self.is_inited then
 		self:init()
 	end
-	self:resumeMonsterListListener()
-	self:resumeArenaListener()
-	self.root:setPosition(uitool:zero())
+	if map_data then
+		self:resetArena()
+		self.monster_lv:removeAllItems()
+		self.hex_node:removeAllChildren()
+		self:updateView(map_data)
+	end
+	if self.is_updated then
+		self:resumeMonsterListListener()
+		self:resumeArenaListener()
+		self.root:setPosition(uitool:zero())
+	end
 end
 
 function embattle_view:closeView()
 	self:pauseMonsterListListener()
 	self:pauseArenaListener()
+	self:resetArena()
 	self.root:setPosition(uitool:farAway())
 end
 ----------------------------------------------------------------
@@ -106,19 +129,9 @@ function embattle_view:makeTeam()
 
 	return team
 end
-
-function embattle_view:makeEnemyTeam()
-	local team = {}
-	local MonsterBase = require("app.logic.MonsterBase")
-
-	table.insert(team, MonsterBase:instance():new(Config.Monster[1],MonsterBase.TeamSide.RIGHT,cc.p(8,3)))
-	table.insert(team, MonsterBase:instance():new(Config.Monster[1],MonsterBase.TeamSide.RIGHT,cc.p(8,5)))
-
-	return team
-end
 ------------左边卡池部分开始------------
 function embattle_view:initMonsterLV()
-	local monsters_num = #self.collected_monster_list
+	local monsters_num = #self.can_use_monster_list
 	local mod_num = monsters_num%3
 	local rows_num = monsters_num/3
 
@@ -137,13 +150,13 @@ function embattle_view:initLVItem(item, index)
 	for i=1,3 do
 		local cur_index = i+3*index
 		local cur_monster = {}
-		if self.collected_monster_list[cur_index] then
+		if self.can_use_monster_list[cur_index] then
 			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
-			cur_monster.head_img:loadTexture(self.collected_monster_list[cur_index].char_img_path)
+			cur_monster.head_img:loadTexture(self.can_use_monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
-			cur_monster.border_img:loadTexture(Config.sprite["card_border_"..self.collected_monster_list[cur_index].rarity])
+			cur_monster.border_img:loadTexture(Config.sprite["card_border_"..self.can_use_monster_list[cur_index].rarity])
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
-			cur_monster.type_img:loadTexture(Config.sprite["attack_type_"..self.collected_monster_list[cur_index].attack_type])
+			cur_monster.type_img:loadTexture(Config.sprite["attack_type_"..self.can_use_monster_list[cur_index].attack_type])
 			self:addMonsterCardEvent(cur_monster.head_img, cur_index)
 			table.insert(self.card_list,cur_monster.head_img)
 		else
@@ -175,7 +188,7 @@ function embattle_view:addMonsterCardEvent(img,index)
 
 		if math.abs(cur_pos.y-start_pos.y)<50 and math.abs(cur_pos.x-start_pos.x)>50 and not self.cur_drag_chesspiece then
 			self.is_chesspiece_from_arena = false
-			self.cur_drag_chesspiece = self:createChesspiece(index)
+			self.cur_drag_chesspiece = self:createChesspiece(self.can_use_monster_list[index],index)
 			node.listener:setSwallowTouches(true)
 		end
 
@@ -192,20 +205,24 @@ function embattle_view:addMonsterCardEvent(img,index)
 
     local function touchEnded( touch, event )
         local node = event:getCurrentTarget()
-
+		local pos = self.hex_node:convertToNodeSpace(touch:getStartLocation())
+        
         if self.cur_drag_chesspiece and not self.target_node then
-        	local pos = self.hex_node:convertToNodeSpace(touch:getStartLocation())
 			uitool:moveToAndFadeOut(self.cur_drag_chesspiece,pos)
 			self:setChesspieceWillBeRemoved(self.cur_drag_chesspiece)
 		elseif self.target_node then
 			if self.target_node.chesspiece then
 				self:removeOneChesspieceFromArena(self.target_node.chesspiece)
-				self:addDragedChesspieceToArena(true)
-			else
-				self.cur_drag_chesspiece.from_card = node
-				self:addDragedChesspieceToArena(true)
+				self:addDragedChesspieceToArena(true,node)
 				self:selectTheCard(node)
-				self.target_node = nil
+			else
+				if self.team_size < self.monster_num_limit then
+					self:addDragedChesspieceToArena(true,node)
+					self:selectTheCard(node)
+					self.target_node = nil
+				else
+					uitool:moveToAndFadeOut(self.cur_drag_chesspiece,pos)
+				end
 			end
 		end
 
@@ -265,19 +282,19 @@ end
 ------------左边卡池部分结束------------
 
 ------------棋子部分开始------------
-function embattle_view:createChesspiece(index)
+function embattle_view:createChesspiece(monster,index)
 
 	local chesspiece = cc.Sprite:create(Config.sprite.chesspiece_mask)
 	chesspiece:setScale(0.5)
 	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}
 	chesspiece:setBlendFunc(blendfunc)
 	
-	local face_sp = cc.Sprite:create(self.collected_monster_list[index].char_img_path)
+	local face_sp = cc.Sprite:create(monster.char_img_path)
 	blendfunc = {src = gl.ONE_MINUS_DST_ALPHA, dst = gl.DST_ALPHA}
 	face_sp:setBlendFunc(blendfunc)
 	face_sp:setName("face_sp")
 
-	local hex_border = cc.Sprite:create(Config.sprite["hex_border_"..self.collected_monster_list[index].rarity])
+	local hex_border = cc.Sprite:create(Config.sprite["hex_border_"..monster.rarity])
 	hex_border:setScale(2.0)
 	hex_border:setName("hex_border")
 	chesspiece:addChild(hex_border, uitool:bottom_Z_order()+5)
@@ -288,7 +305,7 @@ function embattle_view:createChesspiece(index)
 	chesspiece:setName("chesspiece_"..index)
 	self.hex_node:addChild(chesspiece, uitool:bottom_Z_order())
 
-	chesspiece.monster_id = self.collected_monster_list[index].id
+	chesspiece.monster_id = monster.id
 
 	return chesspiece
 end
@@ -326,8 +343,12 @@ function embattle_view:resetSelectHexEffect()
 	self.selected_sp:setOpacity(255)
 end
 
-function embattle_view:addDragedChesspieceToArena(add_to_team)
+function embattle_view:addDragedChesspieceToArena(add_to_team,card)
 	self:putInHexEffect()
+
+	if card then
+		self.cur_drag_chesspiece.from_card = card
+	end
 
 	self.target_node.chesspiece = self.cur_drag_chesspiece
 	self.cur_drag_chesspiece:setPosition(self.target_node:getPosition())
@@ -336,7 +357,7 @@ function embattle_view:addDragedChesspieceToArena(add_to_team)
 	if add_to_team then
 		table.insert(self.monster_team,self.cur_drag_chesspiece)
 		self.team_size = self.team_size + 1 
-		self:updateView()
+		self:updateMonstersNum()
 	end
 end
 
@@ -370,11 +391,13 @@ function embattle_view:removeOneChesspieceFromArena(chesspiece)
 		chesspiece.arena_cell.chesspiece = nil
 		chesspiece.arena_cell = nil
 	end
+	print("removeOneChesspieceFromArena")
 	if chesspiece.from_card then
+		print("remove selected")
 		self:unselectTheCard(chesspiece.from_card)
 	end
 	self.hex_node:removeChild(chesspiece)
-	self:updateView()
+	self:updateMonstersNum()
 end
 ------------棋子部分结束------------
 
@@ -387,16 +410,33 @@ function embattle_view:initArena()
 			if self["gezi_"..x.."_"..y] then
 				self["gezi_"..x.."_"..y].pos = cc.p(x,y)
 			end
-			if x<3 and self["gezi_"..x.."_"..y] then
-				self["gezi_"..x.."_"..y]:loadTexture(Config.sprite.gezi_raw)
-				self["gezi_"..x.."_"..y]:setScaleX(0.9)
-				self["gezi_"..x.."_"..y]:setScaleY(0.8)
-			end
 		end
 	end
 
 	self.highlight_border_sp = self.arena_node:getChildByName("highlight_border_sp")
 	self.selected_sp = self.arena_node:getChildByName("selected_sp")
+end
+
+function embattle_view:updateArena()
+
+	for k,v in pairs(self.enable_gezi) do
+		local pos = gtool:intToCcp(k)
+		self["gezi_"..pos.x.."_"..pos.y]:loadTexture(Config.sprite.gezi_enable)
+		self["gezi_"..pos.x.."_"..pos.y]:setScaleX(0.9)
+		self["gezi_"..pos.x.."_"..pos.y]:setScaleY(0.8)
+	end
+
+	for k,v in pairs(self.barrier_gezi) do
+		local pos = gtool:intToCcp(k)
+		self["gezi_"..pos.x.."_"..pos.y]:loadTexture(Config.sprite.gezi_barrier)
+		self["gezi_"..pos.x.."_"..pos.y]:setScale(0.8)
+	end
+
+	for k,v in pairs(self.enemy_team) do
+		local chesspiece = self:createChesspiece(v,300+v.id)
+		local pos = v.start_pos
+		chesspiece:setPosition(self["gezi_"..pos.x.."_"..pos.y]:getPosition())
+	end
 
 end
 
@@ -474,47 +514,47 @@ function embattle_view:addArenaListener()
 	
 	
 	--注意！！！如果一个界面监听的事件很多会导致降帧！
-	for x=1,2 do
-		for y=1,7 do 
-			if self["gezi_"..x.."_"..y] then
-				self["gezi_"..x.."_"..y].listener = listener:clone()
-				self.eventDispatcher:addEventListenerWithSceneGraphPriority(self["gezi_"..x.."_"..y].listener, self["gezi_"..x.."_"..y])
-			end
-		end
+	for k,v in pairs(self.enable_gezi) do
+		local pos = gtool:intToCcp(k)
+		self["gezi_"..pos.x.."_"..pos.y].listener = listener:clone()
+		self.eventDispatcher:addEventListenerWithSceneGraphPriority(self["gezi_"..pos.x.."_"..pos.y].listener, self["gezi_"..pos.x.."_"..pos.y])
 	end
+
 	self:pauseArenaListener()
 end
 
 function embattle_view:resumeArenaListener()
-	
-	for x=1,2 do
-		for y=1,7 do 
-			if self["gezi_"..x.."_"..y] then
-				self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
-			end
-		end
+	for k,v in pairs(self.enable_gezi) do
+		local pos = gtool:intToCcp(k)
+		self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..pos.x.."_"..pos.y])
 	end
 end
 
 function embattle_view:pauseArenaListener()
-	
-	for x=1,2 do
-		for y=1,7 do 
-			if self["gezi_"..x.."_"..y] then
-				self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..x.."_"..y])
-			end
-		end
+	for k,v in pairs(self.enable_gezi) do
+		local pos = gtool:intToCcp(k)
+		self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..pos.x.."_"..pos.y])
 	end
 end
 
 function embattle_view:removeArenaListener()
-	
-	for x=1,2 do
-		for y=1,7 do 
-			if self["gezi_"..x.."_"..y] then
-				self.eventDispatcher:removeEventListener(self["gezi_"..x.."_"..y].listener)
-			end
-		end
+	for k,v in pairs(self.enable_gezi) do
+		local pos = gtool:intToCcp(k)
+		self.eventDispatcher:removeEventListener(self["gezi_"..pos.x.."_"..pos.y].listener)
+	end
+end
+
+function embattle_view:resetArena()
+	for k,v in pairs(self.enable_gezi) do
+		local pos = gtool:intToCcp(k)
+		self["gezi_"..pos.x.."_"..pos.y]:loadTexture(Config.sprite.gezi_disable)
+		self["gezi_"..pos.x.."_"..pos.y]:setScale(1)
+	end
+
+	for k,v in pairs(self.barrier_gezi) do
+		local pos = gtool:intToCcp(k)
+		self["gezi_"..pos.x.."_"..pos.y]:loadTexture(Config.sprite.gezi_disable)
+		self["gezi_"..pos.x.."_"..pos.y]:setScale(1)
 	end
 end
 ------------右边战场部分结束------------
