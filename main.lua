@@ -6,6 +6,7 @@ require "cocos.init"
 require "tool.mytool"
 require "tool.uitool"
 require "config.config_ui"
+require "config.config_map"
 require "config.config_monster"
 require "app.logic.Judgment"
 

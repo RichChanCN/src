@@ -26,6 +26,7 @@ MainScene.RESOURCE_BINDING = {
 MainScene.VIEW_PATH = "app.views.mainscene"
 
 function MainScene:onCreate()
+	self.map_data = require("app.data.MapData")
 	self:viewInit()
 end
 
@@ -81,10 +82,10 @@ function MainScene:closeMonsterListView()
 	end
 end
 
-function MainScene:openMonsterInfoView(data)
+function MainScene:openMonsterInfoView(monster_list,index)
 	if self.monster_info_view then
 		self.monster_list_view:closeView()
-		self.monster_info_view:openView(data)
+		self.monster_info_view:openView(monster_list,index)
 	end
 end
 
@@ -116,6 +117,14 @@ function MainScene:openEmbattleView()
 	end
 end
 
+function MainScene:openSpecificEmbattleView(story_num,level_num)
+	local data = self.map_data:getMapDataByStoryAndLevel(story_num,level_num)
+	if self.embattle_view then
+        self.adventure_view:closeView()
+		self.embattle_view:openView(data)
+	end
+end
+
 function MainScene:closeEmbattleView()
 	if self.embattle_view then
         self.adventure_view:openView()
@@ -123,9 +132,9 @@ function MainScene:closeEmbattleView()
 	end
 end
 
-function MainScene:openConfirmView()
+function MainScene:openConfirmView(story_num,level_num)
 	if self.confirm_view then
-		self.confirm_view:openView()
+		self.confirm_view:openView(story_num,level_num)
 	end
 end
 

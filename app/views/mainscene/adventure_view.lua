@@ -7,8 +7,16 @@ adventure_view.RESOURCE_BINDING = {
     ["chapter_sv"]			= {["varname"] = "chapter_sv"},
 	["left_btn"]			= {["varname"] = "left_btn"},
 	["right_btn"]			= {["varname"] = "right_btn"},
-	["site_1_img"]			= {["varname"] = "site_1_img"},
 }
+
+function adventure_view:initUI()
+	for i=1,1 do
+		self["chapter_"..i.."_node"] = self.chapter_sv:getChildByName("chapter_"..i.."_node")
+		for j=1,5 do
+			self["site_"..i.."_"..j.."_img"] = self["chapter_"..i.."_node"]:getChildByName("site_"..i.."_"..j.."_img")
+		end
+	end
+end
 
 function adventure_view:initInfo()
 	self.cur_chapter_num = 1
@@ -50,9 +58,12 @@ function adventure_view:initEvents()
 		end
     end)
 
-    self.site_1_img:addClickEventListener(function(sender)
-		self.ctrl:openConfirmView()
-    end)
+	for i=1,5 do
+		self["site_1_"..i.."_img"]:addClickEventListener(function(sender)
+			self.ctrl:openConfirmView(1,i)
+		end)
+	end
+
 end
 
 function adventure_view:updateView()
