@@ -14,19 +14,9 @@ map_view.RESOURCE_BINDING = {
     ["fly_word_template"]	= {["varname"] = "fly_word_template"},
 }
 
-function map_view:init()
-	if not self.is_inited then
-		uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-		self:initInfo()
-		self:initArena()
-		self:initArenaBottomNode()
-		self:initEvents()
-
-		self.is_inited = true
-	else
-		print(self.name.." is inited! scape the init()")
-	end
+function map_view:initUI()
+	self:initArena()
+	self:initArenaBottomNode()
 end
 
 function map_view:initInfo()
@@ -183,7 +173,7 @@ function map_view:hideMask()
 	self.mask_img:runAction(seq)
 end
 --------------------------战场部分开始-------------------------
-function map_view:createModel(monster)
+function map_view:createMonsterModel(monster)
     if monster.model then
         self.model_panel:removeChild(monster.model)
         monster.model = nil
@@ -219,6 +209,20 @@ function map_view:createModel(monster)
     
 end
 
+function map_view:createOtherModel(other_model,pos)
+	local callback = function(model)
+		model:setScale(4)
+        local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
+        model:setPosition(x,y)
+		self.model_panel:addChild(model)
+	end
+	if other_model == 2 then
+		local story_num, level_num = Judgment:Instance():getCurStoryAndLevelNum()
+		local barrier = self.ctrl.map_data:getBarrierModelByStoryAndLevel(story_num, level_num)
+    	cc.Sprite3D:createAsync(barrier,callback)
+    end
+end
+
 function map_view:initBloodBar(node,monster)
 	local blood_bar = self.blood_template:clone()
 	blood_bar.child = {}
@@ -252,10 +256,10 @@ function map_view:initBloodBar(node,monster)
 	node:addChild(blood_bar)
 end
 
-function map_view:createDamageFlyWords(damage,monster,type)
+function map_view:createDamageFlyWords(damage,monster,level)
 	local fly_word = self.fly_word_template:clone()
 	fly_word:setString(damage)
-	fly_word:setTextColor(Config.color["damage_"..type])
+	fly_word:setTextColor(Config.color["damage_"..level])
 	local x,y = monster.node:getPosition()
 
 	fly_word:setPosition(x,y+60)
@@ -365,7 +369,7 @@ function map_view:initArenaBottomNode()
 	self.moveto_point_sp 		= self.arena_bottom_node:getChildByName("moveto_point_sp")
 	self.cur_monster_pos_sp 	= self.arena_bottom_node:getChildByName("cur_monster_pos_sp")
 	self.far_attack_img 		= self.arena_bottom_node:getChildByName("far_attack_img")
-	self.too_far_attack_img 		= self.arena_bottom_node:getChildByName("too_far_attack_img")
+	self.too_far_attack_img 	= self.arena_bottom_node:getChildByName("too_far_attack_img")
 	self.close_attack_img 		= self.arena_bottom_node:getChildByName("close_attack_img")
 end
 

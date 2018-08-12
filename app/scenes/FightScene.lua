@@ -20,6 +20,7 @@ FightScene.Wait_Time = 1
 FightScene.Action_Time = 0.3
 
 function FightScene:onCreate()
+	self.map_data = require("app.data.MapData")
     cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 end
 
@@ -55,9 +56,14 @@ function FightScene:goToMainScene()
 end
 
 function FightScene:initModel()
+	local map = Judgment:Instance():getMap()
+	for k,v in pairs(map) do
+		self.map_view:createOtherModel(v,gtool:intToCcp(k))
+	end
+
 	local all_monster = Judgment:Instance():getAllMonsters()
 	for _,v in pairs(all_monster) do
-		self.map_view:createModel(v)
+		self.map_view:createMonsterModel(v)
 	end
 end
 

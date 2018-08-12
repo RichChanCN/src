@@ -11,7 +11,7 @@ Judgment.MapItem = {
 
 Judgment.GameStatus = {
 	ACTIVE 			= 0,
-	RUN_ACTION		= 1,
+	RUNNING			= 1,
 	WAIT_ORDER		= 2,
 	OVER 			= 3,
 	AUTO 			= 4,
@@ -26,11 +26,11 @@ Judgment.Order = {
 }
 
 Judgment.OPERATE = {
-	[0] = function(is_wait)
+	[0] = function(is_wait, round_num)
 		if Judgment:Instance().scene.battle_info_view:isInited() then
 			Judgment:Instance().scene:updateBattleQueue(is_wait)
 		end
-		Judgment:Instance().cur_active_monster:onActive()
+		Judgment:Instance().cur_active_monster:onActive(round_num)
 	end,
 
 	[1] = function(arena_pos)
@@ -78,9 +78,11 @@ function Judgment:setScene(scene)
 	self.scene:addChild(self.action_node)
 end
 
-function Judgment:initGame(left_team,right_team)
+function Judgment:initGame(left_team,right_team,map,story_num,level_num)
 	self.game_speed = 1
-
+	self.map = map
+	self.story_num = story_num
+	self.level_num = level_num
 	self.left_team = left_team
 	self.right_team = right_team
 
@@ -155,7 +157,7 @@ function Judgment:nextMonsterActivate(is_wait)
 		table.insert(self.cur_round_monster_queue,self.cur_active_monster)
 		table.insert(self.next_round_monster_queue,self.cur_active_monster)
 	end
-	if not self.cur_active_monster:isWaited() then
+	if not self.cur_active_monster:hasWaited() then
 		table.insert(self.next_round_monster_queue,self.cur_active_monster)
 	end
 	self.cur_active_monster = self:getNextMonster()
@@ -190,7 +192,7 @@ end
 function Judgment:aliveMonsterEnterNewRound()
 	local all_alive_monster = self:getAllAliveMonsters()
 	for k,v in pairs(all_alive_monster) do
-		v:onEnterNewRound()
+		v:onEnterNewRound(self.cur_round_num)
 	end
 end
 
@@ -199,7 +201,12 @@ function Judgment:getNextMonster()
 	return self.cur_round_monster_queue[self.cur_active_monster_index]
 end
 function Judgment:updateMapInfo()
-	self.map_info = self.map or {}
+	self.map_info = {}
+
+	for k,v in pairs(self.map) do
+		table.insert(self.map_info,k,v)
+	end
+	
 	local monsters = self:getAllAliveMonsters()
 	for k,v in pairs(monsters) do
 		self.map_info[gtool:ccpToInt(v.cur_pos)] = v
@@ -269,10 +276,6 @@ function Judgment:getAuto()
 	return self.is_auto
 end
 
-function Judgment:setMap(map)
-	self.map = map
-end
-
 function Judgment:getMap()
 	return self.map
 end
@@ -320,6 +323,10 @@ end
 
 function Judgment:getNextRoundMonsterQueue()
 	return self.next_round_monster_queue
+end
+
+function Judgment:getCurStoryAndLevelNum()
+	return self.story_num,self.level_num
 end
 
 function Judgment:getAllMonsters()

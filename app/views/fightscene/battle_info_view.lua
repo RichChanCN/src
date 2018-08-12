@@ -8,19 +8,9 @@ battle_info_view.RESOURCE_BINDING = {
 
 }
 
-function battle_info_view:init()
-    if not self.is_inited then
-        uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-        self:initInfo()
-        self:initRightBottom()
-        self:initLeftBottom()
-        self:initEvents()
-
-        self.is_inited = true
-    else
-        print(self.name.." is inited! scape the init()")
-    end
+function battle_info_view:initUI()
+    self:initRightBottom()
+    self:initLeftBottom()
 end
 
 function battle_info_view:initInfo()

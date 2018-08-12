@@ -47,10 +47,16 @@ Config.color = {
 	rarity_color_3 = cc.c4b(193,78,242,255),
 	rarity_color_4 = cc.c4b(243,146,46,255),
 
+	--low_damage_color
+	damage_1 = cc.c4b(127,127,127,255),
 	--common_damage_color
-	damage_1 = cc.c4b(255,255,255,255),
-	--critical_damage_color
-	damage_2 = cc.c4b(255,165,0,255),
+	damage_2 = cc.c4b(255,255,255,255),
+	--high_damage_color
+	damage_3 = cc.c4b(255,255,0,255),
+	--higher_damage_color
+	damage_4 = cc.c4b(255,165,0,255),
+	--highest_damage_color
+	damage_5 = cc.c4b(255,0,0,255),
 }
 
 Config.text = {

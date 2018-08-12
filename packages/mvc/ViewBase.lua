@@ -17,8 +17,8 @@ function ViewBase:init()
 	if not self.is_inited then
 		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
-		self:initUI()
 		self:initInfo()
+		self:initUI()
 		self:initEvents()
 
 		self.is_inited = true

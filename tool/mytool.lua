@@ -44,9 +44,41 @@ end
 gtool = {}
 
 function gtool:ccpToInt(pos)
-    return pos.x*10+pos.y 
+    if type(pos) == type({}) and pos.x and pos.y then
+        return pos.x*10+pos.y
+    else
+        print("gtool:ccpToInt warning: pos is type: "..type(pos))
+        return pos 
+    end
 end
 
 function gtool:intToCcp(num)
-    return cc.p(math.modf(num/10),num%10) 
+    if type(num) == type(1) then 
+        return cc.p(math.modf(num/10),num%10) 
+    else
+        print("gtool:intToCcp warning: num is type: "..type(num))
+        return num
+    end
+end
+
+function gtool:normalizeTowards(towards)
+    local normal_towards = towards
+    if towards%6 == 0 then
+        normal_towards = 6
+    elseif towards > 6 then
+        normal_towards = towards%6
+    elseif towards < 0 then
+        normal_towards = math.abs(-math.floor(towards/6)*6 + 6 + towards)%6
+    end
+
+    return normal_towards
+end
+
+function gtool:isLegalPosNum( pos )
+    if pos > 11 and pos%10<8 and pos%10 > 0
+        and pos ~= 17 and (pos < 78 or pos == 83 or pos == 85) then
+        return true
+    end
+
+    return false
 end

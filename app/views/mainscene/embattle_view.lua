@@ -16,32 +16,25 @@ embattle_view.RESOURCE_BINDING = {
 ----------------------------------------------------------------
 -------------------------------公有方法--------------------------
 ----------------------------------------------------------------
-function embattle_view:init()
-	if not self.is_inited then
-		uitool:createUIBinding(self, self.RESOURCE_BINDING)
-		
-		self:initArena()
-		self:initInfo()
-
-		self.is_inited = true
-	else
-		print(self.name.." is inited! scape the init()")
-	end
+function embattle_view:initUI()
+	self:initArena()
 end
 
 function embattle_view:initInfo()
 	self.enable_gezi = {}
-	self.barrier_gezi = {}
+	self.other_gezi = {}
 end
 
 function embattle_view:updateInfo(map_data)
+	self.story_num = map_data.story_num
+	self.level_num = map_data.level_num
 	--上场怪物数量限制
 	self.monster_num_limit = map_data.monster_num_limit
 	--可以使用的怪物信息
 	self.can_use_monster_list = map_data.can_use_monster_list or self.ctrl:getCollectedMonsterList()
 	--竞技场的布局信息
 	self.enable_gezi = map_data.enable_gezi
-	self.barrier_gezi = map_data.barrier_gezi
+	self.other_gezi = map_data.other_gezi
 	--敌人的队伍信息
 	self.enemy_team = map_data.enemy_team
 	--当前抓住的棋子
@@ -75,7 +68,7 @@ function embattle_view:initEvents()
     		return
     	end
     	local left_team = self:makeTeam()
-    	Judgment:Instance():initGame(left_team,self.enemy_team)
+    	Judgment:Instance():initGame(left_team,self.enemy_team,self.other_gezi,self.story_num,self.level_num)
         self.ctrl:goToFightScene()
     end)
 end
@@ -426,10 +419,12 @@ function embattle_view:updateArena()
 		self["gezi_"..pos.x.."_"..pos.y]:setScaleY(0.8)
 	end
 
-	for k,v in pairs(self.barrier_gezi) do
-		local pos = gtool:intToCcp(k)
-		self["gezi_"..pos.x.."_"..pos.y]:loadTexture(Config.sprite.gezi_barrier)
-		self["gezi_"..pos.x.."_"..pos.y]:setScale(0.8)
+	for k,v in pairs(self.other_gezi) do
+		if v == 2 then 
+			local pos = gtool:intToCcp(k)
+			self["gezi_"..pos.x.."_"..pos.y]:loadTexture(Config.sprite.gezi_barrier)
+			self["gezi_"..pos.x.."_"..pos.y]:setScale(0.8)
+		end
 	end
 
 	for k,v in pairs(self.enemy_team) do
@@ -551,7 +546,7 @@ function embattle_view:resetArena()
 		self["gezi_"..pos.x.."_"..pos.y]:setScale(1)
 	end
 
-	for k,v in pairs(self.barrier_gezi) do
+	for k,v in pairs(self.other_gezi) do
 		local pos = gtool:intToCcp(k)
 		self["gezi_"..pos.x.."_"..pos.y]:loadTexture(Config.sprite.gezi_disable)
 		self["gezi_"..pos.x.."_"..pos.y]:setScale(1)
