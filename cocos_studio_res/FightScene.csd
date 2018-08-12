@@ -9,13 +9,13 @@
           <AbstractNodeData Name="map_view" ActionTag="-1948909267" Tag="287" IconVisible="False" LeftMargin="-0.0006" RightMargin="0.0006" TopMargin="0.0002" BottomMargin="-0.0002" TouchEnable="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
-              <AbstractNodeData Name="fly_word_template" ActionTag="-1481464827" Tag="239" IconVisible="False" LeftMargin="-990.2107" RightMargin="2830.2107" TopMargin="1284.5627" BottomMargin="-232.5628" IsCustomSize="True" FontSize="25" LabelText="1" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+              <AbstractNodeData Name="fly_word_template" ActionTag="-1481464827" Tag="239" IconVisible="False" LeftMargin="-991.0029" RightMargin="2831.0029" TopMargin="1284.5627" BottomMargin="-232.5628" IsCustomSize="True" FontSize="25" LabelText="1" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                 <Size X="80.0000" Y="28.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="-950.2107" Y="-218.5628" />
+                <Position X="-951.0029" Y="-218.5628" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="-0.4949" Y="-0.2024" />
+                <PrePosition X="-0.4953" Y="-0.2024" />
                 <PreSize X="0.0417" Y="0.0259" />
                 <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                 <OutlineColor A="255" R="0" G="0" B="0" />
@@ -24,43 +24,43 @@
               <AbstractNodeData Name="blood_template" ActionTag="-1189754971" Tag="225" IconVisible="False" LeftMargin="-1065.9595" RightMargin="2895.9595" TopMargin="1282.1733" BottomMargin="-232.1733" Scale9Enable="True" LeftEage="12" RightEage="18" TopEage="4" Scale9OriginX="12" Scale9OriginY="4" Scale9Width="8" Scale9Height="11" ctype="ImageViewObjectData">
                 <Size X="90.0000" Y="30.0000" />
                 <Children>
-                  <AbstractNodeData Name="star_bg" ActionTag="2114227036" Tag="230" IconVisible="False" LeftMargin="6.0000" RightMargin="78.0000" TopMargin="21.0000" BottomMargin="1.0000" Scale9Width="6" Scale9Height="8" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="star_bg" ActionTag="2114227036" Tag="230" IconVisible="False" LeftMargin="3.1429" RightMargin="80.8571" TopMargin="21.0000" BottomMargin="1.0000" Scale9Width="6" Scale9Height="8" ctype="ImageViewObjectData">
                     <Size X="6.0000" Y="8.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="9.0000" Y="5.0000" />
+                    <Position X="6.1429" Y="5.0000" />
                     <Scale ScaleX="2.0000" ScaleY="2.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.1000" Y="0.1667" />
+                    <PrePosition X="0.0683" Y="0.1667" />
                     <PreSize X="0.0667" Y="0.2667" />
                     <FileData Type="Normal" Path="Sprite/bloodEmpty.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="star_bg" ActionTag="-1741222969" Tag="233" IconVisible="False" LeftMargin="42.0000" RightMargin="42.0000" TopMargin="21.0000" BottomMargin="1.0000" Scale9Width="6" Scale9Height="8" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="star_bg" ActionTag="-1741222969" Tag="233" IconVisible="False" LeftMargin="39.1429" RightMargin="44.8571" TopMargin="21.0000" BottomMargin="1.0000" Scale9Width="6" Scale9Height="8" ctype="ImageViewObjectData">
                     <Size X="6.0000" Y="8.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="45.0000" Y="5.0000" />
+                    <Position X="42.1429" Y="5.0000" />
                     <Scale ScaleX="2.0000" ScaleY="2.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.5000" Y="0.1667" />
+                    <PrePosition X="0.4683" Y="0.1667" />
                     <PreSize X="0.0667" Y="0.2667" />
                     <FileData Type="Normal" Path="Sprite/bloodEmpty.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="star_bg" ActionTag="-1889272729" Tag="232" IconVisible="False" LeftMargin="30.0000" RightMargin="54.0000" TopMargin="21.0000" BottomMargin="1.0000" Scale9Width="6" Scale9Height="8" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="star_bg" ActionTag="-1889272729" Tag="232" IconVisible="False" LeftMargin="27.1426" RightMargin="56.8574" TopMargin="21.0000" BottomMargin="1.0000" Scale9Width="6" Scale9Height="8" ctype="ImageViewObjectData">
                     <Size X="6.0000" Y="8.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="33.0000" Y="5.0000" />
+                    <Position X="30.1426" Y="5.0000" />
                     <Scale ScaleX="2.0000" ScaleY="2.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.3667" Y="0.1667" />
+                    <PrePosition X="0.3349" Y="0.1667" />
                     <PreSize X="0.0667" Y="0.2667" />
                     <FileData Type="Normal" Path="Sprite/bloodEmpty.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="star_bg" ActionTag="-1383959836" Tag="231" IconVisible="False" LeftMargin="18.0000" RightMargin="66.0000" TopMargin="21.0000" BottomMargin="1.0000" Scale9Width="6" Scale9Height="8" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="star_bg" ActionTag="-1383959836" Tag="231" IconVisible="False" LeftMargin="15.1429" RightMargin="68.8571" TopMargin="21.0000" BottomMargin="1.0000" Scale9Width="6" Scale9Height="8" ctype="ImageViewObjectData">
                     <Size X="6.0000" Y="8.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="21.0000" Y="5.0000" />
+                    <Position X="18.1429" Y="5.0000" />
                     <Scale ScaleX="2.0000" ScaleY="2.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="0.2333" Y="0.1667" />
+                    <PrePosition X="0.2016" Y="0.1667" />
                     <PreSize X="0.0667" Y="0.2667" />
                     <FileData Type="Normal" Path="Sprite/bloodEmpty.png" Plist="" />
                   </AbstractNodeData>
@@ -74,24 +74,24 @@
                     <PreSize X="0.9889" Y="0.5333" />
                     <FileData Type="Normal" Path="Sprite/battle_bloodbar_1.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="level_img" ActionTag="-1789241671" Tag="226" IconVisible="False" LeftMargin="-53.0000" RightMargin="79.0000" TopMargin="-17.0000" BottomMargin="-17.0000" Scale9Width="64" Scale9Height="64" ctype="ImageViewObjectData">
+                  <AbstractNodeData Name="level_img" ActionTag="-1789241671" Tag="226" IconVisible="False" LeftMargin="-54.9990" RightMargin="80.9990" TopMargin="-17.0003" BottomMargin="-16.9997" Scale9Width="64" Scale9Height="64" ctype="ImageViewObjectData">
                     <Size X="64.0000" Y="64.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="-21.0000" Y="15.0000" />
+                    <Position X="-22.9990" Y="15.0003" />
                     <Scale ScaleX="0.8000" ScaleY="0.8000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="-0.2333" Y="0.5000" />
+                    <PrePosition X="-0.2555" Y="0.5000" />
                     <PreSize X="0.7111" Y="2.1333" />
                     <FileData Type="Normal" Path="Sprite/battle_level_new_bg.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="level_text" ActionTag="41595431" Tag="229" IconVisible="False" LeftMargin="-27.5000" RightMargin="102.5000" TopMargin="2.5000" BottomMargin="2.5000" FontSize="27" LabelText="1" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="15.0000" Y="25.0000" />
+                  <AbstractNodeData Name="level_text" ActionTag="41595431" Tag="229" IconVisible="False" LeftMargin="-36.0000" RightMargin="96.0000" TopMargin="2.5000" BottomMargin="2.5000" IsCustomSize="True" FontSize="27" LabelText="1" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="30.0000" Y="25.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <Position X="-20.0000" Y="15.0000" />
+                    <Position X="-21.0000" Y="15.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
                     <CColor A="255" R="255" G="255" B="255" />
-                    <PrePosition X="-0.2222" Y="0.5000" />
-                    <PreSize X="0.1667" Y="0.8333" />
+                    <PrePosition X="-0.2333" Y="0.5000" />
+                    <PreSize X="0.3333" Y="0.8333" />
                     <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                     <OutlineColor A="255" R="0" G="0" B="0" />
                     <ShadowColor A="255" R="110" G="110" B="110" />
@@ -1788,13 +1788,13 @@
                 <PrePosition X="0.5000" Y="0.4800" />
                 <PreSize X="0.0000" Y="0.0000" />
               </AbstractNodeData>
-              <AbstractNodeData Name="mask_img" ActionTag="694599323" Alpha="0" Tag="514" IconVisible="False" LeftMargin="-61.0447" RightMargin="-66.9553" TopMargin="-57.5789" BottomMargin="162.5789" Scale9Width="2048" Scale9Height="975" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="mask_img" ActionTag="694599323" Alpha="0" Tag="514" IconVisible="False" LeftMargin="-61.0444" RightMargin="-66.9556" TopMargin="-59.4458" BottomMargin="164.4459" Scale9Width="2048" Scale9Height="975" ctype="ImageViewObjectData">
                 <Size X="2048.0000" Y="975.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="962.9553" Y="650.0789" />
+                <Position X="962.9556" Y="651.9459" />
                 <Scale ScaleX="1.5000" ScaleY="1.5000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <PrePosition X="0.5015" Y="0.6019" />
+                <PrePosition X="0.5015" Y="0.6037" />
                 <PreSize X="1.0667" Y="0.9028" />
                 <FileData Type="Normal" Path="Sprite/backmask.png" Plist="" />
               </AbstractNodeData>
@@ -1816,6 +1816,16 @@
               <AbstractNodeData Name="left_bottom_img" ActionTag="554916194" Tag="503" IconVisible="False" RightMargin="1000.0000" TopMargin="1340.0000" BottomMargin="-530.0000" LeftEage="315" RightEage="207" TopEage="58" BottomEage="58" Scale9OriginX="315" Scale9OriginY="58" Scale9Width="107" Scale9Height="61" ctype="ImageViewObjectData">
                 <Size X="920.0000" Y="270.0000" />
                 <Children>
+                  <AbstractNodeData Name="skill_img" ActionTag="-1627732053" VisibleForFrame="False" Tag="231" IconVisible="False" LeftMargin="37.0000" RightMargin="757.0000" TopMargin="-193.0000" BottomMargin="337.0000" TouchEnable="True" Scale9Width="84" Scale9Height="84" ctype="ImageViewObjectData">
+                    <Size X="126.0000" Y="126.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="100.0000" Y="400.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.1087" Y="1.4815" />
+                    <PreSize X="0.1370" Y="0.4667" />
+                    <FileData Type="Normal" Path="Sprite/icon_skill_destructive_ray.png" Plist="" />
+                  </AbstractNodeData>
                   <AbstractNodeData Name="round_img" ActionTag="-476865924" Tag="219" IconVisible="False" LeftMargin="-739.0925" RightMargin="1529.0925" TopMargin="127.1013" BottomMargin="-15.1013" Scale9Width="86" Scale9Height="94" ctype="ImageViewObjectData">
                     <Size X="130.0000" Y="158.0000" />
                     <Children>
@@ -2221,6 +2231,15 @@
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.9115" Y="-0.3704" />
+                <PreSize X="0.0000" Y="0.0000" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="particle_node" ActionTag="189775346" Tag="233" IconVisible="True" RightMargin="1920.0000" TopMargin="1080.0000" ctype="SingleNodeObjectData">
+                <Size X="0.0000" Y="0.0000" />
+                <AnchorPoint />
+                <Position />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition />
                 <PreSize X="0.0000" Y="0.0000" />
               </AbstractNodeData>
             </Children>
