@@ -1,9 +1,5 @@
 Config = Config or {}
 
-Config.Map_model = {
-	
-}
-
 Config.Map = {
 	[1] = {
 		[1] = {

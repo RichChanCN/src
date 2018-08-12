@@ -38,7 +38,7 @@ function map_view:initEvents()
 end
 
 function map_view:updateView()
-	if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+	if Judgment:Instance():isWaitOrder() then
 		self:showGuide()
 	else
 		self:hideGuide()
@@ -57,6 +57,7 @@ function map_view:beginAnimation()
 end
 
 function map_view:endAnimation()
+	self:hideGuide()
 	local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time,1))
 	local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,0.75))
 	local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.openResultView))
@@ -263,8 +264,9 @@ function map_view:createDamageFlyWords(damage,monster,level)
 	local x,y = monster.node:getPosition()
 
 	fly_word:setPosition(x,y+60)
+	--fly_word:setGlobalZOrder(uitool:top_Z_order())
 	fly_word:setScale(0.2)
-
+	
 	self.arena_top_node:addChild(fly_word)
 
 	local ac1 = fly_word:runAction(cc.ScaleTo:create(0.2,1))
@@ -299,7 +301,7 @@ function map_view:addArenaListener(gezi)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
 		local start_location = touch:getLocation()
-		if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+		if Judgment:Instance():isWaitOrder() then
         	if node:hitTest(start_location, self.camera, nil) then
         		local x,y = node:getPosition()
         		self.moveto_point_sp:setPosition(x,y)

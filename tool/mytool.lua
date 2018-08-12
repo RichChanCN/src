@@ -82,3 +82,41 @@ function gtool:isLegalPosNum( pos )
 
     return false
 end
+
+function gtool:getPosListInRange(center_pos_num, range)
+    local pos_list = {[1] = center_pos_num}
+    local temp_list = {[1] = center_pos_num}
+
+    local pathFindHelp = function(num,step)
+        if not pos_list[num] and gtool:isLegalPosNum(num) then
+            pos_list[num] = step
+        end
+    end
+    
+    local findGezi = function(pos,step)
+        pathFindHelp(pos+10,step)
+        pathFindHelp(pos-10,step)
+        pathFindHelp(pos+1,step)
+        pathFindHelp(pos-1,step)
+        if pos%2 == 0 then
+            pathFindHelp(pos+11,step)
+            pathFindHelp(pos+9,step)
+        else
+            pathFindHelp(pos-11,step)
+            pathFindHelp(pos-9,step)
+        end
+    end
+
+    for i=1,range do
+        for _,v in pairs(temp_list) do
+            findGezi(v,i)      
+        end
+        temp_list = {}
+
+        for k,v in pairs(pos_list) do
+            table.insert(temp_list,k)
+        end
+    end
+
+    return pos_list
+end

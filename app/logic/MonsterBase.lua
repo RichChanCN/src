@@ -7,11 +7,14 @@ MonsterBase.TeamSide = {
 }
 
 MonsterBase.DamageLevel = {
+    MISS 		= 0,
     LOW 		= 1,
 	COMMON 		= 2,
 	HIGH 		= 3,
 	HIGHER 		= 4,
 	HIGHEST 	= 5,
+	SKILL 		= 6,
+	HEAL		= 7,
 }
 
 MonsterBase.Status = {
@@ -57,9 +60,8 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.model_path 			= data.model_path
 	self.char_img_path			= data.char_img_path
 
-	self.skills_list 			= data.skills_list
-
 	self.max_anger				= data.anger
+	
 	self.max_hp 				= data.hp
 	self.damage 				= data.damage
 	self.physical_defense 		= data.physical_defense
@@ -67,6 +69,14 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.mobility 				= data.mobility
 	self.initiative 			= data.initiative
 	self.defense_penetration 	= data.defense_penetration
+
+	self.cur_max_hp 				= self.max_hp 			
+	self.cur_damage 				= self.damage 			
+	self.cur_physical_defense 		= self.physical_defense 	
+	self.cur_magic_defense 			= self.magic_defense 		
+	self.cur_mobility 				= self.mobility 			
+	self.cur_initiative 			= self.initiative 		
+	self.cur_defense_penetration 	= self.defense_penetration
 
 	self.cur_anger				= 0
 	self.cur_hp 				= self.max_hp
@@ -84,6 +94,11 @@ function MonsterBase:new( data,team_side,arena_pos )
 
 	self.tag = self.id*100+self.start_pos.x*10+self.start_pos.y
 	
+	if data.skill then
+		local SkillBase = require("app.logic.SkillBase")
+		self.skill = SkillBase:instance():new(data.skill)
+	end
+
 	return self
 end
 
@@ -96,45 +111,81 @@ function MonsterBase:getCurPosNum()
 end
 
 function MonsterBase:getCurDamage()
-	local cur_damage = self.damage
+	self.cur_damage = self.damage
 
-	return cur_damage
+	self:updateCurAttribute()
+
+	return self.cur_damage
 end
 
 function MonsterBase:getCurMaxHp()
-	local cur_max_hp = self.max_hp
+	self.cur_max_hp = self.max_hp
 
-	return cur_max_hp
+	self:updateCurAttribute()
+
+	return self.cur_max_hp
 end
 
 function MonsterBase:getCurPysicalDefense()
-	local cur_physical_defense = self.physical_defense
+	self.cur_physical_defense = self.physical_defense
+	
+	self:updateCurAttribute()
 
-	return cur_physical_defense
+	return self.cur_physical_defense
 end
 
 function MonsterBase:getCurMagicDefense()
-	local cur_magic_defense = self.magic_defense
+	self.cur_magic_defense = self.magic_defense
+	
+	self:updateCurAttribute()
 
-	return cur_magic_defense
+	return self.cur_magic_defense
 end
 
 function MonsterBase:getCurMobility()
-	local cur_mobility = self.mobility
+	self.cur_mobility = self.mobility
+	
+	self:updateCurAttribute()
 
-	return cur_mobility
+	return self.cur_mobility
 end
 
 function MonsterBase:getCurInitiative()
-	local cur_initiative = self.initiative
+	self.cur_initiative = self.initiative
+	
+	self:updateCurAttribute()
 
-	return cur_initiative
+	return self.cur_initiative
 end
 
 function MonsterBase:getCurDefensePenetration()
-	local cur_defense_penetration = self.defense_penetration
+	self.cur_defense_penetration = self.defense_penetration
+	
+	self:updateCurAttribute()
 
-	return cur_defense_penetration
+	return self.cur_defense_penetration
+end
+
+function MonsterBase:getAliveEnemyMonsters()
+	local enemy_list
+	if self:isPlayer() then
+		enemy_list = Judgment:Instance():getRightAliveMonsters()
+	else
+		enemy_list = Judgment:Instance():getLeftAliveMonsters()
+	end
+
+	return enemy_list
+end
+
+function MonsterBase:getAliveFriendMonsters()
+	local enemy_list
+	if not self:isPlayer() then
+		enemy_list = Judgment:Instance():getRightAliveMonsters()
+	else
+		enemy_list = Judgment:Instance():getLeftAliveMonsters()
+	end
+
+	return enemy_list
 end
 
 function MonsterBase:reset()
@@ -147,11 +198,19 @@ function MonsterBase:reset()
 	self.cur_pos    				= self.start_pos
 	self.cur_towards				= self.towards
 
+	self.cur_max_hp 				= self.max_hp 			
+	self.cur_damage 				= self.damage 			
+	self.cur_physical_defense 		= self.physical_defense 	
+	self.cur_magic_defense 			= self.magic_defense 		
+	self.cur_mobility 				= self.mobility 			
+	self.cur_initiative 			= self.initiative 		
+	self.cur_defense_penetration 	= self.defense_penetration
+
 	self.has_waited					= false
 
-	self.steps 						= self.mobility
-	self.buff_list				= {}
-	self.debuff_list			= {}
+	self.steps 						= self.cur_mobility
+	self.buff_list					= {}
+	self.debuff_list				= {}
 
 	self:towardTo(self.cur_towards)
 
@@ -161,7 +220,7 @@ end
 function MonsterBase:getAroundInfo(is_to_show)
 	local steps = self.steps
 	if is_to_show then
-		if steps < 1 and not self:isWaited() then
+		if steps < 1 and not self:hasWaited() then
 			steps = self:getCurMobility()
 		end
 	end
@@ -239,6 +298,10 @@ function MonsterBase:isPlayer()
 	return self.team_side == MonsterBase.TeamSide.LEFT
 end
 
+function MonsterBase:isEnemy(monster)
+	return self.team_side ~= monster.team_side
+end
+
 function MonsterBase:isBeBackAttacked(murderer)
 	return self.cur_towards == murderer.cur_towards
 end
@@ -257,19 +320,23 @@ function MonsterBase:canCounterAttack(murderer)
 			and not(self:isBeSideAttacked(murderer) or self:isBeBackAttacked(murderer))
 end
 
+function MonsterBase:canUseSkill()
+	return self.skill and not(self.cur_anger < self.skill.cost)
+end
+
 function MonsterBase:canActive()
 	return self.status < MonsterBase.Status.CANT_ACTIVE
 end
 
 function MonsterBase:onEnterNewRound(round_num)
 	self.has_waited = false
-	self.steps = self:getCurMobility()
 end
 
 
 function MonsterBase:onActive(round_num)
 	if not self:hasWaited() then
-		self:dealWithBuffAndDebuff()
+		self:dealWithAllBuff()
+		self.steps = self:getCurMobility()
 	end
 
 	if self:canActive() then
@@ -279,8 +346,35 @@ function MonsterBase:onActive(round_num)
 	end
 end
 
-function MonsterBase:dealWithBuffAndDebuff()
-	-- body
+function MonsterBase:dealWithAllBuff()
+	for k,v in pairs(self.buff_list) do
+		if v.affect_round<v.round then
+			v.affect_round = v.affect_round + 1
+		else
+			v.finish(self)
+			table.remove(self.buff_list,k)
+		end
+	end
+
+	for k,v in pairs(self.debuff_list) do
+		if v.affect_round<v.round then
+			v.affect_round = v.affect_round + 1
+		else
+			v.finish(self)
+			table.remove(self.debuff_list,k)
+		end
+	end
+end
+
+function MonsterBase:updateCurAttribute()
+	for k,v in pairs(self.buff_list) do
+		v.apply(self)
+	end
+
+	for k,v in pairs(self.debuff_list) do
+		v.apply(self)
+	end
+
 end
 
 function MonsterBase:Active()
@@ -323,8 +417,6 @@ function MonsterBase:moveTo(arena_pos,target,distance)
 		self:repeatAnimation("walk")
 		self:moveFollowPath(arena_pos,callback)
 	end
-
-	
 end
 
 function MonsterBase:moveFollowPath(arena_pos,callback_final)
@@ -402,12 +494,9 @@ end
 
 function MonsterBase:beAttacked(murderer, is_counter_attack,distance)
 	local damage,damage_type = self:getFinalAttackDamage(murderer,distance)
-	self:minusHP(damage,damage_type)
-	self:addAnger()
 
-	if self.cur_hp < 1 then
-		self:die()
-	else
+	if self:minusHP(damage,damage_type) then
+		self:addAnger()
 		local cb = function()
 			local cur_num = self:getCurPosNum()
 			local to_num = gtool:ccpToInt(murderer.cur_pos)
@@ -443,7 +532,7 @@ function MonsterBase:getFinalAttackDamage(murderer,distance)
 	else
 		defense = self:getCurMagicDefense() - murderer:getCurDefensePenetration()
 	end
-
+	damage = damage * (1 - defense/(defense + 10))
 	
 	if not murderer:isMelee() then
 		if distance > 5 then
@@ -458,9 +547,6 @@ function MonsterBase:getFinalAttackDamage(murderer,distance)
 		end
 	end
 
-	damage = damage * (1 - defense/(defense + 10))
-
-	
 	damage = damage + (math.random() - 0.5) * 10
 
 	if damage < 1 then
@@ -469,51 +555,6 @@ function MonsterBase:getFinalAttackDamage(murderer,distance)
 
 	return math.floor(damage), damage_type
 end
-
-function MonsterBase:minusHP(damage,damage_type)
-	local hp = self.cur_hp - damage
-
-	local cb = function()
-		self.blood_bar.updateHP(hp/self.max_hp,damage,damage_type)
-	end
-	local callback = cc.CallFunc:create(handler(self,cb))
-	self:doSomethingLater(callback,0.5)
-	self:setHP(hp)
-end
-
-function MonsterBase:setHP(hp)
-	if hp<0 then
-		hp = 0
-	end
-	local max_hp = self:getCurMaxHp()
-	if hp>max_hp then
-		hp = max_hp
-	end
-	self.cur_hp = hp
-
-end
-
-function MonsterBase:addAnger(num)
-	if self.cur_anger>self.max_anger-1 then 
-		return
-	end
-	num = num or 1
-
-	self:setAnger(self.cur_anger + num)
-end
-
-function MonsterBase:setAnger(angle)
-	self.cur_anger = angle
-
-	local cb = function()
-		self.card.update(self.cur_anger)
-		self.blood_bar.updateAnger(self.cur_anger)
-	end
-	local callback = cc.CallFunc:create(handler(self,cb))
-
-	self:doSomethingLater(callback,0.5)
-end
-
 
 function MonsterBase:counterAttack(target)
 	local cur_num = self:getCurPosNum()
@@ -542,6 +583,7 @@ end
 
 function MonsterBase:defend()
 	self:changeMonsterStatus(MonsterBase.Status.DEFEND)
+	self:addBuff({Config.Buff.defend})
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUNNING)
 	Judgment:Instance():nextMonsterActivate()
 end
@@ -552,15 +594,176 @@ function MonsterBase:die()
 	local cb = function()
 		self.card.removeSelf()
 		self.node:setVisible(false)
-		Judgment:Instance():checkGameOver()
+		if not Judgment:Instance():isGameOver() then
+			Judgment:Instance():checkGameOver()
+		end
 	end
 	local callback = cc.CallFunc:create(cb)
 	local seq = cc.Sequence:create(ac,callback)
 	self:doAnimation("die", seq)
 end
 
-function MonsterBase:useSkill(index, target)
-	
+function MonsterBase:useSkill(target_pos_num)
+	if self.skill then
+		self.skill:play()
+		self:minusAnger(self.skill.cost)
+		Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUNNING)
+		local cb = function()
+			self.skill:use(self,target_pos_num)
+		end
+		local callback = cc.CallFunc:create(cb)
+		self:doAnimation("attack2", callback)
+	end
+end
+
+function MonsterBase:beAffectedBySkill(caster, skill, is_last)
+	if self:isEnemy(caster) then
+		if skill.damage > 0 then
+			local damage,damage_type = self:getFinalSkillDamage(caster, skill)
+			self:minusHP(damage,damage_type)
+		end
+		if #skill.debuff > 0 then
+			self:addDeBuff(skill.debuff)
+		end
+	else
+		if skill.healing > 0 then
+			local healing,htype = self:getFinalhealing(caster, skill)
+			self:addHP(healing,htype)
+		end
+		if #skill.buff > 0 then
+			self:addBuff(skill.buff)
+		end
+	end
+
+	if is_last then 
+		local cb = function()
+			Judgment:Instance():nextMonsterActivate()
+		end
+		local callback = cc.CallFunc:create(cb)
+		self:doSomethingLater(callback,0.6)
+	end
+
+end
+
+function MonsterBase:getFinalhealing(caster, skill)
+	local healing = skill.healing
+
+	healing = healing + caster.level*skill.healing_level_plus
+
+	return healing, MonsterBase.DamageLevel.HEAL
+end
+
+function MonsterBase:getFinalSkillDamage(caster, skill)
+	local damage = skill.damage
+
+	damage = damage + caster.level*skill.damage_level_plus
+
+	local defense
+	if caster:isPhysical() then
+		defense = self:getCurPysicalDefense() - caster:getCurDefensePenetration()
+	else
+		defense = self:getCurMagicDefense() - caster:getCurDefensePenetration()
+	end
+
+	damage = damage * (1 - defense/(defense + 10))
+
+	damage = damage + (math.random() - 0.5) * 20
+
+	if damage < 1 then
+		damage = 1
+	end
+
+	return math.floor(damage), MonsterBase.DamageLevel.SKILL
+end
+
+function MonsterBase:addHP(healing,htype)
+	local hp = self.cur_hp + healing
+
+	local max_hp = self:getCurMaxHp()
+	if hp>max_hp then
+		hp = max_hp
+	end
+
+	local cb = function()
+		self.blood_bar.updateHP(hp/self.max_hp,healing,htype)
+	end
+	local callback = cc.CallFunc:create(handler(self,cb))
+	self:doSomethingLater(callback,0.5)
+	self:setHP(hp)
+end
+
+function MonsterBase:minusHP(damage,damage_type)
+	local hp = self.cur_hp - damage
+
+	local cb = function()
+		self.blood_bar.updateHP(hp/self.max_hp,damage,damage_type)
+		if hp<0 then
+			self:die()
+		end
+	end
+	local callback = cc.CallFunc:create(handler(self,cb))
+	self:doSomethingLater(callback,0.5)
+	self:setHP(hp)
+
+	if hp > 0 then
+		return true
+	else
+		return false
+	end
+end
+
+function MonsterBase:setHP(hp)
+	if hp<0 then
+		hp = 0
+	end
+	local max_hp = self:getCurMaxHp()
+	if hp>max_hp then
+		hp = max_hp
+	end
+	self.cur_hp = hp
+end
+
+function MonsterBase:addAnger(num)
+	if self.cur_anger>self.max_anger-1 then 
+		return
+	end
+	num = num or 1
+
+	self:setAnger(self.cur_anger + num)
+end
+
+function MonsterBase:minusAnger(num)
+	self:setAnger(self.cur_anger - num)
+end
+
+function MonsterBase:setAnger(angle)
+	self.cur_anger = angle
+
+	local cb = function()
+		self.card.update(self.cur_anger)
+		self.blood_bar.updateAnger(self.cur_anger)
+	end
+	local callback = cc.CallFunc:create(handler(self,cb))
+
+	self:doSomethingLater(callback,0.5)
+end
+
+function MonsterBase:addBuff(buff_list)
+	for k,v in pairs(buff_list) do
+		local buff = v:clone()
+		buff.affect_round = 0
+		buff.begin(self)
+		table.insert(self.buff_list,buff)
+	end
+end
+
+function MonsterBase:addDeBuff(debuff_list)
+	for k,v in pairs(debuff_list) do
+		local buff = v:clone()
+		buff.affect_round = 0
+		buff.begin(self)
+		table.insert(self.debuff_list,buff)
+	end
 end
 
 function MonsterBase:towardTo(num)
@@ -738,10 +941,6 @@ function MonsterBase:getDistanceToPos(num)
 	return self.distance_info[num]
 end
 
-function MonsterBase:updateCurAttribute()
-	
-end
-
 function MonsterBase:changeMonsterStatus(status)
 	status = status or self.last_status or MonsterBase.Status.ALIVE
 	self.last_status = self.status
@@ -806,18 +1005,14 @@ end
 ----------------------------------------------------------
 ----------------------------------------------------------
 ----------------------------------------------------------
---------------------------AI???-------------------------
+--------------------------AI------------------------------
 ----------------------------------------------------------
 ----------------------------------------------------------
 ----------------------------------------------------------
 
 function MonsterBase:runAI()
-	local enemy_list
-	if self:isPlayer() then
-		enemy_list = Judgment:Instance():getRightAliveMonsters()
-	else
-		enemy_list = Judgment:Instance():getLeftAliveMonsters()
-	end
+
+	local enemy_list = self:getAliveEnemyMonsters()
 
 	self.can_reach_area_info = self:getAroundInfo()
 	

@@ -1,0 +1,6 @@
+Config = Config or {}
+
+Config.model_path = "Model/"
+Config.paticle_path = "Particle/"
+Config.sprite_path = "Sprite/"
+Config.monster_img_path = "Monster/"

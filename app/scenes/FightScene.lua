@@ -81,6 +81,10 @@ function FightScene:updateBattleQueue(is_wait)
 	self.battle_info_view:updateRightBottomQueue(is_wait)
 end
 
+function FightScene:getParticleNode()
+	return self.battle_info_view.particle_node
+end
+
 function FightScene:openBattleInfoView()
 	self.battle_info_view:openView()
 end

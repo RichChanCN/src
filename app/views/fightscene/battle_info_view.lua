@@ -5,7 +5,7 @@ local battle_info_view = view:instance()
 battle_info_view.RESOURCE_BINDING = {
 	["left_bottom_img"]         = {["varname"] = "left_bottom_img"},
     ["right_bottom_node"]       = {["varname"] = "right_bottom_node"},
-
+    ["particle_node"]           = {["varname"] = "particle_node"},
 }
 
 function battle_info_view:initUI()
@@ -23,6 +23,12 @@ function battle_info_view:initInfo()
 end
 
 function battle_info_view:initEvents()
+    self.skill_img:addClickEventListener(function(sender)
+        if Judgment:Instance():isWaitOrder() then
+            Judgment:Instance():runGame(Judgment.Order.USE_SKILL,44)
+        end
+    end)
+
     self:initRightBottomEvents()
 end
 
@@ -66,19 +72,19 @@ end
 
 function battle_info_view:initRightBottomEvents()
     uitool:makeImgToButtonNoScale(self.defend_img, function()
-        if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+        if Judgment:Instance():isWaitOrder() then
             Judgment:Instance():requestDefend()
         end
     end)
 
     uitool:makeImgToButtonNoScale(self.wait_img, function()
-        if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+        if Judgment:Instance():isWaitOrder() then
             Judgment:Instance():requestWait()
         end
     end)
 
     uitool:makeImgToButtonNoScale(self.auto_img, function()
-        if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+        if Judgment:Instance():isWaitOrder() then
             Judgment:Instance():requestAuto()
         elseif Judgment:Instance():getGameStatus() ~= Judgment.GameStatus.WAIT_ORDER then
             Judgment:Instance():stopAuto()
@@ -96,6 +102,8 @@ function battle_info_view:initLeftBottom()
     self.queue_template = self.left_bottom_img:getChildByName("queue_template")
     self.cur_monster_img = self.left_bottom_img:getChildByName("cur_monster_img")
     self.round_img = self.left_bottom_img:getChildByName("round_img")
+    self.skill_img = self.left_bottom_img:getChildByName("skill_img")
+
     self:initQueueLV()
 end
 
@@ -157,7 +165,7 @@ end
 function battle_info_view:addQueueItemEvent(img)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
-        if Judgment:Instance():getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+        if Judgment:Instance():isWaitOrder() then
             if uitool:isTouchInNodeRect(node,touch,event) then
                 self.ctrl:showOtherAroundInfo(node.monster)
                 return true
@@ -242,6 +250,13 @@ function battle_info_view:updateRightBottomQueue(is_wait)
         self.queue_lv:removeItem(0)
         local index = self.queue_lv:getIndex(self.next_round_in_queue)
         self.queue_lv:insertCustomItem(last_item,index)
+    end
+
+    if self.queue_first.monster:canUseSkill() then
+        self.skill_img:loadTexture(self.queue_first.monster.skill.img_path)
+        self.skill_img:setVisible(true)
+    else
+        self.skill_img:setVisible(false)
     end
 end
 -----------------------左下队列节点开始-----------------------

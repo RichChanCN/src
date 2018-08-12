@@ -23,6 +23,7 @@ Judgment.Order = {
 	ATTACK 		= 2,
 	DEFEND		= 3,
 	WAIT 		= 4,
+	USE_SKILL	= 5,
 }
 
 Judgment.OPERATE = {
@@ -47,6 +48,10 @@ Judgment.OPERATE = {
 
 	[4] = function()
 		Judgment:Instance().cur_active_monster:wait()
+	end,
+
+	[5] = function(target_pos_num)
+		Judgment:Instance().cur_active_monster:useSkill(target_pos_num)
 	end,
 }
 
@@ -78,6 +83,10 @@ function Judgment:setScene(scene)
 	self.scene:addChild(self.action_node)
 end
 
+function Judgment:getScene(scene)
+	return self.scene
+end
+
 function Judgment:initGame(left_team,right_team,map,story_num,level_num)
 	self.game_speed = 1
 	self.map = map
@@ -106,6 +115,7 @@ function Judgment:runGame(order, param1, param2)
 end
 
 function Judgment:gameOver(win_side)
+	self:setGameStatus(Judgment.GameStatus.OVER)
 	local result = self:getGameResult(win_side)
 	self.scene:gameOver(result)
 	if win_side == 1 then
@@ -327,6 +337,14 @@ end
 
 function Judgment:getCurStoryAndLevelNum()
 	return self.story_num,self.level_num
+end
+
+function Judgment:isWaitOrder()
+	return self.cur_game_status == Judgment.GameStatus.WAIT_ORDER
+end
+
+function Judgment:isGameOver()
+	return self.cur_game_status == Judgment.GameStatus.OVER
 end
 
 function Judgment:getAllMonsters()

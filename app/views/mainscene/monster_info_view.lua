@@ -132,7 +132,7 @@ function monster_info_view:createModel(data)
         
         self.animation = cc.Animation3D:create(data.model_path)
         if self.animation then
-            local animate = Config.Monster_animate[data.id].stand(self.animation)
+            local animate = Config.Monster_animate[data.id].alive(self.animation)
             model:runAction(cc.RepeatForever:create(animate))
         end
 

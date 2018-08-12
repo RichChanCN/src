@@ -1,13 +1,12 @@
 Config = Config or {}
-Config.sprite_path = "Sprite/"
-Config.monster_img_path = "Monster/"
-Config.model_path = "Model/"
 
 Config.sprite = {
 	gezi_enable = Config.sprite_path.."hex_tile_enabled.png",
 	gezi_barrier = Config.sprite_path.."hex_tile_barrier.png",
 	gezi_disable = Config.sprite_path.."hex_tile_disabled.png",
 	
+	buff_defend = Config.sprite_path.."common_defend.png",
+
 	selected = Config.sprite_path.."icon_selected_1.png",
 	chesspiece_mask = Config.sprite_path.."header_hex_mask.png",
 	
@@ -47,6 +46,8 @@ Config.color = {
 	rarity_color_3 = cc.c4b(193,78,242,255),
 	rarity_color_4 = cc.c4b(243,146,46,255),
 
+	--miss_color
+	damage_0 = cc.c4b(0,0,0,255),
 	--low_damage_color
 	damage_1 = cc.c4b(127,127,127,255),
 	--common_damage_color
@@ -57,6 +58,8 @@ Config.color = {
 	damage_4 = cc.c4b(255,165,0,255),
 	--highest_damage_color
 	damage_5 = cc.c4b(255,0,0,255),
+	--skill_damage_color
+	damage_6 = cc.c4b(30,144,255,255),
 }
 
 Config.text = {
