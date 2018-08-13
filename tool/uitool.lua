@@ -237,6 +237,3 @@ function uitool:makeImgToButtonHT(img,camera,callback)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
-
-function uitool:createFlyWords(label,pos)
-end

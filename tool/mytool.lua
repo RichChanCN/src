@@ -84,8 +84,8 @@ function gtool:isLegalPosNum( pos )
 end
 
 function gtool:getPosListInRange(center_pos_num, range)
-    local pos_list = {[1] = center_pos_num}
-    local temp_list = {[1] = center_pos_num}
+    local pos_list = {[center_pos_num] = 1}
+    local temp_list = {[center_pos_num] = 1}
 
     local pathFindHelp = function(num,step)
         if not pos_list[num] and gtool:isLegalPosNum(num) then
@@ -107,16 +107,27 @@ function gtool:getPosListInRange(center_pos_num, range)
         end
     end
 
-    for i=1,range do
-        for _,v in pairs(temp_list) do
-            findGezi(v,i)      
+    local i = 2
+    while range+1 > i do
+        for k,v in pairs(temp_list) do
+            findGezi(k,i)      
         end
         temp_list = {}
 
         for k,v in pairs(pos_list) do
             table.insert(temp_list,k)
         end
+
+        i = i + 1
     end
 
     return pos_list
+end
+
+function gtool:doSomethingLater(callback,time)
+    local ac_node = cc.Node:create()
+    Judgment:Instance():getActionNode():addChild(ac_node)
+    local default_ac = ac_node:runAction(cc.ScaleTo:create(time,1))
+    local seq = cc.Sequence:create(default_ac,callback)
+    ac_node:runAction(seq)
 end

@@ -1,5 +1,6 @@
 Config = Config or {}
 
 Config.Particle = {
-	frozen = Config.paticle_path.."frozen.plist",
+	frozen 	= Config.particle_path.."frozen.plist",
+	stun 	= Config.particle_path.."stun.plist",
 }

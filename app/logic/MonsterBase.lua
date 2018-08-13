@@ -22,10 +22,9 @@ MonsterBase.Status = {
 	ALIVE 		= 1,
 	DEFEND 		= 2,
 	WAITING 	= 3,
-	CANT_MOVE  	= 10,
-	IMPRISON	= 11,
-	CANT_ATTACK = 20,
-	CANT_ACTIVE = 30,
+	CANT_ATTACK = 100,
+	CANT_ACTIVE = 1000,
+	STUN 		= 1001,
 }
 
 MonsterBase.Towards = {
@@ -96,7 +95,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	
 	if data.skill then
 		local SkillBase = require("app.logic.SkillBase")
-		self.skill = SkillBase:instance():new(data.skill)
+		self.skill = SkillBase:instance():new(self,data.skill)
 	end
 
 	return self
@@ -246,7 +245,7 @@ function MonsterBase:getAroundInfo(is_to_show)
 	local can_attack_table = {}
 	for k,v in pairs(map_info) do
 		if type(v) == type({}) and v.team_side ~= self.team_side then
-			if self:canAttack(k) then
+			if self:canReachAndAttack(k) then
 				table.insert(can_attack_table,k)
 			else
 				self.can_reach_area_info[k] = nil
@@ -314,7 +313,8 @@ function MonsterBase:isBeSideAttacked(murderer)
 end
 
 function MonsterBase:canCounterAttack(murderer)
-	return self:isMelee() 
+	return self:isMelee()
+			and self:canAttack()
 			and murderer:isMelee() 
 			and self:isNear(gtool:ccpToInt(murderer.cur_pos)) 
 			and not(self:isBeSideAttacked(murderer) or self:isBeBackAttacked(murderer))
@@ -326,6 +326,10 @@ end
 
 function MonsterBase:canActive()
 	return self.status < MonsterBase.Status.CANT_ACTIVE
+end
+
+function MonsterBase:canAttack()
+	return self.status < MonsterBase.Status.CANT_ATTACK
 end
 
 function MonsterBase:onEnterNewRound(round_num)
@@ -609,17 +613,17 @@ function MonsterBase:useSkill(target_pos_num)
 		self:minusAnger(self.skill.cost)
 		Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUNNING)
 		local cb = function()
-			self.skill:use(self,target_pos_num)
+			self.skill:use(target_pos_num)
 		end
 		local callback = cc.CallFunc:create(cb)
 		self:doAnimation("attack2", callback)
 	end
 end
 
-function MonsterBase:beAffectedBySkill(caster, skill, is_last)
-	if self:isEnemy(caster) then
+function MonsterBase:beAffectedBySkill(skill, is_last)
+	if self:isEnemy(skill.caster) then
 		if skill.damage > 0 then
-			local damage,damage_type = self:getFinalSkillDamage(caster, skill)
+			local damage,damage_type = self:getFinalSkillDamage(skill)
 			self:minusHP(damage,damage_type)
 		end
 		if #skill.debuff > 0 then
@@ -627,7 +631,7 @@ function MonsterBase:beAffectedBySkill(caster, skill, is_last)
 		end
 	else
 		if skill.healing > 0 then
-			local healing,htype = self:getFinalhealing(caster, skill)
+			local healing,htype = self:getFinalhealing(skill)
 			self:addHP(healing,htype)
 		end
 		if #skill.buff > 0 then
@@ -645,17 +649,18 @@ function MonsterBase:beAffectedBySkill(caster, skill, is_last)
 
 end
 
-function MonsterBase:getFinalhealing(caster, skill)
+function MonsterBase:getFinalhealing(skill)
 	local healing = skill.healing
 
-	healing = healing + caster.level*skill.healing_level_plus
+	healing = healing + skill.caster.level*skill.healing_level_plus
 
 	return healing, MonsterBase.DamageLevel.HEAL
 end
 
-function MonsterBase:getFinalSkillDamage(caster, skill)
+function MonsterBase:getFinalSkillDamage(skill)
 	local damage = skill.damage
-
+	local caster = skill.caster
+	
 	damage = damage + caster.level*skill.damage_level_plus
 
 	local defense
@@ -862,12 +867,16 @@ function MonsterBase:nothingCanDo()
 	end
 end
 
-function MonsterBase:canAttack(num)
-	if self:isNear(num) or not self:isMelee() then
-		return true
+function MonsterBase:canReachAndAttack(num)
+	if self:canAttack() then
+		if self:isNear(num) or not self:isMelee() then
+			return true
+		end
+	
+		return self:getNearPosNum(num)
+	else
+		return false
 	end
-
-	return self:getNearPosNum(num)
 end
 
 function MonsterBase:isNear(num)
@@ -952,6 +961,20 @@ function MonsterBase:changeMonsterStatus(status)
 		self:repeatAnimation("defend")
 	elseif status == MonsterBase.Status.WAITING then
 		self:doAnimation("wait")
+	end
+end
+
+function MonsterBase:addMonsterStatus(status)
+	self.last_status = self.status
+	self.status = self.status + status
+end
+
+function MonsterBase:removeMonsterStatus(status)
+	self.last_status = self.status
+	self.status = self.status - status
+
+	if self.status < MonsterBase.Status.CANT_ATTACK then
+		self:repeatAnimation("alive")
 	end
 end
 
@@ -1045,7 +1068,7 @@ end
 function MonsterBase:getEnemyCanAttack(enemy_list)
 	local can_attack_list = {}
 	for k,v in pairs(enemy_list) do
-		if self:canAttack(gtool:ccpToInt(v.cur_pos)) then
+		if self:canReachAndAttack(gtool:ccpToInt(v.cur_pos)) then
 			table.insert(can_attack_list,v)
 		end
 	end

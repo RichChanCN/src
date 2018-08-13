@@ -25,7 +25,7 @@ end
 function battle_info_view:initEvents()
     self.skill_img:addClickEventListener(function(sender)
         if Judgment:Instance():isWaitOrder() then
-            Judgment:Instance():runGame(Judgment.Order.USE_SKILL,44)
+            Judgment:Instance():runGame(Judgment.Order.USE_SKILL)
         end
     end)
 
@@ -67,7 +67,7 @@ function battle_info_view:initRightBottom()
     self.wait_img       = self.right_bottom_node:getChildByName("wait_img")
     self.auto_img       = self.right_bottom_node:getChildByName("auto_img")
     self.speed_img      = self.right_bottom_node:getChildByName("speed_img")
-    self.setting_img    = self.right_bottom_node:getChildByName("setting_img")
+    self.exit_img    = self.right_bottom_node:getChildByName("exit_img")
 end
 
 function battle_info_view:initRightBottomEvents()
@@ -89,6 +89,10 @@ function battle_info_view:initRightBottomEvents()
         elseif Judgment:Instance():getGameStatus() ~= Judgment.GameStatus.WAIT_ORDER then
             Judgment:Instance():stopAuto()
         end
+    end)
+
+    uitool:makeImgToButtonNoScale(self.exit_img, function()
+        self.ctrl:goToMainScene()
     end)
 end
 
@@ -122,6 +126,7 @@ function battle_info_view:initQueueLV()
 
     self.next_round_in_queue = self.round_img:clone()
     self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
+    self:updateSkill()
 end
 
 function battle_info_view:updateLVItem(item,monster,update_only)
@@ -252,6 +257,10 @@ function battle_info_view:updateRightBottomQueue(is_wait)
         self.queue_lv:insertCustomItem(last_item,index)
     end
 
+    self:updateSkill()
+end
+
+function battle_info_view:updateSkill()
     if self.queue_first.monster:canUseSkill() then
         self.skill_img:loadTexture(self.queue_first.monster.skill.img_path)
         self.skill_img:setVisible(true)

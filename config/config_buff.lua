@@ -46,7 +46,7 @@ Config.Buff = {
 		round = 1,
 		begin = function(monster)
 			local particle = cc.ParticleSystemQuad:create(Config.Particle.frozen)
-			particle:setScale(0.3,0.4)
+			particle:setScale(0.3)
 			particle:setName("frozen")
 			particle:setGlobalZOrder(uitool:top_Z_order())
 			particle:setPosition(0, 20)
@@ -70,5 +70,36 @@ Config.Buff = {
 			return buff
 		end,
 	},
+	--激活受限，眩晕1回合
+	stun = {
+		round = 1,
+		begin = function(monster)
+			local particle = cc.ParticleSystemQuad:create(Config.Particle.stun)
+			particle:setScale(0.3)
+			particle:setName("stun")
+			particle:setGlobalZOrder(uitool:top_Z_order())
+			particle:setPosition(0, 40)
+			monster.node:addChild(particle)
+			local MonsterBase = require("app.logic.MonsterBase")
+			monster:addMonsterStatus(MonsterBase.Status.STUN)
+		end,
+		apply = function(monster)
+		end,
+		finish = function(monster)
+			local MonsterBase = require("app.logic.MonsterBase")
+			monster:removeMonsterStatus(MonsterBase.Status.STUN)
+			monster.node:removeChildByName("stun")
+		end,
 
+		clone = function(self)
+			local buff = {}
+
+			buff.round = self.round 
+			buff.begin = self.begin
+			buff.apply = self.apply
+			buff.finish = self.finish
+
+			return buff
+		end,
+	},
 }

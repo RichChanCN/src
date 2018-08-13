@@ -4,7 +4,8 @@ function SkillBase:instance()
 	return setmetatable({}, { __index = self })
 end
 
-function SkillBase:new(skill_data)
+function SkillBase:new(monster,skill_data)
+	self.caster 				= monster
 	self.name 					= skill_data.name 		
 	self.description 			= skill_data.description 
 	self.img_path				= skill_data.img_path
@@ -15,25 +16,35 @@ function SkillBase:new(skill_data)
 	self.damage_level_plus 		= skill_data.damage_level_plus
 	self.healing				= skill_data.healing
 	self.healing_level_plus		= skill_data.healing_level_plus
-	self.paticle_path 			= skill_data.paticle_path
-	self.paticle_pos			= skill_data.paticle_pos
+	self.particle_path 			= skill_data.particle_path
+	self.particle_pos			= skill_data.particle_pos
+	self.particle_scale			= skill_data.particle_scale
+	self.particle_delay_time 	= skill_data.particle_delay_time
 	self.buff					= skill_data.buff
 	self.debuff					= skill_data.debuff
 
 	return self
 end
 
-function SkillBase:use(caster,target_pos_num)
-	local monster_list = self:getBeAffectedMonsterList(caster,target_pos_num)
+function SkillBase:use(target_pos_num)
+	if (not target_pos_num) and (not self.is_need_target) or self.range < 1 then
+		self.target_pos_num = self.caster:getCurPosNum()
+	elseif (not target_pos_num) and self.is_need_target then 
+		print(self.name.." need a target pos !")
+		return
+	end
+
+	local monster_list = self:getBeAffectedMonsterList()
 	--Judgment:Instance():getScene():getParticleNode():removeChildByName(self.name)
 	if #monster_list < 1 then
 		print("no monster is affected by "..self.name)
+		Judgment:Instance():nextMonsterActivate()
 	else
 		for i,v in ipairs(monster_list) do
 			if not monster_list[i+1] then
-				v:beAffectedBySkill(caster,self,true)
+				v:beAffectedBySkill(self,true)
 			else
-				v:beAffectedBySkill(caster,self)
+				v:beAffectedBySkill(self)
 			end
 		end
 	end
@@ -41,34 +52,53 @@ function SkillBase:use(caster,target_pos_num)
 end
 
 function SkillBase:play()
-	local particle = cc.ParticleSystemQuad:create(self.paticle_path)
-	particle:setName(self.name)
-	particle:setGlobalZOrder(uitool:mid_Z_order())
-	particle:setPosition(self.paticle_pos)
-	Judgment:Instance():getScene():getParticleNode():addChild(particle)
+	local cb = function()
+		local particle = cc.ParticleSystemQuad:create(self.particle_path)
+		particle:setName(self.name)
+		if self.particle_scale then
+			particle:setScale(self.particle_scale)
+		end
+		particle:setGlobalZOrder(uitool:mid_Z_order())
+		particle:setPosition(self.particle_pos)
+		if self.range < 1 then
+			Judgment:Instance():getScene():getParticleNode():addChild(particle)
+		else
+			local map_info = Judgment:Instance():getMapInfo()
+			map_info[self.caster:getCurPosNum()].node:addChild(particle)
+		end
+	end
+
+	if self.particle_delay_time then
+		local callback = cc.CallFunc:create(cb)
+		gtool:doSomethingLater(callback, self.particle_delay_time)
+	else
+		cb()
+	end
+		
+
 end
 
-function SkillBase:getBeAffectedMonsterList(caster,target_pos_num)
+function SkillBase:getBeAffectedMonsterList()
 	local monster_list = {}
 	if self.range<1 then
 		if (self.damage > 0 or self.debuff) and (self.healing > 0 and self.buff) then
 			monster_list = Judgment:Instance():getAllAliveMonsters()
 		elseif self.damage > 0 or self.debuff then
-			monster_list = caster:getAliveEnemyMonsters()
+			monster_list = self.caster:getAliveEnemyMonsters()
 		elseif self.healing > 0 and self.buff then
-			monster_list = caster:getAliveFriendMonsters()
+			monster_list = self.caster:getAliveFriendMonsters()
 		end
-	elseif target_pos_num and self.range > 1 then
-		local pos_list = gtool:getPosListInRange(target_pos_num, self.range)
+	elseif self.target_pos_num and self.range > 1 then
+		local pos_list = gtool:getPosListInRange(self.target_pos_num, self.range)
 		local map_info = Judgment:Instance():getMapInfo()
 		for k,v in pairs(pos_list) do
-			if map_info[v] and caster:isEnemy(map_info[v]) then
-				table.insert(monster_list,map_info[v])
+			if map_info[k] and self.caster:isEnemy(map_info[k]) then
+				table.insert(monster_list,map_info[k])
 			end
 		end
 	elseif self.range == 1 then
 		local map_info = Judgment:Instance():getMapInfo()
-		table.insert(monster_list,map_info[target_pos_num])
+		table.insert(monster_list,map_info[self.target_pos_num])
 	end
 
 	return monster_list
