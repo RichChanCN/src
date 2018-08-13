@@ -3,6 +3,7 @@ cc.FileUtils:getInstance():setPopupNotify(false)
 
 require "config.config"
 require "cocos.init"
+require "tool.LuaXML"
 require "tool.mytool"
 require "tool.uitool"
 require "config.config_path"

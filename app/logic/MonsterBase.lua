@@ -716,11 +716,9 @@ end
 function MonsterBase:minusHP(damage,damage_type,is_buff)
 	local hp = self.cur_hp - damage
 
-	print(self.name.."Maxhp: "..self:getCurMaxHp().." hp: "..hp)
-
 	local cb = function()
 		self.blood_bar.updateHP(hp/self.max_hp,damage,damage_type)
-		if hp<0 then
+		if hp<1 then
 			self:die()
 		end
 	end
@@ -729,7 +727,7 @@ function MonsterBase:minusHP(damage,damage_type,is_buff)
 		self:doSomethingLater(callback,0.3)
 	else
 		self.blood_bar.updateHP(hp/self.max_hp,damage,damage_type)
-		if hp<0 then
+		if hp<1 then
 			self:die(is_buff)
 		end
 	end
