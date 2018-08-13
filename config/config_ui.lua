@@ -60,6 +60,12 @@ Config.color = {
 	damage_5 = cc.c4b(255,0,0,255),
 	--skill_damage_color
 	damage_6 = cc.c4b(30,144,255,255),
+	--heal_color
+	damage_7 = cc.c4b(49,212,8,255),
+	--poison_damage_color
+	damage_8 = cc.c4b(187,13,117,255),
+	--bleeding_damage_color
+	damage_9 = cc.c4b(255,0,0,255),
 }
 
 Config.text = {

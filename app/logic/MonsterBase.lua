@@ -15,6 +15,7 @@ MonsterBase.DamageLevel = {
 	HIGHEST 	= 5,
 	SKILL 		= 6,
 	HEAL		= 7,
+	POISON 		= 8,
 }
 
 MonsterBase.Status = {
@@ -177,14 +178,14 @@ function MonsterBase:getAliveEnemyMonsters()
 end
 
 function MonsterBase:getAliveFriendMonsters()
-	local enemy_list
+	local friend_list
 	if not self:isPlayer() then
-		enemy_list = Judgment:Instance():getRightAliveMonsters()
+		friend_list = Judgment:Instance():getRightAliveMonsters()
 	else
-		enemy_list = Judgment:Instance():getLeftAliveMonsters()
+		friend_list = Judgment:Instance():getLeftAliveMonsters()
 	end
 
-	return enemy_list
+	return friend_list
 end
 
 function MonsterBase:reset()
@@ -325,7 +326,7 @@ function MonsterBase:canUseSkill()
 end
 
 function MonsterBase:canActive()
-	return self.status < MonsterBase.Status.CANT_ACTIVE
+	return (not self:isDead()) and self.status < MonsterBase.Status.CANT_ACTIVE
 end
 
 function MonsterBase:canAttack()
@@ -354,6 +355,7 @@ function MonsterBase:dealWithAllBuff()
 	for k,v in pairs(self.buff_list) do
 		if v.affect_round<v.round then
 			v.affect_round = v.affect_round + 1
+			v.once_a_round(self)
 		else
 			v.finish(self)
 			table.remove(self.buff_list,k)
@@ -363,6 +365,7 @@ function MonsterBase:dealWithAllBuff()
 	for k,v in pairs(self.debuff_list) do
 		if v.affect_round<v.round then
 			v.affect_round = v.affect_round + 1
+			v.once_a_round(self)
 		else
 			v.finish(self)
 			table.remove(self.debuff_list,k)
@@ -399,12 +402,14 @@ function MonsterBase:Active()
 	self.node:runAction(seq)
 end
 
-function MonsterBase:moveTo(arena_pos,target,distance)
+function MonsterBase:moveTo(arena_pos,attack_target,distance,skill_target_pos)
 	Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUNNING)
 	local cb = function()
 		self.cur_pos = arena_pos
-		if target and target.isMonster then
-			self:attack(target,distance)
+		if attack_target then
+			self:attack(attack_target,distance)
+		elseif skill_target_pos then
+			self:useSkill(skill_target_pos)
 		else
 			self:changeMonsterStatus(MonsterBase.Status.ALIVE)
 			if self:nothingCanDo() then
@@ -592,14 +597,14 @@ function MonsterBase:defend()
 	Judgment:Instance():nextMonsterActivate()
 end
 
-function MonsterBase:die()
+function MonsterBase:die(is_buff)
 	self.status = MonsterBase.Status.DEAD
 	local ac = self.model:runAction(cc.FadeOut:create(1))
 	local cb = function()
 		self.card.removeSelf()
 		self.node:setVisible(false)
 		if not Judgment:Instance():isGameOver() then
-			Judgment:Instance():checkGameOver()
+			Judgment:Instance():checkGameOver(is_buff)
 		end
 	end
 	local callback = cc.CallFunc:create(cb)
@@ -608,7 +613,7 @@ function MonsterBase:die()
 end
 
 function MonsterBase:useSkill(target_pos_num)
-	if self.skill then
+	if (not self.skill:isNeedTarget()) or (self:isMelee() and self:isNear(target_pos_num)) or (not self:isMelee()) then
 		self.skill:play()
 		self:minusAnger(self.skill.cost)
 		Judgment:Instance():changeGameStatus(Judgment.GameStatus.RUNNING)
@@ -616,11 +621,21 @@ function MonsterBase:useSkill(target_pos_num)
 			self.skill:use(target_pos_num)
 		end
 		local callback = cc.CallFunc:create(cb)
-		self:doAnimation("attack2", callback)
+		self:towardToIntPos(self:getCurPosNum(), target_pos_num)
+		self:doAnimation("skill", callback)
+	else
+		self:moveAndUseSkill(target_pos_num)
 	end
 end
 
+function MonsterBase:moveAndUseSkill(target_pos_num)
+	local pos = gtool:intToCcp(self:getNearPosNum(target_pos_num))
+
+	self:moveTo(pos,nil,nil,target_pos_num)
+end
+
 function MonsterBase:beAffectedBySkill(skill, is_last)
+	print(self:isEnemy(skill.caster))
 	if self:isEnemy(skill.caster) then
 		if skill.damage > 0 then
 			local damage,damage_type = self:getFinalSkillDamage(skill)
@@ -634,6 +649,7 @@ function MonsterBase:beAffectedBySkill(skill, is_last)
 			local healing,htype = self:getFinalhealing(skill)
 			self:addHP(healing,htype)
 		end
+		print(#skill.buff)
 		if #skill.buff > 0 then
 			self:addBuff(skill.buff)
 		end
@@ -660,7 +676,7 @@ end
 function MonsterBase:getFinalSkillDamage(skill)
 	local damage = skill.damage
 	local caster = skill.caster
-	
+
 	damage = damage + caster.level*skill.damage_level_plus
 
 	local defense
@@ -693,12 +709,14 @@ function MonsterBase:addHP(healing,htype)
 		self.blood_bar.updateHP(hp/self.max_hp,healing,htype)
 	end
 	local callback = cc.CallFunc:create(handler(self,cb))
-	self:doSomethingLater(callback,0.5)
+	self:doSomethingLater(callback,0.3)
 	self:setHP(hp)
 end
 
-function MonsterBase:minusHP(damage,damage_type)
+function MonsterBase:minusHP(damage,damage_type,is_buff)
 	local hp = self.cur_hp - damage
+
+	print(self.name.."Maxhp: "..self:getCurMaxHp().." hp: "..hp)
 
 	local cb = function()
 		self.blood_bar.updateHP(hp/self.max_hp,damage,damage_type)
@@ -706,8 +724,16 @@ function MonsterBase:minusHP(damage,damage_type)
 			self:die()
 		end
 	end
-	local callback = cc.CallFunc:create(handler(self,cb))
-	self:doSomethingLater(callback,0.5)
+	if not is_buff then
+		local callback = cc.CallFunc:create(handler(self,cb))
+		self:doSomethingLater(callback,0.3)
+	else
+		self.blood_bar.updateHP(hp/self.max_hp,damage,damage_type)
+		if hp<0 then
+			self:die(is_buff)
+		end
+	end
+
 	self:setHP(hp)
 
 	if hp > 0 then

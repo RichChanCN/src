@@ -116,11 +116,28 @@ function uitool:repeatFadeInAndOut(node)
     node:runAction(cc.RepeatForever:create(seq))
 end
 
+function uitool:repeatScale(node)
+    local children = node:getChildren()
+
+    if #children > 0 then
+        for i=1, #children do
+            self:repeatScale(children[i])
+        end
+    end
+
+    local ac1 = node:runAction(cc.ScaleTo:create(0.5,1.1)) 
+    local ac2 = node:runAction(cc.ScaleTo:create(0.5,1))
+
+    local seq = cc.Sequence:create(ac1,ac2)
+    
+    node:runAction(cc.RepeatForever:create(seq))
+end
+
 function uitool:setProgressBar(img,percent)
     if not img.raw_size then
-        img.row_size = img:getContentSize()
+        img.raw_size = img:getContentSize()
     end
-    img:setContentSize(img.row_size.width*percent,img.row_size.height)
+    img:setContentSize(img.raw_size.width*percent,img.raw_size.height)
 end
 
 function uitool:setNodeToGlobalTop(node,z)

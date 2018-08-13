@@ -26,14 +26,19 @@ function SkillBase:new(monster,skill_data)
 	return self
 end
 
+function SkillBase:isNeedTarget()
+	return self.is_need_target
+end
+
 function SkillBase:use(target_pos_num)
+	self.target_pos_num = target_pos_num
+	
 	if (not target_pos_num) and (not self.is_need_target) or self.range < 1 then
 		self.target_pos_num = self.caster:getCurPosNum()
 	elseif (not target_pos_num) and self.is_need_target then 
 		print(self.name.." need a target pos !")
 		return
 	end
-
 	local monster_list = self:getBeAffectedMonsterList()
 	--Judgment:Instance():getScene():getParticleNode():removeChildByName(self.name)
 	if #monster_list < 1 then
@@ -52,6 +57,10 @@ function SkillBase:use(target_pos_num)
 end
 
 function SkillBase:play()
+	if not self.particle_path then 
+		return
+	end
+
 	local cb = function()
 		local particle = cc.ParticleSystemQuad:create(self.particle_path)
 		particle:setName(self.name)
@@ -81,18 +90,18 @@ end
 function SkillBase:getBeAffectedMonsterList()
 	local monster_list = {}
 	if self.range<1 then
-		if (self.damage > 0 or self.debuff) and (self.healing > 0 and self.buff) then
+		if (self.damage > 0 or self.debuff) and (self.healing > 0 or self.buff) then
 			monster_list = Judgment:Instance():getAllAliveMonsters()
 		elseif self.damage > 0 or self.debuff then
 			monster_list = self.caster:getAliveEnemyMonsters()
-		elseif self.healing > 0 and self.buff then
+		elseif self.healing > 0 or self.buff then
 			monster_list = self.caster:getAliveFriendMonsters()
 		end
 	elseif self.target_pos_num and self.range > 1 then
 		local pos_list = gtool:getPosListInRange(self.target_pos_num, self.range)
 		local map_info = Judgment:Instance():getMapInfo()
 		for k,v in pairs(pos_list) do
-			if map_info[k] and self.caster:isEnemy(map_info[k]) then
+			if map_info[k] and type(map_info[k]) == type({}) and self.caster:isEnemy(map_info[k]) then
 				table.insert(monster_list,map_info[k])
 			end
 		end

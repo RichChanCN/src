@@ -23,9 +23,14 @@ function battle_info_view:initInfo()
 end
 
 function battle_info_view:initEvents()
-    self.skill_img:addClickEventListener(function(sender)
+    uitool:makeImgToButtonNoScale(self.skill_sp, function()
         if Judgment:Instance():isWaitOrder() then
-            Judgment:Instance():runGame(Judgment.Order.USE_SKILL)
+            if not self.queue_first.monster.skill:isNeedTarget() then
+                Judgment:Instance():runGame(Judgment.Order.USE_SKILL)
+            else
+                Judgment:Instance():setIsUseSkill(not Judgment:Instance():getIsUseSkill())
+                self:updateSkillImage()
+            end
         end
     end)
 
@@ -67,7 +72,7 @@ function battle_info_view:initRightBottom()
     self.wait_img       = self.right_bottom_node:getChildByName("wait_img")
     self.auto_img       = self.right_bottom_node:getChildByName("auto_img")
     self.speed_img      = self.right_bottom_node:getChildByName("speed_img")
-    self.exit_img    = self.right_bottom_node:getChildByName("exit_img")
+    self.exit_img       = self.right_bottom_node:getChildByName("exit_img")
 end
 
 function battle_info_view:initRightBottomEvents()
@@ -106,8 +111,8 @@ function battle_info_view:initLeftBottom()
     self.queue_template = self.left_bottom_img:getChildByName("queue_template")
     self.cur_monster_img = self.left_bottom_img:getChildByName("cur_monster_img")
     self.round_img = self.left_bottom_img:getChildByName("round_img")
-    self.skill_img = self.left_bottom_img:getChildByName("skill_img")
-
+    self.skill_sp = self.left_bottom_img:getChildByName("skill_sp")
+    self.skill_icon_sp = self.skill_sp:getChildByName("skill_icon_sp")
     self:initQueueLV()
 end
 
@@ -126,7 +131,7 @@ function battle_info_view:initQueueLV()
 
     self.next_round_in_queue = self.round_img:clone()
     self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
-    self:updateSkill()
+    self:updateSkillImage()
 end
 
 function battle_info_view:updateLVItem(item,monster,update_only)
@@ -257,15 +262,37 @@ function battle_info_view:updateRightBottomQueue(is_wait)
         self.queue_lv:insertCustomItem(last_item,index)
     end
 
-    self:updateSkill()
+    self:updateSkillImage()
 end
 
-function battle_info_view:updateSkill()
+function battle_info_view:updateSkillImage()
     if self.queue_first.monster:canUseSkill() then
-        self.skill_img:loadTexture(self.queue_first.monster.skill.img_path)
-        self.skill_img:setVisible(true)
+        if self.skill_sp.particle then
+            self.skill_sp:removeChildByName("skillicon")
+        end
+        if Judgment:Instance():getIsUseSkill() then
+            local particle = cc.ParticleSystemQuad:create(Config.Particle.skill_will_use)
+            particle:setName("skillicon")
+            particle:setScale(0.6)
+            particle:setGlobalZOrder(uitool:mid_Z_order())
+            particle:setPosition(uitool:getNodeCenterPosition(self.skill_sp))
+            self.skill_sp:addChild(particle)
+            self.skill_sp.particle = particle
+            self.skill_sp:setVisible(true)
+        else
+            self.skill_sp:setTexture(self.queue_first.monster.skill.img_path)
+            local particle = cc.ParticleSystemQuad:create(Config.Particle.skill_can_use)
+            particle:setName("skillicon")
+            particle:setScale(1)
+            particle:setGlobalZOrder(uitool:mid_Z_order())
+            particle:setPosition(uitool:getNodeCenterPosition(self.skill_sp))
+            self.skill_sp:addChild(particle)
+            self.skill_sp.particle = particle
+            self.skill_sp:setVisible(true)
+        end
     else
-        self.skill_img:setVisible(false)
+
+        self.skill_sp:setVisible(false)
     end
 end
 -----------------------左下队列节点开始-----------------------

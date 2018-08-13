@@ -89,11 +89,19 @@ end
 
 function Judgment:initGame(left_team,right_team,map,story_num,level_num)
 	self.game_speed = 1
+	self.is_use_skill = false
 	self.map = map
 	self.story_num = story_num
 	self.level_num = level_num
-	self.left_team = left_team
-	self.right_team = right_team
+
+	self.left_team = {}
+	for k,v in pairs(left_team) do
+		table.insert(self.left_team,v)
+	end
+	self.right_team = {}
+	for k,v in pairs(right_team) do
+		table.insert(self.right_team,v)
+	end
 
 	self:sortAllMonstersByInitiative()
 	self.cur_round_monster_queue = self:getAllMonsters()
@@ -163,6 +171,7 @@ function Judgment:getDeadMonsterNum()
 end
 
 function Judgment:nextMonsterActivate(is_wait)
+	self:setIsUseSkill(false)
 	if is_wait then
 		table.insert(self.cur_round_monster_queue,self.cur_active_monster)
 		table.insert(self.next_round_monster_queue,self.cur_active_monster)
@@ -239,7 +248,12 @@ end
 
 function Judgment:selectTarget(num,distance)
 	if self.map_info[num] and self.map_info[num]:isMonster() then
-		self:runGame(Judgment.Order.ATTACK, self.map_info[num],distance)
+		if not self:getIsUseSkill() then
+			self:runGame(Judgment.Order.ATTACK, self.map_info[num],distance)
+		else
+			self:runGame(Judgment.Order.USE_SKILL, num)
+			self:setIsUseSkill(false)
+		end
 	end
 end
 
@@ -264,7 +278,7 @@ function Judgment:stopAuto()
 	self:setAuto(false)
 end
 
-function Judgment:checkGameOver()
+function Judgment:checkGameOver(is_buff)
 	local right = self:getRightAliveMonsters()
 	local left = self:getLeftAliveMonsters()
 	
@@ -272,10 +286,18 @@ function Judgment:checkGameOver()
 		self:gameOver(1)
 	elseif #left < 1 then
 		self:gameOver(4)
-	else
+	elseif not is_buff then
 		self:nextMonsterActivate()
 	end
 
+end
+
+function Judgment:setIsUseSkill(is_use_skill)
+	self.is_use_skill = is_use_skill
+end
+
+function Judgment:getIsUseSkill()
+	return self.is_use_skill
 end
 
 function Judgment:setAuto(is_auto)
@@ -349,7 +371,7 @@ end
 
 function Judgment:getAllMonsters()
 	local all = {}
-	
+	print(#self.left_team)
 	for _,v in pairs(self.left_team) do
 		table.insert(all,v)
 	end
@@ -424,22 +446,9 @@ function Judgment:getPositionByInt(num)
 	return self.scene.map_view:getPositionByInt(num)
 end
 
-function Judgment:clearAllMonsters()
-	for k,v in pairs(self.left_team) do
-		--v.node:release()
-		v.model = nil
-		v.animation = nil
-		v = nil
-	end
-
+function Judgment:clearTeam()
 	self.left_team = {}
 
-	for k,v in pairs(self.right_team) do
-		--v.node:release()
-		v.model = nil
-		v.animation = nil
-		v = nil
-	end
-
 	self.right_team = {}
+
 end

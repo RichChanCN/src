@@ -31,7 +31,7 @@ function FightScene:onEnter()
 end
 
 function FightScene:onExit()
-	Judgment:Instance():clearAllMonsters()
+	Judgment:Instance():clearTeam()
 	self.map_view:clearModelPanel()
 end
 
