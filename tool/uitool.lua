@@ -254,3 +254,42 @@ function uitool:makeImgToButtonHT(img,camera,callback)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
+
+function uitool:initMonsterCardWithIDAndNum(card,id,num,click_event)
+    local monster = Config.Monster[id]
+    card:loadTexture(monster.char_img_path)
+    card.border_img = card:getChildByName("border_img")
+    card.border_img:loadTexture(Config.sprite["card_border_"..monster.rarity])
+    card.type_img = card:getChildByName("type_img")
+    card.type_img:loadTexture(Config.sprite["attack_type_"..monster.attack_type])
+    card.num_text = card:getChildByName("num_text")
+    card.num_text:setString("X"..num)
+    card.num_text:setTextColor(Config.color["rarity_color_"..monster.rarity])
+    if click_event then 
+        cur_monster.head_img:addClickEventListener(click_event)
+    end
+
+end
+
+function uitool:initOtherCardWithTypeAndNum(card,ctype,num,click_event)
+    card.border_img = card:getChildByName("border_img")
+    card.border_img:loadTexture(Config.sprite.card_border_0)
+    local x,y = card.border_img:getPosition()
+    card.border_img:setPosition(x+3,y)
+    card.type_img = card:getChildByName("type_img")
+    card.type_img:setVisible(false)
+    card.num_text = card:getChildByName("num_text")
+    card.num_text:setString("+"..num)
+    if ctype == "coin" then
+        card:loadTexture(Config.sprite.card_coin)
+        card.num_text:setTextColor(Config.color.coin)
+    elseif ctype == "crystal" then
+        card:loadTexture(Config.sprite.card_crystal)
+        card.num_text:setTextColor(Config.color.crystal)
+    end
+    
+    if click_event then 
+        cur_monster.head_img:addClickEventListener(click_event)
+    end
+
+end

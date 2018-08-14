@@ -5,6 +5,12 @@ Config.sprite = {
 	gezi_barrier = Config.sprite_path.."hex_tile_barrier.png",
 	gezi_disable = Config.sprite_path.."hex_tile_disabled.png",
 	
+	card_crystal 	= Config.sprite_path.."icon_crystal.png",
+	card_coin 		= Config.sprite_path.."icon_gold.png",
+
+	lager_star_got 		= Config.sprite_path.."site_big_star.png",
+	lager_star_empty 	= Config.sprite_path.."site_big_star_gray.png",
+
 	buff_defend = Config.sprite_path.."common_defend.png",
 
 	selected = Config.sprite_path.."icon_selected_1.png",
@@ -45,6 +51,9 @@ Config.color = {
 	rarity_color_2 = cc.c4b(74,154,219,255),
 	rarity_color_3 = cc.c4b(193,78,242,255),
 	rarity_color_4 = cc.c4b(243,146,46,255),
+
+	coin 	= cc.c4b(255,255,0,255),
+	crystal = cc.c4b(30,144,255,255),
 
 	--miss_color
 	damage_0 = cc.c4b(0,0,0,255),

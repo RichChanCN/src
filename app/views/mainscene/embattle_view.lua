@@ -26,7 +26,7 @@ function embattle_view:initInfo()
 end
 
 function embattle_view:updateInfo(map_data)
-	self.story_num = map_data.story_num
+	self.chapter_num = map_data.chapter_num
 	self.level_num = map_data.level_num
 	--上场怪物数量限制
 	self.monster_num_limit = map_data.monster_num_limit
@@ -68,7 +68,7 @@ function embattle_view:initEvents()
     		return
     	end
     	local left_team = self:makeTeam()
-    	Judgment:Instance():initGame(left_team,self.enemy_team,self.other_gezi,self.story_num,self.level_num)
+    	Judgment:Instance():initGame(left_team,self.enemy_team,self.other_gezi,self.chapter_num,self.level_num)
         self.ctrl:goToFightScene()
     end)
 end

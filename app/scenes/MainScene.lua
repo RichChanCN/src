@@ -27,11 +27,20 @@ MainScene.VIEW_PATH = "app.views.mainscene"
 
 function MainScene:onCreate()
 	self.map_data = require("app.data.MapData")
+	self.save_data = require("app.data.SaveData")
+	self:dataInit()
 	self:viewInit()
 end
 
 function MainScene:onEnter()
-	
+	self:openMainView()
+end
+
+function MainScene:onExit()
+end
+
+function MainScene:dataInit()
+	self.save_data:init(self)
 end
 
 function MainScene:viewInit()
@@ -43,7 +52,6 @@ function MainScene:viewInit()
 	self.embattle_view:init()
 	self.monster_list_view:init()
 	self.monster_info_view:init()
-	print("main scene inited")
 end
 
 function MainScene:goToFightScene()
@@ -54,6 +62,30 @@ function MainScene:goToFightScene()
 		local ts = cc.TransitionFadeTR:create(1.5, scene)
 		cc.Director:getInstance():pushScene(ts)
 	end	
+end
+
+function MainScene:getMapData()
+	return self.map_data
+end
+
+function MainScene:getSaveData()
+	return self.save_data
+end
+
+function MainScene:saveData()
+	return self.save_data:save()
+end
+
+function MainScene:getRewardByChapterAndLevel(chapter_num,level_num)
+	return self.map_data:getRewardByChapterAndLevel(chapter_num,level_num)
+end
+
+function MainScene:getStarNumByChapterAndLevel(chapter_num,level_num)
+	return self.save_data:getStarNumByChapterAndLevel(chapter_num,level_num)
+end
+
+function MainScene:getPlayerData()
+	return self.save_data:getPlayerData()
 end
 
 function MainScene:openMainView()
@@ -117,8 +149,8 @@ function MainScene:openEmbattleView()
 	end
 end
 
-function MainScene:openSpecificEmbattleView(story_num,level_num)
-	local data = self.map_data:getMapDataByStoryAndLevel(story_num,level_num)
+function MainScene:openSpecificEmbattleView(chapter_num,level_num)
+	local data = self.map_data:getMapDataByStoryAndLevel(chapter_num,level_num)
 	if self.embattle_view then
         self.adventure_view:closeView()
 		self.embattle_view:openView(data)
@@ -132,9 +164,9 @@ function MainScene:closeEmbattleView()
 	end
 end
 
-function MainScene:openConfirmView(story_num,level_num)
+function MainScene:openConfirmView(chapter_num,level_num)
 	if self.confirm_view then
-		self.confirm_view:openView(story_num,level_num)
+		self.confirm_view:openView(chapter_num,level_num,reward_data)
 	end
 end
 

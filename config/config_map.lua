@@ -3,6 +3,15 @@ Config = Config or {}
 Config.Map = {
 	[1] = {
 		[1] = {
+			reward = {
+				monster = {
+					[1] = 1,
+					[2] = 2,
+				},
+				exp = 50,
+				crystal = 10,
+				coin = 100,
+			},
 			can_use_monster_list = {1},
 			monster_num_limit = 1,
 			barrier_model = Config.model_path.."tree.c3b",
@@ -26,6 +35,14 @@ Config.Map = {
 		},
 
 		[2] = {
+			reward = {
+				monster = {
+					[2] = 2,
+				},
+				exp = 50,
+				crystal = 10,
+				coin = 200,
+			},
 			can_use_monster_list = nil,
 			monster_num_limit = 5,
 			barrier_model = Config.model_path.."tree.c3b",
@@ -54,6 +71,15 @@ Config.Map = {
 		},
 
 		[3] = {
+			reward = {
+				monster = {
+					[2] = 1,
+					[3] = 1,
+				},
+				exp = 50,
+				crystal = 10,
+				coin = 100,
+			},
 			can_use_monster_list = nil,
 			monster_num_limit = 5,
 			barrier_model = Config.model_path.."tree.c3b",
@@ -83,6 +109,15 @@ Config.Map = {
 		},
 
 		[4] = {
+			reward = {
+				monster = {
+					[2] = 1,
+					[3] = 1,
+				},
+				exp = 50,
+				crystal = 10,
+				coin = 100,
+			},
 			can_use_monster_list = nil,
 			monster_num_limit = 5,
 			barrier_model = Config.model_path.."tree.c3b",
@@ -114,6 +149,15 @@ Config.Map = {
 		},
 
 		[5] = {
+			reward = {
+				monster = {
+					[2] = 1,
+					[3] = 1,
+				},
+				exp = 50,
+				crystal = 0,
+				coin = 100,
+			},
 			can_use_monster_list = nil,
 			monster_num_limit = 5,
 			barrier_model = Config.model_path.."tree.c3b",

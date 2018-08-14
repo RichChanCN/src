@@ -218,8 +218,8 @@ function map_view:createOtherModel(other_model,pos)
 		self.model_panel:addChild(model)
 	end
 	if other_model == 2 then
-		local story_num, level_num = Judgment:Instance():getCurStoryAndLevelNum()
-		local barrier = self.ctrl.map_data:getBarrierModelByStoryAndLevel(story_num, level_num)
+		local chapter_num, level_num = Judgment:Instance():getCurStoryAndLevelNum()
+		local barrier = self.ctrl.map_data:getBarrierModelByChapterAndLevel(chapter_num, level_num)
     	cc.Sprite3D:createAsync(barrier,callback)
     end
 end

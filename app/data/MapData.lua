@@ -1,11 +1,11 @@
 local MapData = {}
 
-function MapData:getMapDataByStoryAndLevel(story_num, level_num)
+function MapData:getMapDataByStoryAndLevel(chapter_num, level_num)
 	local MonsterBase = require("app.logic.MonsterBase")
-	local raw_data = Config.Map[story_num][level_num]
+	local raw_data = Config.Map[chapter_num][level_num]
 	local ret_data = {}
 
-	ret_data.story_num = story_num
+	ret_data.chapter_num = chapter_num
 	ret_data.level_num = level_num
 	ret_data.enable_gezi = {}
 	ret_data.other_gezi = {}
@@ -35,10 +35,14 @@ function MapData:getMapDataByStoryAndLevel(story_num, level_num)
 	return ret_data
 end
 
-function MapData:getBarrierModelByStoryAndLevel(story_num, level_num)
+function MapData:getRewardByChapterAndLevel(chapter_num, level_num)
+	return Config.Map[chapter_num][level_num].reward
+end
+
+function MapData:getBarrierModelByChapterAndLevel(chapter_num, level_num)
 	local MonsterBase = require("app.logic.MonsterBase")
 
-	return Config.Map[story_num][level_num].barrier_model
+	return Config.Map[chapter_num][level_num].barrier_model
 end
 
 return MapData

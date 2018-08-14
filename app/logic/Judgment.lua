@@ -87,11 +87,11 @@ function Judgment:getScene(scene)
 	return self.scene
 end
 
-function Judgment:initGame(left_team,right_team,map,story_num,level_num)
+function Judgment:initGame(left_team,right_team,map,chapter_num,level_num)
 	self.game_speed = 1
 	self.is_use_skill = false
 	self.map = map
-	self.story_num = story_num
+	self.chapter_num = chapter_num
 	self.level_num = level_num
 
 	self.left_team = {}
@@ -358,7 +358,7 @@ function Judgment:getNextRoundMonsterQueue()
 end
 
 function Judgment:getCurStoryAndLevelNum()
-	return self.story_num,self.level_num
+	return self.chapter_num,self.level_num
 end
 
 function Judgment:isWaitOrder()
