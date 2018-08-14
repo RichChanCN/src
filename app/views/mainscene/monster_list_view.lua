@@ -40,20 +40,13 @@ function monster_list_view:updateView()
 
 end
 
-function monster_list_view:openView()
-	if not self.is_inited then
-		self:init()
-	end
-
+function monster_list_view:onOpen()
 	self:resumeMonsterListListener()
-	self.root:setPosition(uitool:zero())
 end
 
-function monster_list_view:closeView()
+function monster_list_view:onClose()
 	self:pauseMonsterListListener()
-	self.root:setPosition(uitool:farAway())
 end
-
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------

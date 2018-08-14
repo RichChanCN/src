@@ -34,6 +34,7 @@ end
 
 function MainScene:onEnter()
 	self:openMainView()
+	self:openTitleRightView()
 end
 
 function MainScene:onExit()
@@ -97,6 +98,12 @@ end
 function MainScene:closeMainView()
 	if self.main_view then
 		self.main_view:closeView()
+	end
+end
+
+function MainScene:openTitleRightView()
+	if self.title_right_view then
+		self.title_right_view:openView()
 	end
 end
 

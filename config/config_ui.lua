@@ -11,6 +11,9 @@ Config.sprite = {
 	lager_star_got 		= Config.sprite_path.."site_big_star.png",
 	lager_star_empty 	= Config.sprite_path.."site_big_star_gray.png",
 
+	result_star_got = Config.sprite_path.."star.png",
+	result_star_gray = Config.sprite_path.."star_gray.png",
+
 	buff_defend = Config.sprite_path.."common_defend.png",
 
 	selected = Config.sprite_path.."icon_selected_1.png",
@@ -87,4 +90,8 @@ Config.text = {
 	rarity_text_2 = "RARITY: EPIC MONSTER",
 	rarity_text_3 = "RARITY: MONSTROUS MONSTER",
 	rarity_text_4 = "RARITY: DIABOLIC MONSTER",
+
+	reward_had_got = "You have already received the rewards!",
+	reward_first_get = "You win these rewards!"
+
 }

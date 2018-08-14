@@ -18,9 +18,13 @@ function main_view:initUI()
     self:initBottomNode()
 end
 
-function main_view:initInfo()
-
-end
+-- function main_view:initInfo()
+--     local player_data = self.ctrl:getPlayerData()
+--     self.nickname = player_data.nickname
+--     self.face_sp = player_data.face_sp
+--     self.exp = player_data.exp
+--     self.level = player_data.level
+-- end
 
 function main_view:initEvents()
 	uitool:makeImgToButton(self.adventure_img,function(sender)
@@ -53,17 +57,9 @@ function main_view:updateView()
     uitool:setProgressBar(self.exp_now_img, self.exp/(100+(self.level-1)*20))
 end
 
-function main_view:openView()
-    if not self.is_inited then
-        self:init()
-    end
+function main_view:onOpen()
     self:updateInfo()
     self:updateView()
-    self.root:setPosition(uitool:zero())
-end
-
-function main_view:closeView()
-    self.root:setPosition(uitool:farAway())
 end
 
 ----------------------------------------------------------------

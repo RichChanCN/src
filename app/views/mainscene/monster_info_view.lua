@@ -69,18 +69,13 @@ function monster_info_view:updateView(monster_list,index)
     self:updateRightInfoNode(monster_list[index])
 end
 
-function monster_info_view:openView(monster_list,index)
-    if not self.is_inited then
-        self:init()
-    end
+function monster_info_view:onOpen()
     self:updateView(monster_list,index)
-    self.root:setPosition(uitool:zero())
     self.left_node:runAction(cc.MoveTo:create(0.2,self.left_node_final_pos))
     self.info_bg_img:runAction(cc.MoveTo:create(0.2,self.right_node_final_pos))
 end
 
-function monster_info_view:closeView()
-    self.root:setPosition(uitool:farAway())
+function monster_info_view:onClose()
     self.left_node:setPosition(self.left_node_start_pos)
     self.info_bg_img:setPosition(self.right_node_start_pos)
 end

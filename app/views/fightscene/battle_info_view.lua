@@ -160,9 +160,8 @@ function battle_info_view:updateLVItem(item,monster,update_only)
         end
     end
 
-    local removeSelf = function()
-        local index = self.queue_lv:getIndex(item)
-        self.queue_lv:removeItem(index)
+    local removeSelf = function(card)
+        self.queue_lv:removeChild(card)
     end
 
     item.update = update
@@ -230,6 +229,9 @@ function battle_info_view:updateRightBottomQueue(is_wait)
         if not self.queue_lv:getItem(0).monster then
             self.queue_lv:removeItem(0)
 
+            if not self.queue_lv:getItem(0) then
+                return
+            end
             self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
             self.queue_lv:pushBackCustomItem(last_item)

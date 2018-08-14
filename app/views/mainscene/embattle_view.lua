@@ -103,11 +103,10 @@ function embattle_view:openView(map_data)
 	end
 end
 
-function embattle_view:closeView()
+function embattle_view:onClose()
 	self:pauseMonsterListListener()
 	self:pauseArenaListener()
 	self:resetArena()
-	self.root:setPosition(uitool:farAway())
 end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
@@ -384,9 +383,8 @@ function embattle_view:removeOneChesspieceFromArena(chesspiece)
 		chesspiece.arena_cell.chesspiece = nil
 		chesspiece.arena_cell = nil
 	end
-	print("removeOneChesspieceFromArena")
+	
 	if chesspiece.from_card then
-		print("remove selected")
 		self:unselectTheCard(chesspiece.from_card)
 	end
 	self.hex_node:removeChild(chesspiece)

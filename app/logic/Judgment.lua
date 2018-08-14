@@ -77,16 +77,6 @@ function Judgment:Instance()
 	return self.instance
 end
 
-function Judgment:setScene(scene)
-	self.action_node = cc.Node:create()
-	self.scene = scene
-	self.scene:addChild(self.action_node)
-end
-
-function Judgment:getScene(scene)
-	return self.scene
-end
-
 function Judgment:initGame(left_team,right_team,map,chapter_num,level_num)
 	self.game_speed = 1
 	self.is_use_skill = false
@@ -139,37 +129,6 @@ function Judgment:gameOver(win_side)
 	end
 end
 
-function Judgment:getGameResult(win_side)
-	local result = {}
-	local star_num = 0
-
-	if win_side == 1 then
-		star_num = star_num + 1
-		if self.cur_round_num < 6 then
-			star_num = star_num + 1
-		end
-		if self:getDeadMonsterNum() < 1 then
-			star_num = star_num + 1
-		end
-	end
-
-	result.star_num = star_num 
-
-	return result
-end
-
-function Judgment:getDeadMonsterNum()
-	local num = 0
-
-	for k,v in pairs(self.left_team) do
-		if v:isDead() then
-			num = num + 1
-		end
-	end
-
-	return num
-end
-
 function Judgment:nextMonsterActivate(is_wait)
 	self:setIsUseSkill(false)
 	if is_wait then
@@ -215,10 +174,6 @@ function Judgment:aliveMonsterEnterNewRound()
 	end
 end
 
-function Judgment:getNextMonster()
-	self.cur_active_monster_index = self.cur_active_monster_index + 1
-	return self.cur_round_monster_queue[self.cur_active_monster_index]
-end
 function Judgment:updateMapInfo()
 	self.map_info = {}
 
@@ -296,6 +251,55 @@ function Judgment:setIsUseSkill(is_use_skill)
 	self.is_use_skill = is_use_skill
 end
 
+function Judgment:setScene(scene)
+	self.action_node = cc.Node:create()
+	self.scene = scene
+	self.scene:addChild(self.action_node)
+end
+
+function Judgment:getScene(scene)
+	return self.scene
+end
+
+function Judgment:getGameResult(win_side)
+	local result = {}
+	local star_num = 0
+
+	if win_side == 1 then
+		star_num = star_num + 1
+		if self.cur_round_num < 6 then
+			star_num = star_num + 1
+		end
+		if self:getDeadMonsterNum() < 1 then
+			star_num = star_num + 1
+		end
+	end
+
+	result.star_num = star_num 
+
+	result.chapter_num = self.chapter_num
+	result.level_num = self.level_num
+
+	return result
+end
+
+function Judgment:getDeadMonsterNum()
+	local num = 0
+
+	for k,v in pairs(self.left_team) do
+		if v:isDead() then
+			num = num + 1
+		end
+	end
+
+	return num
+end
+
+function Judgment:getNextMonster()
+	self.cur_active_monster_index = self.cur_active_monster_index + 1
+	return self.cur_round_monster_queue[self.cur_active_monster_index]
+end
+
 function Judgment:getIsUseSkill()
 	return self.is_use_skill
 end
@@ -371,7 +375,7 @@ end
 
 function Judgment:getAllMonsters()
 	local all = {}
-	print(#self.left_team)
+	
 	for _,v in pairs(self.left_team) do
 		table.insert(all,v)
 	end
