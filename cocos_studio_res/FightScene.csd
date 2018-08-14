@@ -2332,7 +2332,7 @@
                 <PreSize X="0.0573" Y="0.1037" />
                 <FileData Type="Normal" Path="Sprite/combat_result_star.png" Plist="" />
               </AbstractNodeData>
-              <AbstractNodeData Name="reslut_text" ActionTag="-969006666" CallBackType="Touch" Tag="246" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="623.5000" RightMargin="623.5000" TopMargin="502.0000" BottomMargin="542.0000" FontSize="40" LabelText="You have already received the prize!" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+              <AbstractNodeData Name="result_text" ActionTag="-969006666" CallBackType="Touch" Tag="246" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="623.5000" RightMargin="623.5000" TopMargin="502.0000" BottomMargin="542.0000" FontSize="40" LabelText="You have already received the prize!" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                 <Size X="673.0000" Y="36.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                 <Position X="960.0000" Y="560.0000" />
@@ -2343,6 +2343,15 @@
                 <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                 <OutlineColor A="255" R="0" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
+              </AbstractNodeData>
+              <AbstractNodeData Name="reward_node" ActionTag="1015137967" Tag="533" IconVisible="True" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="960.0000" RightMargin="960.0000" TopMargin="723.6000" BottomMargin="356.4000" ctype="SingleNodeObjectData">
+                <Size X="0.0000" Y="0.0000" />
+                <AnchorPoint />
+                <Position X="960.0000" Y="356.4000" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <PrePosition X="0.5000" Y="0.3300" />
+                <PreSize X="0.0000" Y="0.0000" />
               </AbstractNodeData>
               <AbstractNodeData Name="left_btn_img" ActionTag="646124608" Tag="247" IconVisible="False" LeftMargin="570.0000" RightMargin="1050.0000" TopMargin="935.0000" BottomMargin="55.0000" Scale9Enable="True" LeftEage="25" RightEage="25" TopEage="22" BottomEage="22" Scale9OriginX="25" Scale9OriginY="22" Scale9Width="28" Scale9Height="24" ctype="ImageViewObjectData">
                 <Size X="300.0000" Y="90.0000" />
