@@ -28,8 +28,41 @@ function SaveData:getPlayerData()
 	return self.player
 end
 
+function SaveData:setStarNum(chapter_num,level_num,num)
+	self.story[chapter_num][level_num] = num
+end
+
+function SaveData:addMonsterCardNum(id,num)
+	if self.monsters.collected[id] then
+		self.monsters.collected[id].card_num = self.monsters.collected[id].card_num + num
+	else
+		self.monsters.collected[id] = {}
+		self.monsters.collected[id].card_num = num
+		self.monsters.collected[id].level = 1
+	end
+end
+
+function SaveData:addCoinNum(num)
+	self.player.coin_num = self.player.coin_num + num
+end
+
+function SaveData:addCrystalNum(num)
+	self.player.crystal_num = self.player.crystal_num + num
+end
+
+function SaveData:addExp(exp)
+	self.player.exp = self.player.exp + exp
+	if not (self.player.exp < self.player.cur_max_exp) then
+		self.player.level = self.player.level + 1
+		self.player.exp = 0
+		exp = exp - self.player.cur_max_exp
+		self.player.cur_max_exp = (100+(self.player.level-1)*20)
+		self:addExp(exp)
+	end
+end
+
 function SaveData:loadData()
-	local xmlfile = xml.load(Config.XML_path.."test.data")
+	local xmlfile = xml.load(Config.XML_path.."save1.data")
 	self.time = xmlfile.time
 
 	for key,value in pairs(self) do
@@ -46,6 +79,8 @@ function SaveData:loadData()
 			self.player[k] = tonumber(v)
 		end
 	end
+
+	self.player.cur_max_exp = (100+(self.player.level-1)*20)
 end
 
 function SaveData:loadHelp(xml)

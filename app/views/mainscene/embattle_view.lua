@@ -31,7 +31,7 @@ function embattle_view:updateInfo(map_data)
 	--上场怪物数量限制
 	self.monster_num_limit = map_data.monster_num_limit
 	--可以使用的怪物信息
-	self.can_use_monster_list = map_data.can_use_monster_list or self.ctrl:getCollectedMonsterList()
+	self.can_use_monster_list = map_data.can_use_monster_list or GameDataCtrl:Instance():getCollectedMonsterList()
 	--竞技场的布局信息
 	self.enable_gezi = map_data.enable_gezi
 	self.other_gezi = map_data.other_gezi
@@ -78,7 +78,7 @@ function embattle_view:updateView(map_data)
 		self:updateArena()
 		self:initEvents()
 		self:initMonsterLV()
-
+		self:updateMonstersNum()
 		self.is_updated = true 
 end
 
@@ -86,11 +86,12 @@ function embattle_view:updateMonstersNum()
 	self.select_num_text:setString("MonsterSelect ("..self.team_size.."/"..self.monster_num_limit..")")
 end
 
-function embattle_view:openView(map_data)
+function embattle_view:openView(chapter_num,level_num)
 	if not self.is_inited then
 		self:init()
 	end
-	if map_data then
+	if chapter_num and level_num then
+		local map_data = GameDataCtrl:Instance():getMapDataByStoryAndLevel(chapter_num,level_num)
 		self:resetArena()
 		self.monster_lv:removeAllItems()
 		self.hex_node:removeAllChildren()

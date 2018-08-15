@@ -6,6 +6,7 @@ require "cocos.init"
 require "tool.LuaXML"
 require "tool.mytool"
 require "tool.uitool"
+require "app.logic.GameDataCtrl"
 require "config.config_path"
 require "config.config_particle"
 require "config.config_ui"
@@ -22,6 +23,8 @@ local function main()
 
 	cc.FileUtils:getInstance():addSearchPath("src")
 	cc.FileUtils:getInstance():addSearchPath("res")
+
+	GameDataCtrl:Instance():init()
 
     require("app.MyApp"):create():run()
 end

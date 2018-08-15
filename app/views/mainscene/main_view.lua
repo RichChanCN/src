@@ -42,10 +42,11 @@ function main_view:initEvents()
 end
 
 function main_view:updateInfo()
-    local player_data = self.ctrl:getPlayerData()
+    local player_data = GameDataCtrl:Instance():getPlayerData()
     self.nickname = player_data.nickname
     self.face_sp = player_data.face_sp
     self.exp = player_data.exp
+    self.cur_max_exp = player_data.cur_max_exp
     self.level = player_data.level
 end
 
@@ -54,7 +55,7 @@ function main_view:updateView()
     self.title_face_sp:setTexture(Config.monster_img_path..self.face_sp)
     self.nickname_text:setString(self.nickname)
     self.level_text:setString(self.level)
-    uitool:setProgressBar(self.exp_now_img, self.exp/(100+(self.level-1)*20))
+    uitool:setProgressBar(self.exp_now_img, self.exp/self.cur_max_exp)
 end
 
 function main_view:onOpen()

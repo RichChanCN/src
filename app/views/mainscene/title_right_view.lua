@@ -30,7 +30,7 @@ function title_right_view:initEvents()
 end
 
 function title_right_view:updateInfo()
-    local player_data = self.ctrl:getPlayerData()
+    local player_data = GameDataCtrl:Instance():getPlayerData()
     self.coin_num = player_data.coin_num
     self.crystal_num = player_data.crystal_num
 end

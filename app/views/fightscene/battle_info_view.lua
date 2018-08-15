@@ -160,8 +160,8 @@ function battle_info_view:updateLVItem(item,monster,update_only)
         end
     end
 
-    local removeSelf = function(card)
-        self.queue_lv:removeChild(card)
+    local removeSelf = function()
+        self.queue_lv:removeChild(item)
     end
 
     item.update = update
@@ -234,25 +234,36 @@ function battle_info_view:updateRightBottomQueue(is_wait)
             end
             self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
-            self.queue_lv:pushBackCustomItem(last_item)
 
-            last_item:setOpacity(0)
-            last_item:runAction(cc.FadeIn:create(0.3))
-
+            if not last_item.monster:isDead() then
+                self.queue_lv:pushBackCustomItem(last_item)
+    
+                last_item:setOpacity(0)
+                last_item:runAction(cc.FadeIn:create(0.3))
+            end
+            
             self.next_round_in_queue = self.round_img:clone()
             local text = self.next_round_in_queue:getChildByName("round_text")
             text:setString(self.cur_round+1)
             self.round_text:setString("ROUND "..self.cur_round)
             
             self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
-            
         else
             self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
-            self.queue_lv:pushBackCustomItem(last_item)
-            
-            last_item:setOpacity(0)
-            last_item:runAction(cc.FadeIn:create(0.3))
+
+            if not last_item.monster:isDead() then
+                local index = self.queue_lv:getIndex(self.next_round_in_queue)
+                index = index + Judgment:Instance():getMonsterIndexInNextRoundAliveMonster(last_item.monster)
+                if self.queue_lv:getItem(index) then
+                    self.queue_lv:insertCustomItem(last_item,index)
+                else
+                    self.queue_lv:pushBackCustomItem(last_item)
+                end
+                
+                last_item:setOpacity(0)
+                last_item:runAction(cc.FadeIn:create(0.3))
+            end
         end
     else
         if not self.queue_lv:getItem(0).monster then

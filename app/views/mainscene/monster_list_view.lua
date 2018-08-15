@@ -25,7 +25,7 @@ end
 
 function monster_list_view:initInfo()
 	self.card_list = {}
-    self.collected_monster_list = self.ctrl:getCollectedMonsterList()
+    self.collected_monster_list = GameDataCtrl:Instance():getCollectedMonsterList()
 	--事件分发器
 	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end

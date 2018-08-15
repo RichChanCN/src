@@ -245,6 +245,10 @@ function MonsterBase:hasWaited()
 	return self.has_waited
 end
 
+function MonsterBase:hasLastRoundWaited()
+	return self.has_last_round_waited
+end
+
 function MonsterBase:isPlayer()
 	return self.team_side == MonsterBase.TeamSide.LEFT
 end
@@ -284,14 +288,16 @@ function MonsterBase:canAttack()
 	return self.status < MonsterBase.Status.CANT_ATTACK
 end
 
+
+----------------------------自动触发----------------------------------
+----------------------------自动触发----------------------------------
+----------------------------自动触发----------------------------------
+
 function MonsterBase:onEnterNewRound(round_num)
+	self.has_last_round_waited = self.has_waited
 	self.has_waited = false
 end
 
-
-----------------------------自动触发----------------------------------
-----------------------------自动触发----------------------------------
-----------------------------自动触发----------------------------------
 function MonsterBase:onActive(round_num)
 	if not self:hasWaited() then
 		self:dealWithAllBuff()
@@ -422,7 +428,7 @@ end
 
 function MonsterBase:die(is_buff_or_skill)
 	self.status = MonsterBase.Status.DEAD
-	self.card.removeSelf(self.card)
+	self.card.removeSelf()
 	local ac = self.model:runAction(cc.FadeOut:create(1))
 	local cb = function()
 		self.node:setVisible(false)
@@ -1301,6 +1307,9 @@ function MonsterBase:runAI()
 	if target_enemy then
 		local pos_num = gtool:ccpToInt(target_enemy.cur_pos)
 		local distance = self:getDistanceToPos(pos_num)
+		if self:canUseSkill() then
+			return self:useSkill(target_enemy:getCurPosNum())
+		end
 		if self:isMelee() then
 			self:moveAndAttack(target_enemy)
 		else
@@ -1348,6 +1357,9 @@ end
 function MonsterBase:moveCloseToLowestHpEnemy(enemy_list,map_info)
 	local enemy = self:getLowestHpEnemy(enemy_list)
 
+	if not enemy then
+		return
+	end
 	local pos_num = gtool:ccpToInt(enemy.cur_pos)
 
 	local all_path = self:getPathInfoToTarget(map_info,pos_num)

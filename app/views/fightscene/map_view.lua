@@ -12,9 +12,12 @@ map_view.RESOURCE_BINDING = {
     ["mask_img"]			= {["varname"] = "mask_img"},
     ["blood_template"]		= {["varname"] = "blood_template"},
     ["fly_word_template"]	= {["varname"] = "fly_word_template"},
+    ["pre_panel"]			= {["varname"] = "pre_panel"},
+    ["logo_node"]			= {["varname"] = "logo_node"},
 }
 
 function map_view:initUI()
+	self:initPrePanel()
 	self:initArena()
 	self:initArenaBottomNode()
 end
@@ -46,12 +49,17 @@ function map_view:updateView()
 end
 
 function map_view:beginAnimation()
-    local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time,0.75))
-    local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,1))
-    local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.startGame))
+	self:playEnterAnimation()
+	self:cameraAnimation()
+end
 
-    local seq = cc.Sequence:create(ac1,ac2,callback)
-	
+function map_view:cameraAnimation()
+	local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time+3,0.75))
+	local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,1))
+	local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.startGame))
+
+	local seq = cc.Sequence:create(ac1,ac2,callback)
+		
 	self:showMask()
 	self.root:runAction(seq)
 end
@@ -75,7 +83,7 @@ function map_view:getPositionByInt(num)
 	return cc.p(a,b)
 end
 ----------------------------------------------------------------
--------------------------------私有方法--------------------------
+-------------------------------Ë½ÓÐ·½·¨--------------------------
 ----------------------------------------------------------------
 function map_view:showOtherAroundInfo(monster)
 	self:hideGuide()
@@ -157,7 +165,7 @@ function map_view:hideGuide()
 end
 
 function map_view:showMask()
-	local ac1 = self.mask_img:runAction(cc.FadeOut:create(self.ctrl.Wait_Time))
+	local ac1 = self.mask_img:runAction(cc.FadeOut:create(self.ctrl.Wait_Time+3))
 	local ac2 = self.mask_img:runAction(cc.FadeIn:create(self.ctrl.Action_Time))
 
 	local seq = cc.Sequence:create(ac1,ac2)
@@ -173,7 +181,7 @@ function map_view:hideMask()
 	
 	self.mask_img:runAction(seq)
 end
---------------------------战场部分开始-------------------------
+--------------------------Õ½³¡²¿·Ö¿ªÊ¼-------------------------
 function map_view:createMonsterModel(monster)
     if monster.model then
         self.model_panel:removeChild(monster.model)
@@ -284,7 +292,7 @@ end
 function map_view:initArena()
 	for x=1,8 do
 		for y=1,7 do
-			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
+			--ÕâÀïÎªÁËÌá¸ßÐ§ÂÊ£¬µ÷ÓÃÁËÔ­±¾µÄ½Ó¿Ú£¬Ö»ÔÚÒ»²ãÀïÃæÑ°ÕÒ½Úµã¡£
 			self["gezi_"..x.."_"..y] = self.arena_event_node:getChildByName("gezi_"..x.."_"..y)
 			self["gezi_"..x.."_"..y.."_black"] = self.arena_bottom_node:getChildByName("gezi_"..x.."_"..y)
 			if self["gezi_"..x.."_"..y] then
@@ -296,7 +304,7 @@ function map_view:initArena()
 
 end
 
---因为棋盘做过倾斜处理，所以这里要用射线来处理
+--ÒòÎªÆåÅÌ×ö¹ýÇãÐ±´¦Àí£¬ËùÒÔÕâÀïÒªÓÃÉäÏßÀ´´¦Àí
 function map_view:addArenaListener(gezi)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
@@ -379,6 +387,84 @@ function map_view:clearModelPanel()
 	self.model_panel:removeAllChildren()
 end
 
---------------------------战场部分结束-------------------------
+--------------------------Õ½³¡²¿·Ö½áÊø-------------------------
+
+
+--------------------------½ø³¡¶¯»­¿ªÊ¼-------------------------
+function map_view:initPrePanel()
+	self.shield_img 	= self.logo_node:getChildByName("shield_img")
+	self.sword_img	 	= self.logo_node:getChildByName("sword_img")
+	self.em_img 		= self.logo_node:getChildByName("em_img")
+	self.ts_img 		= self.logo_node:getChildByName("ts_img")
+	self.word_img 		= self.logo_node:getChildByName("word_img")
+
+end
+
+function map_view:playEnterAnimation()
+
+	self.shield_img:runAction(cc.FadeIn:create(0.5))
+	local a1 = self.word_img:runAction(cc.FadeIn:create(0.5))
+	local a2 = self.word_img:runAction(cc.ScaleTo:create(0.4,1))
+	local seq1 = cc.Sequence:create(a1,a2)
+	self.word_img:runAction(seq1)
+
+	local ac1 = self.sword_img:runAction(cc.ScaleTo:create(0.4,1.2))
+	self.sword_img:stopAction(ac1)
+	local ac2 = self.sword_img:runAction(cc.MoveTo:create(0.3,uitool:zero()))
+	self.sword_img:stopAction(ac2)
+	local callback = function()
+		self.word_img:setVisible(true)
+		self.ts_img:runAction(cc.RotateTo:create(0.4,0))
+		self.em_img:runAction(cc.RotateTo:create(0.4,0))
+		self.ts_img:runAction(cc.FadeIn:create(0.3))
+		self.em_img:runAction(cc.FadeIn:create(0.3))
+	end
+
+	callback = cc.CallFunc:create(callback)
+
+	local seq2 = cc.Sequence:create(ac1,ac2,callback)
+
+	self.sword_img:runAction(seq2)
+
+	local ac3 =  self.logo_node:runAction(cc.FadeIn:create(2))
+	self.logo_node:stopAction(ac3)
+	local ac4 =  self.logo_node:runAction(cc.ScaleTo:create(1,0))
+	self.logo_node:stopAction(ac4)
+
+	local seq3 = cc.Sequence:create(ac3,ac4)
+
+	self.logo_node:runAction(seq3)
+
+
+	local ac5 =  self.pre_panel:runAction(cc.FadeIn:create(3))
+	self.pre_panel:stopAction(ac5)
+	local ac6 =  self.pre_panel:runAction(cc.MoveTo:create(0.2,cc.p(0,4000)))
+	self.pre_panel:stopAction(ac6)
+
+	local seq4 = cc.Sequence:create(ac5,ac6)
+
+	self.pre_panel:runAction(seq4)
+end
+
+function map_view:initEnterAnimation()
+	self.shield_img:setOpacity(0)
+
+	self.sword_img:setPositionY(1500)
+	self.sword_img:setScale(1.2)
+
+	self.ts_img:setRotation(-60)
+	self.em_img:setRotation(60)
+	self.ts_img:setOpacity(0)
+	self.em_img:setOpacity(0)
+
+	self.word_img:setScale(5)
+	self.word_img:setVisible(false)
+
+	self.logo_node:setScale(1)
+	self.logo_node:setVisible(true)
+
+	self.pre_panel:setPosition(960,216)
+end
+--------------------------½ø³¡¶¯»­½áÊø-------------------------
 
 return map_view

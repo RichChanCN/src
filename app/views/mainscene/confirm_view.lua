@@ -32,10 +32,10 @@ function confirm_view:initEvents()
 end
 
 function confirm_view:updateInfo(chapter_num,level_num)
-	self.reward_data = self.ctrl:getRewardByChapterAndLevel(chapter_num, level_num)
+	self.reward_data = GameDataCtrl:Instance():getRewardByChapterAndLevel(chapter_num, level_num)
 	self.reward_list = {}
 
-	self.star_num = self.ctrl:getStarNumByChapterAndLevel(chapter_num, level_num)
+	self.star_num = GameDataCtrl:Instance():getStarNumByChapterAndLevel(chapter_num, level_num)
 	self.all_star_condition = "emmmmmmmmm"
 
 	self.chapter_num = chapter_num

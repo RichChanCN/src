@@ -27,6 +27,7 @@ end
 function FightScene:onEnter()
 	self:viewInit()
 	self:initModel()
+	self.map_view:initEnterAnimation()
 	self.map_view.root:setScale(0.75)
 end
 

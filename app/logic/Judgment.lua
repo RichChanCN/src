@@ -1,4 +1,4 @@
-Judgment = {}
+Judgment = Judgment or {}
 
 Judgment.MapItem = {
 	EMPTY			= 0,
@@ -444,6 +444,32 @@ function Judgment:sortAllMonstersByInitiative()
 	end
 
 	table.sort(self.all_monsters,sort_by_initiative)
+end
+
+function Judgment:getAllAliveMonstersInNextRoundQueue()
+	local list = {}
+	
+	for _,v in pairs(self.next_round_monster_queue) do
+		if not v:isDead() then
+			table.insert(list,v)
+		end
+	end
+
+	return list
+end
+
+function Judgment:getMonsterIndexInNextRoundAliveMonster(monster)
+	local next_round_alive_monsters = self:getAllAliveMonstersInNextRoundQueue()
+	local index = 1
+	
+	for i,v in ipairs(next_round_alive_monsters) do
+		if v:getTag() == monster:getTag() then
+			index = i 
+			break
+		end
+	end
+
+	return index
 end
 
 function Judgment:getPositionByInt(num)

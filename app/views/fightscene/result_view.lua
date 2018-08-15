@@ -12,6 +12,7 @@ result_view.RESOURCE_BINDING = {
     ["reward_node"]         = {["varname"] = "reward_node"},
     ["left_btn_img"]		= {["varname"] = "left_btn_img"},
     ["right_btn_img"]		= {["varname"] = "right_btn_img"},
+    ["reward_template"]     = {["varname"] = "reward_template"},
 }
 
 function result_view:initEvents()
@@ -27,7 +28,7 @@ function result_view:initEvents()
 end
 
 function result_view:updateInfo()
-    self.reward_data = self.ctrl:getRewardByChapterAndLevel(self.result.chapter_num, self.result.level_num)
+    self.reward_data = GameDataCtrl:Instance():getRewardByChapterAndLevel(self.result.chapter_num, self.result.level_num)
     self.reward_list = {}
 end
 
@@ -39,7 +40,7 @@ function result_view:updateView()
             self["star_"..i]:loadTexture(Config.sprite.result_star_gray)
         end
     end
-    local last_star_num = self.ctrl:getStarNumByChapterAndLevel(self.result.chapter_num,self.result.level_num)
+    local last_star_num = GameDataCtrl:Instance():getStarNumByChapterAndLevel(self.result.chapter_num,self.result.level_num)
     if last_star_num and last_star_num > 0 then
         self.result_text:setString(Config.text.reward_had_got)
         self.reward_node:setVisible(false)
@@ -78,6 +79,13 @@ function result_view:updateReward()
         v:setPosition((i-mid)*interval+offset,0)
     end
 
+    self:dealWithResultAndReward()
+end
+
+function result_view:dealWithResultAndReward()
+    GameDataCtrl:Instance():setStarNum(self.result.chapter_num, self.result.level_num, self.result.star_num)
+    GameDataCtrl:Instance():addRewardToSaveData(self.reward_data)
+    self.result = nil
 end
 
 function result_view:setResult(result)
@@ -91,7 +99,8 @@ function result_view:openView()
 		self:init()
 	end
     if self.result and type(self.result) == type({}) then
-	   self:updateView()
+	   self:updateInfo()
+       self:updateView()
     end
 	self.root:setPosition(uitool:zero())
 end

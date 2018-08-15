@@ -1,5 +1,5 @@
 local MonsterData = {}
 
-function MonsterData:getAllMonsterList(){
+function MonsterData:getAllMonsterList()
 	return Config.Monster
-}
+end

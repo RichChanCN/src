@@ -20,6 +20,10 @@ function uitool:bottom_Z_order()
     return 0
 end
 
+function uitool:screen_center_pos()
+    return cc.p(960,540)
+end
+
 function uitool:getNodeCenterPosition(node)
     local size = node:getContentSize()
     return cc.p(size.width/2,size.height/2)
