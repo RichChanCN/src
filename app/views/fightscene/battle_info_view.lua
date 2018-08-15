@@ -73,6 +73,9 @@ function battle_info_view:initRightBottom()
     self.auto_img       = self.right_bottom_node:getChildByName("auto_img")
     self.speed_img      = self.right_bottom_node:getChildByName("speed_img")
     self.exit_img       = self.right_bottom_node:getChildByName("exit_img")
+
+    self.auto_icon = self.auto_img:getChildByName("img")
+    self.speed_icon = self.speed_img:getChildByName("img")
 end
 
 function battle_info_view:initRightBottomEvents()
@@ -90,8 +93,10 @@ function battle_info_view:initRightBottomEvents()
 
     uitool:makeImgToButtonNoScale(self.auto_img, function()
         if Judgment:Instance():isWaitOrder() then
+            self.auto_icon:loadTexture(Config.sprite.autoOn)
             Judgment:Instance():requestAuto()
         elseif Judgment:Instance():getGameStatus() ~= Judgment.GameStatus.WAIT_ORDER then
+            self.auto_icon:loadTexture(Config.sprite.autoOff)
             Judgment:Instance():stopAuto()
         end
     end)
@@ -232,15 +237,17 @@ function battle_info_view:updateRightBottomQueue(is_wait)
             if not self.queue_lv:getItem(0) then
                 return
             end
-            self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
-            self.queue_lv:removeItem(0)
-
             if not last_item.monster:isDead() then
-                self.queue_lv:pushBackCustomItem(last_item)
+                local index = Judgment:Instance():getMonsterIndexInCurRoundAliveMonster(last_item.monster)-1
+                print("index",index)
+                self.queue_lv:insertCustomItem(last_item,index)
     
                 last_item:setOpacity(0)
                 last_item:runAction(cc.FadeIn:create(0.3))
             end
+            self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
+            self.queue_lv:removeItem(0)
+
             
             self.next_round_in_queue = self.round_img:clone()
             local text = self.next_round_in_queue:getChildByName("round_text")

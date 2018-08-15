@@ -446,6 +446,22 @@ function Judgment:sortAllMonstersByInitiative()
 	table.sort(self.all_monsters,sort_by_initiative)
 end
 
+function Judgment:sortMonstersByInitiative(list)
+	local sort_by_initiative = function(a,b)
+		if a.initiative == b.initiative then
+			if a.level == b.level then
+				return a.rarity > b.rarity
+			else
+				return a.level > b.level
+			end
+		else
+			return a.initiative > b.initiative
+		end
+	end
+
+	table.sort(list,sort_by_initiative)
+end
+
 function Judgment:getAllAliveMonstersInNextRoundQueue()
 	local list = {}
 	
@@ -458,11 +474,37 @@ function Judgment:getAllAliveMonstersInNextRoundQueue()
 	return list
 end
 
+function Judgment:getAllAliveMonstersInCurRoundQueue()
+	local list = {}
+	
+	for _,v in pairs(self.cur_round_monster_queue) do
+		if not v:isDead() then
+			table.insert(list,v)
+		end
+	end
+
+	return list
+end
+
 function Judgment:getMonsterIndexInNextRoundAliveMonster(monster)
 	local next_round_alive_monsters = self:getAllAliveMonstersInNextRoundQueue()
 	local index = 1
-	
+	--self:sortMonstersByInitiative(next_round_alive_monsters)
 	for i,v in ipairs(next_round_alive_monsters) do
+		if v:getTag() == monster:getTag() then
+			index = i 
+			break
+		end
+	end
+
+	return index
+end
+
+function Judgment:getMonsterIndexInCurRoundAliveMonster(monster)
+	local cur_round_alive_monsters = self:getAllAliveMonstersInCurRoundQueue()
+	local index = 1
+	--self:sortMonstersByInitiative(cur_round_alive_monsters)
+	for i,v in ipairs(cur_round_alive_monsters) do
 		if v:getTag() == monster:getTag() then
 			index = i 
 			break
@@ -474,6 +516,10 @@ end
 
 function Judgment:getPositionByInt(num)
 	return self.scene.map_view:getPositionByInt(num)
+end
+
+function Judgment:getMapTopArenaNode()
+	return self.scene.map_view.arena_top_node
 end
 
 function Judgment:clearTeam()

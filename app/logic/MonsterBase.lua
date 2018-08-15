@@ -55,6 +55,7 @@ function MonsterBase:new( data,team_side,arena_pos )
 	self.rarity					= data.rarity
 	self.max_hp 				= data.hp
 	self.attack_type			= data.attack_type
+	self.attack_particle		= data.attack_particle
 	self.move_type 				= data.move_type
 	
 	self.model_path 			= data.model_path
@@ -376,6 +377,10 @@ function MonsterBase:attack(target,distance)
 	if self:isMelee() and not self:isNear(gtool:ccpToInt(target.cur_pos)) then
 		self:moveAndAttack(target)
 	else
+		if self.attack_particle then
+			self:createAttackParticle(target)
+		end
+
 		self:addAnger()
 		local cur_num = self:getCurPosNum()
 		local to_num = gtool:ccpToInt(target.cur_pos)
@@ -879,6 +884,23 @@ function MonsterBase:getDistanceInfo()
     end
 
     return distanc_table
+end
+
+function MonsterBase:createAttackParticle(target)
+	local particle = cc.ParticleSystemQuad:create(self.attack_particle)
+	particle:setScale(0.3)
+	particle:setName("attack")
+	local start_pos = Judgment:Instance():getPositionByInt(self:getCurPosNum())
+	particle:setPosition(start_pos.x, start_pos.y)
+	local node = Judgment:Instance():getMapTopArenaNode()
+	node:addChild(particle)
+	local end_pos = Judgment:Instance():getPositionByInt(target:getCurPosNum())
+	local ac1 = particle:runAction(cc.MoveTo:create(0.5,cc.p(start_pos.x,start_pos.y+30)))
+	particle:stopAction(ac1)
+	local ac2 = particle:runAction(cc.MoveTo:create(0.3,cc.p(end_pos.x,end_pos.y+15)))
+	particle:stopAction(ac2)
+	local seq = cc.Sequence:create(ac1,ac2)
+	particle:runAction(seq)
 end
 ----------------------------ÒÆ¶¯¸¨Öú----------------------------------
 ----------------------------ÒÆ¶¯¸¨Öú----------------------------------

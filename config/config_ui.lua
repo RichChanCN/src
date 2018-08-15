@@ -11,8 +11,16 @@ Config.sprite = {
 	lager_star_got 		= Config.sprite_path.."site_big_star.png",
 	lager_star_empty 	= Config.sprite_path.."site_big_star_gray.png",
 
+	autoOn = Config.sprite_path.."autoOn.png",
+	autoOff = Config.sprite_path.."autoOff.png",
+
 	result_star_got = Config.sprite_path.."star.png",
 	result_star_gray = Config.sprite_path.."star_gray.png",
+
+	result_win_band = Config.sprite_path.."result_win_title_bg.png",
+	result_defeat_band = Config.sprite_path.."result_defeated_title_bg.png",
+	result_win_bg = Config.sprite_path.."combat_result_win_bg.png",
+	result_defeat_bg = Config.sprite_path.."combat_result_defeated_bg.png",
 
 	buff_defend = Config.sprite_path.."common_defend.png",
 

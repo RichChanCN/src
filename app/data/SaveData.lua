@@ -29,7 +29,12 @@ function SaveData:getPlayerData()
 end
 
 function SaveData:setStarNum(chapter_num,level_num,num)
-	self.story[chapter_num][level_num] = num
+	if not self.story[chapter_num] then
+		self.story[chapter_num] = {}
+		self.story[chapter_num][level_num] = num
+	elseif (not self.story[chapter_num][level_num]) or self.story[chapter_num][level_num]<num then
+		self.story[chapter_num][level_num] = num
+	end
 end
 
 function SaveData:addMonsterCardNum(id,num)
