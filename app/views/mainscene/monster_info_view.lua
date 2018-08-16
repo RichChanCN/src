@@ -26,7 +26,7 @@ function monster_info_view:initInfo()
     self.is_model_loaded = false
     self.monster_model = nil
     self.model_camera = nil
-    self.monster_model = nil
+    self.monster_data = {}
 end
 
 function monster_info_view:updateInfo(monster_list,index)
@@ -58,6 +58,13 @@ function monster_info_view:initEvents()
     self.right_btn:addClickEventListener(function(sender)
         self:updateView(self.monster_list,self.last_index)
     end)
+    uitool:makeImgToButton(self.upgrade_img,function()
+        print("···",self.monster_data.card_num)
+        if self.monster_data.card_num and not(self.monster_data.card_num < self.monster_data.level) then
+            GameDataCtrl:Instance():requestUpgradeMonster(self.monster_data.id)
+            self:upgradeUpdate()
+        end
+    end)
     --------------左边节点事件-------------
     self:initModelEvents()
 end
@@ -69,8 +76,10 @@ function monster_info_view:updateView(monster_list,index)
     self:updateRightInfoNode(monster_list[index])
 end
 
-function monster_info_view:onOpen()
-    self:updateView(monster_list,index)
+function monster_info_view:onOpen(...)
+    local params = {...}
+    self.monster_data = params[1][params[2]]
+    self:updateView(params[1],params[2])
     self.left_node:runAction(cc.MoveTo:create(0.2,self.left_node_final_pos))
     self.info_bg_img:runAction(cc.MoveTo:create(0.2,self.right_node_final_pos))
 end
@@ -82,6 +91,13 @@ end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
+
+function monster_info_view:upgradeUpdate()
+    local card_num,level = GameDataCtrl:Instance():getMonsterCardNumAndLevelByID(self.monster_data.id)
+    self.title_text:setString("LEVEL "..level.." "..self.monster_data.name)
+    self.progress_text:setString(card_num .."/"..level)
+    uitool:setProgressBar(self.progress_img, card_num)
+end
 
 --------------------左边相关开始----------------------
 function monster_info_view:initLeftModelNode()
@@ -108,6 +124,14 @@ function monster_info_view:updateLeftModelNode(data)
     self.type_text:setString(Config.text["monster_type_"..data.attack_type])
     self.rarity_text:setString(Config.text["rarity_text_"..data.rarity])
     self.rarity_text:setTextColor(Config.color["rarity_color_"..data.rarity])
+
+    if not data.card_num then
+        self.progress_text:setString(0 .."/"..data.level)
+        uitool:setProgressBar(self.progress_img, 0)
+    else
+        self.progress_text:setString(data.card_num.."/"..data.level)
+        uitool:setProgressBar(self.progress_img, data.card_num/data.level)
+    end
 end
 
 function monster_info_view:createModel(data)
@@ -214,6 +238,11 @@ function monster_info_view:initRightInfoNode()
 	self.initiative_text 			= self.info_bg_img:getChildByName("initiative_text")
 	self.mobility_text 				= self.info_bg_img:getChildByName("mobility_text")
 	self.defense_penetration_text	= self.info_bg_img:getChildByName("defense_penetration_text")
+
+    self.no_skill_text              = self.info_bg_img:getChildByName("no_skill_text")
+    self.skill_sp                   = self.info_bg_img:getChildByName("skill_sp")
+    self.skill_icon_sp              = self.skill_sp:getChildByName("skill_icon_sp")
+    self.skill_description_text     = self.info_bg_img:getChildByName("skill_description_text")
 end
 
 function monster_info_view:updateRightInfoNode(data)
@@ -224,6 +253,18 @@ function monster_info_view:updateRightInfoNode(data)
 	self.initiative_text:setString(data.initiative)
 	self.mobility_text:setString(data.mobility)
 	self.defense_penetration_text:setString(data.defense_penetration)
+
+    if data.skill then
+        self.no_skill_text:setVisible(false)
+        self.skill_sp:setVisible(true)
+        self.skill_description_text:setVisible(true)
+        self.skill_sp:setTexture(data.skill.img_path)
+        self.skill_description_text:setString(data.skill.description)
+    else
+        self.no_skill_text:setVisible(true)
+        self.skill_sp:setVisible(false)
+        self.skill_description_text:setVisible(false)
+    end
 end
 --------------------右边相关结束----------------------
 

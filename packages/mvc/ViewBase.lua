@@ -39,7 +39,7 @@ function ViewBase:initEvents()
 	print("warning! you should implement initEvents() in instance")
 end
 
-function ViewBase:onOpen()
+function ViewBase:onOpen(...)
 	-- body
 end
 
@@ -47,11 +47,11 @@ function ViewBase:onClose()
 	-- body
 end
 
-function ViewBase:openView()
+function ViewBase:openView(...)
 	if not self.is_inited then
 		self:init()
 	end
-	self:onOpen()
+	self:onOpen(...)
 
 	if self.view_pos then
 		self.root:setPosition(self.view_pos)

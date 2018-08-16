@@ -239,7 +239,6 @@ function battle_info_view:updateRightBottomQueue(is_wait)
             end
             if not last_item.monster:isDead() then
                 local index = Judgment:Instance():getMonsterIndexInCurRoundAliveMonster(last_item.monster)-1
-                print("index",index)
                 self.queue_lv:insertCustomItem(last_item,index)
     
                 last_item:setOpacity(0)

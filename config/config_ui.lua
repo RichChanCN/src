@@ -100,6 +100,8 @@ Config.text = {
 	rarity_text_4 = "RARITY: DIABOLIC MONSTER",
 
 	reward_had_got = "You have already received the rewards!",
-	reward_first_get = "You win these rewards!"
+	reward_first_get = "You win these rewards!",
 
+	collected_tip = "You can get the collected monsters in the rewards",
+	uncollected_tip = "You can unlock these monsters in the story or shop",
 }

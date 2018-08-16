@@ -144,6 +144,9 @@ function uitool:setProgressBar(img,percent)
     if percent < 0 then 
         percent = 0
     end
+    if percent > 1 then 
+        percent = 1
+    end
     img:setContentSize(img.raw_size.width*percent,img.raw_size.height)
 end
 

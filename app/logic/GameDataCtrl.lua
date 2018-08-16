@@ -47,7 +47,7 @@ function GameDataCtrl:getSaveData()
 end
 
 function GameDataCtrl:saveData()
-	return self.save_data:save()
+	self.save_data:save()
 end
 
 function GameDataCtrl:setStarNum(chapter_num,level_num,num)
@@ -80,10 +80,24 @@ function GameDataCtrl:getPlayerData()
 	return self.save_data:getPlayerData()
 end
 
+function GameDataCtrl:getMonsterCardNumAndLevelByID(id)
+	return self.save_data:getMonsterCardNumAndLevelByID(id)
+end
+
+function GameDataCtrl:getCollectedMonsterList()
+	return self.save_data:getCollectedMonsterList()
+end
+
+function GameDataCtrl:getNotCollectedMonsterList()
+	return self.save_data:getNotCollectedMonsterList()
+end
+
 function GameDataCtrl:getMonsterData()
 	return self.monster_data
 end
 
-function GameDataCtrl:getCollectedMonsterList()
-	return Config.Monster
+function GameDataCtrl:requestUpgradeMonster(id)
+	if self.save_data:upgradeMonster(id) then
+		self:saveData()
+	end
 end

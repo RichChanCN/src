@@ -6,10 +6,12 @@ SaveData.number_index = {
 	["id"] = 1,
 	["coin_num"] = 1,
 	["crystal_num"] = 1,
+	["card_num"] = 1,
 }
 
 function SaveData:init(ctrl)
 	self.ctrl = ctrl
+	self.collected_monsters = {}
 	self:initInfo()
 	self:loadData()
 end
@@ -28,6 +30,60 @@ function SaveData:getPlayerData()
 	return self.player
 end
 
+function SaveData:initCollectedMonsters()
+	for key,value in pairs(self.monsters) do
+		self:addNewMonsterInCollected(key,value)
+	end
+
+	table.print(self.collected_monsters)
+end
+
+function SaveData:addNewMonsterInCollected(key,value)
+	local monster = {}
+	for k,v in pairs(Config.Monster[key]) do
+		monster[k] = v
+	end
+	monster.level = value.level
+	monster.card_num = value.card_num
+
+	table.insert(self.collected_monsters,monster)
+end
+
+function SaveData:updateCollectedMonsters()
+	for key,value in pairs(self.monsters) do
+		if self.collected_monsters[key] then
+			self.collected_monsters[key].card_num = value.card_num
+			self.collected_monsters[key].level = value.level
+		else
+			self:addNewMonsterInCollected(key,value)
+		end
+	end
+end
+
+function SaveData:getCollectedMonsterList()
+	self:updateCollectedMonsters()
+	return self.collected_monsters
+end
+
+function SaveData:getNotCollectedMonsterList()
+	local monster_list = {}
+	for k,v in pairs(Config.Monster) do
+		if not self.monsters[v.id] then
+			table.insert(monster_list,v)
+		end
+	end
+
+	return monster_list
+end
+
+function SaveData:getMonsterCardNumAndLevelByID(id)
+	if self.monsters[id] then
+		return self.monsters[id].card_num,self.monsters[id].level
+	else
+		return 0,1
+	end
+end
+
 function SaveData:setStarNum(chapter_num,level_num,num)
 	if not self.story[chapter_num] then
 		self.story[chapter_num] = {}
@@ -38,12 +94,12 @@ function SaveData:setStarNum(chapter_num,level_num,num)
 end
 
 function SaveData:addMonsterCardNum(id,num)
-	if self.monsters.collected[id] then
-		self.monsters.collected[id].card_num = self.monsters.collected[id].card_num + num
+	if self.monsters[id] then
+		self.monsters[id].card_num = self.monsters[id].card_num + num
 	else
-		self.monsters.collected[id] = {}
-		self.monsters.collected[id].card_num = num
-		self.monsters.collected[id].level = 1
+		self.monsters[id] = {}
+		self.monsters[id].card_num = num
+		self.monsters[id].level = 1
 	end
 end
 
@@ -66,6 +122,16 @@ function SaveData:addExp(exp)
 	end
 end
 
+function SaveData:upgradeMonster(id)
+	if self.monsters[id] and (self.monsters[id].card_num > self.monsters[id].level - 1) then
+		self.monsters[id].card_num = self.monsters[id].card_num - self.monsters[id].level
+		self.monsters[id].level = self.monsters[id].level+1
+		return true
+	else
+		return false
+	end
+end
+
 function SaveData:loadData()
 	local xmlfile = xml.load(Config.XML_path.."save1.data")
 	self.time = xmlfile.time
@@ -85,7 +151,17 @@ function SaveData:loadData()
 		end
 	end
 
+	for key,value in pairs(self.monsters) do
+		for k,v in pairs(value) do
+			if SaveData.number_index[k] then
+				self.monsters[key][k] = tonumber(v)
+			end
+		end
+	end
+
 	self.player.cur_max_exp = (100+(self.player.level-1)*20)
+
+	self:initCollectedMonsters()
 end
 
 function SaveData:loadHelp(xml)
@@ -134,17 +210,10 @@ function SaveData:save()
 
 	local monsters = xmlfile:append("monsters")
 	for key,value in pairs(self.monsters) do
-		if type(value) == "table" then
-			local object = monsters:append(key)
-			for k1,v1 in pairs(value) do
-				local monster = object:append("monster")
-				monster.id = k1
-				for k2,v2 in pairs(v1) do
-					monster:append(k2)[1] = v2
-				end
-			end
-		else
-			object:append(key)[1] = value
+		local monster = monsters:append("monster")
+		monster.id = key
+		for k1,v1 in pairs(value) do
+			monster:append(k1)[1] = v1
 		end
 	end
 	xmlfile:save(Config.XML_path.."save1.data")
