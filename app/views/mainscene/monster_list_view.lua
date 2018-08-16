@@ -8,25 +8,9 @@ monster_list_view.RESOURCE_BINDING = {
     ["template_panel"]			= {["varname"] = "template_panel"},
 }
 
-function monster_list_view:init()
-	if not self.is_inited then
-		uitool:createUIBinding(self, self.RESOURCE_BINDING)
-
-		self:initInfo()
-		self:initEvents()
-		self:initMonsterLV()
-
-		self.is_inited = true
-	else
-		print(self.name.." is inited! scape the init()")
-	end
-end
-
-
 function monster_list_view:initInfo()
 	self.card_list = {}
-    self.collected_monster_list = GameDataCtrl:Instance():getCollectedMonsterList()
-	self.uncollected_monster_list = GameDataCtrl:Instance():getNotCollectedMonsterList()
+	
 	--事件分发器
 	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
@@ -37,16 +21,25 @@ function monster_list_view:initEvents()
     end)
 end
 
-function monster_list_view:updateView()
+function monster_list_view:updateInfo()
+    self.collected_monster_list = GameDataCtrl:Instance():getCollectedMonsterList()
+	self.uncollected_monster_list = GameDataCtrl:Instance():getNotCollectedMonsterList()
+end
 
+function monster_list_view:updateView()
+	self:initMonsterLV()
 end
 
 function monster_list_view:onOpen()
-	self:resumeMonsterListListener()
+	self:updateInfo()
+	self:updateView()
 end
 
 function monster_list_view:onClose()
-	self:pauseMonsterListListener()
+	local collected_title = self.monster_lv:getItem(0):clone()
+	self.monster_lv:removeAllItems()
+
+	self.monster_lv:pushBackCustomItem(collected_title)
 end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------

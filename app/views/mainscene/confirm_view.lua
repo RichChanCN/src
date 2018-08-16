@@ -58,10 +58,10 @@ function confirm_view:updateView()
 end
 
 function confirm_view:updateReward()
-	if self.star_num > 0 then
-		self.got_img:setVisible(true)
-		self.reward_node:setVisible(false)
-	else
+	-- if self.star_num > 0 then
+	-- 	self.got_img:setVisible(true)
+	-- 	self.reward_node:setVisible(false)
+	-- else
 		self.reward_node:removeAllChildren()
 		self.got_img:setVisible(false)
 		self.reward_node:setVisible(true)
@@ -90,7 +90,7 @@ function confirm_view:updateReward()
 		for i,v in ipairs(self.reward_list) do
 			v:setPosition((i-mid)*interval+offset,0)
 		end
-	end
+	--end
 
 end
 

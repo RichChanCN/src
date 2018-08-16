@@ -23,7 +23,11 @@ function SaveData:initInfo()
 end
 
 function SaveData:getStarNumByChapterAndLevel(chapter_num, level_num)
-	return tonumber(self.story[chapter_num][level_num])
+	if self.story[chapter_num] and self.story[chapter_num][level_num] then
+		return tonumber(self.story[chapter_num][level_num])
+	else
+		return 0
+	end
 end
 
 function SaveData:getPlayerData()
@@ -34,8 +38,6 @@ function SaveData:initCollectedMonsters()
 	for key,value in pairs(self.monsters) do
 		self:addNewMonsterInCollected(key,value)
 	end
-
-	table.print(self.collected_monsters)
 end
 
 function SaveData:addNewMonsterInCollected(key,value)
@@ -114,11 +116,12 @@ end
 function SaveData:addExp(exp)
 	self.player.exp = self.player.exp + exp
 	if not (self.player.exp < self.player.cur_max_exp) then
+		exp = self.player.exp - self.player.cur_max_exp
 		self.player.level = self.player.level + 1
 		self.player.exp = 0
-		exp = exp - self.player.cur_max_exp
 		self.player.cur_max_exp = (100+(self.player.level-1)*20)
 		self:addExp(exp)
+		uitool:createTopTip("Level up!","green")
 	end
 end
 
@@ -130,6 +133,18 @@ function SaveData:upgradeMonster(id)
 	else
 		return false
 	end
+end
+
+function SaveData:getMonsterDataByID(id)
+	local value = self.monsters[id]
+	local monster = {}
+	for k,v in pairs(Config.Monster[id]) do
+		monster[k] = v
+	end
+	monster.level = value.level
+	monster.card_num = value.card_num
+
+	return monster
 end
 
 function SaveData:loadData()
@@ -156,6 +171,12 @@ function SaveData:loadData()
 			if SaveData.number_index[k] then
 				self.monsters[key][k] = tonumber(v)
 			end
+		end
+	end
+
+	for key,value in pairs(self.story) do
+		for k,v in pairs(value) do
+			self.story[key][k] = tonumber(v)
 		end
 	end
 

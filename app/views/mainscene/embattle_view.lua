@@ -65,6 +65,7 @@ function embattle_view:initEvents()
 
     uitool:makeImgToButton(self.fight_img,function()
     	if self.team_size < 1 then
+    		uitool:createTopTip("you should select 1 monster at least!", "red")
     		return
     	end
     	local left_team = self:makeTeam()
@@ -105,8 +106,8 @@ function embattle_view:openView(chapter_num,level_num)
 end
 
 function embattle_view:onClose()
-	self:pauseMonsterListListener()
-	self:pauseArenaListener()
+	self:removeArenaListener()
+	self:removeMonsterListListener()
 	self:resetArena()
 end
 ----------------------------------------------------------------
@@ -117,7 +118,7 @@ function embattle_view:makeTeam()
 	local MonsterBase = require("app.logic.MonsterBase")
 
 	for _,v in pairs(self.monster_team) do
-		table.insert(team, MonsterBase:instance():new(Config.Monster[v.monster_id],MonsterBase.TeamSide.LEFT,v.arena_cell.pos))
+		table.insert(team, MonsterBase:instance():new(v.monster,MonsterBase.TeamSide.LEFT,v.arena_cell.pos))
 	end
 
 	return team
@@ -214,6 +215,7 @@ function embattle_view:addMonsterCardEvent(img,index)
 					self:selectTheCard(node)
 					self.target_node = nil
 				else
+					uitool:createTopTip("can't add more monsters!", "red")
 					uitool:moveToAndFadeOut(self.cur_drag_chesspiece,pos)
 				end
 			end
@@ -272,6 +274,15 @@ function embattle_view:pauseMonsterListListener()
 		end
 	end
 end
+
+
+function embattle_view:removeMonsterListListener()
+	for _,v in pairs(self.card_list) do
+		if not v.selected then
+			self.eventDispatcher:removeEventListenersForTarget(v)
+		end
+	end
+end
 ------------左边卡池部分结束------------
 
 ------------棋子部分开始------------
@@ -298,7 +309,7 @@ function embattle_view:createChesspiece(monster,index)
 	chesspiece:setName("chesspiece_"..index)
 	self.hex_node:addChild(chesspiece, uitool:bottom_Z_order())
 
-	chesspiece.monster_id = monster.id
+	chesspiece.monster = monster
 
 	return chesspiece
 end
@@ -541,6 +552,7 @@ end
 function embattle_view:resetArena()
 	for k,v in pairs(self.enable_gezi) do
 		local pos = gtool:intToCcp(k)
+		self["gezi_"..pos.x.."_"..pos.y].chesspiece = nil
 		self["gezi_"..pos.x.."_"..pos.y]:loadTexture(Config.sprite.gezi_disable)
 		self["gezi_"..pos.x.."_"..pos.y]:setScale(1)
 	end

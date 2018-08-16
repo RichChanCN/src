@@ -6,7 +6,7 @@ Config.Skill = {
 		--技能名称
 		name = "Snow Storm",
 		--技能描述
-		description = "Emmmmmmmmmmmmmm...",
+		description = "Cost 4 anger points,deals 100+(10*level) damage to all enemies,And they add freezing to them, minus their mobility in next action.",
 		--技能图标路径
 		img_path = Config.monster_img_path.."icon_skill_destructive_ray.png",
 		--技能范围，0的话就是全范围
@@ -40,7 +40,7 @@ Config.Skill = {
 	--冲击波
 	[1002] = {
 		name = "Impact Wave",
-		description = "Emmmmmmmmmmmmmm...",
+		description = "Cost 4 anger points, deals 50+(10*5) damage to all enemies around self, And they can't do anything in next action.",
 		img_path = Config.monster_img_path.."icon_skill_earth_shake.png",
 		range = 2,
 		is_need_target = false,
@@ -66,11 +66,11 @@ Config.Skill = {
 	--毒刃
 	[1003] = {
 		name = "Poison Blade",
-		description = "Emmmmmmmmmmmmmm...",
+		description = "Cost 2 anger points, deals 50+(10*5) damage to an enemy, And it will minus 40 HP when begin next two action",
 		img_path = Config.monster_img_path.."icon_skill_holy_slash.png",
 		range = 1,
 		is_need_target = true,
-		cost = 0,
+		cost = 2,
 		damage = 50,
 		damage_level_plus = 5,
 
@@ -88,7 +88,7 @@ Config.Skill = {
 	--友方群体加攻击
 	[1004] = {
 		name = "Battle Fury",
-		description = "Emmmmmmmmmmmmmm...",
+		description = "Cost 3 anger points, increase all friend 30% damage 2 round.",
 		img_path = Config.monster_img_path.."icon_skill_eager_for_fight.png",
 		range = 0,
 		is_need_target = false,

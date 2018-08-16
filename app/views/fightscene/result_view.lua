@@ -3,8 +3,8 @@ local view = require("packages.mvc.ViewBase")
 local result_view = view:instance()
 
 result_view.RESOURCE_BINDING = {
-    ["reslut_bg_img"]		= {["varname"] = "reslut_bg_img"},
-    ["reslut_band_img"]		= {["varname"] = "reslut_band_img"},
+    ["result_bg_img"]		= {["varname"] = "result_bg_img"},
+    ["result_band_img"]		= {["varname"] = "result_band_img"},
     ["star_1"]				= {["varname"] = "star_1"},
     ["star_2"]				= {["varname"] = "star_2"},
     ["star_3"]				= {["varname"] = "star_3"},
@@ -41,14 +41,20 @@ function result_view:updateView()
         end
     end
     local last_star_num = GameDataCtrl:Instance():getStarNumByChapterAndLevel(self.result.chapter_num,self.result.level_num)
-    if last_star_num and last_star_num > 0 then
-        self.result_text:setString(Config.text.reward_had_got)
-        self.reward_node:setVisible(false)
-    else
+
+    if self.result.star_num > 0 then
+        self.result_bg_img:loadTexture(Config.sprite.result_win_bg)
+        self.result_band_img:loadTexture(Config.sprite.result_win_band)
         self.result_text:setString(Config.text.reward_first_get)
         self.reward_node:setVisible(true)
         self:updateReward()
+    else
+        self.result_bg_img:loadTexture(Config.sprite.result_defeat_bg)
+        self.result_band_img:loadTexture(Config.sprite.result_defeat_band)
+        self.result_text:setString(Config.text.defeat)
+        self.reward_node:setVisible(false)
     end
+
 end
 
 function result_view:updateReward()
@@ -90,8 +96,6 @@ end
 
 function result_view:setResult(result)
     self.result = result
-
-    table.print(self.result)
 end
 
 function result_view:openView()

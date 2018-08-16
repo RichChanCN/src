@@ -31,7 +31,6 @@ function MainScene:onCreate()
 end
 
 function MainScene:onEnter()
-	GameDataCtrl:Instance():saveData()
 	self:openMainView()
 	self:openTitleRightView()
 end

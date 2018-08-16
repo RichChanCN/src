@@ -395,7 +395,7 @@ function MonsterBase:wait(is_auto)
 		if is_auto then
 			self:defend()
 		else
-			print("you has been waited!")
+			uitool:createTopTip("you has been waited!")
 		end
 	else
 		self:changeMonsterStatus(MonsterBase.Status.WAITING)

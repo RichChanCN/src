@@ -720,7 +720,7 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </AbstractNodeData>
-          <AbstractNodeData Name="adventure_view" ActionTag="1867228251" Tag="86" IconVisible="False" LeftMargin="0.0007" RightMargin="-0.0007" TopMargin="-2159.9983" BottomMargin="2159.9983" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
+          <AbstractNodeData Name="adventure_view" ActionTag="1867228251" Tag="86" IconVisible="False" LeftMargin="38.1579" RightMargin="-38.1578" TopMargin="-2166.7690" BottomMargin="2166.7690" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
             <Size X="1920.0000" Y="1080.0000" />
             <Children>
               <AbstractNodeData Name="chapter_sv" CanEdit="False" ActionTag="-253173483" Tag="90" IconVisible="False" PositionPercentXEnabled="True" ClipAble="True" BackColorAlpha="102" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ScrollDirectionType="Horizontal" ctype="ScrollViewObjectData">
@@ -1020,17 +1020,57 @@
                       <AbstractNodeData Name="site_1_1_img" ActionTag="-829032727" Tag="123" IconVisible="False" LeftMargin="-372.9122" RightMargin="269.9122" TopMargin="-286.8007" BottomMargin="210.8007" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
                         <Size X="103.0000" Y="76.0000" />
                         <Children>
-                          <AbstractNodeData Name="num_text" ActionTag="304385212" Tag="124" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="36.7517" RightMargin="46.2483" TopMargin="8.9116" BottomMargin="31.0884" FontSize="40" LabelText="1" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                            <Size X="20.0000" Y="36.0000" />
+                          <AbstractNodeData Name="challenged_img" ActionTag="-462673263" CallBackType="Click" Tag="551" IconVisible="False" LeftMargin="21.5000" RightMargin="24.5000" TopMargin="7.5000" BottomMargin="31.5000" Scale9Width="57" Scale9Height="37" ctype="ImageViewObjectData">
+                            <Size X="57.0000" Y="37.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="50.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4854" Y="0.6579" />
+                            <PreSize X="0.5534" Y="0.4868" />
+                            <FileData Type="Normal" Path="Sprite/site_challenged.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="num_text" ActionTag="304385212" Tag="124" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="16.7517" RightMargin="26.2483" TopMargin="8.9116" BottomMargin="31.0884" IsCustomSize="True" FontSize="40" LabelText="1" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="60.0000" Y="36.0000" />
                             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                             <Position X="46.7517" Y="49.0884" />
                             <Scale ScaleX="1.0000" ScaleY="1.0000" />
                             <CColor A="255" R="255" G="255" B="255" />
                             <PrePosition X="0.4539" Y="0.6459" />
-                            <PreSize X="0.1942" Y="0.4737" />
+                            <PreSize X="0.5825" Y="0.4737" />
                             <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                             <OutlineColor A="255" R="0" G="0" B="0" />
                             <ShadowColor A="255" R="110" G="110" B="110" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_1" ActionTag="2005342156" Tag="553" IconVisible="False" LeftMargin="10.5000" RightMargin="63.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="25.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.2427" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_2" ActionTag="-1079292215" Tag="556" IconVisible="False" LeftMargin="35.5000" RightMargin="38.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4854" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_3" ActionTag="-209286946" Tag="557" IconVisible="False" LeftMargin="60.5000" RightMargin="13.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="75.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.7282" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
                           </AbstractNodeData>
                         </Children>
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
@@ -1041,96 +1081,256 @@
                         <PreSize X="0.0000" Y="0.0000" />
                         <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="site_1_2_img" ActionTag="303326266" Tag="515" IconVisible="False" LeftMargin="-66.3796" RightMargin="-36.6204" TopMargin="-261.6946" BottomMargin="185.6946" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                      <AbstractNodeData Name="site_1_2_img" ActionTag="1301404515" Tag="564" IconVisible="False" LeftMargin="-34.2151" RightMargin="-68.7849" TopMargin="-266.7980" BottomMargin="190.7980" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
                         <Size X="103.0000" Y="76.0000" />
                         <Children>
-                          <AbstractNodeData Name="num_text" ActionTag="990968603" Tag="516" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="35.3567" RightMargin="37.6433" TopMargin="7.9464" BottomMargin="32.0536" FontSize="40" LabelText="2" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                            <Size X="30.0000" Y="36.0000" />
+                          <AbstractNodeData Name="challenged_img" ActionTag="219946675" CallBackType="Click" Tag="565" IconVisible="False" LeftMargin="21.5000" RightMargin="24.5000" TopMargin="7.5000" BottomMargin="31.5000" Scale9Width="57" Scale9Height="37" ctype="ImageViewObjectData">
+                            <Size X="57.0000" Y="37.0000" />
                             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                            <Position X="50.3567" Y="50.0536" />
+                            <Position X="50.0000" Y="50.0000" />
                             <Scale ScaleX="1.0000" ScaleY="1.0000" />
                             <CColor A="255" R="255" G="255" B="255" />
-                            <PrePosition X="0.4889" Y="0.6586" />
-                            <PreSize X="0.2913" Y="0.4737" />
+                            <PrePosition X="0.4854" Y="0.6579" />
+                            <PreSize X="0.5534" Y="0.4868" />
+                            <FileData Type="Normal" Path="Sprite/site_challenged.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="num_text" ActionTag="204657917" Tag="566" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="16.7517" RightMargin="26.2483" TopMargin="8.9116" BottomMargin="31.0884" IsCustomSize="True" FontSize="40" LabelText="2" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="60.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="46.7517" Y="49.0884" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4539" Y="0.6459" />
+                            <PreSize X="0.5825" Y="0.4737" />
                             <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                             <OutlineColor A="255" R="0" G="0" B="0" />
                             <ShadowColor A="255" R="110" G="110" B="110" />
                           </AbstractNodeData>
+                          <AbstractNodeData Name="star_1" ActionTag="-676074523" Tag="567" IconVisible="False" LeftMargin="10.5000" RightMargin="63.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="25.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.2427" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_2" ActionTag="1136714950" Tag="568" IconVisible="False" LeftMargin="35.5000" RightMargin="38.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4854" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_3" ActionTag="-1790287259" Tag="569" IconVisible="False" LeftMargin="60.5000" RightMargin="13.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="75.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.7282" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
                         </Children>
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="-14.8796" Y="223.6946" />
+                        <Position X="17.2849" Y="228.7980" />
                         <Scale ScaleX="1.3000" ScaleY="1.3000" />
                         <CColor A="255" R="255" G="255" B="255" />
                         <PrePosition />
                         <PreSize X="0.0000" Y="0.0000" />
                         <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="site_1_3_img" ActionTag="67756405" Tag="517" IconVisible="False" LeftMargin="230.4012" RightMargin="-333.4012" TopMargin="-238.3664" BottomMargin="162.3664" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                      <AbstractNodeData Name="site_1_3_img" ActionTag="1325252192" Tag="570" IconVisible="False" LeftMargin="290.0706" RightMargin="-393.0706" TopMargin="-278.8260" BottomMargin="202.8260" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
                         <Size X="103.0000" Y="76.0000" />
                         <Children>
-                          <AbstractNodeData Name="num_text" ActionTag="-1978435218" Tag="518" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="37.4429" RightMargin="36.5571" TopMargin="7.1560" BottomMargin="32.8440" FontSize="40" LabelText="3" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                            <Size X="29.0000" Y="36.0000" />
+                          <AbstractNodeData Name="challenged_img" ActionTag="307085934" CallBackType="Click" Tag="571" IconVisible="False" LeftMargin="21.5000" RightMargin="24.5000" TopMargin="7.5000" BottomMargin="31.5000" Scale9Width="57" Scale9Height="37" ctype="ImageViewObjectData">
+                            <Size X="57.0000" Y="37.0000" />
                             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                            <Position X="51.9429" Y="50.8440" />
-                            <Scale ScaleX="1.0546" ScaleY="1.0000" />
+                            <Position X="50.0000" Y="50.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
                             <CColor A="255" R="255" G="255" B="255" />
-                            <PrePosition X="0.5043" Y="0.6690" />
-                            <PreSize X="0.2816" Y="0.4737" />
+                            <PrePosition X="0.4854" Y="0.6579" />
+                            <PreSize X="0.5534" Y="0.4868" />
+                            <FileData Type="Normal" Path="Sprite/site_challenged.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="num_text" ActionTag="-1609083761" Tag="572" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="16.7517" RightMargin="26.2483" TopMargin="8.9116" BottomMargin="31.0884" IsCustomSize="True" FontSize="40" LabelText="3" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="60.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="46.7517" Y="49.0884" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4539" Y="0.6459" />
+                            <PreSize X="0.5825" Y="0.4737" />
                             <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                             <OutlineColor A="255" R="0" G="0" B="0" />
                             <ShadowColor A="255" R="110" G="110" B="110" />
                           </AbstractNodeData>
+                          <AbstractNodeData Name="star_1" ActionTag="-1478967574" Tag="573" IconVisible="False" LeftMargin="10.5000" RightMargin="63.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="25.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.2427" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_2" ActionTag="743361743" Tag="574" IconVisible="False" LeftMargin="35.5000" RightMargin="38.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4854" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_3" ActionTag="250169706" Tag="575" IconVisible="False" LeftMargin="60.5000" RightMargin="13.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="75.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.7282" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
                         </Children>
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="281.9012" Y="200.3664" />
+                        <Position X="341.5706" Y="240.8260" />
                         <Scale ScaleX="1.3000" ScaleY="1.3000" />
                         <CColor A="255" R="255" G="255" B="255" />
                         <PrePosition />
                         <PreSize X="0.0000" Y="0.0000" />
                         <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="site_1_4_img" ActionTag="1019941593" Tag="519" IconVisible="False" LeftMargin="519.1789" RightMargin="-622.1789" TopMargin="-277.3591" BottomMargin="201.3591" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                      <AbstractNodeData Name="site_1_4_img" ActionTag="-635082974" Tag="576" IconVisible="False" LeftMargin="577.6415" RightMargin="-680.6415" TopMargin="-230.6389" BottomMargin="154.6389" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
                         <Size X="103.0000" Y="76.0000" />
                         <Children>
-                          <AbstractNodeData Name="num_text" ActionTag="645889237" Tag="520" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="35.8670" RightMargin="38.1330" TopMargin="9.5348" BottomMargin="30.4652" FontSize="40" LabelText="4" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                            <Size X="29.0000" Y="36.0000" />
+                          <AbstractNodeData Name="challenged_img" ActionTag="-925252828" CallBackType="Click" Tag="577" IconVisible="False" LeftMargin="21.5000" RightMargin="24.5000" TopMargin="7.5000" BottomMargin="31.5000" Scale9Width="57" Scale9Height="37" ctype="ImageViewObjectData">
+                            <Size X="57.0000" Y="37.0000" />
                             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                            <Position X="50.3670" Y="48.4652" />
+                            <Position X="50.0000" Y="50.0000" />
                             <Scale ScaleX="1.0000" ScaleY="1.0000" />
                             <CColor A="255" R="255" G="255" B="255" />
-                            <PrePosition X="0.4890" Y="0.6377" />
-                            <PreSize X="0.2816" Y="0.4737" />
+                            <PrePosition X="0.4854" Y="0.6579" />
+                            <PreSize X="0.5534" Y="0.4868" />
+                            <FileData Type="Normal" Path="Sprite/site_challenged.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="num_text" ActionTag="-5572553" Tag="578" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="16.7517" RightMargin="26.2483" TopMargin="8.9116" BottomMargin="31.0884" IsCustomSize="True" FontSize="40" LabelText="4" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="60.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="46.7517" Y="49.0884" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4539" Y="0.6459" />
+                            <PreSize X="0.5825" Y="0.4737" />
                             <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                             <OutlineColor A="255" R="0" G="0" B="0" />
                             <ShadowColor A="255" R="110" G="110" B="110" />
                           </AbstractNodeData>
+                          <AbstractNodeData Name="star_1" ActionTag="-263656633" Tag="579" IconVisible="False" LeftMargin="10.5000" RightMargin="63.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="25.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.2427" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_2" ActionTag="564188068" Tag="580" IconVisible="False" LeftMargin="35.5000" RightMargin="38.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4854" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_3" ActionTag="-515320143" Tag="581" IconVisible="False" LeftMargin="60.5000" RightMargin="13.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="75.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.7282" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
                         </Children>
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="570.6789" Y="239.3591" />
+                        <Position X="629.1415" Y="192.6389" />
                         <Scale ScaleX="1.3000" ScaleY="1.3000" />
                         <CColor A="255" R="255" G="255" B="255" />
                         <PrePosition />
                         <PreSize X="0.0000" Y="0.0000" />
                         <FileData Type="Normal" Path="Sprite/site_not_open.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="site_1_5_img" ActionTag="983308199" Tag="521" IconVisible="False" LeftMargin="488.0582" RightMargin="-591.0582" TopMargin="-39.7142" BottomMargin="-36.2858" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
+                      <AbstractNodeData Name="site_1_5_img" ActionTag="171939857" Tag="558" IconVisible="False" LeftMargin="412.5259" RightMargin="-515.5259" TopMargin="-30.0541" BottomMargin="-45.9459" TouchEnable="True" Scale9Width="103" Scale9Height="76" ctype="ImageViewObjectData">
                         <Size X="103.0000" Y="76.0000" />
                         <Children>
-                          <AbstractNodeData Name="num_text" ActionTag="845365913" Tag="522" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="37.4429" RightMargin="36.5571" TopMargin="8.7444" BottomMargin="31.2556" FontSize="40" LabelText="5" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                            <Size X="29.0000" Y="36.0000" />
+                          <AbstractNodeData Name="challenged_img" ActionTag="-1889496986" CallBackType="Click" Tag="559" IconVisible="False" LeftMargin="21.5000" RightMargin="24.5000" TopMargin="7.5000" BottomMargin="31.5000" Scale9Width="57" Scale9Height="37" ctype="ImageViewObjectData">
+                            <Size X="57.0000" Y="37.0000" />
                             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                            <Position X="51.9429" Y="49.2556" />
+                            <Position X="50.0000" Y="50.0000" />
                             <Scale ScaleX="1.0000" ScaleY="1.0000" />
                             <CColor A="255" R="255" G="255" B="255" />
-                            <PrePosition X="0.5043" Y="0.6481" />
-                            <PreSize X="0.2816" Y="0.4737" />
+                            <PrePosition X="0.4854" Y="0.6579" />
+                            <PreSize X="0.5534" Y="0.4868" />
+                            <FileData Type="Normal" Path="Sprite/site_challenged.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="num_text" ActionTag="-579226411" Tag="560" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="16.7517" RightMargin="26.2483" TopMargin="8.9116" BottomMargin="31.0884" IsCustomSize="True" FontSize="40" LabelText="5" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                            <Size X="60.0000" Y="36.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="46.7517" Y="49.0884" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4539" Y="0.6459" />
+                            <PreSize X="0.5825" Y="0.4737" />
                             <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                             <OutlineColor A="255" R="0" G="0" B="0" />
                             <ShadowColor A="255" R="110" G="110" B="110" />
                           </AbstractNodeData>
+                          <AbstractNodeData Name="star_1" ActionTag="-1189179539" Tag="561" IconVisible="False" LeftMargin="10.5000" RightMargin="63.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="25.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.2427" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_2" ActionTag="1340804708" Tag="562" IconVisible="False" LeftMargin="35.5000" RightMargin="38.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="50.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.4854" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
+                          <AbstractNodeData Name="star_3" ActionTag="-233074313" Tag="563" IconVisible="False" LeftMargin="60.5000" RightMargin="13.5000" TopMargin="49.5000" BottomMargin="-2.5000" Scale9Width="29" Scale9Height="29" ctype="ImageViewObjectData">
+                            <Size X="29.0000" Y="29.0000" />
+                            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                            <Position X="75.0000" Y="12.0000" />
+                            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                            <CColor A="255" R="255" G="255" B="255" />
+                            <PrePosition X="0.7282" Y="0.1579" />
+                            <PreSize X="0.2816" Y="0.3816" />
+                            <FileData Type="Normal" Path="Sprite/icon_star_0.png" Plist="" />
+                          </AbstractNodeData>
                         </Children>
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                        <Position X="539.5582" Y="1.7142" />
+                        <Position X="464.0259" Y="-7.9459" />
                         <Scale ScaleX="1.3000" ScaleY="1.3000" />
                         <CColor A="255" R="255" G="255" B="255" />
                         <PrePosition />
@@ -1325,10 +1525,10 @@
               </AbstractNodeData>
             </Children>
             <AnchorPoint />
-            <Position X="0.0007" Y="2159.9983" />
+            <Position X="38.1579" Y="2166.7690" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.0000" Y="2.0000" />
+            <PrePosition X="0.0199" Y="2.0063" />
             <PreSize X="1.0000" Y="1.0000" />
             <SingleColor A="255" R="19" G="29" B="57" />
             <FirstColor A="255" R="150" G="200" B="255" />
@@ -2121,26 +2321,26 @@
                         <PreSize X="0.9333" Y="0.6000" />
                         <FileData Type="Normal" Path="Sprite/bg_chat_join.png" Plist="" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="title_text" ActionTag="-1900294250" Tag="226" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="663.5000" RightMargin="663.5000" TopMargin="17.0000" BottomMargin="47.0000" FontSize="40" LabelText="Collected" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                        <Size X="173.0000" Y="36.0000" />
+                      <AbstractNodeData Name="title_text" ActionTag="-1900294250" Tag="226" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="550.0000" RightMargin="550.0000" TopMargin="17.0000" BottomMargin="47.0000" IsCustomSize="True" FontSize="40" LabelText="Collected" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                        <Size X="400.0000" Y="36.0000" />
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                         <Position X="750.0000" Y="65.0000" />
                         <Scale ScaleX="1.0000" ScaleY="1.0000" />
                         <CColor A="255" R="255" G="255" B="255" />
                         <PrePosition X="0.5000" Y="0.6500" />
-                        <PreSize X="0.1153" Y="0.3600" />
+                        <PreSize X="0.2667" Y="0.3600" />
                         <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                         <OutlineColor A="255" R="0" G="0" B="0" />
                         <ShadowColor A="255" R="110" G="110" B="110" />
                       </AbstractNodeData>
-                      <AbstractNodeData Name="title_text_0" ActionTag="739530077" Tag="227" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="389.0000" RightMargin="386.0000" TopMargin="70.0000" BottomMargin="2.0000" FontSize="30" LabelText="You can get the collected monsters in all the outputs" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                        <Size X="725.0000" Y="28.0000" />
+                      <AbstractNodeData Name="tip_text" ActionTag="739530077" Tag="227" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="251.5000" RightMargin="248.5000" TopMargin="70.0000" BottomMargin="2.0000" IsCustomSize="True" FontSize="30" LabelText="You can get the collected monsters in the rewards" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                        <Size X="1000.0000" Y="28.0000" />
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                         <Position X="751.5000" Y="16.0000" />
                         <Scale ScaleX="1.0000" ScaleY="1.0000" />
                         <CColor A="255" R="169" G="203" B="235" />
                         <PrePosition X="0.5010" Y="0.1600" />
-                        <PreSize X="0.4833" Y="0.2800" />
+                        <PreSize X="0.6667" Y="0.2800" />
                         <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
                         <OutlineColor A="255" R="0" G="0" B="0" />
                         <ShadowColor A="255" R="110" G="110" B="110" />
@@ -2490,8 +2690,8 @@
                     <PreSize X="0.0000" Y="0.0000" />
                     <FileData Type="Normal" Path="Sprite/item_bg_4.png" Plist="" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="progress_img" ActionTag="726143378" Alpha="204" Tag="254" IconVisible="False" LeftMargin="-145.0000" TopMargin="320.0000" BottomMargin="-370.0000" Scale9Enable="True" LeftEage="9" RightEage="4" TopEage="7" BottomEage="7" Scale9OriginX="9" Scale9OriginY="7" Scale9Width="17" Scale9Height="10" ctype="ImageViewObjectData">
-                    <Size X="145.0000" Y="50.0000" />
+                  <AbstractNodeData Name="progress_img" ActionTag="726143378" Alpha="204" Tag="254" IconVisible="False" LeftMargin="-145.0000" RightMargin="-147.0000" TopMargin="320.0000" BottomMargin="-370.0000" Scale9Enable="True" LeftEage="9" RightEage="4" TopEage="7" BottomEage="7" Scale9OriginX="9" Scale9OriginY="7" Scale9Width="17" Scale9Height="10" ctype="ImageViewObjectData">
+                    <Size X="292.0000" Y="50.0000" />
                     <AnchorPoint ScaleY="0.5000" />
                     <Position X="-145.0000" Y="-345.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
@@ -2511,8 +2711,8 @@
                     <FileData Type="Normal" Path="Sprite/icon_up_3.png" Plist="" />
                     <BlendFunc Src="770" Dst="771" />
                   </AbstractNodeData>
-                  <AbstractNodeData Name="progress_text" ActionTag="-545343338" Tag="257" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="-29.5000" RightMargin="-29.5000" TopMargin="331.0000" BottomMargin="-359.0000" FontSize="30" LabelText="1/2" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
-                    <Size X="59.0000" Y="28.0000" />
+                  <AbstractNodeData Name="progress_text" ActionTag="-545343338" Tag="257" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="-50.0000" RightMargin="-50.0000" TopMargin="331.0000" BottomMargin="-359.0000" IsCustomSize="True" FontSize="30" LabelText="1/2" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="100.0000" Y="28.0000" />
                     <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                     <Position Y="-345.0000" />
                     <Scale ScaleX="1.0000" ScaleY="1.0000" />
@@ -2853,6 +3053,65 @@
                     <PrePosition X="0.2917" Y="0.5481" />
                     <PreSize X="0.3350" Y="0.0652" />
                     <FileData Type="Normal" Path="Sprite/item_bg_3.png" Plist="" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="skill_sp" ActionTag="1028831538" Tag="546" IconVisible="False" LeftMargin="88.0000" RightMargin="428.0000" TopMargin="403.0000" BottomMargin="188.0000" ctype="SpriteObjectData">
+                    <Size X="84.0000" Y="84.0000" />
+                    <Children>
+                      <AbstractNodeData Name="skill_icon_sp" ActionTag="1163917518" Tag="547" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" ctype="SpriteObjectData">
+                        <Size X="84.0000" Y="84.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="42.0000" Y="42.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.0000" Y="1.0000" />
+                        <FileData Type="Normal" Path="Sprite/icon_skill_destructive_ray.png" Plist="" />
+                        <BlendFunc Src="773" Dst="772" />
+                      </AbstractNodeData>
+                      <AbstractNodeData Name="skill_border_sp" ActionTag="-205116841" Tag="548" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-6.0000" RightMargin="-6.0000" TopMargin="-4.5000" BottomMargin="-4.5000" ctype="SpriteObjectData">
+                        <Size X="96.0000" Y="93.0000" />
+                        <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                        <Position X="42.0000" Y="42.0000" />
+                        <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                        <CColor A="255" R="255" G="255" B="255" />
+                        <PrePosition X="0.5000" Y="0.5000" />
+                        <PreSize X="1.1429" Y="1.1071" />
+                        <FileData Type="Normal" Path="Sprite/skill_icon_bg.png" Plist="" />
+                        <BlendFunc Src="770" Dst="771" />
+                      </AbstractNodeData>
+                    </Children>
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="130.0000" Y="230.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <PrePosition X="0.2167" Y="0.3407" />
+                    <PreSize X="0.1400" Y="0.1244" />
+                    <FileData Type="Normal" Path="Sprite/mask_skill_icon.png" Plist="" />
+                    <BlendFunc Src="771" Dst="769" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="skill_description_text" ActionTag="-787212956" VisibleForFrame="False" Tag="549" IconVisible="False" LeftMargin="195.0000" RightMargin="55.0000" TopMargin="400.0000" BottomMargin="175.0000" IsCustomSize="True" FontSize="20" LabelText="Emmmmmmm..." OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="350.0000" Y="100.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="370.0000" Y="225.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="0" G="0" B="0" />
+                    <PrePosition X="0.6167" Y="0.3333" />
+                    <PreSize X="0.5833" Y="0.1481" />
+                    <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                    <OutlineColor A="255" R="255" G="255" B="255" />
+                    <ShadowColor A="255" R="110" G="110" B="110" />
+                  </AbstractNodeData>
+                  <AbstractNodeData Name="no_skill_text" ActionTag="1483014278" Tag="550" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="150.0000" RightMargin="150.0000" TopMargin="419.5000" BottomMargin="210.5000" IsCustomSize="True" FontSize="50" LabelText="No Skills" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
+                    <Size X="300.0000" Y="45.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <Position X="300.0000" Y="233.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <CColor A="255" R="0" G="0" B="0" />
+                    <PrePosition X="0.5000" Y="0.3452" />
+                    <PreSize X="0.5000" Y="0.0667" />
+                    <FontResource Type="Normal" Path="Font/camex2.2.ttf" Plist="" />
+                    <OutlineColor A="255" R="255" G="255" B="255" />
+                    <ShadowColor A="255" R="110" G="110" B="110" />
                   </AbstractNodeData>
                   <AbstractNodeData Name="hp_text" ActionTag="413621338" Tag="281" IconVisible="False" LeftMargin="125.0000" RightMargin="375.0000" TopMargin="93.0000" BottomMargin="558.0000" IsCustomSize="True" FontSize="25" LabelText="100" HorizontalAlignmentType="HT_Center" VerticalAlignmentType="VT_Center" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
                     <Size X="100.0000" Y="24.0000" />
@@ -3290,7 +3549,7 @@
                 <OutlineColor A="255" R="255" G="0" B="0" />
                 <ShadowColor A="255" R="110" G="110" B="110" />
               </AbstractNodeData>
-              <AbstractNodeData Name="got_img" ActionTag="1598353536" VisibleForFrame="False" Tag="526" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="896.5603" RightMargin="901.4397" TopMargin="483.1729" BottomMargin="485.8271" Scale9Width="122" Scale9Height="111" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="got_img" ActionTag="1598353536" VisibleForFrame="False" Tag="526" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="896.5040" RightMargin="901.4960" TopMargin="483.2040" BottomMargin="485.7960" Scale9Width="122" Scale9Height="111" ctype="ImageViewObjectData">
                 <Size X="122.0000" Y="111.0000" />
                 <Children>
                   <AbstractNodeData Name="got_text" ActionTag="1471595638" Tag="532" IconVisible="False" PositionPercentXEnabled="True" LeftMargin="7.0000" RightMargin="7.0000" TopMargin="127.0000" BottomMargin="-44.0000" FontSize="30" LabelText="Claimed" OutlineEnabled="True" ShadowOffsetX="2.0000" ShadowOffsetY="-2.0000" ctype="TextObjectData">
@@ -3307,7 +3566,7 @@
                   </AbstractNodeData>
                 </Children>
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="957.5603" Y="541.3271" />
+                <Position X="957.5040" Y="541.2960" />
                 <Scale ScaleX="1.5000" ScaleY="1.5000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.4987" Y="0.5012" />
@@ -3337,7 +3596,7 @@
                 <PrePosition X="0.5000" Y="0.4500" />
                 <PreSize X="0.0000" Y="0.0000" />
               </AbstractNodeData>
-              <AbstractNodeData Name="reward_template" ActionTag="-1740410388" Tag="527" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="211.7104" RightMargin="1558.2896" TopMargin="-470.2395" BottomMargin="1370.2395" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="reward_template" ActionTag="-1740410388" Tag="527" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="211.7104" RightMargin="1558.2896" TopMargin="-470.2681" BottomMargin="1370.2681" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
                 <Size X="150.0000" Y="180.0000" />
                 <Children>
                   <AbstractNodeData Name="border_img" CanEdit="False" ActionTag="-1996868286" Tag="528" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-17.0000" RightMargin="-17.0000" TopMargin="-18.0000" BottomMargin="-18.0000" Scale9Width="184" Scale9Height="216" ctype="ImageViewObjectData">
@@ -3374,7 +3633,7 @@
                   </AbstractNodeData>
                 </Children>
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="286.7104" Y="1460.2395" />
+                <Position X="286.7104" Y="1460.2681" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="0.1493" Y="1.3521" />

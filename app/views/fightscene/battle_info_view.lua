@@ -239,8 +239,12 @@ function battle_info_view:updateRightBottomQueue(is_wait)
             end
             if not last_item.monster:isDead() then
                 local index = Judgment:Instance():getMonsterIndexInCurRoundAliveMonster(last_item.monster)-1
-                self.queue_lv:insertCustomItem(last_item,index)
-    
+                if self.queue_lv:getItem(index) then
+                    self.queue_lv:insertCustomItem(last_item,index)
+                else
+                    self.queue_lv:pushBackCustomItem(last_item)
+                end
+                
                 last_item:setOpacity(0)
                 last_item:runAction(cc.FadeIn:create(0.3))
             end
@@ -280,7 +284,6 @@ function battle_info_view:updateRightBottomQueue(is_wait)
         local index = self.queue_lv:getIndex(self.next_round_in_queue)
         self.queue_lv:insertCustomItem(last_item,index)
     end
-
     self:updateSkillImage()
 end
 

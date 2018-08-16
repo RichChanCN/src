@@ -195,7 +195,7 @@ end
 
 function Judgment:selectPos(node)
 	if self.map_info[gtool:ccpToInt(node.arena_pos)] then
-		print("you can't do that!")
+		uitool:createTopTip("you can't do that!")
 	else
 		self:runGame(Judgment.Order.MOVE, node.arena_pos)
 	end

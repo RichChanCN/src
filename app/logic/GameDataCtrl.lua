@@ -92,6 +92,10 @@ function GameDataCtrl:getNotCollectedMonsterList()
 	return self.save_data:getNotCollectedMonsterList()
 end
 
+function GameDataCtrl:getSaveMonsterDataByID(id)
+	return self.save_data:getMonsterDataByID(id)
+end
+
 function GameDataCtrl:getMonsterData()
 	return self.monster_data
 end

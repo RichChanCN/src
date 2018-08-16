@@ -36,13 +36,13 @@ function SkillBase:use(target_pos_num)
 	if (not target_pos_num) and (not self.is_need_target) or self.range < 1 then
 		self.target_pos_num = self.caster:getCurPosNum()
 	elseif (not target_pos_num) and self.is_need_target then 
-		print(self.name.." need a target pos !")
+		uitool:createTopTip(self.name.." need a target pos !")
 		return
 	end
 	local monster_list = self:getBeAffectedMonsterList()
 	--Judgment:Instance():getScene():getParticleNode():removeChildByName(self.name)
 	if #monster_list < 1 then
-		print("no monster is affected by "..self.name)
+		uitool:createTopTip("no monster is affected by "..self.name)
 		Judgment:Instance():nextMonsterActivate()
 	else
 		for i,v in ipairs(monster_list) do
@@ -96,6 +96,14 @@ function SkillBase:getBeAffectedMonsterList()
 			monster_list = self.caster:getAliveEnemyMonsters()
 		elseif self.healing > 0 or self.buff then
 			monster_list = self.caster:getAliveFriendMonsters()
+		end
+	elseif (not self:isNeedTarget()) and self.range > 1 then
+		local pos_list = gtool:getPosListInRange(self.caster:getCurPosNum(), self.range)
+		local map_info = Judgment:Instance():getMapInfo()
+		for k,v in pairs(pos_list) do
+			if map_info[k] and type(map_info[k]) == type({}) and self.caster:isEnemy(map_info[k]) then
+				table.insert(monster_list,map_info[k])
+			end
 		end
 	elseif self.target_pos_num and self.range > 1 then
 		local pos_list = gtool:getPosListInRange(self.target_pos_num, self.range)

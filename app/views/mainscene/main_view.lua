@@ -32,7 +32,9 @@ function main_view:initEvents()
         self:closeView()
     end)
 
-    uitool:makeImgToButton(self.train_img,nil)
+    uitool:makeImgToButton(self.train_img,function()
+        uitool:createTopTip("unenble yet!")
+    end)
 
     uitool:makeImgToButtonNoScale(self.title_face_sp, function ()
         self.ctrl:openSettingView()

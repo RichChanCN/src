@@ -303,3 +303,41 @@ function uitool:initOtherCardWithTypeAndNum(card,ctype,num,click_event)
     end
 
 end
+
+function uitool:createTopTip(string,color)
+    color = color or "white"
+    color = Config.color[color]
+    local scene = cc.Director:getInstance():getRunningScene()
+    if not scene.top_tip then
+        local tip_bg = cc.Sprite:create()
+        tip_bg:setTexture(Config.sprite.tip_bg)
+        local label = cc.Label:createWithTTF(string,Config.font.default,36)
+        label:setPosition(self:getNodeCenterPosition(tip_bg))
+        tip_bg.label = label
+        tip_bg:addChild(label)
+        tip_bg:setScale(2)
+        scene.top_tip = tip_bg
+        scene:addChild(tip_bg, self:top_Z_order())
+    else
+        scene.top_tip:stopAllActions()
+        scene.top_tip.label:setString(string)
+        scene.top_tip:setVisible(true)
+    end
+
+    scene.top_tip.label:setTextColor(color)
+
+    scene.top_tip:setPosition(self:getNodeCenterPosition(scene))
+
+    local cb = function()
+        scene.top_tip:setVisible(false)
+    end
+
+    local callback = cc.CallFunc:create(cb)
+
+    local ac = scene.top_tip:runAction(cc.FadeIn:create(1))
+    scene.top_tip:stopAction(ac)
+
+    local seq = cc.Sequence:create(ac,callback)
+
+    scene.top_tip:runAction(seq)
+end

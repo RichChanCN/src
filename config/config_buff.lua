@@ -165,7 +165,7 @@ Config.Buff = {
 		end,
 		once_a_round = function(monster)
 			local MonsterBase = require("app.logic.MonsterBase")
-			monster:minusHP(200, MonsterBase.DamageLevel.POISON,true)
+			monster:minusHP(40, MonsterBase.DamageLevel.POISON,true)
 		end,
 		apply = function(monster)
 			monster.cur_damage = monster.cur_damage * 0.9

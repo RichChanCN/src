@@ -8,6 +8,19 @@ Config.sprite = {
 	card_crystal 	= Config.sprite_path.."icon_crystal.png",
 	card_coin 		= Config.sprite_path.."icon_gold.png",
 
+	tip_bg = Config.sprite_path.."bg_chat_join.png",
+
+	challenge_normal = Config.sprite_path.."site_open.png",
+	challenge_best = Config.sprite_path.."site_challenged.png",
+
+	site_star_get = Config.sprite_path.."icon_star_1.png",
+	site_star_empty = Config.sprite_path.."icon_star_0.png",
+
+	star_0_site = Config.sprite_path.."site_not_open.png",
+	star_1_site = Config.sprite_path.."site_bg_star_1.png",
+	star_2_site = Config.sprite_path.."site_bg_star_2.png",
+	star_3_site = Config.sprite_path.."site_bg_star_3.png",
+
 	lager_star_got 		= Config.sprite_path.."site_big_star.png",
 	lager_star_empty 	= Config.sprite_path.."site_big_star_gray.png",
 
@@ -58,6 +71,12 @@ Config.sprite = {
 }
 
 Config.color = {
+	white = cc.c4b(255,255,255,255),
+	black = cc.c4b(0,0,0,255),
+	green = cc.c4b(0,255,0,255),
+	blue  = cc.c4b(0,0,255,255),
+	red   = cc.c4b(255,0,0,255),
+
 	rarity_color_1 = cc.c4b(66,152,76,255),
 	rarity_color_2 = cc.c4b(74,154,219,255),
 	rarity_color_3 = cc.c4b(193,78,242,255),
@@ -101,7 +120,12 @@ Config.text = {
 
 	reward_had_got = "You have already received the rewards!",
 	reward_first_get = "You win these rewards!",
+	defeat = "Regrettably,please try again",
 
 	collected_tip = "You can get the collected monsters in the rewards",
 	uncollected_tip = "You can unlock these monsters in the story or shop",
+}
+
+Config.font = {
+	default = Config.fonts_path.."camex2.2.ttf",
 }

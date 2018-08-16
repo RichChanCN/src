@@ -1808,7 +1808,7 @@
                 <PreSize X="0.0667" Y="0.0593" />
                 <FileData Type="Default" Path="Default/defaultMap.tmx" Plist="" />
               </AbstractNodeData>
-              <AbstractNodeData Name="pre_panel" ActionTag="-2105716723" Tag="538" IconVisible="False" TopMargin="-0.0015" BottomMargin="0.0015" TouchEnable="True" ComboBoxIndex="1" ColorAngle="90.0000" ctype="PanelObjectData">
+              <AbstractNodeData Name="pre_panel" ActionTag="-2105716723" Tag="538" IconVisible="False" TopMargin="-0.0015" BottomMargin="0.0015" TouchEnable="True" ComboBoxIndex="1" ColorAngle="90.0000" Scale9Width="1" Scale9Height="1" ctype="PanelObjectData">
                 <Size X="1920.0000" Y="1080.0000" />
                 <Children>
                   <AbstractNodeData Name="logo_node" ActionTag="1291055899" VisibleForFrame="False" Tag="544" IconVisible="True" LeftMargin="960.0000" RightMargin="960.0000" TopMargin="540.0000" BottomMargin="540.0000" ctype="SingleNodeObjectData">
@@ -2487,7 +2487,7 @@
                 <PreSize X="0.1563" Y="0.0833" />
                 <FileData Type="Normal" Path="Sprite/button_002.png" Plist="" />
               </AbstractNodeData>
-              <AbstractNodeData Name="reward_template" ActionTag="-2063669352" Tag="534" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-745.5631" RightMargin="2515.5630" TopMargin="646.5463" BottomMargin="253.4537" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
+              <AbstractNodeData Name="reward_template" ActionTag="-2063669352" Tag="534" IconVisible="False" PositionPercentYEnabled="True" LeftMargin="-745.5631" RightMargin="2515.5630" TopMargin="646.5600" BottomMargin="253.4400" Scale9Width="150" Scale9Height="180" ctype="ImageViewObjectData">
                 <Size X="150.0000" Y="180.0000" />
                 <Children>
                   <AbstractNodeData Name="border_img" CanEdit="False" ActionTag="2042248057" Tag="535" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="-17.0000" RightMargin="-17.0000" TopMargin="-18.0000" BottomMargin="-18.0000" Scale9Width="184" Scale9Height="216" ctype="ImageViewObjectData">
@@ -2524,7 +2524,7 @@
                   </AbstractNodeData>
                 </Children>
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <Position X="-670.5631" Y="343.4537" />
+                <Position X="-670.5631" Y="343.4400" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <PrePosition X="-0.3493" Y="0.3180" />

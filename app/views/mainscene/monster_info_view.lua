@@ -34,7 +34,7 @@ function monster_info_view:updateInfo(monster_list,index)
     self.is_model_loaded = false
     self.monster_list = monster_list
     self.cur_index = index
-
+    self.monster_data = monster_list[index]
     self.last_index = self.cur_index - 1
     if self.last_index < 1 then
         self.last_index = #self.monster_list
@@ -59,7 +59,6 @@ function monster_info_view:initEvents()
         self:updateView(self.monster_list,self.last_index)
     end)
     uitool:makeImgToButton(self.upgrade_img,function()
-        print("···",self.monster_data.card_num)
         if self.monster_data.card_num and not(self.monster_data.card_num < self.monster_data.level) then
             GameDataCtrl:Instance():requestUpgradeMonster(self.monster_data.id)
             self:upgradeUpdate()
@@ -78,7 +77,6 @@ end
 
 function monster_info_view:onOpen(...)
     local params = {...}
-    self.monster_data = params[1][params[2]]
     self:updateView(params[1],params[2])
     self.left_node:runAction(cc.MoveTo:create(0.2,self.left_node_final_pos))
     self.info_bg_img:runAction(cc.MoveTo:create(0.2,self.right_node_final_pos))
@@ -92,11 +90,17 @@ end
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 
+function monster_info_view:updateMonsterByID(id)
+    self.monster_list[self.cur_index] = GameDataCtrl:Instance():getSaveMonsterDataByID(id)
+end
+
 function monster_info_view:upgradeUpdate()
     local card_num,level = GameDataCtrl:Instance():getMonsterCardNumAndLevelByID(self.monster_data.id)
+    print(card_num,level)
     self.title_text:setString("LEVEL "..level.." "..self.monster_data.name)
     self.progress_text:setString(card_num .."/"..level)
-    uitool:setProgressBar(self.progress_img, card_num)
+    uitool:setProgressBar(self.progress_img, card_num/level)
+    self:updateMonsterByID(self.monster_data.id)
 end
 
 --------------------左边相关开始----------------------

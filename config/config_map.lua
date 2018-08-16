@@ -5,10 +5,10 @@ Config.Map = {
 		[1] = {
 			reward = {
 				monster = {
-					[1] = 1,
-					[2] = 2,
+					[1] = 10,
+					[4] = 10,
 				},
-				exp = 50,
+				exp = 20,
 				crystal = 10,
 				coin = 100,
 			},
@@ -37,10 +37,11 @@ Config.Map = {
 		[2] = {
 			reward = {
 				monster = {
-					[2] = 2,
+					[2] = 10,
+					[3] = 1,
 				},
-				exp = 50,
-				crystal = 10,
+				exp = 40,
+				crystal = 20,
 				coin = 200,
 			},
 			can_use_monster_list = nil,
@@ -73,12 +74,12 @@ Config.Map = {
 		[3] = {
 			reward = {
 				monster = {
-					[2] = 1,
-					[3] = 1,
+					[3] = 2,
+					[4] = 1,
 				},
-				exp = 50,
+				exp = 60,
 				crystal = 10,
-				coin = 100,
+				coin = 300,
 			},
 			can_use_monster_list = nil,
 			monster_num_limit = 5,
@@ -111,12 +112,12 @@ Config.Map = {
 		[4] = {
 			reward = {
 				monster = {
-					[2] = 1,
-					[3] = 1,
+					[4] = 2,
+					[5] = 1,
 				},
 				exp = 50,
 				crystal = 10,
-				coin = 100,
+				coin = 400,
 			},
 			can_use_monster_list = nil,
 			monster_num_limit = 5,
@@ -142,7 +143,7 @@ Config.Map = {
 				[45] = 2,
 				[46] = 2,
 
-				[74] = 307,
+				[74] = 306,
 				[83] = 304,
 				[85] = 304,
 			},
@@ -151,12 +152,12 @@ Config.Map = {
 		[5] = {
 			reward = {
 				monster = {
-					[2] = 1,
-					[3] = 1,
+					[6] = 1,
+					[7] = 1,
 				},
-				exp = 50,
-				crystal = 0,
-				coin = 100,
+				exp = 100,
+				crystal = 50,
+				coin = 500,
 			},
 			can_use_monster_list = nil,
 			monster_num_limit = 5,
