@@ -87,10 +87,11 @@ function embattle_view:updateMonstersNum()
 	self.select_num_text:setString("MonsterSelect ("..self.team_size.."/"..self.monster_num_limit..")")
 end
 
-function embattle_view:openView(chapter_num,level_num)
-	if not self.is_inited then
-		self:init()
-	end
+function embattle_view:onOpen(...)
+	local params = {...}
+	local chapter_num = params[1]
+	local level_num = params[2]
+
 	if chapter_num and level_num then
 		local map_data = GameDataCtrl:Instance():getMapDataByStoryAndLevel(chapter_num,level_num)
 		self:resetArena()
@@ -101,7 +102,6 @@ function embattle_view:openView(chapter_num,level_num)
 	if self.is_updated then
 		self:resumeMonsterListListener()
 		self:resumeArenaListener()
-		self.root:setPosition(uitool:zero())
 	end
 end
 

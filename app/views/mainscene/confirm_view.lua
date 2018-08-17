@@ -94,13 +94,11 @@ function confirm_view:updateReward()
 
 end
 
-function confirm_view:openView(chapter_num,level_num)
-	if not self.is_inited then
-		self:init()
-	end
-	self:updateInfo(chapter_num,level_num)
+function confirm_view:onOpen(...)
+	local params = {...}
+	self:updateInfo(params[1],params[2])
 	self:updateView()
-	self.root:setPosition(uitool:zero())
 end
+
 
 return confirm_view
