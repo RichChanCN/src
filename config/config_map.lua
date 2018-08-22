@@ -1,10 +1,15 @@
-Config = Config or {}
+g_config = g_config or {}
 
-Config.Map = {
-	[1] = {
-		[1] = {
-			reward = {
-				monster = {
+g_config.Map = 
+{
+	[1] = 
+	{
+		[1] = 
+		{
+			reward = 
+			{
+				monster = 
+				{
 					[1] = 10,
 					[4] = 10,
 				},
@@ -12,10 +17,18 @@ Config.Map = {
 				crystal = 10,
 				coin = 100,
 			},
-			can_use_monster_list = {1},
+
+			can_use_monster_list = 
+			{
+				1
+			},
+
 			monster_num_limit = 1,
-			barrier_model = Config.model_path.."tree.c3b",
-			arena_info = {
+
+			barrier_model = g_config.model_path.."tree.c3b",
+			
+			arena_info = 
+			{
 				[12] = 0,
 				[13] = 0,
 				[14] = 0,
@@ -34,9 +47,12 @@ Config.Map = {
 			},
 		},
 
-		[2] = {
-			reward = {
-				monster = {
+		[2] = 
+		{
+			reward = 
+			{
+				monster = 
+				{
 					[2] = 10,
 					[3] = 1,
 				},
@@ -44,10 +60,15 @@ Config.Map = {
 				crystal = 20,
 				coin = 200,
 			},
+
 			can_use_monster_list = nil,
+
 			monster_num_limit = 5,
-			barrier_model = Config.model_path.."tree.c3b",
-			arena_info = {
+
+			barrier_model = g_config.model_path.."tree.c3b",
+
+			arena_info = 
+			{
 				[12] = 0,
 				[13] = 0,
 				[14] = 0,
@@ -71,9 +92,12 @@ Config.Map = {
 			},
 		},
 
-		[3] = {
-			reward = {
-				monster = {
+		[3] = 
+		{
+			reward = 
+			{
+				monster = 
+				{
 					[3] = 2,
 					[4] = 1,
 				},
@@ -81,10 +105,15 @@ Config.Map = {
 				crystal = 10,
 				coin = 300,
 			},
+
 			can_use_monster_list = nil,
+
 			monster_num_limit = 5,
-			barrier_model = Config.model_path.."tree.c3b",
-			arena_info = {
+
+			barrier_model = g_config.model_path.."tree.c3b",
+
+			arena_info = 
+			{
 				[12] = 0,
 				[13] = 0,
 				[14] = 0,
@@ -109,9 +138,12 @@ Config.Map = {
 			},
 		},
 
-		[4] = {
-			reward = {
-				monster = {
+		[4] = 
+		{
+			reward = 
+			{
+				monster = 
+				{
 					[4] = 2,
 					[5] = 1,
 				},
@@ -119,10 +151,15 @@ Config.Map = {
 				crystal = 10,
 				coin = 400,
 			},
+
 			can_use_monster_list = nil,
+
 			monster_num_limit = 5,
-			barrier_model = Config.model_path.."tree.c3b",
-			arena_info = {
+
+			barrier_model = g_config.model_path.."tree.c3b",
+
+			arena_info = 
+			{
 				[12] = 0,
 				[13] = 0,
 				[14] = 0,
@@ -149,9 +186,12 @@ Config.Map = {
 			},
 		},
 
-		[5] = {
-			reward = {
-				monster = {
+		[5] = 
+		{
+			reward = 
+			{
+				monster = 
+				{
 					[6] = 1,
 					[7] = 1,
 				},
@@ -159,10 +199,15 @@ Config.Map = {
 				crystal = 50,
 				coin = 500,
 			},
+
 			can_use_monster_list = nil,
+
 			monster_num_limit = 5,
-			barrier_model = Config.model_path.."tree.c3b",
-			arena_info = {
+
+			barrier_model = g_config.model_path.."tree.c3b",
+			
+			arena_info = 
+			{
 				[12] = 0,
 				[13] = 0,
 				[14] = 0,

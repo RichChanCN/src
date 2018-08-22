@@ -15,7 +15,7 @@ function monster_info_view:initUI()
     self:initRightInfoNode()
 end
 
-function monster_info_view:initInfo()
+function monster_info_view:init_info()
     self.left_node_start_pos = cc.p(-545,540)
     self.left_node_final_pos = cc.p(545,540)
     self.right_node_start_pos = cc.p(2350,500)
@@ -48,7 +48,7 @@ end
 
 function monster_info_view:initEvents()
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:closeMonsterInfoView()
+        self.ctrl:close_monster_info_view()
     end)
 
     self.left_btn:addClickEventListener(function(sender)
@@ -60,7 +60,7 @@ function monster_info_view:initEvents()
     end)
     uitool:makeImgToButton(self.upgrade_img,function()
         if self.monster_data.card_num and not(self.monster_data.card_num < self.monster_data.level) then
-            GameDataCtrl:Instance():requestUpgradeMonster(self.monster_data.id)
+            game_data_ctrl:Instance():requestUpgradeMonster(self.monster_data.id)
             self:upgradeUpdate()
         end
     end)
@@ -91,15 +91,15 @@ end
 ----------------------------------------------------------------
 
 function monster_info_view:updateMonsterByID(id)
-    self.monster_list[self.cur_index] = GameDataCtrl:Instance():getSaveMonsterDataByID(id)
+    self.monster_list[self.cur_index] = game_data_ctrl:Instance():get_save_monster_data_by_id(id)
 end
 
 function monster_info_view:upgradeUpdate()
-    local card_num,level = GameDataCtrl:Instance():getMonsterCardNumAndLevelByID(self.monster_data.id)
+    local card_num,level = game_data_ctrl:Instance():get_monster_card_num_and_level_by_id(self.monster_data.id)
     print(card_num,level)
     self.title_text:setString("LEVEL "..level.." "..self.monster_data.name)
     self.progress_text:setString(card_num .."/"..level)
-    uitool:setProgressBar(self.progress_img, card_num/level)
+    uitool:set_progress_bar(self.progress_img, card_num/level)
     self:updateMonsterByID(self.monster_data.id)
 end
 
@@ -123,18 +123,18 @@ end
 function monster_info_view:updateLeftModelNode(data)
     self:createModel(data)
 
-    self.rarity_sp:setTexture(Config.sprite["rarity_sp_"..data.rarity])
-    self.type_sp:setTexture(Config.sprite["attack_type_"..data.attack_type])
-    self.type_text:setString(Config.text["monster_type_"..data.attack_type])
-    self.rarity_text:setString(Config.text["rarity_text_"..data.rarity])
-    self.rarity_text:setTextColor(Config.color["rarity_color_"..data.rarity])
+    self.rarity_sp:setTexture(g_config.sprite["rarity_sp_"..data.rarity])
+    self.type_sp:setTexture(g_config.sprite["attack_type_"..data.attack_type])
+    self.type_text:setString(g_config.text["monster_type_"..data.attack_type])
+    self.rarity_text:setString(g_config.text["rarity_text_"..data.rarity])
+    self.rarity_text:setTextColor(g_config.color["rarity_color_"..data.rarity])
 
     if not data.card_num then
         self.progress_text:setString(0 .."/"..data.level)
-        uitool:setProgressBar(self.progress_img, 0)
+        uitool:set_progress_bar(self.progress_img, 0)
     else
         self.progress_text:setString(data.card_num.."/"..data.level)
-        uitool:setProgressBar(self.progress_img, data.card_num/data.level)
+        uitool:set_progress_bar(self.progress_img, data.card_num/data.level)
     end
 end
 
@@ -147,15 +147,15 @@ function monster_info_view:createModel(data)
 
 		model:setScale(4.5)
         model:setRotation3D(cc.vec3(0,-90,0))
-        if data.move_type == Config.Monster_move_type.FLY then
-            model:setPosition(uitool:getNodeCenterPosition(self.model_panel))
+        if data.move_type == g_config.monster_move_type.FLY then
+            model:setPosition(uitool:get_node_center_position(self.model_panel))
         else
-            model:setPosition(uitool:getNodeBottomCenterPosition(self.model_panel))
+            model:setPosition(uitool:get_node_bottom_center_position(self.model_panel))
         end
         
         self.animation = cc.Animation3D:create(data.model_path)
         if self.animation then
-            local animate = Config.Monster_animate[data.id].alive(self.animation)
+            local animate = g_config.monster_animate[data.id].alive(self.animation)
             model:runAction(cc.RepeatForever:create(animate))
         end
 
@@ -184,7 +184,7 @@ function monster_info_view:initModelEvents()
 	local function touchBegan( touch, event )
 	    local node = event:getCurrentTarget()
 
-	    if uitool:isTouchInNodeRect(node,touch,event) and self.is_model_loaded then
+	    if uitool:is_touch_in_node_rect(node,touch,event) and self.is_model_loaded then
 	        return true
 	    end
 
@@ -222,11 +222,11 @@ end
 
 function monster_info_view:playAnAnimation()
     self.monster_model:stopAllActions()
-    local animate = Config.Monster_animate[self.cur_monster_id][self.next_animate](self.animation)
+    local animate = g_config.monster_animate[self.cur_monster_id][self.next_animate](self.animation)
 
     self.monster_model:runAction(cc.RepeatForever:create(animate))
 
-    self.next_animate = self.next_animate % Config.Monster_animate[self.cur_monster_id].show_num + 1
+    self.next_animate = self.next_animate % g_config.monster_animate[self.cur_monster_id].show_num + 1
 end
 --------------------左边相关结束----------------------
 

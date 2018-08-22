@@ -18,8 +18,8 @@ function main_view:initUI()
     self:initBottomNode()
 end
 
--- function main_view:initInfo()
---     local player_data = self.ctrl:getPlayerData()
+-- function main_view:init_info()
+--     local player_data = self.ctrl:get_player_data()
 --     self.nickname = player_data.nickname
 --     self.face_sp = player_data.face_sp
 --     self.exp = player_data.exp
@@ -28,7 +28,7 @@ end
 
 function main_view:initEvents()
 	uitool:makeImgToButton(self.adventure_img,function(sender)
-        self.ctrl:openAdventureView()
+        self.ctrl:open_adventure_view()
         self:closeView()
     end)
 
@@ -37,14 +37,14 @@ function main_view:initEvents()
     end)
 
     uitool:makeImgToButtonNoScale(self.title_face_sp, function ()
-        self.ctrl:openSettingView()
+        self.ctrl:open_setting_view()
     end)
 
     self:initRightBottomBtnEvents()
 end
 
 function main_view:updateInfo()
-    local player_data = GameDataCtrl:Instance():getPlayerData()
+    local player_data = game_data_ctrl:Instance():get_player_data()
     self.nickname = player_data.nickname
     self.face_sp = player_data.face_sp
     self.exp = player_data.exp
@@ -54,10 +54,10 @@ end
 
 function main_view:updateView()
     self.nickname_text:setString(self.nickname)
-    self.title_face_sp:setTexture(Config.monster_img_path..self.face_sp)
+    self.title_face_sp:setTexture(g_config.monster_img_path..self.face_sp)
     self.nickname_text:setString(self.nickname)
     self.level_text:setString(self.level)
-    uitool:setProgressBar(self.exp_now_img, self.exp/self.cur_max_exp)
+    uitool:set_progress_bar(self.exp_now_img, self.exp/self.cur_max_exp)
 end
 
 function main_view:onOpen()
@@ -90,7 +90,7 @@ end
 
 function main_view:initRightBottomBtnEvents()
     self.monster_btn:addClickEventListener(function(sender)
-        self.ctrl:openMonsterListView()
+        self.ctrl:open_monster_list_view()
     end)
 end
 

@@ -1,11 +1,12 @@
-Config = Config or {}
+g_config = g_config or {}
 
-Config.Particle = {
-	magic_ball		= Config.particle_path.."magicball.plist",
-	frozen 			= Config.particle_path.."frozen.plist",
-	poison 			= Config.particle_path.."poison.plist",
-	stun 			= Config.particle_path.."stun.plist",
-	damage_up 		= Config.particle_path.."damageup.plist",
-	skill_can_use 	= Config.particle_path.."skillcanuse.plist",
-	skill_will_use 	= Config.particle_path.."skillwilluse.plist",
+g_config.Particle = 
+{
+	magic_ball		= g_config.particle_path.."magicball.plist",
+	frozen 			= g_config.particle_path.."frozen.plist",
+	poison 			= g_config.particle_path.."poison.plist",
+	stun 			= g_config.particle_path.."stun.plist",
+	damage_up 		= g_config.particle_path.."damageup.plist",
+	skill_can_use 	= g_config.particle_path.."skillcanuse.plist",
+	skill_will_use 	= g_config.particle_path.."skillwilluse.plist",
 }

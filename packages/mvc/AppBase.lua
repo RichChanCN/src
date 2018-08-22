@@ -5,7 +5,7 @@ function AppBase:ctor(configs)
     self.configs_ = {
         scenesRoot  = "app.scenes",
         modelsRoot = "app.models",
-        defaultSceneName = "MainScene",
+        defaultSceneName = "main_scene",
     }
 
     for k, v in pairs(configs or {}) do
@@ -28,7 +28,7 @@ function AppBase:ctor(configs)
     end
 
     -- event
-    self:onCreate()
+    self:on_create()
 end
 
 function AppBase:run(initSceneName)
@@ -37,12 +37,12 @@ function AppBase:run(initSceneName)
 end
 
 function AppBase:enterScene(sceneName, transition, time, more)
-    local view = self:createView(sceneName)
+    local view = self:create_view(sceneName)
     view:showWithScene(transition, time, more)
     return view
 end
 
-function AppBase:createView(name)
+function AppBase:create_view(name)
     for _, root in ipairs(self.configs_.scenesRoot) do
         local packageName = string.format("%s.%s", root, name)
         local status, view = xpcall(function()
@@ -57,11 +57,11 @@ function AppBase:createView(name)
             return view:create(self, name)
         end
     end
-    error(string.format("AppBase:createView() - not found view \"%s\" in search paths \"%s\"",
+    error(string.format("AppBase:create_view() - not found view \"%s\" in search paths \"%s\"",
         name, table.concat(self.configs_.scenesRoot, ",")), 0)
 end
 
-function AppBase:onCreate()
+function AppBase:on_create()
 end
 
 return AppBase

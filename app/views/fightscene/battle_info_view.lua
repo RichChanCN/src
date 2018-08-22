@@ -13,7 +13,7 @@ function battle_info_view:initUI()
     self:initLeftBottom()
 end
 
-function battle_info_view:initInfo()
+function battle_info_view:init_info()
     self.left_bottom_img_start_pos = cc.p(0,-530)
     self.left_bottom_img_end_pos   = cc.p(0,0)
     self.right_bottom_node_start_pos = cc.p(1750,-400)
@@ -24,11 +24,11 @@ end
 
 function battle_info_view:initEvents()
     uitool:makeImgToButtonNoScale(self.skill_sp, function()
-        if Judgment:Instance():isWaitOrder() then
-            if not self.queue_first.monster.skill:isNeedTarget() then
-                Judgment:Instance():runGame(Judgment.Order.USE_SKILL)
+        if pve_game_ctrl:Instance():is_wait_order() then
+            if not self.queue_first.monster.skill:is_need_target() then
+                pve_game_ctrl:Instance():runGame(pve_game_ctrl.order.USE_SKILL)
             else
-                Judgment:Instance():setIsUseSkill(not Judgment:Instance():getIsUseSkill())
+                pve_game_ctrl:Instance():set_is_use_skill(not pve_game_ctrl:Instance():get_is_use_skill())
                 self:updateSkillImage()
             end
         end
@@ -38,10 +38,10 @@ function battle_info_view:initEvents()
 end
 
 function battle_info_view:updateInfo()
-    self.cur_active_index = Judgment:Instance():getCurActiveMonsterIndex()
-    self.cur_round = Judgment:Instance():getCurRoundNum()
-    self.cur_queue = Judgment:Instance():getCurRoundMonsterQueue()
-    self.next_queue = Judgment:Instance():getNextRoundMonsterQueue()
+    self.cur_active_index = pve_game_ctrl:Instance():getCurActiveMonsterIndex()
+    self.cur_round = pve_game_ctrl:Instance():get_cur_round_num()
+    self.cur_queue = pve_game_ctrl:Instance():get_cur_round_monster_queue()
+    self.next_queue = pve_game_ctrl:Instance():get_next_round_monster_queue()
 end
 
 function battle_info_view:updateView()
@@ -80,24 +80,24 @@ end
 
 function battle_info_view:initRightBottomEvents()
     uitool:makeImgToButtonNoScale(self.defend_img, function()
-        if Judgment:Instance():isWaitOrder() then
-            Judgment:Instance():requestDefend()
+        if pve_game_ctrl:Instance():is_wait_order() then
+            pve_game_ctrl:Instance():request_defend()
         end
     end)
 
     uitool:makeImgToButtonNoScale(self.wait_img, function()
-        if Judgment:Instance():isWaitOrder() then
-            Judgment:Instance():requestWait()
+        if pve_game_ctrl:Instance():is_wait_order() then
+            pve_game_ctrl:Instance():request_wait()
         end
     end)
 
     uitool:makeImgToButtonNoScale(self.auto_img, function()
-        if Judgment:Instance():isWaitOrder() then
-            self.auto_icon:loadTexture(Config.sprite.autoOn)
-            Judgment:Instance():requestAuto()
-        elseif Judgment:Instance():getGameStatus() ~= Judgment.GameStatus.WAIT_ORDER then
-            self.auto_icon:loadTexture(Config.sprite.autoOff)
-            Judgment:Instance():stopAuto()
+        if pve_game_ctrl:Instance():is_wait_order() then
+            self.auto_icon:loadTexture(g_config.sprite.autoOn)
+            pve_game_ctrl:Instance():request_auto()
+        elseif pve_game_ctrl:Instance():get_game_status() ~= pve_game_ctrl.game_status.WAIT_ORDER then
+            self.auto_icon:loadTexture(g_config.sprite.autoOff)
+            pve_game_ctrl:Instance():stop_auto()
         end
     end)
 
@@ -146,7 +146,7 @@ function battle_info_view:updateLVItem(item,monster,update_only)
     item.child.level_text = item:getChildByName("level_text")
     
     item:loadTexture(monster.char_img_path)
-    item.child.border_img:loadTexture(Config.sprite["team_card_border_"..monster.team_side])
+    item.child.border_img:loadTexture(g_config.sprite["team_card_border_"..monster.team_side])
     item.child.level_text:setString(monster.level)
 
     self:updateAnger(item)
@@ -179,8 +179,8 @@ end
 function battle_info_view:addQueueItemEvent(img)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
-        if Judgment:Instance():isWaitOrder() then
-            if uitool:isTouchInNodeRect(node,touch,event) then
+        if pve_game_ctrl:Instance():is_wait_order() then
+            if uitool:is_touch_in_node_rect(node,touch,event) then
                 self.ctrl:showOtherAroundInfo(node.monster)
                 return true
             end
@@ -237,8 +237,8 @@ function battle_info_view:updateRightBottomQueue(is_wait)
             if not self.queue_lv:getItem(0) then
                 return
             end
-            if not last_item.monster:isDead() then
-                local index = Judgment:Instance():getMonsterIndexInCurRoundAliveMonster(last_item.monster)-1
+            if not last_item.monster:is_dead() then
+                local index = pve_game_ctrl:Instance():get_monster_index_in_cur_round_alive_monster(last_item.monster)-1
                 if self.queue_lv:getItem(index) then
                     self.queue_lv:insertCustomItem(last_item,index)
                 else
@@ -262,9 +262,9 @@ function battle_info_view:updateRightBottomQueue(is_wait)
             self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
 
-            if not last_item.monster:isDead() then
+            if not last_item.monster:is_dead() then
                 local index = self.queue_lv:getIndex(self.next_round_in_queue)
-                index = index + Judgment:Instance():getMonsterIndexInNextRoundAliveMonster(last_item.monster)
+                index = index + pve_game_ctrl:Instance():get_monster_index_in_next_round_alive_monster(last_item.monster)
                 if self.queue_lv:getItem(index) then
                     self.queue_lv:insertCustomItem(last_item,index)
                 else
@@ -288,26 +288,26 @@ function battle_info_view:updateRightBottomQueue(is_wait)
 end
 
 function battle_info_view:updateSkillImage()
-    if self.queue_first.monster:canUseSkill() then
+    if self.queue_first.monster:can_use_skill() then
         if self.skill_sp.particle then
             self.skill_sp:removeChildByName("skillicon")
         end
-        if Judgment:Instance():getIsUseSkill() then
-            local particle = cc.ParticleSystemQuad:create(Config.Particle.skill_will_use)
+        if pve_game_ctrl:Instance():get_is_use_skill() then
+            local particle = cc.ParticleSystemQuad:create(g_config.Particle.skill_will_use)
             particle:setName("skillicon")
             particle:setScale(0.6)
-            particle:setGlobalZOrder(uitool:mid_Z_order())
-            particle:setPosition(uitool:getNodeCenterPosition(self.skill_sp))
+            particle:setGlobalZOrder(uitool:mid_z_order())
+            particle:setPosition(uitool:get_node_center_position(self.skill_sp))
             self.skill_sp:addChild(particle)
             self.skill_sp.particle = particle
             self.skill_sp:setVisible(true)
         else
             self.skill_sp:setTexture(self.queue_first.monster.skill.img_path)
-            local particle = cc.ParticleSystemQuad:create(Config.Particle.skill_can_use)
+            local particle = cc.ParticleSystemQuad:create(g_config.Particle.skill_can_use)
             particle:setName("skillicon")
             particle:setScale(1)
-            particle:setGlobalZOrder(uitool:mid_Z_order())
-            particle:setPosition(uitool:getNodeCenterPosition(self.skill_sp))
+            particle:setGlobalZOrder(uitool:mid_z_order())
+            particle:setPosition(uitool:get_node_center_position(self.skill_sp))
             self.skill_sp:addChild(particle)
             self.skill_sp.particle = particle
             self.skill_sp:setVisible(true)

@@ -3,10 +3,10 @@ cc.FileUtils:getInstance():setPopupNotify(false)
 
 require "config.config"
 require "cocos.init"
-require "tool.LuaXML"
-require "tool.mytool"
-require "tool.uitool"
-require "app.logic.GameDataCtrl"
+require "tool.lua_xml"
+require "tool.my_tool"
+require "tool.ui_tool"
+require "app.logic.game_data_ctrl"
 require "config.config_path"
 require "config.config_particle"
 require "config.config_ui"
@@ -14,7 +14,7 @@ require "config.config_buff"
 require "config.config_skill"
 require "config.config_monster"
 require "config.config_map"
-require "app.logic.Judgment"
+require "app.logic.pve_game_ctrl"
 
 local function main()
 	collectgarbage("collect")
@@ -24,9 +24,9 @@ local function main()
 	cc.FileUtils:getInstance():addSearchPath("src")
 	cc.FileUtils:getInstance():addSearchPath("res")
 
-	GameDataCtrl:Instance():init()
+	game_data_ctrl:instance():init()
 
-    require("app.MyApp"):create():run("PreScene")
+    require("app.MyApp"):create():run("pre_scene")
 end
 
 local status, msg = xpcall(main, __G__TRACKBACK__)

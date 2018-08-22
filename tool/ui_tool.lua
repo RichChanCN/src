@@ -1,6 +1,6 @@
 uitool = {}
 
-function uitool:farAway()
+function uitool:far_away()
     return cc.p(10000,10000)
 end
 
@@ -8,15 +8,15 @@ function uitool:zero()
     return cc.p(0,0)
 end
 
-function uitool:top_Z_order()
+function uitool:top_z_order()
     return 2000
 end
 
-function uitool:mid_Z_order()
+function uitool:mid_z_order()
     return 1000
 end
 
-function uitool:bottom_Z_order()
+function uitool:bottom_z_order()
     return 0
 end
 
@@ -24,27 +24,27 @@ function uitool:screen_center_pos()
     return cc.p(960,540)
 end
 
-function uitool:getNodeCenterPosition(node)
+function uitool:get_node_center_position(node)
     local size = node:getContentSize()
     return cc.p(size.width/2,size.height/2)
 end
 
-function uitool:getNodeBottomCenterPosition(node)
+function uitool:get_node_bottom_center_position(node)
     local size = node:getContentSize()
     return cc.p(size.width/2,0)
 end
 
-function uitool:createUIBinding(panel,binding)
+function uitool:create_ui_binding(panel,binding)
     assert(panel.root, "uitool:createResourceBinding() - not load resource node")
 	for nodeName, nodeBinding in pairs(binding) do
-        local node = self:seekChildNode(panel.root, nodeName);
+        local node = self:seek_child_node(panel.root, nodeName);
         if nodeBinding.varname then
             panel[nodeBinding.varname] = node
         end
     end
 end
 
-function uitool:seekChildNode(node, name)
+function uitool:seek_child_node(node, name)
     local child = node:getChildByName(name)
     --print("find" .. name .. "in" .. node:getName())
     if child then
@@ -52,7 +52,7 @@ function uitool:seekChildNode(node, name)
     else
         local children = node:getChildren()
         for i=1, #children do
-            child = self:seekChildNode(children[i], name)
+            child = self:seek_child_node(children[i], name)
             if child then
                 return child
             end
@@ -61,7 +61,7 @@ function uitool:seekChildNode(node, name)
     end
 end
 
-function uitool:isTouchInNodeRect(node,touch,event,scale)
+function uitool:is_touch_in_node_rect(node,touch,event,scale)
     local scale = scale or 1.0
     local node = event:getCurrentTarget()
     local locationInNode = node:convertToNodeSpace(touch:getLocation())
@@ -72,7 +72,7 @@ function uitool:isTouchInNodeRect(node,touch,event,scale)
 end
 
 
-function uitool:isTouchInNodeCircle(node,touch,event,scale)
+function uitool:is_touch_in_node_circle(node,touch,event,scale)
     local scale = scale or 1.0
     local node = event:getCurrentTarget()
     local locationInNode = node:convertToNodeSpace(touch:getLocation())
@@ -80,15 +80,15 @@ function uitool:isTouchInNodeCircle(node,touch,event,scale)
     local radius = math.min(node:getContentSize().width,node:getContentSize().height)
     
 
-    return math.pow(locationInNode.x-x,2)+math.pow(locationInNode.y-y,2)<math.pow(radius)
+    return math.pow(locationInNode.x - x, 2) + math.pow(locationInNode.y - y, 2) < math.pow(radius)
 end
 
-function uitool:moveToAndFadeOut(node,pos)
+function uitool:move_to_and_fade_out(node,pos)
     local children = node:getChildren()
 
     if #children > 0 then
         for i=1, #children do
-            self:moveToAndFadeOut(children[i])
+            self:move_to_and_fade_out(children[i])
         end
     end
 
@@ -103,12 +103,12 @@ function uitool:moveToAndFadeOut(node,pos)
     node:runAction(seq1)
 end
 
-function uitool:repeatFadeInAndOut(node)
+function uitool:repeat_fade_in_and_out(node)
     local children = node:getChildren()
 
     if #children > 0 then
         for i=1, #children do
-            self:repeatFadeInAndOut(children[i])
+            self:repeat_fade_in_and_out(children[i])
         end
     end
 
@@ -120,12 +120,12 @@ function uitool:repeatFadeInAndOut(node)
     node:runAction(cc.RepeatForever:create(seq))
 end
 
-function uitool:repeatScale(node)
+function uitool:repeat_scale(node)
     local children = node:getChildren()
 
     if #children > 0 then
         for i=1, #children do
-            self:repeatScale(children[i])
+            self:repeat_scale(children[i])
         end
     end
 
@@ -137,7 +137,7 @@ function uitool:repeatScale(node)
     node:runAction(cc.RepeatForever:create(seq))
 end
 
-function uitool:setProgressBar(img,percent)
+function uitool:set_progress_bar(img,percent)
     if not img.raw_size then
         img.raw_size = img:getContentSize()
     end
@@ -150,13 +150,13 @@ function uitool:setProgressBar(img,percent)
     img:setContentSize(img.raw_size.width*percent,img.raw_size.height)
 end
 
-function uitool:setNodeToGlobalTop(node,z)
-    z = z or self:top_Z_order()
+function uitool:set_node_to_global_top(node,z)
+    z = z or self:top_z_order()
     local children = node:getChildren()
 
     if #children > 0 then
         for i=1, #children do
-            self:setNodeToGlobalTop(children[i])
+            self:set_node_to_global_top(children[i])
         end
     end
 
@@ -167,7 +167,7 @@ function uitool:makeImgToButton(img,callback)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
 
-        if self:isTouchInNodeRect(node,touch,event) then
+        if self:is_touch_in_node_rect(node,touch,event) then
             node:setScale(1.06)
             return true
         end
@@ -178,7 +178,7 @@ function uitool:makeImgToButton(img,callback)
     local function touchMoved( touch, event )
         local node = event:getCurrentTarget()
 
-        if self:isTouchInNodeRect(node,touch,event) then
+        if self:is_touch_in_node_rect(node,touch,event) then
             node:setScale(1.06)
         else
             node:setScale(1.0)
@@ -188,7 +188,7 @@ function uitool:makeImgToButton(img,callback)
     local function touchEnded( touch, event )
         local node = event:getCurrentTarget()
         
-        if self:isTouchInNodeRect(node,touch,event) then
+        if self:is_touch_in_node_rect(node,touch,event) then
             if callback then
                 callback()
             end
@@ -209,7 +209,7 @@ function uitool:makeImgToButtonNoScale(img,callback)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
 
-        if self:isTouchInNodeRect(node,touch,event) then
+        if self:is_touch_in_node_rect(node,touch,event) then
             return true
         end
 
@@ -219,7 +219,7 @@ function uitool:makeImgToButtonNoScale(img,callback)
     local function touchEnded( touch, event )
         local node = event:getCurrentTarget()
         
-        if self:isTouchInNodeRect(node,touch,event) then
+        if self:is_touch_in_node_rect(node,touch,event) then
             if callback then
                 callback()
             end
@@ -266,15 +266,15 @@ function uitool:makeImgToButtonHT(img,camera,callback)
 end
 
 function uitool:initMonsterCardWithIDAndNum(card,id,num,click_event)
-    local monster = Config.Monster[id]
+    local monster = g_config.monter[id]
     card:loadTexture(monster.char_img_path)
     card.border_img = card:getChildByName("border_img")
-    card.border_img:loadTexture(Config.sprite["card_border_"..monster.rarity])
+    card.border_img:loadTexture(g_config.sprite["card_border_"..monster.rarity])
     card.type_img = card:getChildByName("type_img")
-    card.type_img:loadTexture(Config.sprite["attack_type_"..monster.attack_type])
+    card.type_img:loadTexture(g_config.sprite["attack_type_"..monster.attack_type])
     card.num_text = card:getChildByName("num_text")
     card.num_text:setString("X"..num)
-    card.num_text:setTextColor(Config.color["rarity_color_"..monster.rarity])
+    card.num_text:setTextColor(g_config.color["rarity_color_"..monster.rarity])
     if click_event then 
         cur_monster.head_img:addClickEventListener(click_event)
     end
@@ -283,7 +283,7 @@ end
 
 function uitool:initOtherCardWithTypeAndNum(card,ctype,num,click_event)
     card.border_img = card:getChildByName("border_img")
-    card.border_img:loadTexture(Config.sprite.card_border_0)
+    card.border_img:loadTexture(g_config.sprite.card_border_0)
     local x,y = card.border_img:getPosition()
     card.border_img:setPosition(x+3,y)
     card.type_img = card:getChildByName("type_img")
@@ -291,11 +291,11 @@ function uitool:initOtherCardWithTypeAndNum(card,ctype,num,click_event)
     card.num_text = card:getChildByName("num_text")
     card.num_text:setString("+"..num)
     if ctype == "coin" then
-        card:loadTexture(Config.sprite.card_coin)
-        card.num_text:setTextColor(Config.color.coin)
+        card:loadTexture(g_config.sprite.card_coin)
+        card.num_text:setTextColor(g_config.color.coin)
     elseif ctype == "crystal" then
-        card:loadTexture(Config.sprite.card_crystal)
-        card.num_text:setTextColor(Config.color.crystal)
+        card:loadTexture(g_config.sprite.card_crystal)
+        card.num_text:setTextColor(g_config.color.crystal)
     end
     
     if click_event then 
@@ -306,18 +306,18 @@ end
 
 function uitool:createTopTip(string,color)
     color = color or "white"
-    color = Config.color[color]
+    color = g_config.color[color]
     local scene = cc.Director:getInstance():getRunningScene()
     if not scene.top_tip then
         local tip_bg = cc.Sprite:create()
-        tip_bg:setTexture(Config.sprite.tip_bg)
-        local label = cc.Label:createWithTTF(string,Config.font.default,36)
-        label:setPosition(self:getNodeCenterPosition(tip_bg))
+        tip_bg:setTexture(g_config.sprite.tip_bg)
+        local label = cc.Label:createWithTTF(string,g_config.font.default,36)
+        label:setPosition(self:get_node_center_position(tip_bg))
         tip_bg.label = label
         tip_bg:addChild(label)
         tip_bg:setScale(2)
         scene.top_tip = tip_bg
-        scene:addChild(tip_bg, self:top_Z_order())
+        scene:addChild(tip_bg, self:top_z_order())
     else
         scene.top_tip:stopAllActions()
         scene.top_tip.label:setString(string)
@@ -326,7 +326,7 @@ function uitool:createTopTip(string,color)
 
     scene.top_tip.label:setTextColor(color)
 
-    scene.top_tip:setPosition(self:getNodeCenterPosition(scene))
+    scene.top_tip:setPosition(self:get_node_center_position(scene))
 
     local cb = function()
         scene.top_tip:setVisible(false)

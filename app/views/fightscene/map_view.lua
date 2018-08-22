@@ -41,7 +41,7 @@ function map_view:initEvents()
 end
 
 function map_view:updateView()
-	if Judgment:Instance():isWaitOrder() then
+	if Judgment:Instance():is_wait_order() then
 		self:showGuide()
 	else
 		self:hideGuide()
@@ -77,8 +77,8 @@ function map_view:endAnimation()
 	self.ctrl:closeBattleInfoView()
 end
 
-function map_view:getPositionByInt(num)
-	local pos = gtool:intToCcp(num)
+function map_view:get_position_by_int(num)
+	local pos = gtool:int_2_ccp(num)
 	local a,b = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
 	return cc.p(a,b)
 end
@@ -96,7 +96,7 @@ function map_view:hideOtherAroundInfo()
 end
 
 function map_view:showGuide(monster)
-	local cur_active_monster = monster or Judgment:Instance():getCurActiveMonster()
+	local cur_active_monster = monster or Judgment:Instance():get_cur_active_monster()
 	
 	local gezi_list = cur_active_monster:getAroundInfo(monster)
 
@@ -115,10 +115,10 @@ function map_view:showGuide(monster)
 end
 
 function map_view:showEnemy(num,monster,distance)
-	local cur_active_monster = monster or Judgment:Instance():getCurActiveMonster()
+	local cur_active_monster = monster or Judgment:Instance():get_cur_active_monster()
 	local atk_img
 	
-	if cur_active_monster:isMelee() then
+	if cur_active_monster:is_melee() then
 		atk_img = self.close_attack_img:clone()
 	elseif distance>5 or distance < 3 then
 		atk_img = self.too_far_attack_img:clone()
@@ -130,11 +130,11 @@ function map_view:showEnemy(num,monster,distance)
 	atk_img:setPosition(self["gezi_"..x.."_"..y]:getPosition())
 
 	self.arena_top_node:addChild(atk_img)
-	uitool:repeatFadeInAndOut(atk_img)
+	uitool:repeat_fade_in_and_out(atk_img)
 
 	local img = atk_img:getChildByName("img")
 	uitool:makeImgToButtonHT(img,self.camera,function()
-		Judgment:Instance():selectTarget(num,distance)
+		Judgment:Instance():select_target(num,distance)
 	end)
 end
 
@@ -196,7 +196,7 @@ function map_view:createMonsterModel(monster)
 		local node = self.model_node_list[monster:getTag()]
 		local pos = monster.start_pos
         local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
-        if monster:isFly() then
+        if monster:is_fly() then
         	node:setPosition(x,y+10)
         else
         	node:setPosition(x,y-10)
@@ -226,7 +226,7 @@ function map_view:createOtherModel(other_model,pos)
 		self.model_panel:addChild(model)
 	end
 	if other_model == 2 then
-		local chapter_num, level_num = Judgment:Instance():getCurStoryAndLevelNum()
+		local chapter_num, level_num = Judgment:Instance():get_cur_chapter_and_level()
 		local barrier = self.ctrl.map_data:getBarrierModelByChapterAndLevel(chapter_num, level_num)
     	cc.Sprite3D:createAsync(barrier,callback)
     end
@@ -243,7 +243,7 @@ function map_view:initBloodBar(node,monster)
 
 	local updateHP = function(percent,damage,type)
 		self:createDamageFlyWords(damage,monster,type)
-		uitool:setProgressBar(blood_bar.child.blood_img,percent)
+		uitool:set_progress_bar(blood_bar.child.blood_img,percent)
 	end
 
 	local updateAnger = function(anger)
@@ -259,7 +259,7 @@ function map_view:initBloodBar(node,monster)
 	blood_bar.updateHP = updateHP
 	blood_bar.updateAnger = updateAnger
 	blood_bar:setPosition(0,75)
-	uitool:setNodeToGlobalTop(blood_bar)
+	uitool:set_node_to_global_top(blood_bar)
 	blood_bar:setName("blood_bar")
 	monster.blood_bar = blood_bar
 	node:addChild(blood_bar)
@@ -272,7 +272,7 @@ function map_view:createDamageFlyWords(damage,monster,level)
 	local x,y = monster.node:getPosition()
 
 	fly_word:setPosition(x,y+60)
-	--fly_word:setGlobalZOrder(uitool:top_Z_order())
+	--fly_word:setGlobalZOrder(uitool:top_z_order())
 	fly_word:setScale(0.2)
 	
 	self.arena_top_node:addChild(fly_word)
@@ -309,7 +309,7 @@ function map_view:addArenaListener(gezi)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
 		local start_location = touch:getLocation()
-		if Judgment:Instance():isWaitOrder() then
+		if Judgment:Instance():is_wait_order() then
         	if node:hitTest(start_location, self.camera, nil) then
         		local x,y = node:getPosition()
         		self.moveto_point_sp:setPosition(x,y)
@@ -341,7 +341,7 @@ function map_view:addArenaListener(gezi)
         self.moveto_point_sp:setPosition(uitool:farAway())
 
         if node:hitTest(cur_location, self.camera, nil) then
-            Judgment:Instance():selectPos(node)
+            Judgment:Instance():select_pos(node)
         end
     end
 

@@ -1,19 +1,21 @@
-Config = Config or {}
+g_config = g_config or {}
 
-Config.Buff = {
+g_config.buff = 
+{
 -----------------------------------------------------------------------
 -------------------------------buff------------------------------------
 -----------------------------------------------------------------------
 	--执行防御之后自动加上的状态，持续到下回合开始
-	defend = {
+	defend = 
+	{
 		--持续回合数，0代表持续到下次回合开始
 		round = 0,
 		--buff附加到对象上后会调用的
 		begin = function(monster)
 			local defend_sp = cc.Sprite:create()
-			defend_sp:setTexture(Config.sprite.buff_defend)
+			defend_sp:setTexture(g_config.sprite.buff_defend)
 			defend_sp:setPosition(0, 20)
-			defend_sp:setGlobalZOrder(uitool:top_Z_order())
+			defend_sp:setGlobalZOrder(uitool:top_z_order())
 			defend_sp:setName("defend")
 			defend_sp:setContentSize(50,75)
 			defend_sp:runAction(cc.ScaleTo:create(1,1.2))
@@ -49,21 +51,25 @@ Config.Buff = {
 	},
 
 	--伤害提升
-	damage_up = {
+	damage_up = 
+	{
 		round = 2,
 		begin = function(monster)
-			local particle = cc.ParticleSystemQuad:create(Config.Particle.damage_up)
+			local particle = cc.ParticleSystemQuad:create(g_config.Particle.damage_up)
 			particle:setScale(0.3)
 			particle:setName("damageup")
-			particle:setGlobalZOrder(uitool:top_Z_order())
+			particle:setGlobalZOrder(uitool:top_z_order())
 			particle:setPosition(0, 20)
 			monster.node:addChild(particle)
 		end,
+
 		once_a_round = function(monster)
 		end,
+
 		apply = function(monster)
 			monster.cur_damage = monster.cur_damage * 1.3
 		end,
+		
 		finish = function(monster)
 			monster.node:removeChildByName("damageup")
 		end,
@@ -85,21 +91,25 @@ Config.Buff = {
 ------------------------------debuff-----------------------------------
 -----------------------------------------------------------------------
 	--移动受限，可移动范围 -1
-	move_limit = {
+	move_limit = 
+	{
 		round = 1,
 		begin = function(monster)
-			local particle = cc.ParticleSystemQuad:create(Config.Particle.frozen)
+			local particle = cc.ParticleSystemQuad:create(g_config.Particle.frozen)
 			particle:setScale(0.3)
 			particle:setName("frozen")
-			particle:setGlobalZOrder(uitool:top_Z_order())
+			particle:setGlobalZOrder(uitool:top_z_order())
 			particle:setPosition(0, 20)
 			monster.node:addChild(particle)
 		end,
+
 		once_a_round = function(monster)
 		end,
+
 		apply = function(monster)
 			monster.cur_mobility = monster.mobility - 1
 		end,
+
 		finish = function(monster)
 			monster.node:removeChildByName("frozen")
 		end,
@@ -117,25 +127,29 @@ Config.Buff = {
 		end,
 	},
 	--激活受限，眩晕1回合
-	stun = {
+	stun = 
+	{
 		round = 1,
 		begin = function(monster)
-			local particle = cc.ParticleSystemQuad:create(Config.Particle.stun)
+			local particle = cc.ParticleSystemQuad:create(g_config.Particle.stun)
 			particle:setScale(0.3)
 			particle:setName("stun")
-			particle:setGlobalZOrder(uitool:top_Z_order())
+			particle:setGlobalZOrder(uitool:top_z_order())
 			particle:setPosition(0, 40)
 			monster.node:addChild(particle)
-			local MonsterBase = require("app.logic.MonsterBase")
-			monster:addMonsterStatus(MonsterBase.Status.STUN)
+			local monster_base = require("app.logic.monster_base")
+			monster:addMonsterStatus(monster_base.status.STUN)
 		end,
+
 		once_a_round = function(monster)
 		end,
+
 		apply = function(monster)
 		end,
+
 		finish = function(monster)
-			local MonsterBase = require("app.logic.MonsterBase")
-			monster:removeMonsterStatus(MonsterBase.Status.STUN)
+			local monster_base = require("app.logic.monster_base")
+			monster:removeMonsterStatus(monster_base.status.STUN)
 			monster.node:removeChildByName("stun")
 		end,
 
@@ -153,19 +167,20 @@ Config.Buff = {
 	},
 
 	--中毒，降低伤害，每回合开始时扣除一定血量
-	poison = {
+	poison = 
+	{
 		round = 2,
 		begin = function(monster)
-			local particle = cc.ParticleSystemQuad:create(Config.Particle.poison)
+			local particle = cc.ParticleSystemQuad:create(g_config.Particle.poison)
 			particle:setScale(0.3)
 			particle:setName("poison")
-			particle:setGlobalZOrder(uitool:top_Z_order())
+			particle:setGlobalZOrder(uitool:top_z_order())
 			particle:setPosition(0, 20)
 			monster.node:addChild(particle)
 		end,
 		once_a_round = function(monster)
-			local MonsterBase = require("app.logic.MonsterBase")
-			monster:minusHP(40, MonsterBase.DamageLevel.POISON,true)
+			local monster_base = require("app.logic.monster_base")
+			monster:minusHP(40, monster_base.damage_level.POISON,true)
 		end,
 		apply = function(monster)
 			monster.cur_damage = monster.cur_damage * 0.9

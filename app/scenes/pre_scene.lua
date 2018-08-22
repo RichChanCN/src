@@ -1,20 +1,20 @@
 
-local PreScene = class("PreScene", cc.load("mvc").SceneBase)
+local pre_scene = class("pre_scene", cc.load("mvc").SceneBase)
 
 
 -- 加载csb文件
-PreScene.RESOURCE_FILENAME = "PreScene.csb"
-PreScene.RESOURCE_BINDING = {
+pre_scene.RESOURCE_FILENAME = "pre_scene.csb"
+pre_scene.RESOURCE_BINDING = {
     ["cocos_logo_sp"]			= {["varname"] = "cocos_logo_sp"},
     ["game_logo_sp"]			= {["varname"] = "game_logo_sp"},
  }
 
-function PreScene:onCreate()
-	self:beginAnimation()
-	self:preLoadMainScene()
+pre_scene.on_create = function(self)
+	self:begin_animation()
+	self:pre_load_main_scene()
 end
 
-function PreScene:beginAnimation()
+pre_scene.begin_animation = function(self)
 	local ac1 = self.cocos_logo_sp:runAction(cc.FadeIn:create(2))
 	local ac2 = self.cocos_logo_sp:runAction(cc.DelayTime:create(1))
 	local ac3 = self.cocos_logo_sp:runAction(cc.FadeOut:create(1))
@@ -24,10 +24,10 @@ function PreScene:beginAnimation()
 	local ac6 = self.game_logo_sp:runAction(cc.DelayTime:create(1))
 	local ac7 = self.game_logo_sp:runAction(cc.FadeOut:create(1))
 	
-	local callback = cc.CallFunc:create(handler(self,self.goToMainScene))
+	local callback = cc.CallFunc:create(handler(self,self.go_to_main_scene))
 
 	-- local cb = function()
-	-- 	self:goToMainScene()
+	-- 	self:go_to_main_scene()
 	-- end
 	
 	-- local callback = cc.CallFunc:create(handler(self,cb))
@@ -38,19 +38,19 @@ function PreScene:beginAnimation()
 	self.game_logo_sp:runAction(seq2)
 end
 
-function PreScene:preLoadMainScene()
-	local starttime = os.clock();
-    self.app_:createView("MainScene")
-	local endtime = os.clock();
+pre_scene.pre_load_main_scene = function(self)
+	local start_time = os.clock();
+    self.app_:create_view("main_scene")
+	local end_time = os.clock();
 
-	print(string.format("cost time  : %.4f", endtime - starttime))
+	print(string.format("cost time  : %.4f", end_time - start_time))
 end
 
-function PreScene:goToMainScene()
-	local starttime = os.clock();
-	local layer = self.app_:createView("MainScene")
-	local endtime = os.clock();
-	print(string.format("cost time  : %.4f", endtime - starttime))
+pre_scene.go_to_main_scene = function(self)
+	local start_time = os.clock();
+	local layer = self.app_:create_view("main_scene")
+	local end_time = os.clock();
+	print(string.format("cost time  : %.4f", end_time - start_time))
 	local scene = cc.Scene:create()
     scene:addChild(layer)
 	if scene then
@@ -59,4 +59,4 @@ function PreScene:goToMainScene()
 	end
 end
 
-return PreScene
+return pre_scene
