@@ -32,7 +32,7 @@ function FightScene:onEnter()
 end
 
 function FightScene:onExit()
-	pve_game_ctrl:Instance():clearTeam()
+	pve_game_ctrl:Instance():clear_team()
 	self.map_view:clearModelPanel()
 end
 
@@ -57,12 +57,12 @@ function FightScene:goToMainScene()
 end
 
 function FightScene:initModel()
-	local map = pve_game_ctrl:Instance():getMap()
+	local map = pve_game_ctrl:Instance():get_map()
 	for k,v in pairs(map) do
 		self.map_view:createOtherModel(v,gtool:int_2_ccp(k))
 	end
 
-	local all_monster = pve_game_ctrl:Instance():getAllMonsters()
+	local all_monster = pve_game_ctrl:Instance():get_all_monsters()
 	for _,v in pairs(all_monster) do
 		self.map_view:createMonsterModel(v)
 	end

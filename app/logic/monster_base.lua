@@ -49,55 +49,54 @@ monster_base.new = function(self, data, team_side, arena_pos)
 	team_side = team_side or self.TeamSide.NONE
 	pos = pos or cc.p(1,1)
 
-	self.id 					= data.id
-	self.name 					= data.name
-	self.level 					= data.level
-	self.rarity					= data.rarity
-	self.max_hp 				= data.hp
-	self.attack_type			= data.attack_type
-	self.attack_particle		= data.attack_particle
-	self.move_type 				= data.move_type
+	self._id 					= data.id
+	self._name 					= data.name
+	self._level 				= data.level
+	self._rarity				= data.rarity
+	self._attack_type			= data.attack_type
+	self._attack_particle		= data.attack_particle
+	self._move_type 			= data.move_type
 	
-	self.model_path 			= data.model_path
-	self.char_img_path			= data.char_img_path
+	self._model_path 			= data.model_path
+	self._char_img_path			= data.char_img_path
 
-	self.max_anger				= data.anger
+	self._max_anger				= data.anger
 	
-	self.max_hp 				= data.hp
-	self.damage 				= data.damage
-	self.physical_defense 		= data.physical_defense
-	self.magic_defense 			= data.magic_defense
-	self.mobility 				= data.mobility
-	self.initiative 			= data.initiative
-	self.defense_penetration 	= data.defense_penetration
+	self._max_hp 				= data.hp
+	self._damage 				= data.damage
+	self._physical_defense 		= data.physical_defense
+	self._magic_defense 		= data.magic_defense
+	self._mobility 				= data.mobility
+	self._initiative 			= data.initiative
+	self._defense_penetration 	= data.defense_penetration
 
-	self.cur_max_hp 				= self.max_hp 			
-	self.cur_damage 				= self.damage 			
-	self.cur_physical_defense 		= self.physical_defense 	
-	self.cur_magic_defense 			= self.magic_defense 		
-	self.cur_mobility 				= self.mobility 			
-	self.cur_initiative 			= self.initiative 		
-	self.cur_defense_penetration 	= self.defense_penetration
+	self._cur_max_hp 				= self._max_hp 			
+	self._cur_damage 				= self._damage 			
+	self._cur_physical_defense 		= self._physical_defense 	
+	self._cur_magic_defense 		= self._magic_defense 		
+	self._cur_mobility 				= self._mobility 			
+	self._cur_initiative 			= self._initiative 		
+	self._cur_defense_penetration 	= self._defense_penetration
 
-	self.cur_anger				= 0
-	self.cur_hp 				= self.max_hp
-	self.steps 					= self.cur_mobility
-	self.cur_towards				= self.towards
+	self._cur_anger					= 0
+	self._cur_hp 					= self._max_hp
+	self._steps 					= self._cur_mobility
+	self._cur_towards				= self._towards
 	
-	self.team_side				= team_side
-	self.towards				= monster_base.towards[team_side]
-	self.has_waited				= false
-	self.start_pos 				= arena_pos
-	self.cur_pos 				= arena_pos
-	self.status 				= monster_base.status.ALIVE
-	self.buff_list				= {}
-	self.debuff_list			= {}
+	self._team_side				= team_side
+	self._towards				= monster_base.towards[team_side]
+	self._has_waited			= false
+	self._start_pos 			= arena_pos
+	self._cur_pos 				= arena_pos
+	self._status 				= monster_base.status.ALIVE
+	self._buff_list				= {}
+	self._debuff_list			= {}
 
-	self.tag = self.id * 100 + self.start_pos.x * 10 + self.start_pos.y
+	self.tag = self._id * 100 + self._start_pos.x * 10 + self._start_pos.y
 	
 	if data.skill then
-		local SkillBase = require("app.logic.SkillBase")
-		self.skill = SkillBase:instance():new(self,data.skill)
+		local skill_base = require("app.logic.skill_base")
+		self.skill = skill_base:instance():new(self,data.skill)
 	end
 
 	return self
@@ -108,71 +107,71 @@ monster_base.getTag = function(self)
 end
 
 monster_base.get_cur_pos_num = function(self)
-	return gtool:ccpToInt(self.cur_pos)
+	return gtool:ccp_2_int(self._cur_pos)
 end
 
 monster_base.get_cur_damage = function(self)
-	self.cur_damage = self.damage
+	self._cur_damage = self._damage
 
-	self:updateCurAttribute()
+	self:update_cur_attribute()
 
 	return self.cur_damage
 end
 
 monster_base.get_cur_max_hp = function(self)
-	self.cur_max_hp = self.max_hp
+	self._cur_max_hp = self._max_hp
 
-	self:updateCurAttribute()
+	self:update_cur_attribute()
 
-	return self.cur_max_hp
+	return self._cur_max_hp
 end
 
 monster_base.get_cur_pysical_defense = function(self)
-	self.cur_physical_defense = self.physical_defense
+	self._cur_physical_defense = self._physical_defense
 	
-	self:updateCurAttribute()
+	self:update_cur_attribute()
 
-	return self.cur_physical_defense
+	return self._cur_physical_defense
 end
 
 monster_base.get_cur_magic_defense = function(self)
-	self.cur_magic_defense = self.magic_defense
+	self._cur_magic_defense = self._magic_defense
 	
-	self:updateCurAttribute()
+	self:update_cur_attribute()
 
-	return self.cur_magic_defense
+	return self._cur_magic_defense
 end
 
 monster_base.get_cur_mobility = function(self)
-	self.cur_mobility = self.mobility
+	self._cur_mobility = self._mobility
 	
-	self:updateCurAttribute()
+	self:update_cur_attribute()
 
-	return self.cur_mobility
+	return self._cur_mobility
 end
 
 monster_base.get_cur_initiative = function(self)
-	self.cur_initiative = self.initiative
+	self._cur_initiative = self._initiative
 	
-	self:updateCurAttribute()
+	self:update_cur_attribute()
 
-	return self.cur_initiative
+	return self._cur_initiative
 end
 
 monster_base.get_cur_defense_penetration = function(self)
-	self.cur_defense_penetration = self.defense_penetration
+	self._cur_defense_penetration = self._defense_penetration
 	
-	self:updateCurAttribute()
+	self:update_cur_attribute()
 
-	return self.cur_defense_penetration
+	return self._cur_defense_penetration
 end
 
 monster_base.get_alive_enemy_monsters = function(self)
 	local enemy_list
-	if self:isPlayer() then
-		enemy_list = pve_game_ctrl:Instance():getRightAliveMonsters()
+	if self:is_player() then
+		enemy_list = pve_game_ctrl:Instance():get_right_alive_monsters()
 	else
-		enemy_list = pve_game_ctrl:Instance():getLeftAliveMonsters()
+		enemy_list = pve_game_ctrl:Instance():get_left_alive_monsters()
 	end
 
 	return enemy_list
@@ -180,10 +179,10 @@ end
 
 monster_base.get_alive_friend_monsters = function(self)
 	local friend_list
-	if not self:isPlayer() then
-		friend_list = pve_game_ctrl:Instance():getRightAliveMonsters()
+	if not self:is_player() then
+		friend_list = pve_game_ctrl:Instance():get_right_alive_monsters()
 	else
-		friend_list = pve_game_ctrl:Instance():getLeftAliveMonsters()
+		friend_list = pve_game_ctrl:Instance():get_left_alive_monsters()
 	end
 
 	return friend_list
@@ -194,134 +193,134 @@ monster_base.reset = function(self)
 		return
 	end
 
-	self.cur_anger					= 0
-	self.cur_hp 					= self.max_hp
-	self.cur_pos    				= self.start_pos
-	self.cur_towards				= self.towards
+	self._cur_anger					= 0
+	self._cur_hp 					= self._max_hp
+	self._cur_pos    				= self._start_pos
+	self._cur_towards				= self._towards
 
-	self.cur_max_hp 				= self.max_hp 			
-	self.cur_damage 				= self.damage 			
-	self.cur_physical_defense 		= self.physical_defense 	
-	self.cur_magic_defense 			= self.magic_defense 		
-	self.cur_mobility 				= self.mobility 			
-	self.cur_initiative 			= self.initiative 		
-	self.cur_defense_penetration 	= self.defense_penetration
+	self._cur_max_hp 				= self._max_hp 			
+	self._cur_damage 				= self._damage 			
+	self._cur_physical_defense 		= self._physical_defense 	
+	self._cur_magic_defense 			= self._magic_defense 		
+	self._cur_mobility 				= self._mobility 			
+	self._cur_initiative 			= self._initiative 		
+	self._cur_defense_penetration 	= self._defense_penetration
 
-	self.has_waited					= false
+	self._has_waited					= false
 
-	self.steps 						= self.cur_mobility
-	self.buff_list					= {}
-	self.debuff_list				= {}
+	self._steps 						= self._cur_mobility
+	self._buff_list					= {}
+	self._debuff_list				= {}
 
-	self:towardTo(self.cur_towards)
+	self:toward_to(self._cur_towards)
 
-	self:changeMonsterStatus(monster_base.status.ALIVE)
+	self:change_monster_status(monster_base.status.ALIVE)
 end
 
-monster_base.isMonster = function(self)
+monster_base.is_monster = function(self)
 	return true
 end
 
-monster_base.isFly = function(self)
-	return self.move_type == Config.Monster_move_type.FLY
+monster_base.is_fly = function(self)
+	return self._move_type == Config.Monster_move_type.FLY
 end
 
-monster_base.isDead = function(self)
-	return self.status == monster_base.status.DEAD
+monster_base.is_dead = function(self)
+	return self._status == monster_base.status.DEAD
 end
 
-monster_base.isDefend = function(self)
-	return self.status == monster_base.status.DEFNED
+monster_base.is_defend = function(self)
+	return self._status == monster_base.status.DEFNED
 end
 
-monster_base.isMelee = function(self)
-	return self.attack_type < Config.Monster_attack_type.SHOOTER
+monster_base.is_melee = function(self)
+	return self._attack_type < Config.Monster_attack_type.SHOOTER
 end
 
-monster_base.isPhysical = function(self)
-	return self.attack_type%2 == 1
+monster_base.is_physical = function(self)
+	return self._attack_type%2 == 1
 end
 
-monster_base.hasWaited = function(self)
-	return self.has_waited
+monster_base.has_waited = function(self)
+	return self._has_waited
 end
 
-monster_base.hasLastRoundWaited = function(self)
+monster_base.has_last_round_waited = function(self)
 	return self.has_last_round_waited
 end
 
-monster_base.isPlayer = function(self)
-	return self.team_side == monster_base.team_side.LEFT
+monster_base.is_player = function(self)
+	return self._team_side == monster_base.team_side.LEFT
 end
 
-monster_base.isEnemy = function(self, monster)
-	return self.team_side ~= monster.team_side
+monster_base.is_enemy = function(self, monster)
+	return self._team_side ~= monster.team_side
 end
 
-monster_base.isBeBackAttacked = function(self, murderer)
-	return self.cur_towards == murderer.cur_towards
+monster_base.is_be_back_attacked = function(self, murderer)
+	return self._cur_towards == murderer.cur_towards
 end
 
-monster_base.isBeSideAttacked = function(self, murderer)
-	return self.cur_towards+1 == murderer.cur_towards
-			or self.cur_towards+1 == murderer.cur_towards + 6
-			or self.cur_towards-1 == murderer.cur_towards
-			or self.cur_towards-1 == murderer.cur_towards - 6
+monster_base.is_be_side_attacked = function(self, murderer)
+	return self._cur_towards+1 == murderer.cur_towards
+			or self._cur_towards+1 == murderer.cur_towards + 6
+			or self._cur_towards-1 == murderer.cur_towards
+			or self._cur_towards-1 == murderer.cur_towards - 6
 end
 
-monster_base.canCounterAttack = function(self, murderer)
-	return self:isMelee()
-			and self:canAttack()
-			and murderer:isMelee() 
-			and self:isNear(gtool:ccpToInt(murderer.cur_pos)) 
-			and not(self:isBeSideAttacked(murderer) or self:isBeBackAttacked(murderer))
+monster_base.can_counter_attack = function(self, murderer)
+	return self:is_melee()
+			and self:can_attack()
+			and murderer:is_melee() 
+			and self:is_near(gtool:ccp_2_int(murderer.cur_pos)) 
+			and not(self:is_be_side_attacked(murderer) or self:is_be_back_attacked(murderer))
 end
 
-monster_base.canUseSkill = function(self)
-	return self.skill and not(self.cur_anger < self.skill.cost)
+monster_base.can_use_skill = function(self)
+	return self.skill and not(self._cur_anger < self.skill.cost)
 end
 
-monster_base.canActive = function(self)
-	return (not self:isDead()) and self.status < monster_base.status.CANT_ACTIVE
+monster_base.can_active = function(self)
+	return (not self:is_dead()) and self._status < monster_base.status.CANT_ACTIVE
 end
 
-monster_base.canAttack = function(self)
-	return self.status < monster_base.status.CANT_ATTACK
+monster_base.can_attack = function(self)
+	return self._status < monster_base.status.CANT_ATTACK
 end
 
 
-----------------------------◊‘∂Ø¥•∑¢----------------------------------
-----------------------------◊‘∂Ø¥•∑¢----------------------------------
-----------------------------◊‘∂Ø¥•∑¢----------------------------------
+----------------------------√ó√î¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
+----------------------------√ó√î¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
+----------------------------√ó√î¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
 
-monster_base.onEnterNewRound = function(self, round_num)
-	self.has_last_round_waited = self.has_waited
-	self.has_waited = false
+monster_base.on_enter_new_round = function(self, round_num)
+	self.has_last_round_waited = self._has_waited
+	self._has_waited = false
 end
 
-monster_base.onActive = function(self, round_num)
-	if not self:hasWaited() then
-		self:dealWithAllBuff()
-		self.steps = self:get_cur_mobility()
+monster_base.on_active = function(self, round_num)
+	if not self:has_waited() then
+		self:deal_with_all_buff()
+		self._steps = self:get_cur_mobility()
 	end
 
-	if self:canActive() then
-		self:Active()
+	if self:can_active() then
+		self:active()
 	else
-		pve_game_ctrl:Instance():nextMonsterActivate()
+		pve_game_ctrl:Instance():next_monster_activate()
 	end
 end
 
-monster_base.Active = function(self)
+monster_base.active = function(self)
 	local ac1 = self.node:runAction(cc.Blink:create(0.5, 2))
 	self.node:stopAction(ac1)
 	local cb = function()
 		self.node:setVisible(true)
-		if self:isPlayer() and not pve_game_ctrl:Instance():getAuto() then
-			self:changeMonsterStatus(monster_base.status.ALIVE)
-			pve_game_ctrl:Instance():changeGameStatus(pve_game_ctrl.GameStatus.WAIT_ORDER)
+		if self:is_player() and not pve_game_ctrl:Instance():get_auto() then
+			self:change_monster_status(monster_base.status.ALIVE)
+			pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.WAIT_ORDER)
 		else
-			self:runAI()
+			self:run_ai()
 		end
 	end
 	local callback = cc.CallFunc:create(cb)
@@ -330,198 +329,198 @@ monster_base.Active = function(self)
 	self.node:runAction(seq)
 end
 
-monster_base.updateCurAttribute = function(self)
-	for k,v in pairs(self.buff_list) do
+monster_base.update_cur_attribute = function(self)
+	for k,v in pairs(self._buff_list) do
 		v.apply(self)
 	end
 
-	for k,v in pairs(self.debuff_list) do
+	for k,v in pairs(self._debuff_list) do
 		v.apply(self)
 	end
 
 end
 
-----------------------------÷˜∂Ø¥•∑¢----------------------------------
-----------------------------÷˜∂Ø¥•∑¢----------------------------------
-----------------------------÷˜∂Ø¥•∑¢----------------------------------
-monster_base.moveTo = function(self, arena_pos, attack_target, skill_target_pos)
-	pve_game_ctrl:Instance():changeGameStatus(pve_game_ctrl.GameStatus.RUNNING)
+----------------------------√ñ√∑¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
+----------------------------√ñ√∑¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
+----------------------------√ñ√∑¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
+monster_base.move_to = function(self, arena_pos, attack_target, skill_target_pos)
+	pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 	local cb = function()
-		self.cur_pos = arena_pos
+		self._cur_pos = arena_pos
 		if attack_target then
-			local distance = self:getDistanceToPos(attack_target:get_cur_pos_num(),true)
+			local distance = self:get_distance_to_pos(attack_target:get_cur_pos_num(),true)
 			self:attack(attack_target, distance)
 		elseif skill_target_pos then
-			self:useSkill(skill_target_pos)
+			self:use_skill(skill_target_pos)
 		else
-			self:changeMonsterStatus(monster_base.status.ALIVE)
-			if self:nothingCanDo() then
-				pve_game_ctrl:Instance():nextMonsterActivate()
+			self:change_monster_status(monster_base.status.ALIVE)
+			if self:nothing_can_do() then
+				pve_game_ctrl:Instance():next_monster_activate()
 			else
-				pve_game_ctrl:Instance():changeGameStatus(pve_game_ctrl.GameStatus.WAIT_ORDER)
+				pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.WAIT_ORDER)
 			end
 		end
 	end
 	local callback = cc.CallFunc:create(handler(self,cb))
-	if gtool:ccpToInt(arena_pos) == self:get_cur_pos_num() then
+	if gtool:ccp_2_int(arena_pos) == self:get_cur_pos_num() then
 		cb()
 	else
-		self:repeatAnimation("walk")
-		self:moveFollowPath(arena_pos,callback)
+		self:repeat_animation("walk")
+		self:move_follow_path(arena_pos,callback)
 	end
 end
 
 monster_base.attack = function(self, target, distance)
-	pve_game_ctrl:Instance():changeGameStatus(pve_game_ctrl.GameStatus.RUNNING)
+	pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 	
-	if self:isMelee() and not self:isNear(gtool:ccpToInt(target.cur_pos)) then
-		self:moveAndAttack(target)
+	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target.cur_pos)) then
+		self:move_and_Attack(targeta
 	else
-		if self.attack_particle then
-			self:createAttackParticle(target)
+		if self._attack_particle then
+			self:create_attack_particle(target)
 		end
 
-		self:addAnger()
+		self:add_anger()
 		local cur_num = self:get_cur_pos_num()
-		local to_num = gtool:ccpToInt(target.cur_pos)
-		self:towardToIntPos(cur_num,to_num)
-		self:doAnimation("attack1")
-		target:beAttacked(self,false,distance)
+		local to_num = gtool:ccp_2_int(target.cur_pos)
+		self:toward_to_int_pos(cur_num,to_num)
+		self:do_animation("attack1")
+		target:be_attacked(self,false,distance)
 	end
 end
 
 monster_base.wait = function(self, is_auto)
-	if self:hasWaited() then
+	if self:has_waited() then
 		if is_auto then
 			self:defend()
 		else
 			uitool:createTopTip("you has been waited!")
 		end
 	else
-		self:changeMonsterStatus(monster_base.status.WAITING)
-		self.has_waited = true
-		pve_game_ctrl:Instance():changeGameStatus(pve_game_ctrl.GameStatus.RUNNING)
-		pve_game_ctrl:Instance():nextMonsterActivate(true)
+		self:change_monster_status(monster_base.status.WAITING)
+		self._has_waited = true
+		pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+		pve_game_ctrl:Instance():next_monster_activate(true)
 	end
 end
 
 monster_base.defend = function(self)
-	self:changeMonsterStatus(monster_base.status.DEFEND)
-	self:addBuff({Config.Buff.defend})
-	pve_game_ctrl:Instance():changeGameStatus(pve_game_ctrl.GameStatus.RUNNING)
-	pve_game_ctrl:Instance():nextMonsterActivate()
+	self:change_monster_status(monster_base.status.DEFEND)
+	self:add_buff({Config.Buff.defend})
+	pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+	pve_game_ctrl:Instance():next_monster_activate()
 end
 
-monster_base.useSkill = function(self, target_pos_num)
-	if (not self.skill:isNeedTarget()) or (self:isMelee() and self:isNear(target_pos_num)) or (not self:isMelee()) then
+monster_base.use_skill = function(self, target_pos_num)
+	if (not self.skill:is_need_target()) or (self:is_melee() and self:is_near(target_pos_num)) or (not self:is_melee()) then
 		self.skill:play()
-		self:minusAnger(self.skill.cost)
-		pve_game_ctrl:Instance():changeGameStatus(pve_game_ctrl.GameStatus.RUNNING)
+		self:minus_anger(self.skill.cost)
+		pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 		local cb = function()
 			self.skill:use(target_pos_num)
 		end
 		local callback = cc.CallFunc:create(cb)
-		self:towardToIntPos(self:get_cur_pos_num(), target_pos_num)
-		self:doAnimation("skill", callback)
+		self:toward_to_int_pos(self:get_cur_pos_num(), target_pos_num)
+		self:do_animation("skill", callback)
 	else
-		self:moveAndUseSkill(target_pos_num)
+		self:move_and_use_skill(target_pos_num)
 	end
 end
-----------------------------±ª∂Ø¥•∑¢----------------------------------
-----------------------------±ª∂Ø¥•∑¢----------------------------------
-----------------------------±ª∂Ø¥•∑¢----------------------------------
+----------------------------¬±¬ª¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
+----------------------------¬±¬ª¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
+----------------------------¬±¬ª¬∂¬Ø¬¥¬•¬∑¬¢----------------------------------
 
 monster_base.die = function(self, is_buff_or_skill)
-	self.status = monster_base.status.DEAD
+	self._status = monster_base.status.DEAD
 	self.card.removeSelf()
 
 	local ac = self.model:runAction(cc.FadeOut:create(1))
 	local cb = function()
 		self.node:setVisible(false)
-		if not pve_game_ctrl:Instance():isGameOver() then
-			pve_game_ctrl:Instance():checkGameOver(is_buff_or_skill)
+		if not pve_game_ctrl:Instance():is_game_over() then
+			pve_game_ctrl:Instance():check_game_over(is_buff_or_skill)
 		end
 	end
 
 	local callback = cc.CallFunc:create(cb)
 	local seq = cc.Sequence:create(ac,callback)
-	self:doAnimation("die", seq)
+	self:do_animation("die", seq)
 end
 
-monster_base.beAttacked = function(self, murderer, is_counter_attack, distance)
-	local damage,damage_type = self:getFinalAttackDamage(murderer, distance)
+monster_base.be_attacked = function(self, murderer, is_counter_attack, distance)
+	local damage,damage_type = self:get_final_attack_damage(murderer, distance)
 
-	if self:minusHP(damage, damage_type) then
-		self:addAnger()
+	if self:minus_hp(damage, damage_type) then
+		self:add_anger()
 		local cb = function()
 			local cur_num = self:get_cur_pos_num()
-			local to_num = gtool:ccpToInt(murderer.cur_pos)
-			if (not is_counter_attack) and self:canCounterAttack(murderer) then
-				self:towardToIntPos(cur_num, to_num)
-				self:counterAttack(murderer)
+			local to_num = gtool:ccp_2_int(murderer.cur_pos)
+			if (not is_counter_attack) and self:can_counter_attack(murderer) then
+				self:toward_to_int_pos(cur_num, to_num)
+				self:counter_attack(murderer)
 			else
-				self:towardToIntPos(cur_num, to_num)
-				pve_game_ctrl:Instance():nextMonsterActivate()
+				self:toward_to_int_pos(cur_num, to_num)
+				pve_game_ctrl:Instance():next_monster_activate()
 			end
 		end
 		local callback = cc.CallFunc:create(handler(self, cb))
-		self:doAnimation("beattacked", callback)
+		self:do_animation("beattacked", callback)
 	end
 end
 
-monster_base.counterAttack = function(self, target)
+monster_base.counter_attack = function(self, target)
 	local cur_num = self:get_cur_pos_num()
-	local to_num = gtool:ccpToInt(target.cur_pos)
-	self:towardToIntPos(cur_num, to_num)
-	self:doAnimation("attack1")
-	self:addAnger()
-	target:beAttacked(self,true)
+	local to_num = gtool:ccp_2_int(target.cur_pos)
+	self:toward_to_int_pos(cur_num, to_num)
+	self:do_animation("attack1")
+	self:add_anger()
+	target:be_attacked(self,true)
 end
 
-monster_base.beAffectedBySkill = function(self, skill, is_last)
-	if self:isEnemy(skill.caster) then
+monster_base.be_affected_by_skill = function(self, skill, is_last)
+	if self:is_enemy(skill.caster) then
 		if skill.damage > 0 then
-			local damage,damage_type = self:getFinalSkillDamage(skill)
-			self:minusHP(damage,damage_type,true)
+			local damage,damage_type = self:get_final_skill_damage(skill)
+			self:minus_hp(damage,damage_type,true)
 		end
 		if #skill.debuff > 0 then
-			self:addDeBuff(skill.debuff)
+			self:add_debuff(skill.debuff)
 		end
 	else
 		if skill.healing > 0 then
-			local healing,htype = self:getFinalhealing(skill)
-			self:addHP(healing,htype)
+			local healing,htype = self:get_final_healing(skill)
+			self:add_hp(healing,htype)
 		end
 		if #skill.buff > 0 then
-			self:addBuff(skill.buff)
+			self:add_buff(skill.buff)
 		end
 	end
 
 	if is_last then 
 		local cb = function()
-			pve_game_ctrl:Instance():nextMonsterActivate()
+			pve_game_ctrl:Instance():next_monster_activate()
 		end
 		local callback = cc.CallFunc:create(cb)
-		self:doSomethingLater(callback,0.6)
+		self:do_something_later(callback,0.6)
 	end
 end
 
-monster_base.towardTo = function(self, num)
-	self.cur_towards = num
+monster_base.toward_to = function(self, num)
+	self._cur_towards = num
 	self.model:setRotation3D(cc.vec3(0,(1-num)*60,0))
 end
 
 
-monster_base.towardToIntPos = function(self, cur_num, to_num, only_get)
+monster_base.toward_to_int_pos = function(self, cur_num, to_num, only_get)
 	if not to_num then 
 		return
 	end
 
 	local result_towards
 
-	local towardToHelp = function ()
-		local to_pos = gtool:intToCcp(to_num)
-		local cur_pos = gtool:intToCcp(cur_num)
+	local toward_to_help = function ()
+		local to_pos = gtool:int_2_ccp(to_num)
+		local cur_pos = gtool:int_2_ccp(cur_num)
 		if to_num > cur_num then
 			if to_pos.x-cur_pos.x>math.abs(to_pos.y-cur_pos.y) then
 				result_towards = 1
@@ -556,7 +555,7 @@ monster_base.towardToIntPos = function(self, cur_num, to_num, only_get)
 		elseif deta == 11 then
 			result_towards = 6
 		else
-			towardToHelp()
+			toward_to_help()
 		end
 	else
 		if deta == 10 then
@@ -572,41 +571,41 @@ monster_base.towardToIntPos = function(self, cur_num, to_num, only_get)
 		elseif deta == 1 then
 			result_towards = 6
 		else
-			towardToHelp()
+			toward_to_help()
 		end
 	end
 
 	if only_get then
 		return result_towards
 	else
-		self:towardTo(result_towards)
+		self:toward_to(result_towards)
 	end
 end
-----------------------------…À∫¶÷Œ¡∆º∆À„—™¡ø≈≠∆¯----------------------------------
-----------------------------…À∫¶÷Œ¡∆º∆À„—™¡ø≈≠∆¯----------------------------------
-----------------------------…À∫¶÷Œ¡∆º∆À„—™¡ø≈≠∆¯----------------------------------
-monster_base.getFinalAttackDamage = function(self, murderer, distance)
+----------------------------√â√ã¬∫¬¶√ñ√é√Å√Ü¬º√Ü√ã√£√ë¬™√Å¬ø√Ö¬≠√Ü√∏----------------------------------
+----------------------------√â√ã¬∫¬¶√ñ√é√Å√Ü¬º√Ü√ã√£√ë¬™√Å¬ø√Ö¬≠√Ü√∏----------------------------------
+----------------------------√â√ã¬∫¬¶√ñ√é√Å√Ü¬º√Ü√ã√£√ë¬™√Å¬ø√Ö¬≠√Ü√∏----------------------------------
+monster_base.get_final_attack_damage = function(self, murderer, distance)
 	local damage = murderer:get_cur_damage()
 	local damage_type = monster_base.damage_level.COMMON
 
-	if self:isBeBackAttacked(murderer) then
+	if self:is_be_back_attacked(murderer) then
 		damage = damage * 1.5
 		damage_type = monster_base.damage_level.HIGHER
-	elseif self:isBeSideAttacked(murderer) then
+	elseif self:is_be_side_attacked(murderer) then
 		damage = damage * 1.2
 		damage_type = monster_base.damage_level.HIGH
 	end
 
 	
 	local defense
-	if murderer:isPhysical() then
+	if murderer:is_physical() then
 		defense = self:get_cur_pysical_defense() - murderer:get_cur_defense_penetration()
 	else
 		defense = self:get_cur_magic_defense() - murderer:get_cur_defense_penetration()
 	end
 	damage = damage * (1 - defense / (defense + 10))
 	
-	if not murderer:isMelee() then
+	if not murderer:is_melee() then
 		if distance > 5 then
 			damage = damage * (1 - (distance - 5) * 2 / 10)
 			damage_type = monster_base.damage_level.LOW
@@ -628,7 +627,7 @@ monster_base.getFinalAttackDamage = function(self, murderer, distance)
 	return math.floor(damage), damage_type
 end
 
-monster_base.getFinalhealing = function(self, skill)
+monster_base.get_final_healing = function(self, skill)
 	local healing = skill.healing
 
 	healing = healing + skill.caster.level * skill.healing_level_plus
@@ -636,14 +635,14 @@ monster_base.getFinalhealing = function(self, skill)
 	return healing, monster_base.damage_level.HEAL
 end
 
-monster_base.getFinalSkillDamage = function(self, skill)
+monster_base.get_final_skill_damage = function(self, skill)
 	local damage = skill.damage
 	local caster = skill.caster
 
 	damage = damage + caster.level * skill.damage_level_plus
 
 	local defense
-	if caster:isPhysical() then
+	if caster:is_physical() then
 		defense = self:get_cur_pysical_defense() - caster:get_cur_defense_penetration()
 	else
 		defense = self:get_cur_magic_defense() - caster:get_cur_defense_penetration()
@@ -660,8 +659,8 @@ monster_base.getFinalSkillDamage = function(self, skill)
 	return math.floor(damage), monster_base.damage_level.SKILL
 end
 
-monster_base.addHP = function(self, healing, htype)
-	local hp = self.cur_hp + healing
+monster_base.add_hp = function(self, healing, htype)
+	local hp = self._cur_hp + healing
 
 	local max_hp = self:get_cur_max_hp()
 	if hp>max_hp then
@@ -669,33 +668,33 @@ monster_base.addHP = function(self, healing, htype)
 	end
 
 	local cb = function()
-		self.blood_bar.updateHP(hp / self.max_hp, healing, htype)
+		self.blood_bar.updateHP(hp / self._max_hp, healing, htype)
 	end
 	local callback = cc.CallFunc:create(handler(self,cb))
-	self:doSomethingLater(callback,0.3)
-	self:setHP(hp)
+	self:do_something_later(callback,0.3)
+	self:set_hp(hp)
 end
 
-monster_base.minusHP = function(self, damage, damage_type, is_buff_or_skill)
-	local hp = self.cur_hp - damage
+monster_base.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
+	local hp = self._cur_hp - damage
 
 	local cb = function()
-		self.blood_bar.updateHP(hp / self.max_hp , damage , damage_type)
+		self.blood_bar.updateHP(hp / self._max_hp , damage , damage_type)
 		if hp<1 then
 			self:die()
 		end
 	end
 	if not is_buff_or_skill then
 		local callback = cc.CallFunc:create(handler(self, cb))
-		self:doSomethingLater(callback,0.5)
+		self:do_something_later(callback,0.5)
 	else
-		self.blood_bar.updateHP(hp / self.max_hp, damage, damage_type)
+		self.blood_bar.updateHP(hp / self._max_hp, damage, damage_type)
 		if hp<1 then
 			self:die(is_buff_or_skill)
 		end
 	end
 
-	self:setHP(hp)
+	self:set_hp(hp)
 
 	if hp > 0 then
 		return true
@@ -704,7 +703,7 @@ monster_base.minusHP = function(self, damage, damage_type, is_buff_or_skill)
 	end
 end
 
-monster_base.setHP = function(self, hp)
+monster_base.set_hp = function(self, hp)
 	if hp<0 then
 		hp = 0
 	end
@@ -712,105 +711,105 @@ monster_base.setHP = function(self, hp)
 	if hp>max_hp then
 		hp = max_hp
 	end
-	self.cur_hp = hp
+	self._cur_hp = hp
 end
 
-monster_base.addAnger = function(self, num)
-	if self.cur_anger>self.max_anger-1 then 
+monster_base.add_anger = function(self, num)
+	if self._cur_anger>self._max_anger-1 then 
 		return
 	end
 	num = num or 1
 
-	self:setAnger(self.cur_anger + num)
+	self:set_anger(self._cur_anger + num)
 end
 
-monster_base.minusAnger = function(self, num)
-	self:setAnger(self.cur_anger - num)
+monster_base.minus_anger = function(self, num)
+	self:set_anger(self._cur_anger - num)
 end
 
-monster_base.setAnger = function(self, angle)
-	self.cur_anger = angle
+monster_base.set_anger = function(self, angle)
+	self._cur_anger = angle
 
 	local cb = function()
-		self.card.update(self.cur_anger)
-		self.blood_bar.updateAnger(self.cur_anger)
+		self.card.update(self._cur_anger)
+		self.blood_bar.updateAnger(self._cur_anger)
 	end
 	local callback = cc.CallFunc:create(handler(self,cb))
 
-	self:doSomethingLater(callback,0.5)
+	self:do_something_later(callback,0.5)
 end
-----------------------------buffœ‡πÿ----------------------------------
-----------------------------buffœ‡πÿ----------------------------------
-----------------------------buffœ‡πÿ----------------------------------
-monster_base.addBuff = function(self, buff_list)
+----------------------------buff√è√†¬π√ò----------------------------------
+----------------------------buff√è√†¬π√ò----------------------------------
+----------------------------buff√è√†¬π√ò----------------------------------
+monster_base.add_buff = function(self, buff_list)
 	for k,v in pairs(buff_list) do
 		local buff = v:clone()
 		buff.affect_round = 0
 		buff.begin(self)
-		table.insert(self.buff_list, buff)
+		table.insert(self._buff_list, buff)
 	end
 end
 
-monster_base.addDeBuff = function(self, debuff_list)
+monster_base.add_debuff = function(self, debuff_list)
 	for k,v in pairs(debuff_list) do
 		local buff = v:clone()
 		buff.affect_round = 0
 		buff.begin(self)
-		table.insert(self.debuff_list, buff)
+		table.insert(self._debuff_list, buff)
 	end
 end
 
-monster_base.dealWithAllBuff = function(self)
-	for k,v in pairs(self.buff_list) do
+monster_base.deal_with_all_buff = function(self)
+	for k,v in pairs(self._buff_list) do
 		if v.affect_round<v.round then
 			v.affect_round = v.affect_round + 1
 			v.once_a_round(self)
 		else
 			v.finish(self)
-			table.remove(self.buff_list, k)
+			table.remove(self._buff_list, k)
 		end
 	end
 
-	for k,v in pairs(self.debuff_list) do
+	for k,v in pairs(self._debuff_list) do
 		if v.affect_round<v.round then
 			v.affect_round = v.affect_round + 1
 			v.once_a_round(self)
 		else
 			v.finish(self)
-			table.remove(self.debuff_list, k)
+			table.remove(self._debuff_list, k)
 		end
 	end
 end
 
-----------------------------π•ª˜ ººƒ‹∏®÷˙----------------------------------
-----------------------------π•ª˜ ººƒ‹∏®÷˙----------------------------------
-----------------------------π•ª˜ ººƒ‹∏®÷˙----------------------------------
+----------------------------¬π¬•¬ª√∑ ¬º¬º√Ñ√ú¬∏¬®√ñ√∫----------------------------------
+----------------------------¬π¬•¬ª√∑ ¬º¬º√Ñ√ú¬∏¬®√ñ√∫----------------------------------
+----------------------------¬π¬•¬ª√∑ ¬º¬º√Ñ√ú¬∏¬®√ñ√∫----------------------------------
 
-monster_base.moveAndAttack = function(self, target)
-	local num = gtool:ccpToInt(target.cur_pos)
-	local pos = gtool:intToCcp(self:getBackFirstNearPosNum(num,target.cur_towards))
+monster_base.move_and_attack = function(self, target)
+	local num = gtool:ccp_2_int(target.cur_pos)
+	local pos = gtool:int_2_ccp(self:get_back_first_near_pos_num(num,target.cur_towards))
 
-	self:moveTo(pos, target)
+	self:move_to(pos, target)
 end
 
-monster_base.moveAndUseSkill = function(self, target_pos_num)
-	local pos = gtool:intToCcp(self:getNearPosNum(target_pos_num))
+monster_base.move_and_use_skill = function(self, target_pos_num)
+	local pos = gtool:int_2_ccp(self:get_near_pos_num(target_pos_num))
 
-	self:moveTo(pos,nil,target_pos_num)
+	self:move_to(pos,nil,target_pos_num)
 end
 
-monster_base.moveFollowPath = function(self, arena_pos, callback_final)
-	local num = gtool:ccpToInt(arena_pos)
-	local path = self:getPathToPos(num)
-	self.steps = self.steps - #path
+monster_base.move_follow_path = function(self, arena_pos, callback_final)
+	local num = gtool:ccp_2_int(arena_pos)
+	local path = self:get_path_to_pos(num)
+	self._steps = self._steps - #path
 	
 	local ac_table  = {}
 	local next_pos
 
 	for i = #path, 1, -1 do
-		local pos = pve_game_ctrl:Instance():getPositionByInt(path[i])
+		local pos = pve_game_ctrl:Instance():get_position_by_int(path[i])
 		
-		if self:isFly() then
+		if self:is_fly() then
 			pos.y = pos.y + 10
 		else
 			pos.y = pos.y - 10
@@ -820,7 +819,7 @@ monster_base.moveFollowPath = function(self, arena_pos, callback_final)
 		self.node:stopAction(action)
 		
 		local cb = function()
-			self:towardToIntPos(path[i],path[i-1])
+			self:toward_to_int_pos(path[i],path[i-1])
 		end
 		local callback = cc.CallFunc:create(handler(self,cb))
 		local seq = cc.Sequence:create(action,callback)
@@ -830,54 +829,54 @@ monster_base.moveFollowPath = function(self, arena_pos, callback_final)
 	table.insert(ac_table,callback_final)
 
 	local all_seq = cc.Sequence:create(unpack(ac_table))
-	self:towardToIntPos(self:get_cur_pos_num(), path[#path])
+	self:toward_to_int_pos(self:get_cur_pos_num(), path[#path])
 	self.node:runAction(all_seq)
 end
 
-monster_base.getDistanceToPos = function(self, num, update)
+monster_base.get_distance_to_pos = function(self, num, update)
 	if update then
-		self.distance_info = self:getDistanceInfo()
+		self.distance_info = self:get_distance_info()
 	end
 	return self.distance_info[num]
 end
 
-monster_base.getDistanceInfo = function(self)
+monster_base.get_distance_info = function(self)
 	local distanc_table = {}
     local temp_list = {}
     
-    local pathFindHelp = function(num, step)
+    local path_find_help = function(num, step)
         if not distanc_table[num] and gtool:isLegalPosNum(num) then
             distanc_table[num] = step
         end
     end
     
-    local findGezi = function(pos, step)
-        pathFindHelp(pos+10,step)
-        pathFindHelp(pos-10,step)
-        pathFindHelp(pos+1,step)
-        pathFindHelp(pos-1,step)
+    local find_gezi = function(pos, step)
+        path_find_help(pos+10,step)
+        path_find_help(pos-10,step)
+        path_find_help(pos+1,step)
+        path_find_help(pos-1,step)
         if pos%2 == 0 then
-            pathFindHelp(pos+11,step)
-            pathFindHelp(pos+9,step)
+            path_find_help(pos+11,step)
+            path_find_help(pos+9,step)
         else
-            pathFindHelp(pos-11,step)
-            pathFindHelp(pos-9,step)
+            path_find_help(pos-11,step)
+            path_find_help(pos-9,step)
         end
     end
 
-    findGezi(self:get_cur_pos_num(), 1)
+    find_gezi(self:get_cur_pos_num(), 1)
     for k,v in pairs(distanc_table) do
         table.insert(temp_list, k)
     end
 
-	local steps = math.abs(self.cur_pos.x - 4) + math.abs(self.cur_pos.y - 4) + 4
+	local steps = math.abs(self._cur_pos.x - 4) + math.abs(self._cur_pos.y - 4) + 4
 	if steps > 8 then 
 		steps = 8 
 	end
 
     for i = 2, steps do
         for _,v in pairs(temp_list) do
-            findGezi(v, i)      
+            find_gezi(v, i)      
         end
         temp_list = {}
 
@@ -889,15 +888,15 @@ monster_base.getDistanceInfo = function(self)
     return distanc_table
 end
 
-monster_base.createAttackParticle = function(self, target)
-	local particle = cc.ParticleSystemQuad:create(self.attack_particle)
+monster_base.create_attack_particle = function(self, target)
+	local particle = cc.ParticleSystemQuad:create(self._attack_particle)
 	particle:setScale(0.3)
 	particle:setName("attack")
-	local start_pos = pve_game_ctrl:Instance():getPositionByInt(self:get_cur_pos_num())
+	local start_pos = pve_game_ctrl:Instance():get_position_by_int(self:get_cur_pos_num())
 	particle:setPosition(start_pos.x, start_pos.y)
-	local node = pve_game_ctrl:Instance():getMapTopArenaNode()
+	local node = pve_game_ctrl:Instance():get_map_top_arena_node()
 	node:addChild(particle)
-	local end_pos = pve_game_ctrl:Instance():getPositionByInt(target:get_cur_pos_num())
+	local end_pos = pve_game_ctrl:Instance():get_position_by_int(target:get_cur_pos_num())
 	local ac1 = particle:runAction(cc.MoveTo:create(0.5,cc.p(start_pos.x, start_pos.y + 30)))
 	particle:stopAction(ac1)
 	local ac2 = particle:runAction(cc.MoveTo:create(0.3,cc.p(end_pos.x, end_pos.y + 15)))
@@ -905,40 +904,40 @@ monster_base.createAttackParticle = function(self, target)
 	local seq = cc.Sequence:create(ac1,ac2)
 	particle:runAction(seq)
 end
-----------------------------“∆∂Ø∏®÷˙----------------------------------
-----------------------------“∆∂Ø∏®÷˙----------------------------------
-----------------------------“∆∂Ø∏®÷˙----------------------------------
+----------------------------√í√Ü¬∂¬Ø¬∏¬®√ñ√∫----------------------------------
+----------------------------√í√Ü¬∂¬Ø¬∏¬®√ñ√∫----------------------------------
+----------------------------√í√Ü¬∂¬Ø¬∏¬®√ñ√∫----------------------------------
 
-monster_base.getAroundInfo = function(self, is_to_show)
-	local steps = self.steps
+monster_base.get_around_info = function(self, is_to_show)
+	local steps = self._steps
 	if is_to_show then
-		if steps < 1 and not self:hasWaited() then
+		if steps < 1 and not self:has_waited() then
 			steps = self:get_cur_mobility()
 		end
 	end
 
-	local map_info = pve_game_ctrl:Instance():getMapInfo()
+	local map_info = pve_game_ctrl:Instance():get_map_info()
 	self.can_reach_area_info = {}
 
 	if steps>0 then
 		
-		self.can_reach_area_info = self:getCanReachAreaInfo(self:get_cur_pos_num(), map_info, steps)
+		self.can_reach_area_info = self:get_can_reach_area_info(self:get_cur_pos_num(), map_info, steps)
 
-		if self:isFly() then
-			self.fly_path = self:getFlyPath()
+		if self:is_fly() then
+			self.fly_path = self:get_fly_path()
 		end
 
 		for k,v in pairs(map_info) do
-			if type(v) == type({}) and v.team_side == self.team_side then
-				self.can_reach_area_info[k] = pve_game_ctrl.MapItem.FRIEND
+			if type(v) == type({}) and v.team_side == self._team_side then
+				self.can_reach_area_info[k] = pve_game_ctrl.map_item.FRIEND
 			end
 		end
 	end
 
 	local can_attack_table = {}
 	for k,v in pairs(map_info) do
-		if type(v) == type({}) and v.team_side ~= self.team_side then
-			if self:canReachAndAttack(k) then
+		if type(v) == type({}) and v.team_side ~= self._team_side then
+			if self:can_reach_and_attack(k) then
 				table.insert(can_attack_table,k)
 			else
 				self.can_reach_area_info[k] = nil
@@ -948,42 +947,42 @@ monster_base.getAroundInfo = function(self, is_to_show)
 		end
 	end
 
-	self.distance_info = self:getDistanceInfo()
+	self.distance_info = self:get_distance_info()
 	
 	for k,v in pairs(can_attack_table) do
-		self.can_reach_area_info[v] = pve_game_ctrl.MapItem.ENEMY*100 + self:getDistanceToPos(v)
+		self.can_reach_area_info[v] = pve_game_ctrl.map_item.ENEMY*100 + self:get_distance_to_pos(v)
 	end
 	
-	self.can_reach_area_info[0] = self.cur_pos
+	self.can_reach_area_info[0] = self._cur_pos
 	return self.can_reach_area_info
 end
 
-monster_base.getCanReachAreaInfo = function(self, center_pos_num, map_info, steps)
+monster_base.get_can_reach_area_info = function(self, center_pos_num, map_info, steps)
     local area_table = {}
     local temp_list = {}
     
-    local pathFindHelp = function(pos, num)
-        if not area_table[num] and gtool:isLegalPosNum(num) and ((not map_info[num]) or self:isFly()) then
+    local path_find_help = function(pos, num)
+        if not area_table[num] and gtool:isLegalPosNum(num) and ((not map_info[num]) or self:is_fly()) then
             
             area_table[num] = pos
         end
     end
     
-    local findGezi = function(pos)
-        pathFindHelp(pos,pos+10)
-        pathFindHelp(pos,pos-10)
-        pathFindHelp(pos,pos+1)
-        pathFindHelp(pos,pos-1)
+    local find_gezi = function(pos)
+        path_find_help(pos,pos+10)
+        path_find_help(pos,pos-10)
+        path_find_help(pos,pos+1)
+        path_find_help(pos,pos-1)
         if pos%2 == 0 then
-            pathFindHelp(pos,pos+11)
-            pathFindHelp(pos,pos+9)
+            path_find_help(pos,pos+11)
+            path_find_help(pos,pos+9)
         else
-            pathFindHelp(pos,pos-11)
-            pathFindHelp(pos,pos-9)
+            path_find_help(pos,pos-11)
+            path_find_help(pos,pos-9)
         end
     end
 
-    findGezi(center_pos_num)
+    find_gezi(center_pos_num)
     for k,v in pairs(area_table) do
         table.insert(temp_list,k)
     end
@@ -991,7 +990,7 @@ monster_base.getCanReachAreaInfo = function(self, center_pos_num, map_info, step
     for i=2,steps do
         for _,v in pairs(temp_list) do
 
-            findGezi(v)
+            find_gezi(v)
             
         end
         temp_list = {}
@@ -1004,43 +1003,43 @@ monster_base.getCanReachAreaInfo = function(self, center_pos_num, map_info, step
     return area_table
 end
 
-monster_base.getFlyPath = function(self)
+monster_base.get_fly_path = function(self)
     local fly_path = {}
     local temp_list = {}
     
-    local pathFindHelp = function(pos, num)
+    local path_find_help = function(pos, num)
         if not fly_path[num] and gtool:isLegalPosNum(num) then
             fly_path[num] = pos
         end
     end
     
-    local findGezi = function(pos)
-        pathFindHelp(pos,pos + 10)
-        pathFindHelp(pos,pos - 10)
-        pathFindHelp(pos,pos + 1)
-        pathFindHelp(pos,pos - 1)
+    local find_gezi = function(pos)
+        path_find_help(pos,pos + 10)
+        path_find_help(pos,pos - 10)
+        path_find_help(pos,pos + 1)
+        path_find_help(pos,pos - 1)
         if pos % 2 == 0 then
-            pathFindHelp(pos,pos + 11)
-            pathFindHelp(pos,pos + 9)
+            path_find_help(pos,pos + 11)
+            path_find_help(pos,pos + 9)
         else
-            pathFindHelp(pos,pos - 11)
-            pathFindHelp(pos,pos - 9)
+            path_find_help(pos,pos - 11)
+            path_find_help(pos,pos - 9)
         end
     end
 
-    findGezi(self:get_cur_pos_num())
+    find_gezi(self:get_cur_pos_num())
     for k,v in pairs(fly_path) do
         table.insert(temp_list, k)
     end
 
-	local steps = math.abs(self.cur_pos.x - 4) + math.abs(self.cur_pos.y - 4) + 4
+	local steps = math.abs(self._cur_pos.x - 4) + math.abs(self._cur_pos.y - 4) + 4
 	if steps > 8 then 
 		steps = 8 
 	end
 
     for i = 2, steps do
         for _,v in pairs(temp_list) do
-            findGezi(v)      
+            find_gezi(v)      
         end
         temp_list = {}
 
@@ -1052,40 +1051,40 @@ monster_base.getFlyPath = function(self)
     return fly_path
 end
 
-monster_base.getPathInfoToTarget = function(self, map_info, target)
+monster_base.get_path_info_to_target = function(self, map_info, target)
     local area_table = {}
     local temp_list = {}
     
-    local pathFindHelp = function(pos, num)
+    local path_find_help = function(pos, num)
         if num == target then
             area_table[num] = pos
             return true
         end
         if not area_table[num] 
         	and gtool:isLegalPosNum(num) 
-        	and ((not map_info[num]) or self:isFly()) then
+        	and ((not map_info[num]) or self:is_fly()) then
             area_table[num] = pos
         end
 
         return false
     end
     
-    local findGezi = function(pos)
-        if pathFindHelp(pos,pos+10)
-            or pathFindHelp(pos,pos-10)
-            or pathFindHelp(pos,pos+1)
-            or pathFindHelp(pos,pos-1) then
+    local find_gezi = function(pos)
+        if path_find_help(pos,pos+10)
+            or path_find_help(pos,pos-10)
+            or path_find_help(pos,pos+1)
+            or path_find_help(pos,pos-1) then
             return true
         end
         if pos%2 == 0 then
-            if pathFindHelp(pos,pos+11)
-                or pathFindHelp(pos,pos+9) then
+            if path_find_help(pos,pos+11)
+                or path_find_help(pos,pos+9) then
 
                 return true
             end
         else
-            if pathFindHelp(pos,pos-11)
-                or pathFindHelp(pos,pos-9) then
+            if path_find_help(pos,pos-11)
+                or path_find_help(pos,pos-9) then
 
                 return true
             end
@@ -1094,7 +1093,7 @@ monster_base.getPathInfoToTarget = function(self, map_info, target)
         return false
     end
 
-    findGezi(self:get_cur_pos_num())
+    find_gezi(self:get_cur_pos_num())
     for k,v in pairs(area_table) do
         table.insert(temp_list, k)
     end
@@ -1103,7 +1102,7 @@ monster_base.getPathInfoToTarget = function(self, map_info, target)
 
     for i=2,20 do
         for _,v in pairs(temp_list) do
-            if findGezi(v) then
+            if find_gezi(v) then
                 return area_table
             end
         end
@@ -1120,11 +1119,11 @@ monster_base.getPathInfoToTarget = function(self, map_info, target)
     return area_table
 end
 
-monster_base.getPathToPos = function(self, num, path_table)
+monster_base.get_path_to_pos = function(self, num, path_table)
 	path_table = path_table or {}
 	table.insert(path_table,num)
 	local last_geizi
-	if self:isFly() then 
+	if self:is_fly() then 
 		last_geizi = self.fly_path[num]
 	else
 		last_geizi = self.can_reach_area_info[num]
@@ -1133,38 +1132,38 @@ monster_base.getPathToPos = function(self, num, path_table)
 	if self:get_cur_pos_num() == last_geizi then
 		return path_table
 	else
-		return self:getPathToPos(last_geizi,path_table)
+		return self:get_path_to_pos(last_geizi,path_table)
 	end
 end
 
-monster_base.getNearPosNum = function(self, num)
+monster_base.get_near_pos_num = function(self, num)
 
 	if num%2 == 0 then
-		if self:canMoveToThePosNum(num+10) then
+		if self:can_move_to_pos_num(num+10) then
 			return num+10
-		elseif self:canMoveToThePosNum(num-10) then
+		elseif self:can_move_to_pos_num(num-10) then
 			return num-10
-		elseif self:canMoveToThePosNum(num+1) then
+		elseif self:can_move_to_pos_num(num+1) then
 			return num+1
-		elseif self:canMoveToThePosNum(num-1) then
+		elseif self:can_move_to_pos_num(num-1) then
 			return num-1
-		elseif self:canMoveToThePosNum(num+11) then
+		elseif self:can_move_to_pos_num(num+11) then
 			return num+11
-		elseif self:canMoveToThePosNum(num+9) then
+		elseif self:can_move_to_pos_num(num+9) then
 			return num+9
 		end
 	else
-		if self:canMoveToThePosNum(num+10) then
+		if self:can_move_to_pos_num(num+10) then
 			return num+10
-		elseif self:canMoveToThePosNum(num-10) then
+		elseif self:can_move_to_pos_num(num-10) then
 			return num-10
-		elseif self:canMoveToThePosNum(num+1) then
+		elseif self:can_move_to_pos_num(num+1) then
 			return num+1
-		elseif self:canMoveToThePosNum(num-1) then
+		elseif self:can_move_to_pos_num(num-1) then
 			return num-1
-		elseif self:canMoveToThePosNum(num-11) then
+		elseif self:can_move_to_pos_num(num-11) then
 			return num-11
-		elseif self:canMoveToThePosNum(num-9) then
+		elseif self:can_move_to_pos_num(num-9) then
 			return num-9
 		end
 	end
@@ -1172,17 +1171,17 @@ monster_base.getNearPosNum = function(self, num)
 	return false
 end
 
-----------------------------∏®÷˙≈–∂œ----------------------------------
-----------------------------∏®÷˙≈–∂œ----------------------------------
-----------------------------∏®÷˙≈–∂œ----------------------------------
-monster_base.nothingCanDo = function(self)
-	if pve_game_ctrl:Instance():getAuto() then
+----------------------------¬∏¬®√ñ√∫√Ö√ê¬∂√è----------------------------------
+----------------------------¬∏¬®√ñ√∫√Ö√ê¬∂√è----------------------------------
+----------------------------¬∏¬®√ñ√∫√Ö√ê¬∂√è----------------------------------
+monster_base.nothing_can_do = function(self)
+	if pve_game_ctrl:Instance():get_auto() then
 		return true
 	end
-	if not self:isMelee() then
+	if not self:is_melee() then
 		return false
 	else
-		self:getAroundInfo()
+		self:get_around_info()
 		
 		local count = 0
 		for k,v in pairs(self.can_reach_area_info) do
@@ -1195,19 +1194,19 @@ monster_base.nothingCanDo = function(self)
 	end
 end
 
-monster_base.canReachAndAttack = function(self, num)
-	if self:canAttack() then
-		if self:isNear(num) or not self:isMelee() then
+monster_base.can_reach_and_attack = function(self, num)
+	if self:can_attack() then
+		if self:is_near(num) or not self:is_melee() then
 			return true
 		end
 	
-		return self:getNearPosNum(num)
+		return self:get_near_pos_num(num)
 	else
 		return false
 	end
 end
 
-monster_base.isNear = function(self, num)
+monster_base.is_near = function(self, num)
 	local cur = self:get_cur_pos_num()
 	if num%2 == 0 then
 		if cur == num+10
@@ -1234,53 +1233,53 @@ monster_base.isNear = function(self, num)
 	return false
 end
 
-monster_base.canMoveToThePosNum = function(self, num)
+monster_base.can_move_to_pos_num = function(self, num)
 	return self.can_reach_area_info[num] and self.can_reach_area_info[num] > 10 and 100 > self.can_reach_area_info[num]
 end
-----------------------------◊¥Ã¨∂Ø◊˜----------------------------------
-----------------------------◊¥Ã¨∂Ø◊˜----------------------------------
-----------------------------◊¥Ã¨∂Ø◊˜----------------------------------
-monster_base.changeMonsterStatus(status)
+----------------------------√ó¬¥√å¬¨¬∂¬Ø√ó√∑----------------------------------
+----------------------------√ó¬¥√å¬¨¬∂¬Ø√ó√∑----------------------------------
+----------------------------√ó¬¥√å¬¨¬∂¬Ø√ó√∑----------------------------------
+monster_base.change_monster_status(status)
 	status = status or self.last_status or monster_base.status.ALIVE
-	self.last_status = self.status
-	self.status = status
+	self.last_status = self._status
+	self._status = status
 	
 	if status == monster_base.status.ALIVE then
-		self:repeatAnimation("alive")
+		self:repeat_animation("alive")
 	elseif status == monster_base.status.DEFEND then
-		self:repeatAnimation("defend")
+		self:repeat_animation("defend")
 	elseif status == monster_base.status.WAITING then
-		self:doAnimation("wait")
+		self:do_animation("wait")
 	end
 end
 
-monster_base.addMonsterStatus = function(self, status)
-	self.last_status = self.status
-	self.status = self.status + status
+monster_base.add_monster_status = function(self, status)
+	self.last_status = self._status
+	self._status = self._status + status
 end
 
-monster_base.removeMonsterStatus = function(self, status)
-	self.last_status = self.status
-	self.status = self.status - status
+monster_base.remove_monster_status = function(self, status)
+	self.last_status = self._status
+	self._status = self._status - status
 
-	if self.status < monster_base.status.CANT_ATTACK then
-		self:repeatAnimation("alive")
+	if self._status < monster_base.status.CANT_ATTACK then
+		self:repeat_animation("alive")
 	end
 end
 
-monster_base.goBackRepeatAnimate = function(self)
-	if self.status == monster_base.status.ALIVE then
-		self:repeatAnimation("alive")
-	elseif self.status == monster_base.status.DEFEND then
-		self:repeatAnimation("defend")
+monster_base.go_back_repeat_animate = function(self)
+	if self._status == monster_base.status.ALIVE then
+		self:repeat_animation("alive")
+	elseif self._status == monster_base.status.DEFEND then
+		self:repeat_animation("defend")
 	else
-		self:repeatAnimation("alive")
+		self:repeat_animation("alive")
 	end
 end
 
-monster_base.repeatAnimation = function(self, name)
-	if Config.Monster_animate[self.id][name] then
-    	local animate = Config.Monster_animate[self.id][name](self.animation)
+monster_base.repeat_animation = function(self, name)
+	if Config.Monster_animate[self._id][name] then
+    	local animate = Config.Monster_animate[self._id][name](self.animation)
 		self.model:stopAllActions()
         self.model:runAction(cc.RepeatForever:create(animate))
 
@@ -1290,26 +1289,26 @@ monster_base.repeatAnimation = function(self, name)
     return false
 end
 
-monster_base.doAnimation = function(self, name, cb)
-	if Config.Monster_animate[self.id][name] then
-    	local animate = Config.Monster_animate[self.id][name](self.animation)
-		local callback = cc.CallFunc:create(handler(self,self.goBackRepeatAnimate))
+monster_base.do_animation = function(self, name, cb)
+	if Config.Monster_animate[self._id][name] then
+    	local animate = Config.Monster_animate[self._id][name](self.animation)
+		local callback = cc.CallFunc:create(handler(self,self.go_back_repeat_animate))
 		self.model:stopAllActions()
 		local seq
-		if self:isDead() then
+		if self:is_dead() then
 			seq = cc.Sequence:create(animate,cb)
         else
         	seq = cc.Sequence:create(animate,callback,cb)
         end
         self.model:runAction(seq)
     elseif cb then
-    	self:doSomethingLater(cb,1)
+    	self:do_something_later(cb,1)
     end
 end
 
-monster_base.doSomethingLater = function(self, callback, time)
+monster_base.do_something_later = function(self, callback, time)
 	local ac_node = cc.Node:create()
-    pve_game_ctrl:Instance():getActionNode():addChild(ac_node)
+    pve_game_ctrl:Instance():get_action_node():addChild(ac_node)
     local default_ac = ac_node:runAction(cc.ScaleTo:create(time,1))
     local seq = cc.Sequence:create(default_ac,callback)
     ac_node:runAction(seq)
@@ -1323,28 +1322,28 @@ end
 ----------------------------------------------------------
 ----------------------------------------------------------
 
-monster_base.runAI = function(self)
+monster_base.run_ai = function(self)
 	local enemy_list = self:get_alive_enemy_monsters()
 
-	self.can_reach_area_info = self:getAroundInfo()
+	self.can_reach_area_info = self:get_around_info()
 	
-	local target_enemy = self:getEnemyCanAttack(enemy_list)
+	local target_enemy = self:get_enemy_can_attack(enemy_list)
 	
 	if target_enemy then
-		local pos_num = gtool:ccpToInt(target_enemy.cur_pos)
-		local distance = self:getDistanceToPos(pos_num)
-		if self:canUseSkill() then
-			return self:useSkill(target_enemy:get_cur_pos_num())
+		local pos_num = gtool:ccp_2_int(target_enemy.cur_pos)
+		local distance = self:get_distance_to_pos(pos_num)
+		if self:can_use_skill() then
+			return self:use_skill(target_enemy:get_cur_pos_num())
 		end
-		if self:isMelee() then
-			self:moveAndAttack(target_enemy)
+		if self:is_melee() then
+			self:move_and_Attack(target_enemya
 		else
 			if distance<6 and distance > 2 then
 				self:attack(target_enemy, distance)
 			else
-				local pos = self:getGoodPosToAttack(target_enemy,distance)
+				local pos = self:get_good_pos_to_attack(target_enemy,distance)
 				if pos then
-					self:moveTo(pos,target_enemy)
+					self:move_to(pos,target_enemy)
 				else
 					self:attack(target_enemy, distance)
 				end
@@ -1352,23 +1351,23 @@ monster_base.runAI = function(self)
 		end
 
 	else
-		local map_info = pve_game_ctrl:Instance():getMapInfo()
-		self:moveCloseToLowestHpEnemy(enemy_list,map_info)
+		local map_info = pve_game_ctrl:Instance():get_map_info()
+		self:move_close_to_lowest_hp_enemy(enemy_list,map_info)
 	end
 end
 
-monster_base.getEnemyCanAttack = function(self, enemy_list)
+monster_base.get_enemy_can_attack = function(self, enemy_list)
 	local can_attack_list = {}
 	for k,v in pairs(enemy_list) do
-		if self:canReachAndAttack(gtool:ccpToInt(v.cur_pos)) then
+		if self:can_reach_and_attack(gtool:ccp_2_int(v.cur_pos)) then
 			table.insert(can_attack_list,v)
 		end
 	end
 	
-	return self:getLowestHpEnemy(can_attack_list)
+	return self:get_lowest_hp_enemy(can_attack_list)
 end
 
-monster_base.getLowestHpEnemy = function(self, enemy_list)
+monster_base.get_lowest_hp_enemy = function(self, enemy_list)
 	local sort_by_hp = function(a,b)
 		return a.cur_hp < b.cur_hp
 	end
@@ -1380,19 +1379,19 @@ monster_base.getLowestHpEnemy = function(self, enemy_list)
 	return enemy_list[1]
 end
 
-monster_base.moveCloseToLowestHpEnemy = function(self, enemy_list, map_info)
-	local enemy = self:getLowestHpEnemy(enemy_list)
+monster_base.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_info)
+	local enemy = self:get_lowest_hp_enemy(enemy_list)
 
 	if not enemy then
 		return
 	end
-	local pos_num = gtool:ccpToInt(enemy.cur_pos)
+	local pos_num = gtool:ccp_2_int(enemy.cur_pos)
 
-	local all_path = self:getPathInfoToTarget(map_info,pos_num)
+	local all_path = self:get_path_info_to_target(map_info,pos_num)
 
 	local path
 	if all_path[pos_num] then
-		path = self:getPathToPosPlus(pos_num, all_path)
+		path = self:get_path_to_posPlus(pos_num, all_path)
 	end
 
 	if path then
@@ -1404,29 +1403,29 @@ monster_base.moveCloseToLowestHpEnemy = function(self, enemy_list, map_info)
 			end
 		end
 		
-		self:moveTo(gtool:intToCcp(path[index]))
+		self:move_to(gtool:int_2_ccp(path[index]))
 	else
 		self:wait(true)
 	end
 end
 
-monster_base.getGoodPosToAttack = function(self, enemy, distance)
-	local enemy_direction = self:towardToIntPos(self:get_cur_pos_num(), enemy:get_cur_pos_num(), true)
+monster_base.get_good_pos_to_attack = function(self, enemy, distance)
+	local enemy_direction = self:toward_to_int_pos(self:get_cur_pos_num(), enemy:get_cur_pos_num(), true)
 	local pos_num
 	if distance < 3 then
-		pos_num = self:getPosNumByDirectionAndSteps(self:get_cur_pos_num(),enemy_direction + 3,2)
+		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(),enemy_direction + 3,2)
 	else
-		pos_num = self:getPosNumByDirectionAndSteps(self:get_cur_pos_num(),enemy_direction,distance - 5)
+		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(),enemy_direction,distance - 5)
 	end
 
-	if self:canMoveToThePosNum(pos_num) then
-		return gtool:intToCcp(pos_num)
+	if self:can_move_to_pos_num(pos_num) then
+		return gtool:int_2_ccp(pos_num)
 	else
 		return nil
 	end
 end
 
-monster_base.getPosNumByDirectionAndSteps = function(self, pos, towards, steps)
+monster_base.get_pos_num_by_direction_and_steps = function(self, pos, towards, steps)
 	if steps < 1 then
 		return pos
 	end
@@ -1455,15 +1454,15 @@ monster_base.getPosNumByDirectionAndSteps = function(self, pos, towards, steps)
 	if steps == 1 then
 		return temp_table[towards]
 	else
-		return self:getPosNumByDirectionAndSteps(temp_table[towards], towards, steps - 1)
+		return self:get_pos_num_by_direction_and_steps(temp_table[towards], towards, steps - 1)
 	end
 end
 
-monster_base.getPathToPosPlus = function(self, num, all_path, path_table)
+monster_base.get_path_to_posPlus = function(self, num, all_path, path_table)
 	path_table = path_table or {}
 	table.insert(path_table,num)
 	local last_geizi
-	if self:isFly() then 
+	if self:is_fly() then 
 		last_geizi = self.fly_path[num]
 	else
 		last_geizi = all_path[num]
@@ -1472,13 +1471,13 @@ monster_base.getPathToPosPlus = function(self, num, all_path, path_table)
 	if self:get_cur_pos_num() == last_geizi then
 		return path_table
 	else
-		return self:getPathToPosPlus(last_geizi,all_path,path_table)
+		return self:get_path_to_posPlus(last_geizi,all_path,path_table)
 	end
 end
 
-monster_base.getBackFirstNearPosNum = function(self, num, target_toward)
+monster_base.get_back_first_near_pos_num = function(self, num, target_toward)
 	local help = function (a)
-		return self:canMoveToThePosNum(a) or a == self:get_cur_pos_num()
+		return self:can_move_to_pos_num(a) or a == self:get_cur_pos_num()
 	end
 
 	local temp_table
@@ -1527,7 +1526,7 @@ monster_base.getBackFirstNearPosNum = function(self, num, target_toward)
 	end
 end
 
-monster_base.getNearPosPlus(num)
+monster_base.get_near_pos_plus(num)
 	if num%2 == 0 then
 		if gtool:isLegalPosNum(num + 10) then
 			return num + 10
