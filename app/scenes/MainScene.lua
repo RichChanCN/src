@@ -26,11 +26,16 @@ MainScene.RESOURCE_BINDING = {
 MainScene.VIEW_PATH = "app.views.mainscene"
 
 function MainScene:onCreate()
+	GameDataCtrl:Instance():registerScene(self)
 	self:viewInit()
 end
 
 function MainScene:onEnter()
-	
+	self:openMainView()
+	self:openTitleRightView()
+end
+
+function MainScene:onExit()
 end
 
 function MainScene:viewInit()
@@ -42,7 +47,6 @@ function MainScene:viewInit()
 	self.embattle_view:init()
 	self.monster_list_view:init()
 	self.monster_info_view:init()
-	print("main scene inited")
 end
 
 function MainScene:goToFightScene()
@@ -50,8 +54,8 @@ function MainScene:goToFightScene()
 	local layer = self.app_:createView("FightScene")
 	scene:addChild(layer)
 	if scene then
-		local ts = cc.TransitionFadeTR:create(1.5, scene)
-		cc.Director:getInstance():replaceScene(ts)
+		local ts = cc.TransitionFade:create(0.5, scene)
+		cc.Director:getInstance():pushScene(ts)
 	end	
 end
 
@@ -64,6 +68,12 @@ end
 function MainScene:closeMainView()
 	if self.main_view then
 		self.main_view:closeView()
+	end
+end
+
+function MainScene:openTitleRightView()
+	if self.title_right_view then
+		self.title_right_view:openView()
 	end
 end
 
@@ -81,10 +91,10 @@ function MainScene:closeMonsterListView()
 	end
 end
 
-function MainScene:openMonsterInfoView(data)
+function MainScene:openMonsterInfoView(monster_list,index)
 	if self.monster_info_view then
 		self.monster_list_view:closeView()
-		self.monster_info_view:openView(data)
+		self.monster_info_view:openView(monster_list,index)
 	end
 end
 
@@ -116,6 +126,13 @@ function MainScene:openEmbattleView()
 	end
 end
 
+function MainScene:openSpecificEmbattleView(chapter_num,level_num)
+	if self.embattle_view then
+        self.adventure_view:closeView()
+		self.embattle_view:openView(chapter_num,level_num)
+	end
+end
+
 function MainScene:closeEmbattleView()
 	if self.embattle_view then
         self.adventure_view:openView()
@@ -123,9 +140,9 @@ function MainScene:closeEmbattleView()
 	end
 end
 
-function MainScene:openConfirmView()
+function MainScene:openConfirmView(chapter_num,level_num)
 	if self.confirm_view then
-		self.confirm_view:openView()
+		self.confirm_view:openView(chapter_num,level_num,reward_data)
 	end
 end
 
@@ -139,10 +156,6 @@ function MainScene:openSettingView()
 	if self.setting_view then
 		self.setting_view:openView()
 	end
-end
-
-function MainScene:getCollectedMonsterList()
-	return Config.Monster
 end
 
 return MainScene

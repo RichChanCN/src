@@ -3,10 +3,17 @@ cc.FileUtils:getInstance():setPopupNotify(false)
 
 require "config.config"
 require "cocos.init"
+require "tool.LuaXML"
 require "tool.mytool"
 require "tool.uitool"
+require "app.logic.GameDataCtrl"
+require "config.config_path"
+require "config.config_particle"
 require "config.config_ui"
+require "config.config_buff"
+require "config.config_skill"
 require "config.config_monster"
+require "config.config_map"
 require "app.logic.Judgment"
 
 local function main()
@@ -17,7 +24,9 @@ local function main()
 	cc.FileUtils:getInstance():addSearchPath("src")
 	cc.FileUtils:getInstance():addSearchPath("res")
 
-    require("app.MyApp"):create():run()
+	GameDataCtrl:Instance():init()
+
+    require("app.MyApp"):create():run("PreScene")
 end
 
 local status, msg = xpcall(main, __G__TRACKBACK__)

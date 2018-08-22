@@ -1,4 +1,4 @@
-Judgment = {}
+Judgment = Judgment or {}
 
 Judgment.MapItem = {
 	EMPTY			= 0,
@@ -6,13 +6,15 @@ Judgment.MapItem = {
 	ENEMY			= 3,
 	LEFT_MONSTER 	= 1,
 	RIGHT_MONSTER 	= 4,
+	FRIEND			= 5,
 }
 
 Judgment.GameStatus = {
 	ACTIVE 			= 0,
-	RUN_ACTION		= 1,
+	RUNNING			= 1,
 	WAIT_ORDER		= 2,
 	OVER 			= 3,
+	AUTO 			= 4,
 }
 
 Judgment.Order = {
@@ -21,19 +23,23 @@ Judgment.Order = {
 	ATTACK 		= 2,
 	DEFEND		= 3,
 	WAIT 		= 4,
+	USE_SKILL	= 5,
 }
 
-Judgment.FSM = {
-	[0] = function()
-		Judgment:Instance().cur_active_monster:onActive()
+Judgment.OPERATE = {
+	[0] = function(is_wait, round_num)
+		if Judgment:Instance().scene.battle_info_view:isInited() then
+			Judgment:Instance().scene:updateBattleQueue(is_wait)
+		end
+		Judgment:Instance().cur_active_monster:onActive(round_num)
 	end,
 
-	[1] = function(pos,arena_pos)
-		Judgment:Instance().cur_active_monster:moveTo(pos,arena_pos)
+	[1] = function(arena_pos)
+		Judgment:Instance().cur_active_monster:moveTo(arena_pos)
 	end,
 
-	[2] = function(target)
-		Judgment:Instance().cur_active_monster:attack(target)
+	[2] = function(target,distance)
+		Judgment:Instance().cur_active_monster:attack(target,distance)
 	end,
 
 	[3] = function()
@@ -42,6 +48,10 @@ Judgment.FSM = {
 
 	[4] = function()
 		Judgment:Instance().cur_active_monster:wait()
+	end,
+
+	[5] = function(target_pos_num)
+		Judgment:Instance().cur_active_monster:useSkill(target_pos_num)
 	end,
 }
 
@@ -57,7 +67,6 @@ function Judgment:new()
 	self.map_info = {}
 	self.cur_round_monster_queue = {}
 	self.next_round_monster_queue = {}
-
 	return o
 end
  
@@ -68,45 +77,52 @@ function Judgment:Instance()
 	return self.instance
 end
 
-function Judgment:setScene(scene)
-	self.scene = scene
-end
-
-function Judgment:initGame(left_team,right_team)
+function Judgment:initGame(left_team,right_team,map,chapter_num,level_num)
 	self.game_speed = 1
+	self.is_use_skill = false
+	self.map = map
+	self.chapter_num = chapter_num
+	self.level_num = level_num
 
-	self.left_team = left_team
-	self.right_team = right_team
+	self.left_team = {}
+	for k,v in pairs(left_team) do
+		table.insert(self.left_team,v)
+	end
+	self.right_team = {}
+	for k,v in pairs(right_team) do
+		table.insert(self.right_team,v)
+	end
 
-	self.all_monsters = self:getAllMonsters()
 	self:sortAllMonstersByInitiative()
+	self.cur_round_monster_queue = self:getAllMonsters()
 end
 
 function Judgment:startGame()
+	self.is_auto = false
 	self.cur_round_num = 1
-	self.cur_monster_index = 1
-	self.cur_round_monster_queue = self.all_monsters
-	self.all_monsters = nil
-	self.cur_active_monster = self.cur_round_monster_queue[self.cur_monster_index]
+	self.cur_active_monster_index = 1
+	self.cur_active_monster = self.cur_round_monster_queue[self.cur_active_monster_index]
 	self.cur_game_status = Judgment.GameStatus.ACTIVE
 	self:updateMapInfo()
 	self:runGame(Judgment.Order.ACTIVATE)
 end
 
 function Judgment:runGame(order, param1, param2)
-	local action = Judgment.FSM[order]
+	local action = Judgment.OPERATE[order]
 	action(param1,param2)
 end
 
 function Judgment:gameOver(win_side)
-	self.scene:gameOver()
+	self:setGameStatus(Judgment.GameStatus.OVER)
+	local result = self:getGameResult(win_side)
+	self.scene:gameOver(result)
 	if win_side == 1 then
-		local table = self:getLeftMonstersNotDead()
+		local table = self:getLeftAliveMonsters()
 		for k,v in pairs(table) do
 			v:repeatAnimation("victory")
 		end
 	else
-		local table = self:getRightMonstersNotDead()
+		local table = self:getRightAliveMonsters()
 		for k,v in pairs(table) do
 			v:repeatAnimation("victory")
 		end
@@ -114,14 +130,14 @@ function Judgment:gameOver(win_side)
 end
 
 function Judgment:nextMonsterActivate(is_wait)
-	if not self.cur_active_monster:isDead() then
-		if not is_wait then
-			table.insert(self.next_round_monster_queue,self.cur_active_monster)
-		else
-			table.insert(self.cur_round_monster_queue,self.cur_active_monster)
-		end
+	self:setIsUseSkill(false)
+	if is_wait then
+		table.insert(self.cur_round_monster_queue,self.cur_active_monster)
+		table.insert(self.next_round_monster_queue,self.cur_active_monster)
 	end
-
+	if not self.cur_active_monster:hasWaited() then
+		table.insert(self.next_round_monster_queue,self.cur_active_monster)
+	end
 	self.cur_active_monster = self:getNextMonster()
 
 	if not self.cur_active_monster then
@@ -129,42 +145,43 @@ function Judgment:nextMonsterActivate(is_wait)
 	elseif self.cur_active_monster:isDead() then
 		self:nextMonsterActivate()
 	else
-		self:runGame(Judgment.Order.ACTIVATE)
+		self:runGame(Judgment.Order.ACTIVATE,is_wait)
 	end
 end
 
 function Judgment:startNextRound()
 	print("round "..self.cur_round_num.."finish")
 	self.cur_round_num = self.cur_round_num + 1
-	self.cur_monster_index = 1
+	self.cur_active_monster_index = 1
 	self.cur_round_monster_queue = self.next_round_monster_queue
 	self.next_round_monster_queue = {}
-	self.cur_active_monster = self.cur_round_monster_queue[self.cur_monster_index]
+	
+	self:aliveMonsterEnterNewRound()
+	
+	self.cur_active_monster = self.cur_round_monster_queue[self.cur_active_monster_index]
+	while self.cur_active_monster:isDead() do
+		self.cur_active_monster = self:getNextMonster()
+	end
 	self.cur_game_status = Judgment.GameStatus.ACTIVE
 	self:updateMapInfo()
 	self:runGame(Judgment.Order.ACTIVATE)
 end
 
-function Judgment:getNextMonster()
-	self.cur_monster_index = self.cur_monster_index + 1
-	return self.cur_round_monster_queue[self.cur_monster_index]
-end
-
-function Judgment:setMap(map)
-	self.map = map
-end
-
-function Judgment:getMap()
-	return self.map
-end
-
-function Judgment:getMapInfo()
-	return self.map_info
+function Judgment:aliveMonsterEnterNewRound()
+	local all_alive_monster = self:getAllAliveMonsters()
+	for k,v in pairs(all_alive_monster) do
+		v:onEnterNewRound(self.cur_round_num)
+	end
 end
 
 function Judgment:updateMapInfo()
-	self.map_info = self.map or {}
-	local monsters = self:getAllMonstersNotDead()
+	self.map_info = {}
+
+	for k,v in pairs(self.map) do
+		table.insert(self.map_info,k,v)
+	end
+	
+	local monsters = self:getAllAliveMonsters()
 	for k,v in pairs(monsters) do
 		self.map_info[gtool:ccpToInt(v.cur_pos)] = v
 	end
@@ -176,17 +193,22 @@ function Judgment:changeGameStatus(status)
 	self.scene:updateMapView()
 end
 
-function Judgment:selectPos(pos,node)
+function Judgment:selectPos(node)
 	if self.map_info[gtool:ccpToInt(node.arena_pos)] then
-		print("you can't do that!")
+		uitool:createTopTip("you can't do that!")
 	else
-		self:runGame(Judgment.Order.MOVE, pos, node.arena_pos)
+		self:runGame(Judgment.Order.MOVE, node.arena_pos)
 	end
 end
 
-function Judgment:selectTarget(num)
+function Judgment:selectTarget(num,distance)
 	if self.map_info[num] and self.map_info[num]:isMonster() then
-		self:runGame(Judgment.Order.ATTACK, self.map_info[num])
+		if not self:getIsUseSkill() then
+			self:runGame(Judgment.Order.ATTACK, self.map_info[num],distance)
+		else
+			self:runGame(Judgment.Order.USE_SKILL, num)
+			self:setIsUseSkill(false)
+		end
 	end
 end
 
@@ -200,7 +222,107 @@ function Judgment:requestWait()
 end
 
 function Judgment:requestAuto()
+	self:setAuto(true)
+	if self:getGameStatus() == Judgment.GameStatus.WAIT_ORDER then
+		self.cur_active_monster:runAI()
+	end
+	self:setGameStatus(Judgment.GameStatus.AUTO)
+end
+
+function Judgment:stopAuto()
+	self:setAuto(false)
+end
+
+function Judgment:checkGameOver(is_buff)
+	local right = self:getRightAliveMonsters()
+	local left = self:getLeftAliveMonsters()
 	
+	if #right < 1 then
+		self:gameOver(1)
+	elseif #left < 1 then
+		self:gameOver(4)
+	elseif not is_buff then
+		self:nextMonsterActivate()
+	end
+
+end
+
+function Judgment:setIsUseSkill(is_use_skill)
+	self.is_use_skill = is_use_skill
+end
+
+function Judgment:setScene(scene)
+	self.action_node = cc.Node:create()
+	self.scene = scene
+	self.scene:addChild(self.action_node)
+end
+
+function Judgment:getScene(scene)
+	return self.scene
+end
+
+function Judgment:getGameResult(win_side)
+	local result = {}
+	local star_num = 0
+
+	if win_side == 1 then
+		star_num = star_num + 1
+		if self.cur_round_num < 6 then
+			star_num = star_num + 1
+		end
+		if self:getDeadMonsterNum() < 1 then
+			star_num = star_num + 1
+		end
+	end
+
+	result.star_num = star_num 
+
+	result.chapter_num = self.chapter_num
+	result.level_num = self.level_num
+
+	return result
+end
+
+function Judgment:getDeadMonsterNum()
+	local num = 0
+
+	for k,v in pairs(self.left_team) do
+		if v:isDead() then
+			num = num + 1
+		end
+	end
+
+	return num
+end
+
+function Judgment:getNextMonster()
+	self.cur_active_monster_index = self.cur_active_monster_index + 1
+	return self.cur_round_monster_queue[self.cur_active_monster_index]
+end
+
+function Judgment:getIsUseSkill()
+	return self.is_use_skill
+end
+
+function Judgment:setAuto(is_auto)
+	self.is_auto = is_auto
+end
+
+function Judgment:getAuto()
+	return self.is_auto
+end
+
+function Judgment:getMap()
+	return self.map
+end
+
+function Judgment:getMapInfo()
+	self:updateMapInfo()
+	return self.map_info
+end
+
+function Judgment:getActionNode()
+	return self.action_node
 end
 
 function Judgment:setGameStatus(status)
@@ -219,22 +341,36 @@ function Judgment:getGameSpeed()
 	return self.game_speed
 end
 
-function Judgment:checkGameOver()
-	local right = self:getRightMonstersNotDead()
-	local left = self:getLeftMonstersNotDead()
-	
-	if #right < 1 then
-		self:gameOver(1)
-	elseif #left < 1 then
-		self:gameOver(4)
-	else
-		self:nextMonsterActivate()
-	end
+function Judgment:getCurRoundNum()
+	return self.cur_round_num
+end
 
+function Judgment:getCurActiveMonsterIndex()
+	return self.cur_active_monster_index
 end
 
 function Judgment:getCurActiveMonster()
 	return self.cur_active_monster
+end
+
+function Judgment:getCurRoundMonsterQueue()
+	return self.cur_round_monster_queue
+end
+
+function Judgment:getNextRoundMonsterQueue()
+	return self.next_round_monster_queue
+end
+
+function Judgment:getCurStoryAndLevelNum()
+	return self.chapter_num,self.level_num
+end
+
+function Judgment:isWaitOrder()
+	return self.cur_game_status == Judgment.GameStatus.WAIT_ORDER
+end
+
+function Judgment:isGameOver()
+	return self.cur_game_status == Judgment.GameStatus.OVER
 end
 
 function Judgment:getAllMonsters()
@@ -252,7 +388,7 @@ function Judgment:getAllMonsters()
 end
 
 
-function Judgment:getAllMonstersNotDead()
+function Judgment:getAllAliveMonsters()
 	local all = {}
 	
 	for _,v in pairs(self.left_team) do
@@ -270,7 +406,7 @@ function Judgment:getAllMonstersNotDead()
 	return all
 end
 
-function Judgment:getLeftMonstersNotDead()
+function Judgment:getLeftAliveMonsters()
 	local all = {}
 	
 	for _,v in pairs(self.left_team) do
@@ -282,7 +418,7 @@ function Judgment:getLeftMonstersNotDead()
 	return all
 end
 
-function Judgment:getRightMonstersNotDead()
+function Judgment:getRightAliveMonsters()
 	local all = {}
 	
 	for _,v in pairs(self.right_team) do
@@ -310,6 +446,85 @@ function Judgment:sortAllMonstersByInitiative()
 	table.sort(self.all_monsters,sort_by_initiative)
 end
 
+function Judgment:sortMonstersByInitiative(list)
+	local sort_by_initiative = function(a,b)
+		if a.initiative == b.initiative then
+			if a.level == b.level then
+				return a.rarity > b.rarity
+			else
+				return a.level > b.level
+			end
+		else
+			return a.initiative > b.initiative
+		end
+	end
+
+	table.sort(list,sort_by_initiative)
+end
+
+function Judgment:getAllAliveMonstersInNextRoundQueue()
+	local list = {}
+	
+	for _,v in pairs(self.next_round_monster_queue) do
+		if not v:isDead() then
+			table.insert(list,v)
+		end
+	end
+
+	return list
+end
+
+function Judgment:getAllAliveMonstersInCurRoundQueue()
+	local list = {}
+	
+	for _,v in pairs(self.cur_round_monster_queue) do
+		if not v:isDead() then
+			table.insert(list,v)
+		end
+	end
+
+	return list
+end
+
+function Judgment:getMonsterIndexInNextRoundAliveMonster(monster)
+	local next_round_alive_monsters = self:getAllAliveMonstersInNextRoundQueue()
+	local index = 1
+	--self:sortMonstersByInitiative(next_round_alive_monsters)
+	for i,v in ipairs(next_round_alive_monsters) do
+		if v:getTag() == monster:getTag() then
+			index = i 
+			break
+		end
+	end
+
+	return index
+end
+
+function Judgment:getMonsterIndexInCurRoundAliveMonster(monster)
+	local cur_round_alive_monsters = self:getAllAliveMonstersInCurRoundQueue()
+	local index = 1
+	--self:sortMonstersByInitiative(cur_round_alive_monsters)
+	for i,v in ipairs(cur_round_alive_monsters) do
+		if v:getTag() == monster:getTag() then
+			index = i 
+			break
+		end
+	end
+
+	return index
+end
+
 function Judgment:getPositionByInt(num)
 	return self.scene.map_view:getPositionByInt(num)
+end
+
+function Judgment:getMapTopArenaNode()
+	return self.scene.map_view.arena_top_node
+end
+
+function Judgment:clearTeam()
+	self.left_team = {}
+
+	self.right_team = {}
+
 end

@@ -10,23 +10,30 @@ FightScene.RESOURCE_BINDING = {
     ["map_view"]			= {["varname"] = "map_view"},
 	--map_view
     ["battle_info_view"]	= {["varname"] = "battle_info_view"},
+ 	--result_view
+ 	["result_view"]			= {["varname"] = "result_view"},
  }
 
 --面板文件位置
 FightScene.VIEW_PATH = "app.views.fightscene"
-
 FightScene.Wait_Time = 1
 FightScene.Action_Time = 0.3
 
 function FightScene:onCreate()
+	self.map_data = require("app.data.MapData")
     cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 end
 
 function FightScene:onEnter()
 	self:viewInit()
 	self:initModel()
+	self.map_view:initEnterAnimation()
 	self.map_view.root:setScale(0.75)
-	--cc.Camera:getDefaultCamera():setPosition3D(cc.vec3(960,540,1200))
+end
+
+function FightScene:onExit()
+	Judgment:Instance():clearTeam()
+	self.map_view:clearModelPanel()
 end
 
 function FightScene:onEnterTransitionFinish()
@@ -37,36 +44,78 @@ end
 function FightScene:startGame()
 	Judgment:Instance():setScene(self)
 	Judgment:Instance():startGame()
-	self.battle_info_view:openView()
+	self:openBattleInfoView()
 end
 
-function FightScene:gameOver()
-	local ac1 = self.map_view.root:runAction(cc.ScaleTo:create(self.Wait_Time,1))
-	local ac2 = self.map_view.root:runAction(cc.ScaleTo:create(self.Action_Time,0.75))
-	
-	--local callback = cc.CallFunc:create(handler(self,self.startGame))
+function FightScene:gameOver(result)
+	self:setResult(result)
+	self.map_view:endAnimation()
+end
 
-	local seq = cc.Sequence:create(ac1,ac2)
-		
-	self.map_view.root:runAction(seq)
-	self.battle_info_view:closeView()
-	self.map_view:hideMask()
+function FightScene:goToMainScene()
+	cc.Director:getInstance():popScene()
 end
 
 function FightScene:initModel()
+	local map = Judgment:Instance():getMap()
+	for k,v in pairs(map) do
+		self.map_view:createOtherModel(v,gtool:intToCcp(k))
+	end
+
 	local all_monster = Judgment:Instance():getAllMonsters()
 	for _,v in pairs(all_monster) do
-		self.map_view:createModel(v)
+		self.map_view:createMonsterModel(v)
 	end
 end
 
 function FightScene:viewInit()
 	self.map_view:init()
-	self.battle_info_view:init()
+	--self.battle_info_view:init()
 end
 
 function FightScene:updateMapView()
 	self.map_view:updateView()
+end
+
+
+function FightScene:updateBattleQueue(is_wait)
+	self.battle_info_view:updateRightBottomQueue(is_wait)
+end
+
+function FightScene:getParticleNode()
+	return self.battle_info_view.particle_node
+end
+
+function FightScene:openBattleInfoView()
+	self.battle_info_view:openView()
+end
+
+function FightScene:closeBattleInfoView()
+	self.battle_info_view:closeView()
+end
+
+function FightScene:setResult(result)
+	self.result_view:setResult(result)
+end
+
+function FightScene:openResultView()
+	self.result_view:openView()
+end
+
+function FightScene:closeResultView()
+	self.result_view:closeView()
+end
+
+function FightScene:showGuide()
+	self.map_view:showGuide()
+end
+
+function FightScene:showOtherAroundInfo(monster)
+	self.map_view:showOtherAroundInfo(monster)
+end
+
+function FightScene:hideOtherAroundInfo()
+	self.map_view:hideOtherAroundInfo()
 end
 
 return FightScene

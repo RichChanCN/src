@@ -8,22 +8,27 @@ function ViewBase:new( name, root, ctrl)
 	self.name = name
 	self.root = root
 	self.ctrl = ctrl
-	self.isInited = false
+	self.is_inited = false
 
 	return self
 end
 
 function ViewBase:init()
-	if not self.isInited then
+	if not self.is_inited then
 		uitool:createUIBinding(self, self.RESOURCE_BINDING)
 
 		self:initInfo()
+		self:initUI()
 		self:initEvents()
 
-		self.isInited = true
+		self.is_inited = true
 	else
 		print(self.name.." is inited! scape the init()")
 	end
+end
+
+function ViewBase:initUI()
+	print("warning! you should implement initUI() in instance!---"..self.name)
 end
 
 function ViewBase:initInfo()
@@ -34,15 +39,34 @@ function ViewBase:initEvents()
 	print("warning! you should implement initEvents() in instance")
 end
 
-function ViewBase:openView()
-	if not self.isInited then
+function ViewBase:onOpen(...)
+	-- body
+end
+
+function ViewBase:onClose()
+	-- body
+end
+
+function ViewBase:openView(...)
+	if not self.is_inited then
 		self:init()
 	end
-	self.root:setPosition(uitool:zero())
+	self:onOpen(...)
+
+	if self.view_pos then
+		self.root:setPosition(self.view_pos)
+	else
+		self.root:setPosition(uitool:zero())
+	end
 end
 
 function ViewBase:closeView()
+	self:onClose()
 	self.root:setPosition(uitool:farAway())
+end
+
+function ViewBase:isInited()
+	return self.is_inited
 end
 
 return ViewBase

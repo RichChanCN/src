@@ -2871,6 +2871,11 @@
         </Folder>
         <Project Name="PreScene.csd" Type="Scene" />
         <Project Name="FightScene.csd" Type="Scene" />
+        <Folder Name="Particle">
+          <PlistParticleFile Name="ice_ball.plist" />
+          <PlistParticleFile Name="ice_ball2.plist" />
+          <PlistParticleFile Name="fire.plist" />
+        </Folder>
       </RootFolder>
     </Group>
   </SolutionFolder>

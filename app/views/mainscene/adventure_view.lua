@@ -7,8 +7,16 @@ adventure_view.RESOURCE_BINDING = {
     ["chapter_sv"]			= {["varname"] = "chapter_sv"},
 	["left_btn"]			= {["varname"] = "left_btn"},
 	["right_btn"]			= {["varname"] = "right_btn"},
-	["site_1_img"]			= {["varname"] = "site_1_img"},
 }
+
+function adventure_view:initUI()
+	for i=1,1 do
+		self["chapter_"..i.."_node"] = self.chapter_sv:getChildByName("chapter_"..i.."_node")
+		for j=1,5 do
+			self["site_"..i.."_"..j.."_img"] = self["chapter_"..i.."_node"]:getChildByName("site_"..i.."_"..j.."_img")
+		end
+	end
+end
 
 function adventure_view:initInfo()
 	self.cur_chapter_num = 1
@@ -50,14 +58,45 @@ function adventure_view:initEvents()
 		end
     end)
 
-    self.site_1_img:addClickEventListener(function(sender)
-		self.ctrl:openConfirmView()
-    end)
+	for i=1,5 do
+		self["site_1_"..i.."_img"]:addClickEventListener(function(sender)
+			self.ctrl:openConfirmView(1,i)
+		end)
+	end
+
 end
 
 function adventure_view:updateView()
+	for i=1,1 do
+		for j=1,5 do
+			local star_num = GameDataCtrl:Instance():getStarNumByChapterAndLevel(i, j)
+			self["site_"..i.."_"..j.."_img"]:loadTexture(Config.sprite["star_"..star_num.."_site"])
+			
+			local challenge_img = self["site_"..i.."_"..j.."_img"]:getChildByName("challenged_img")
+			if star_num > 2 then
+				challenge_img:setVisible(true)
+				challenge_img:loadTexture(Config.sprite.challenge_best)
+			elseif star_num > 0 then
+				challenge_img:setVisible(true)
+				challenge_img:loadTexture(Config.sprite.challenge_normal)
+			else
+				challenge_img:setVisible(false)
+			end
 
+			for n=1,3 do
+				local star = self["site_"..i.."_"..j.."_img"]:getChildByName("star_"..n)
+				if not (n > star_num) then
+					star:loadTexture(Config.sprite.site_star_get)
+				else
+					star:loadTexture(Config.sprite.site_star_empty)
+				end
+			end
+		end
+	end
 end
 
+function adventure_view:onOpen()
+	self:updateView()
+end
 
 return adventure_view

@@ -1,12 +1,51 @@
 Config = Config or {}
-Config.sprite_path = "Sprite/"
-Config.monster_img_path = "Monster/"
-Config.model_path = "Model/"
 
 Config.sprite = {
-	gezi_raw = Config.sprite_path.."hex_tile_enabled.png",
+	gezi_enable = Config.sprite_path.."hex_tile_enabled.png",
+	gezi_barrier = Config.sprite_path.."hex_tile_barrier.png",
+	gezi_disable = Config.sprite_path.."hex_tile_disabled.png",
+	
+	card_crystal 	= Config.sprite_path.."icon_crystal.png",
+	card_coin 		= Config.sprite_path.."icon_gold.png",
+
+	tip_bg = Config.sprite_path.."bg_chat_join.png",
+
+	challenge_normal = Config.sprite_path.."site_open.png",
+	challenge_best = Config.sprite_path.."site_challenged.png",
+
+	site_star_get = Config.sprite_path.."icon_star_1.png",
+	site_star_empty = Config.sprite_path.."icon_star_0.png",
+
+	star_0_site = Config.sprite_path.."site_not_open.png",
+	star_1_site = Config.sprite_path.."site_bg_star_1.png",
+	star_2_site = Config.sprite_path.."site_bg_star_2.png",
+	star_3_site = Config.sprite_path.."site_bg_star_3.png",
+
+	lager_star_got 		= Config.sprite_path.."site_big_star.png",
+	lager_star_empty 	= Config.sprite_path.."site_big_star_gray.png",
+
+	autoOn = Config.sprite_path.."autoOn.png",
+	autoOff = Config.sprite_path.."autoOff.png",
+
+	result_star_got = Config.sprite_path.."star.png",
+	result_star_gray = Config.sprite_path.."star_gray.png",
+
+	result_win_band = Config.sprite_path.."result_win_title_bg.png",
+	result_defeat_band = Config.sprite_path.."result_defeated_title_bg.png",
+	result_win_bg = Config.sprite_path.."combat_result_win_bg.png",
+	result_defeat_bg = Config.sprite_path.."combat_result_defeated_bg.png",
+
+	buff_defend = Config.sprite_path.."common_defend.png",
+
 	selected = Config.sprite_path.."icon_selected_1.png",
 	chesspiece_mask = Config.sprite_path.."header_hex_mask.png",
+	
+	team_hp_img_1  = Config.sprite_path.."battle_bloodbar_1.png",
+	team_hp_img_4 = Config.sprite_path.."battle_bloodbar_2.png",
+	
+	team_card_border_1  = Config.sprite_path.."hero_border_self.png",
+	team_card_border_4 = Config.sprite_path.."hero_border_other.png",
+	boss_card_border  = Config.sprite_path.."hero_border_boss.png",
 
 	hex_border_0 = Config.monster_img_path.."hex_tile_border_0.png",
 	hex_border_1 = Config.monster_img_path.."hex_tile_border_1.png",
@@ -32,10 +71,40 @@ Config.sprite = {
 }
 
 Config.color = {
+	white = cc.c4b(255,255,255,255),
+	black = cc.c4b(0,0,0,255),
+	green = cc.c4b(0,255,0,255),
+	blue  = cc.c4b(0,0,255,255),
+	red   = cc.c4b(255,0,0,255),
+
 	rarity_color_1 = cc.c4b(66,152,76,255),
 	rarity_color_2 = cc.c4b(74,154,219,255),
 	rarity_color_3 = cc.c4b(193,78,242,255),
 	rarity_color_4 = cc.c4b(243,146,46,255),
+
+	coin 	= cc.c4b(255,255,0,255),
+	crystal = cc.c4b(30,144,255,255),
+
+	--miss_color
+	damage_0 = cc.c4b(0,0,0,255),
+	--low_damage_color
+	damage_1 = cc.c4b(127,127,127,255),
+	--common_damage_color
+	damage_2 = cc.c4b(255,255,255,255),
+	--high_damage_color
+	damage_3 = cc.c4b(255,255,0,255),
+	--higher_damage_color
+	damage_4 = cc.c4b(255,165,0,255),
+	--highest_damage_color
+	damage_5 = cc.c4b(255,0,0,255),
+	--skill_damage_color
+	damage_6 = cc.c4b(30,144,255,255),
+	--heal_color
+	damage_7 = cc.c4b(49,212,8,255),
+	--poison_damage_color
+	damage_8 = cc.c4b(187,13,117,255),
+	--bleeding_damage_color
+	damage_9 = cc.c4b(255,0,0,255),
 }
 
 Config.text = {
@@ -48,4 +117,15 @@ Config.text = {
 	rarity_text_2 = "RARITY: EPIC MONSTER",
 	rarity_text_3 = "RARITY: MONSTROUS MONSTER",
 	rarity_text_4 = "RARITY: DIABOLIC MONSTER",
+
+	reward_had_got = "You have already received the rewards!",
+	reward_first_get = "You win these rewards!",
+	defeat = "Regrettably,please try again",
+
+	collected_tip = "You can get the collected monsters in the rewards",
+	uncollected_tip = "You can unlock these monsters in the story or shop",
+}
+
+Config.font = {
+	default = Config.fonts_path.."camex2.2.ttf",
 }
