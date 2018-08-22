@@ -8,7 +8,7 @@ monster_list_view.RESOURCE_BINDING = {
     ["template_panel"]			= {["varname"] = "template_panel"},
 }
 
-function monster_list_view:initInfo()
+function monster_list_view:init_info()
 	self.card_list = {}
 	
 	--事件分发器
@@ -22,8 +22,8 @@ function monster_list_view:initEvents()
 end
 
 function monster_list_view:updateInfo()
-    self.collected_monster_list = GameDataCtrl:Instance():getCollectedMonsterList()
-	self.uncollected_monster_list = GameDataCtrl:Instance():getNotCollectedMonsterList()
+    self.collected_monster_list = game_data_ctrl:Instance():get_collected_monster_list()
+	self.uncollected_monster_list = game_data_ctrl:Instance():get_not_collected_monster_list()
 end
 
 function monster_list_view:updateView()
@@ -54,7 +54,7 @@ function monster_list_view:initCollectedMonsterLV()
 	local collected_title = self.monster_lv:getItem(0)
 	local title_tip = collected_title:getChildByName("tip_text")
 
-	title_tip:setString(Config.text.collected_tip)
+	title_tip:setString(g_config.text.collected_tip)
 
 	local monsters_num = #self.collected_monster_list
 	local mod_num = monsters_num%5
@@ -77,7 +77,7 @@ function monster_list_view:initNotCollectedMonsterLV()
 	local tip_text = not_collected_title:getChildByName("tip_text")
 	
 	titile_text:setString("Not Collected")
-	tip_text:setString(Config.text.uncollected_tip)
+	tip_text:setString(g_config.text.uncollected_tip)
 
 	self.monster_lv:pushBackCustomItem(not_collected_title)
 
@@ -104,9 +104,9 @@ function monster_list_view:initLVItem(monster_list ,item, index)
 			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
 			cur_monster.head_img:loadTexture(monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
-			cur_monster.border_img:loadTexture(Config.sprite["card_border_"..monster_list[cur_index].rarity])
+			cur_monster.border_img:loadTexture(g_config.sprite["card_border_"..monster_list[cur_index].rarity])
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
-			cur_monster.type_img:loadTexture(Config.sprite["attack_type_"..monster_list[cur_index].attack_type])
+			cur_monster.type_img:loadTexture(g_config.sprite["attack_type_"..monster_list[cur_index].attack_type])
 			cur_monster.head_img:addClickEventListener(function(sender)
 				self.ctrl:openMonsterInfoView(monster_list,cur_index)
 			end)

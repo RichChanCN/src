@@ -20,7 +20,7 @@ FightScene.Wait_Time = 1
 FightScene.Action_Time = 0.3
 
 function FightScene:onCreate()
-	self.map_data = require("app.data.MapData")
+	self.map_data = require("app.data.map_data")
     cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 end
 
@@ -32,7 +32,7 @@ function FightScene:onEnter()
 end
 
 function FightScene:onExit()
-	Judgment:Instance():clearTeam()
+	pve_game_ctrl:Instance():clearTeam()
 	self.map_view:clearModelPanel()
 end
 
@@ -42,8 +42,8 @@ function FightScene:onEnterTransitionFinish()
 end
 
 function FightScene:startGame()
-	Judgment:Instance():setScene(self)
-	Judgment:Instance():startGame()
+	pve_game_ctrl:Instance():setScene(self)
+	pve_game_ctrl:Instance():startGame()
 	self:openBattleInfoView()
 end
 
@@ -57,12 +57,12 @@ function FightScene:goToMainScene()
 end
 
 function FightScene:initModel()
-	local map = Judgment:Instance():getMap()
+	local map = pve_game_ctrl:Instance():getMap()
 	for k,v in pairs(map) do
-		self.map_view:createOtherModel(v,gtool:intToCcp(k))
+		self.map_view:createOtherModel(v,gtool:int_2_ccp(k))
 	end
 
-	local all_monster = Judgment:Instance():getAllMonsters()
+	local all_monster = pve_game_ctrl:Instance():getAllMonsters()
 	for _,v in pairs(all_monster) do
 		self.map_view:createMonsterModel(v)
 	end

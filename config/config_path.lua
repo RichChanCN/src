@@ -1,8 +1,8 @@
-Config = Config or {}
+g_config = g_config or {}
 
-Config.model_path = "Model/"
-Config.particle_path = "Particle/"
-Config.sprite_path = "Sprite/"
-Config.monster_img_path = "Monster/"
-Config.XML_path = "res/Data/"
-Config.fonts_path = "res/Font/"
+g_config.model_path = "Model/"
+g_config.particle_path = "Particle/"
+g_config.sprite_path = "Sprite/"
+g_config.monster_img_path = "Monster/"
+g_config.xml_path = "res/Data/"
+g_config.fonts_path = "res/Font/"

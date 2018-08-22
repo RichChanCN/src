@@ -1,76 +1,78 @@
-Config = Config or {}
+g_config = g_config or {}
 
-Config.sprite = {
-	gezi_enable = Config.sprite_path.."hex_tile_enabled.png",
-	gezi_barrier = Config.sprite_path.."hex_tile_barrier.png",
-	gezi_disable = Config.sprite_path.."hex_tile_disabled.png",
+g_config.sprite = 
+{
+	gezi_enable = g_config.sprite_path.."hex_tile_enabled.png",
+	gezi_barrier = g_config.sprite_path.."hex_tile_barrier.png",
+	gezi_disable = g_config.sprite_path.."hex_tile_disabled.png",
 	
-	card_crystal 	= Config.sprite_path.."icon_crystal.png",
-	card_coin 		= Config.sprite_path.."icon_gold.png",
+	card_crystal 	= g_config.sprite_path.."icon_crystal.png",
+	card_coin 		= g_config.sprite_path.."icon_gold.png",
 
-	tip_bg = Config.sprite_path.."bg_chat_join.png",
+	tip_bg = g_config.sprite_path.."bg_chat_join.png",
 
-	challenge_normal = Config.sprite_path.."site_open.png",
-	challenge_best = Config.sprite_path.."site_challenged.png",
+	challenge_normal = g_config.sprite_path.."site_open.png",
+	challenge_best = g_config.sprite_path.."site_challenged.png",
 
-	site_star_get = Config.sprite_path.."icon_star_1.png",
-	site_star_empty = Config.sprite_path.."icon_star_0.png",
+	site_star_get = g_config.sprite_path.."icon_star_1.png",
+	site_star_empty = g_config.sprite_path.."icon_star_0.png",
 
-	star_0_site = Config.sprite_path.."site_not_open.png",
-	star_1_site = Config.sprite_path.."site_bg_star_1.png",
-	star_2_site = Config.sprite_path.."site_bg_star_2.png",
-	star_3_site = Config.sprite_path.."site_bg_star_3.png",
+	star_0_site = g_config.sprite_path.."site_not_open.png",
+	star_1_site = g_config.sprite_path.."site_bg_star_1.png",
+	star_2_site = g_config.sprite_path.."site_bg_star_2.png",
+	star_3_site = g_config.sprite_path.."site_bg_star_3.png",
 
-	lager_star_got 		= Config.sprite_path.."site_big_star.png",
-	lager_star_empty 	= Config.sprite_path.."site_big_star_gray.png",
+	lager_star_got 		= g_config.sprite_path.."site_big_star.png",
+	lager_star_empty 	= g_config.sprite_path.."site_big_star_gray.png",
 
-	autoOn = Config.sprite_path.."autoOn.png",
-	autoOff = Config.sprite_path.."autoOff.png",
+	autoOn = g_config.sprite_path.."autoOn.png",
+	autoOff = g_config.sprite_path.."autoOff.png",
 
-	result_star_got = Config.sprite_path.."star.png",
-	result_star_gray = Config.sprite_path.."star_gray.png",
+	result_star_got = g_config.sprite_path.."star.png",
+	result_star_gray = g_config.sprite_path.."star_gray.png",
 
-	result_win_band = Config.sprite_path.."result_win_title_bg.png",
-	result_defeat_band = Config.sprite_path.."result_defeated_title_bg.png",
-	result_win_bg = Config.sprite_path.."combat_result_win_bg.png",
-	result_defeat_bg = Config.sprite_path.."combat_result_defeated_bg.png",
+	result_win_band = g_config.sprite_path.."result_win_title_bg.png",
+	result_defeat_band = g_config.sprite_path.."result_defeated_title_bg.png",
+	result_win_bg = g_config.sprite_path.."combat_result_win_bg.png",
+	result_defeat_bg = g_config.sprite_path.."combat_result_defeated_bg.png",
 
-	buff_defend = Config.sprite_path.."common_defend.png",
+	buff_defend = g_config.sprite_path.."common_defend.png",
 
-	selected = Config.sprite_path.."icon_selected_1.png",
-	chesspiece_mask = Config.sprite_path.."header_hex_mask.png",
+	selected = g_config.sprite_path.."icon_selected_1.png",
+	chesspiece_mask = g_config.sprite_path.."header_hex_mask.png",
 	
-	team_hp_img_1  = Config.sprite_path.."battle_bloodbar_1.png",
-	team_hp_img_4 = Config.sprite_path.."battle_bloodbar_2.png",
+	team_hp_img_1  = g_config.sprite_path.."battle_bloodbar_1.png",
+	team_hp_img_4 = g_config.sprite_path.."battle_bloodbar_2.png",
 	
-	team_card_border_1  = Config.sprite_path.."hero_border_self.png",
-	team_card_border_4 = Config.sprite_path.."hero_border_other.png",
-	boss_card_border  = Config.sprite_path.."hero_border_boss.png",
+	team_card_border_1  = g_config.sprite_path.."hero_border_self.png",
+	team_card_border_4 = g_config.sprite_path.."hero_border_other.png",
+	boss_card_border  = g_config.sprite_path.."hero_border_boss.png",
 
-	hex_border_0 = Config.monster_img_path.."hex_tile_border_0.png",
-	hex_border_1 = Config.monster_img_path.."hex_tile_border_1.png",
-	hex_border_2 = Config.monster_img_path.."hex_tile_border_2.png",
-	hex_border_3 = Config.monster_img_path.."hex_tile_border_3.png",
-	hex_border_4 = Config.monster_img_path.."hex_tile_border_4.png",
+	hex_border_0 = g_config.monster_img_path.."hex_tile_border_0.png",
+	hex_border_1 = g_config.monster_img_path.."hex_tile_border_1.png",
+	hex_border_2 = g_config.monster_img_path.."hex_tile_border_2.png",
+	hex_border_3 = g_config.monster_img_path.."hex_tile_border_3.png",
+	hex_border_4 = g_config.monster_img_path.."hex_tile_border_4.png",
 
-	rarity_sp_1 = Config.monster_img_path.."item_bg_1_1.png",
-	rarity_sp_2 = Config.monster_img_path.."item_bg_1_2.png",
-	rarity_sp_3 = Config.monster_img_path.."item_bg_1_3.png",
-	rarity_sp_4 = Config.monster_img_path.."item_bg_1_4.png",
+	rarity_sp_1 = g_config.monster_img_path.."item_bg_1_1.png",
+	rarity_sp_2 = g_config.monster_img_path.."item_bg_1_2.png",
+	rarity_sp_3 = g_config.monster_img_path.."item_bg_1_3.png",
+	rarity_sp_4 = g_config.monster_img_path.."item_bg_1_4.png",
 
-	card_border_0 = Config.monster_img_path.."hero_card_border_0.png",
-	card_border_1 = Config.monster_img_path.."hero_card_border_1.png",
-	card_border_2 = Config.monster_img_path.."hero_card_border_2.png",
-	card_border_3 = Config.monster_img_path.."hero_card_border_3.png",
-	card_border_4 = Config.monster_img_path.."hero_card_border_4.png",
+	card_border_0 = g_config.monster_img_path.."hero_card_border_0.png",
+	card_border_1 = g_config.monster_img_path.."hero_card_border_1.png",
+	card_border_2 = g_config.monster_img_path.."hero_card_border_2.png",
+	card_border_3 = g_config.monster_img_path.."hero_card_border_3.png",
+	card_border_4 = g_config.monster_img_path.."hero_card_border_4.png",
 
-	attack_type_1 = Config.monster_img_path.."icon_attack_type_1.png",
-	attack_type_2 = Config.monster_img_path.."icon_attack_type_2.png",
-	attack_type_3 = Config.monster_img_path.."icon_attack_type_3.png",
-	attack_type_4 = Config.monster_img_path.."icon_attack_type_4.png",
+	attack_type_1 = g_config.monster_img_path.."icon_attack_type_1.png",
+	attack_type_2 = g_config.monster_img_path.."icon_attack_type_2.png",
+	attack_type_3 = g_config.monster_img_path.."icon_attack_type_3.png",
+	attack_type_4 = g_config.monster_img_path.."icon_attack_type_4.png",
 }
 
-Config.color = {
+g_config.color = 
+{
 	white = cc.c4b(255,255,255,255),
 	black = cc.c4b(0,0,0,255),
 	green = cc.c4b(0,255,0,255),
@@ -107,7 +109,8 @@ Config.color = {
 	damage_9 = cc.c4b(255,0,0,255),
 }
 
-Config.text = {
+g_config.text = 
+{
 	monster_type_1 = "PHYSICAL MELEE",
 	monster_type_2 = "MAGIC MELEE",
 	monster_type_3 = "PHYSICAL RANGE",
@@ -126,6 +129,7 @@ Config.text = {
 	uncollected_tip = "You can unlock these monsters in the story or shop",
 }
 
-Config.font = {
-	default = Config.fonts_path.."camex2.2.ttf",
+g_config.font = 
+{
+	default = g_config.fonts_path.."camex2.2.ttf",
 }

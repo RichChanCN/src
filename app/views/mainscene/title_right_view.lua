@@ -13,7 +13,7 @@ function title_right_view:initUI()
     
 end
 
-function title_right_view:initInfo()
+function title_right_view:init_info()
     self.view_pos = cc.p(1850,1025)
 end
 
@@ -30,7 +30,7 @@ function title_right_view:initEvents()
 end
 
 function title_right_view:updateInfo()
-    local player_data = GameDataCtrl:Instance():getPlayerData()
+    local player_data = game_data_ctrl:Instance():get_player_data()
     self.coin_num = player_data.coin_num
     self.crystal_num = player_data.crystal_num
 end

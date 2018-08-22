@@ -18,7 +18,7 @@ function adventure_view:initUI()
 	end
 end
 
-function adventure_view:initInfo()
+function adventure_view:init_info()
 	self.cur_chapter_num = 1
 end
 
@@ -69,16 +69,16 @@ end
 function adventure_view:updateView()
 	for i=1,1 do
 		for j=1,5 do
-			local star_num = GameDataCtrl:Instance():getStarNumByChapterAndLevel(i, j)
-			self["site_"..i.."_"..j.."_img"]:loadTexture(Config.sprite["star_"..star_num.."_site"])
+			local star_num = game_data_ctrl:Instance():get_star_num_by_chapter_and_level(i, j)
+			self["site_"..i.."_"..j.."_img"]:loadTexture(g_config.sprite["star_"..star_num.."_site"])
 			
 			local challenge_img = self["site_"..i.."_"..j.."_img"]:getChildByName("challenged_img")
 			if star_num > 2 then
 				challenge_img:setVisible(true)
-				challenge_img:loadTexture(Config.sprite.challenge_best)
+				challenge_img:loadTexture(g_config.sprite.challenge_best)
 			elseif star_num > 0 then
 				challenge_img:setVisible(true)
-				challenge_img:loadTexture(Config.sprite.challenge_normal)
+				challenge_img:loadTexture(g_config.sprite.challenge_normal)
 			else
 				challenge_img:setVisible(false)
 			end
@@ -86,9 +86,9 @@ function adventure_view:updateView()
 			for n=1,3 do
 				local star = self["site_"..i.."_"..j.."_img"]:getChildByName("star_"..n)
 				if not (n > star_num) then
-					star:loadTexture(Config.sprite.site_star_get)
+					star:loadTexture(g_config.sprite.site_star_get)
 				else
-					star:loadTexture(Config.sprite.site_star_empty)
+					star:loadTexture(g_config.sprite.site_star_empty)
 				end
 			end
 		end

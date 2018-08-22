@@ -26,7 +26,7 @@ MainScene.RESOURCE_BINDING = {
 MainScene.VIEW_PATH = "app.views.mainscene"
 
 function MainScene:onCreate()
-	GameDataCtrl:Instance():registerScene(self)
+	GameDataCtrl:Instance():register_scene(self)
 	self:viewInit()
 end
 

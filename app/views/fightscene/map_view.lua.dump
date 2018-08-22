@@ -83,7 +83,7 @@ function map_view:getPositionByInt(num)
 	return cc.p(a,b)
 end
 ----------------------------------------------------------------
--------------------------------Ë½ÓÐ·½·¨--------------------------
+-------------------------------脣陆脫脨路陆路篓--------------------------
 ----------------------------------------------------------------
 function map_view:showOtherAroundInfo(monster)
 	self:hideGuide()
@@ -181,7 +181,7 @@ function map_view:hideMask()
 	
 	self.mask_img:runAction(seq)
 end
---------------------------Õ½³¡²¿·Ö¿ªÊ¼-------------------------
+--------------------------脮陆鲁隆虏驴路脰驴陋脢录-------------------------
 function map_view:createMonsterModel(monster)
     if monster.model then
         self.model_panel:removeChild(monster.model)
@@ -292,7 +292,7 @@ end
 function map_view:initArena()
 	for x=1,8 do
 		for y=1,7 do
-			--ÕâÀïÎªÁËÌá¸ßÐ§ÂÊ£¬µ÷ÓÃÁËÔ­±¾µÄ½Ó¿Ú£¬Ö»ÔÚÒ»²ãÀïÃæÑ°ÕÒ½Úµã¡£
+			--脮芒脌茂脦陋脕脣脤谩赂脽脨搂脗脢拢卢碌梅脫脙脕脣脭颅卤戮碌脛陆脫驴脷拢卢脰禄脭脷脪禄虏茫脌茂脙忙脩掳脮脪陆脷碌茫隆拢
 			self["gezi_"..x.."_"..y] = self.arena_event_node:getChildByName("gezi_"..x.."_"..y)
 			self["gezi_"..x.."_"..y.."_black"] = self.arena_bottom_node:getChildByName("gezi_"..x.."_"..y)
 			if self["gezi_"..x.."_"..y] then
@@ -304,7 +304,7 @@ function map_view:initArena()
 
 end
 
---ÒòÎªÆåÅÌ×ö¹ýÇãÐ±´¦Àí£¬ËùÒÔÕâÀïÒªÓÃÉäÏßÀ´´¦Àí
+--脪貌脦陋脝氓脜脤脳枚鹿媒脟茫脨卤麓娄脌铆拢卢脣霉脪脭脮芒脌茂脪陋脫脙脡盲脧脽脌麓麓娄脌铆
 function map_view:addArenaListener(gezi)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
@@ -387,10 +387,10 @@ function map_view:clearModelPanel()
 	self.model_panel:removeAllChildren()
 end
 
---------------------------Õ½³¡²¿·Ö½áÊø-------------------------
+--------------------------脮陆鲁隆虏驴路脰陆谩脢酶-------------------------
 
 
---------------------------½ø³¡¶¯»­¿ªÊ¼-------------------------
+--------------------------陆酶鲁隆露炉禄颅驴陋脢录-------------------------
 function map_view:initPrePanel()
 	self.shield_img 	= self.logo_node:getChildByName("shield_img")
 	self.sword_img	 	= self.logo_node:getChildByName("sword_img")
@@ -465,6 +465,6 @@ function map_view:initEnterAnimation()
 
 	self.pre_panel:setPosition(960,216)
 end
---------------------------½ø³¡¶¯»­½áÊø-------------------------
+--------------------------陆酶鲁隆露炉禄颅陆谩脢酶-------------------------
 
 return map_view

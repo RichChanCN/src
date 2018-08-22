@@ -1,14 +1,16 @@
-Config = Config or {}
+g_config = g_config or {}
 
-Config.Skill = {
+g_config.skill = 
+{
 	--暴风雪
-	[1001] = {
+	[1001] = 
+	{
 		--技能名称
 		name = "Snow Storm",
 		--技能描述
 		description = "Cost 4 anger points,deals 100+(10*level) damage to all enemies,And they add freezing to them, minus their mobility in next action.",
 		--技能图标路径
-		img_path = Config.monster_img_path.."icon_skill_destructive_ray.png",
+		img_path = g_config.monster_img_path.."icon_skill_destructive_ray.png",
 		--技能范围，0的话就是全范围
 		range = 0,
 		--技能是否需要选择目标
@@ -25,23 +27,26 @@ Config.Skill = {
 		healing_level_plus = 0,
 
 		--技能粒子路径
-	 	particle_path = Config.particle_path.."snowstorm.plist",
+	 	particle_path = g_config.particle_path.."snowstorm.plist",
 	 	--粒子放置的位置
 	 	particle_pos = cc.p(500,1000),
 	 	--给队友加的buff列表
-		buff = {
+		buff = 
+		{
 
 		},
 		--给敌人加的buff列表
-		debuff = {
-			[1] = Config.Buff.move_limit,
+		debuff = 
+		{
+			[1] = g_config.buff.move_limit,
 		},
 	}, 
 	--冲击波
-	[1002] = {
+	[1002] = 
+	{
 		name = "Impact Wave",
 		description = "Cost 4 anger points, deals 50+(10*5) damage to all enemies around self, And they can't do anything in next action.",
-		img_path = Config.monster_img_path.."icon_skill_earth_shake.png",
+		img_path = g_config.monster_img_path.."icon_skill_earth_shake.png",
 		range = 2,
 		is_need_target = false,
 		cost = 4,
@@ -51,23 +56,26 @@ Config.Skill = {
 		healing = 0,
 		healing_level_plus = 0,
 
-	 	particle_path = Config.particle_path.."impactwave.plist",
+	 	particle_path = g_config.particle_path.."impactwave.plist",
 	 	particle_pos = cc.p(0,0),
 	 	particle_scale = 0.5,
 	 	particle_delay_time = 0.7, 
-		buff = {
+		buff = 
+		{
 
 		},
-		debuff = {
-			[1] = Config.Buff.stun,
+		debuff = 
+		{
+			[1] = g_config.buff.stun,
 		},
 	}, 
 
 	--毒刃
-	[1003] = {
+	[1003] = 
+	{
 		name = "Poison Blade",
 		description = "Cost 2 anger points, deals 50+(10*5) damage to an enemy, And it will minus 40 HP when begin next two action",
-		img_path = Config.monster_img_path.."icon_skill_holy_slash.png",
+		img_path = g_config.monster_img_path.."icon_skill_holy_slash.png",
 		range = 1,
 		is_need_target = true,
 		cost = 2,
@@ -77,19 +85,22 @@ Config.Skill = {
 		healing = 0,
 		healing_level_plus = 0,
 
-		buff = {
+		buff = 
+		{
 
 		},
-		debuff = {
-			[1] = Config.Buff.poison,
+		debuff = 
+		{
+			[1] = g_config.buff.poison,
 		},
 	},
 
 	--友方群体加攻击
-	[1004] = {
+	[1004] = 
+	{
 		name = "Battle Fury",
 		description = "Cost 3 anger points, increase all friend 30% damage 2 round.",
-		img_path = Config.monster_img_path.."icon_skill_eager_for_fight.png",
+		img_path = g_config.monster_img_path.."icon_skill_eager_for_fight.png",
 		range = 0,
 		is_need_target = false,
 		cost = 3,
@@ -99,10 +110,12 @@ Config.Skill = {
 		healing = 0,
 		healing_level_plus = 0,
 
-		buff = {
-			[1] = Config.Buff.damage_up,
+		buff = 
+		{
+			[1] = g_config.buff.damage_up,
 		},
-		debuff = {
+		debuff = 
+		{
 		},
 	},
 }

@@ -15,7 +15,7 @@ confirm_view.RESOURCE_BINDING = {
     ["reward_template"]		= {["varname"] = "reward_template"},
 }
 
-function confirm_view:initInfo()
+function confirm_view:init_info()
 	self.chapter_num = 1
 	self.level_num = 1
 	self.reward_list = {}
@@ -32,10 +32,10 @@ function confirm_view:initEvents()
 end
 
 function confirm_view:updateInfo(chapter_num,level_num)
-	self.reward_data = GameDataCtrl:Instance():getRewardByChapterAndLevel(chapter_num, level_num)
+	self.reward_data = game_data_ctrl:Instance():get_reward_by_chapter_and_level(chapter_num, level_num)
 	self.reward_list = {}
 
-	self.star_num = GameDataCtrl:Instance():getStarNumByChapterAndLevel(chapter_num, level_num)
+	self.star_num = game_data_ctrl:Instance():get_star_num_by_chapter_and_level(chapter_num, level_num)
 	self.all_star_condition = "emmmmmmmmm"
 
 	self.chapter_num = chapter_num
@@ -47,10 +47,10 @@ function confirm_view:updateView()
 
 	for i=1,3 do
 		if not (i > self.star_num) then
-			self["star_"..i.."_sp"]:setTexture(Config.sprite.lager_star_got)
+			self["star_"..i.."_sp"]:setTexture(g_config.sprite.lager_star_got)
 			self["star_"..i.."_sp"]:setScale(1)
 		else
-			self["star_"..i.."_sp"]:setTexture(Config.sprite.lager_star_empty)
+			self["star_"..i.."_sp"]:setTexture(g_config.sprite.lager_star_empty)
 			self["star_"..i.."_sp"]:setScale(1.5)
 		end
 	end

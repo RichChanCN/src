@@ -52,11 +52,11 @@ function gtool:ccpToInt(pos)
     end
 end
 
-function gtool:intToCcp(num)
+function gtool:int_2_ccp(num)
     if type(num) == type(1) then 
         return cc.p(math.modf(num/10),num%10) 
     else
-        print("gtool:intToCcp warning: num is type: "..type(num))
+        print("gtool:int_2_ccp warning: num is type: "..type(num))
         return num
     end
 end
@@ -126,7 +126,7 @@ end
 
 function gtool:doSomethingLater(callback,time)
     local ac_node = cc.Node:create()
-    Judgment:Instance():getActionNode():addChild(ac_node)
+    pve_game_ctrl:Instance():getActionNode():addChild(ac_node)
     local default_ac = ac_node:runAction(cc.ScaleTo:create(time,1))
     local seq = cc.Sequence:create(default_ac,callback)
     ac_node:runAction(seq)

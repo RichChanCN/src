@@ -28,30 +28,30 @@ function result_view:initEvents()
 end
 
 function result_view:updateInfo()
-    self.reward_data = GameDataCtrl:Instance():getRewardByChapterAndLevel(self.result.chapter_num, self.result.level_num)
+    self.reward_data = game_data_ctrl:Instance():get_reward_by_chapter_and_level(self.result.chapter_num, self.result.level_num)
     self.reward_list = {}
 end
 
 function result_view:updateView()
     for i=1,3 do
         if not (i > self.result.star_num) then
-            self["star_"..i]:loadTexture(Config.sprite.result_star_got)
+            self["star_"..i]:loadTexture(g_config.sprite.result_star_got)
         else
-            self["star_"..i]:loadTexture(Config.sprite.result_star_gray)
+            self["star_"..i]:loadTexture(g_config.sprite.result_star_gray)
         end
     end
-    local last_star_num = GameDataCtrl:Instance():getStarNumByChapterAndLevel(self.result.chapter_num,self.result.level_num)
+    local last_star_num = game_data_ctrl:Instance():get_star_num_by_chapter_and_level(self.result.chapter_num,self.result.level_num)
 
     if self.result.star_num > 0 then
-        self.result_bg_img:loadTexture(Config.sprite.result_win_bg)
-        self.result_band_img:loadTexture(Config.sprite.result_win_band)
-        self.result_text:setString(Config.text.reward_first_get)
+        self.result_bg_img:loadTexture(g_config.sprite.result_win_bg)
+        self.result_band_img:loadTexture(g_config.sprite.result_win_band)
+        self.result_text:setString(g_config.text.reward_first_get)
         self.reward_node:setVisible(true)
         self:updateReward()
     else
-        self.result_bg_img:loadTexture(Config.sprite.result_defeat_bg)
-        self.result_band_img:loadTexture(Config.sprite.result_defeat_band)
-        self.result_text:setString(Config.text.defeat)
+        self.result_bg_img:loadTexture(g_config.sprite.result_defeat_bg)
+        self.result_band_img:loadTexture(g_config.sprite.result_defeat_band)
+        self.result_text:setString(g_config.text.defeat)
         self.reward_node:setVisible(false)
     end
 
@@ -89,8 +89,8 @@ function result_view:updateReward()
 end
 
 function result_view:dealWithResultAndReward()
-    GameDataCtrl:Instance():setStarNum(self.result.chapter_num, self.result.level_num, self.result.star_num)
-    GameDataCtrl:Instance():addRewardToSaveData(self.reward_data)
+    game_data_ctrl:Instance():set_star_num(self.result.chapter_num, self.result.level_num, self.result.star_num)
+    game_data_ctrl:Instance():add_reward_to_save_data(self.reward_data)
     self.result = nil
 end
 

@@ -34,16 +34,16 @@ function SkillBase:use(target_pos_num)
 	self.target_pos_num = target_pos_num
 	
 	if (not target_pos_num) and (not self.is_need_target) or self.range < 1 then
-		self.target_pos_num = self.caster:getCurPosNum()
+		self.target_pos_num = self.caster:get_cur_pos_num()
 	elseif (not target_pos_num) and self.is_need_target then 
 		uitool:createTopTip(self.name.." need a target pos !")
 		return
 	end
 	local monster_list = self:getBeAffectedMonsterList()
-	--Judgment:Instance():getScene():getParticleNode():removeChildByName(self.name)
+	--pve_game_ctrl:instance():getScene():getParticleNode():removeChildByName(self.name)
 	if #monster_list < 1 then
 		uitool:createTopTip("no monster is affected by "..self.name)
-		Judgment:Instance():nextMonsterActivate()
+		pve_game_ctrl:instance():nextMonsterActivate()
 	else
 		for i,v in ipairs(monster_list) do
 			if not monster_list[i+1] then
@@ -67,13 +67,13 @@ function SkillBase:play()
 		if self.particle_scale then
 			particle:setScale(self.particle_scale)
 		end
-		particle:setGlobalZOrder(uitool:mid_Z_order())
+		particle:setGlobalZOrder(uitool:mid_z_order())
 		particle:setPosition(self.particle_pos)
 		if self.range < 1 then
-			Judgment:Instance():getScene():getParticleNode():addChild(particle)
+			pve_game_ctrl:instance():getScene():getParticleNode():addChild(particle)
 		else
-			local map_info = Judgment:Instance():getMapInfo()
-			map_info[self.caster:getCurPosNum()].node:addChild(particle)
+			local map_info = pve_game_ctrl:instance():getMapInfo()
+			map_info[self.caster:get_cur_pos_num()].node:addChild(particle)
 		end
 	end
 
@@ -91,15 +91,15 @@ function SkillBase:getBeAffectedMonsterList()
 	local monster_list = {}
 	if self.range<1 then
 		if (self.damage > 0 or self.debuff) and (self.healing > 0 or self.buff) then
-			monster_list = Judgment:Instance():getAllAliveMonsters()
+			monster_list = pve_game_ctrl:instance():getAllAliveMonsters()
 		elseif self.damage > 0 or self.debuff then
-			monster_list = self.caster:getAliveEnemyMonsters()
+			monster_list = self.caster:get_alive_enemy_monsters()
 		elseif self.healing > 0 or self.buff then
-			monster_list = self.caster:getAliveFriendMonsters()
+			monster_list = self.caster:get_alive_friend_monsters()
 		end
 	elseif (not self:isNeedTarget()) and self.range > 1 then
-		local pos_list = gtool:getPosListInRange(self.caster:getCurPosNum(), self.range)
-		local map_info = Judgment:Instance():getMapInfo()
+		local pos_list = gtool:getPosListInRange(self.caster:get_cur_pos_num(), self.range)
+		local map_info = pve_game_ctrl:instance():getMapInfo()
 		for k,v in pairs(pos_list) do
 			if map_info[k] and type(map_info[k]) == type({}) and self.caster:isEnemy(map_info[k]) then
 				table.insert(monster_list,map_info[k])
@@ -107,14 +107,14 @@ function SkillBase:getBeAffectedMonsterList()
 		end
 	elseif self.target_pos_num and self.range > 1 then
 		local pos_list = gtool:getPosListInRange(self.target_pos_num, self.range)
-		local map_info = Judgment:Instance():getMapInfo()
+		local map_info = pve_game_ctrl:instance():getMapInfo()
 		for k,v in pairs(pos_list) do
 			if map_info[k] and type(map_info[k]) == type({}) and self.caster:isEnemy(map_info[k]) then
 				table.insert(monster_list,map_info[k])
 			end
 		end
 	elseif self.range == 1 then
-		local map_info = Judgment:Instance():getMapInfo()
+		local map_info = pve_game_ctrl:instance():getMapInfo()
 		table.insert(monster_list,map_info[self.target_pos_num])
 	end
 
