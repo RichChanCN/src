@@ -28,7 +28,7 @@ end
 
 function main_view:initEvents()
 	uitool:makeImgToButton(self.adventure_img,function(sender)
-        self.ctrl:openAdventureView()
+        self.ctrl:open_adventure_view()
         self:closeView()
     end)
 
@@ -37,7 +37,7 @@ function main_view:initEvents()
     end)
 
     uitool:makeImgToButtonNoScale(self.title_face_sp, function ()
-        self.ctrl:openSettingView()
+        self.ctrl:open_setting_view()
     end)
 
     self:initRightBottomBtnEvents()
@@ -90,7 +90,7 @@ end
 
 function main_view:initRightBottomBtnEvents()
     self.monster_btn:addClickEventListener(function(sender)
-        self.ctrl:openMonsterListView()
+        self.ctrl:open_monster_list_view()
     end)
 end
 

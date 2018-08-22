@@ -17,7 +17,7 @@ end
 
 function monster_list_view:initEvents()
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:closeMonsterListView()
+        self.ctrl:close_monster_list_view()
     end)
 end
 
@@ -108,7 +108,7 @@ function monster_list_view:initLVItem(monster_list ,item, index)
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
 			cur_monster.type_img:loadTexture(g_config.sprite["attack_type_"..monster_list[cur_index].attack_type])
 			cur_monster.head_img:addClickEventListener(function(sender)
-				self.ctrl:openMonsterInfoView(monster_list,cur_index)
+				self.ctrl:open_monster_info_view(monster_list,cur_index)
 			end)
 			table.insert(self.card_list,cur_monster.head_img)
 		else

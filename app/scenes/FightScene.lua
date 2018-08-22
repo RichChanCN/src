@@ -19,7 +19,7 @@ FightScene.VIEW_PATH = "app.views.fightscene"
 FightScene.Wait_Time = 1
 FightScene.Action_Time = 0.3
 
-function FightScene:onCreate()
+function FightScene:on_create()
 	self.map_data = require("app.data.map_data")
     cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 end

@@ -25,7 +25,7 @@ end
 function adventure_view:initEvents()
 
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:closeAdventureView()
+        self.ctrl:close_adventure_view()
     end)
     
 	if self.cur_chapter_num == 1 then
@@ -60,7 +60,7 @@ function adventure_view:initEvents()
 
 	for i=1,5 do
 		self["site_1_"..i.."_img"]:addClickEventListener(function(sender)
-			self.ctrl:openConfirmView(1,i)
+			self.ctrl:open_confirm_view(1,i)
 		end)
 	end
 

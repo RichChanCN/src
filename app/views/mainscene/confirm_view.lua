@@ -23,11 +23,11 @@ end
 
 function confirm_view:initEvents()
 	self.close_btn:addClickEventListener(function(sender)
-        self.ctrl:closeConfirmView()
+        self.ctrl:close_confirm_view()
     end)
     uitool:makeImgToButton(self.go_img,function(sender)
-    	self.ctrl:closeConfirmView()
-    	self.ctrl:openSpecificEmbattleView(self.chapter_num,self.level_num)
+    	self.ctrl:close_confirm_view()
+    	self.ctrl:open_specific_embattle_view(self.chapter_num,self.level_num)
     end)
 end
 

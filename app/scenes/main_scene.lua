@@ -1,10 +1,10 @@
 
-local MainScene = class("MainScene", cc.load("mvc").SceneBase)
+local main_scene = class("main_scene", cc.load("mvc").SceneBase)
 
 
-MainScene.RESOURCE_FILENAME = "MainScene.csb"
+main_scene.RESOURCE_FILENAME = "main_scene.csb"
  
-MainScene.RESOURCE_BINDING = {
+main_scene.RESOURCE_BINDING = {
 	--main_view
     ["main_view"]			= {["varname"] = "main_view"},
 	--title_right_view
@@ -23,22 +23,22 @@ MainScene.RESOURCE_BINDING = {
     ["monster_info_view"]	= {["varname"] = "monster_info_view"},
 }
 
-MainScene.VIEW_PATH = "app.views.mainscene"
+main_scene.VIEW_PATH = "app.views.mainscene"
 
-function MainScene:onCreate()
+main_scene.on_create = function(self)
 	GameDataCtrl:Instance():register_scene(self)
 	self:viewInit()
 end
 
-function MainScene:onEnter()
-	self:openMainView()
-	self:openTitleRightView()
+main_scene.onEnter = function(self)
+	self:open_main_view()
+	self:open_title_right_view()
 end
 
-function MainScene:onExit()
+main_scene.onExit = function(self)
 end
 
-function MainScene:viewInit()
+main_scene.viewInit = function(self)
 	self.main_view:init()
 	self.title_right_view:init()
 	self.setting_view:init()
@@ -49,9 +49,9 @@ function MainScene:viewInit()
 	self.monster_info_view:init()
 end
 
-function MainScene:goToFightScene()
+main_scene.go_to_fight_scene = function(self)
 	local scene = cc.Scene:create()
-	local layer = self.app_:createView("FightScene")
+	local layer = self.app_:create_view("FightScene")
 	scene:addChild(layer)
 	if scene then
 		local ts = cc.TransitionFade:create(0.5, scene)
@@ -59,103 +59,103 @@ function MainScene:goToFightScene()
 	end	
 end
 
-function MainScene:openMainView()
+main_scene.open_main_view = function(self)
 	if self.main_view then
 		self.main_view:openView()
 	end
 end
 
-function MainScene:closeMainView()
+main_scene.close_main_view = function(self)
 	if self.main_view then
 		self.main_view:closeView()
 	end
 end
 
-function MainScene:openTitleRightView()
+main_scene.open_title_right_view = function(self)
 	if self.title_right_view then
 		self.title_right_view:openView()
 	end
 end
 
-function MainScene:openMonsterListView()
+main_scene.open_monster_list_view = function(self)
 	if self.monster_list_view then
 		self.main_view:closeView()
 		self.monster_list_view:openView()
 	end
 end
 
-function MainScene:closeMonsterListView()
+main_scene.close_monster_list_view = function(self)
 	if self.monster_list_view then
         self.main_view:openView()
 		self.monster_list_view:closeView()
 	end
 end
 
-function MainScene:openMonsterInfoView(monster_list,index)
+main_scene.open_monster_info_view = function(self, monster_list, index)
 	if self.monster_info_view then
 		self.monster_list_view:closeView()
 		self.monster_info_view:openView(monster_list,index)
 	end
 end
 
-function MainScene:closeMonsterInfoView()
+main_scene.close_monster_info_view = function(self)
 	if self.monster_info_view then
         self.monster_list_view:openView()
 		self.monster_info_view:closeView()
 	end
 end
 
-function MainScene:openAdventureView()
+main_scene.open_adventure_view = function(self)
 	if self.adventure_view then
 		self.main_view:closeView()
 		self.adventure_view:openView()
 	end
 end
 
-function MainScene:closeAdventureView()
+main_scene.close_adventure_view = function(self)
 	if self.adventure_view then
         self.main_view:openView()
 		self.adventure_view:closeView()
 	end
 end
 
-function MainScene:openEmbattleView()
+main_scene.open_embattle_view = function(self)
 	if self.embattle_view then
         self.adventure_view:closeView()
 		self.embattle_view:openView()
 	end
 end
 
-function MainScene:openSpecificEmbattleView(chapter_num,level_num)
+main_scene.open_specific_embattle_view = function(self, chapter_num, level_num)
 	if self.embattle_view then
         self.adventure_view:closeView()
-		self.embattle_view:openView(chapter_num,level_num)
+		self.embattle_view:openView(chapter_num, level_num)
 	end
 end
 
-function MainScene:closeEmbattleView()
+main_scene.close_embattle_view = function(self)
 	if self.embattle_view then
         self.adventure_view:openView()
 		self.embattle_view:closeView()
 	end
 end
 
-function MainScene:openConfirmView(chapter_num,level_num)
+main_scene.open_confirm_view = function(self, chapter_num, level_num)
 	if self.confirm_view then
 		self.confirm_view:openView(chapter_num,level_num,reward_data)
 	end
 end
 
-function MainScene:closeConfirmView()
+main_scene.close_confirm_view = function(self)
 	if self.confirm_view then
 		self.confirm_view:closeView()
 	end
 end
 
-function MainScene:openSettingView()
+main_scene.open_setting_view = function(self)
 	if self.setting_view then
 		self.setting_view:openView()
 	end
 end
 
-return MainScene
+return main_scene

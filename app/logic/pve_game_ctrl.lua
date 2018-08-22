@@ -119,12 +119,12 @@ pve_game_ctrl.game_over = function(self, win_side)
 	if win_side == 1 then
 		local table = self:get_left_alive_monsters()
 		for k,v in pairs(table) do
-			v:repeatAnimation("victory")
+			v:repeat_animation("victory")
 		end
 	else
 		local table = self:get_right_alive_monsters()
 		for k,v in pairs(table) do
-			v:repeatAnimation("victory")
+			v:repeat_animation("victory")
 		end
 	end
 end
@@ -362,7 +362,7 @@ pve_game_ctrl.get_next_round_monster_queue = function(self)
 end
 
 pve_game_ctrl.get_cur_chapter_and_level = function(self)
-	return self.chapter_num,self.level_num
+	return self.chapter_num, self.level_num
 end
 
 pve_game_ctrl.is_wait_order = function(self)
@@ -393,13 +393,13 @@ pve_game_ctrl.get_all_alive_monsters = function(self)
 	
 	for _,v in pairs(self.left_team) do
 		if not v:is_dead() then
-			table.insert(all,v)
+			table.insert(all, v)
 		end
 	end
 
 	for _,v in pairs(self.right_team) do
 		if not v:is_dead() then
-			table.insert(all,v)
+			table.insert(all, v)
 		end
 	end
 
@@ -411,7 +411,7 @@ pve_game_ctrl.get_left_alive_monsters = function(self)
 	
 	for _,v in pairs(self.left_team) do
 		if not v:is_dead() then
-			table.insert(all,v)
+			table.insert(all, v)
 		end
 	end
 
@@ -447,7 +447,7 @@ pve_game_ctrl.sort_all_monsters_by_initiative = function(self)
 end
 
 pve_game_ctrl.sort_monsters_by_initiative = function(self, list)
-	local sort_by_initiative = function(a,b)
+	local sort_by_initiative = function(a, b)
 		if a.initiative == b.initiative then
 			if a.level == b.level then
 				return a.rarity > b.rarity
@@ -459,7 +459,7 @@ pve_game_ctrl.sort_monsters_by_initiative = function(self, list)
 		end
 	end
 
-	table.sort(list,sort_by_initiative)
+	table.sort(list, sort_by_initiative)
 end
 
 pve_game_ctrl.get_all_alive_monsters_in_next_round_queue = function(self)
@@ -467,7 +467,7 @@ pve_game_ctrl.get_all_alive_monsters_in_next_round_queue = function(self)
 	
 	for _,v in pairs(self.next_round_monster_queue) do
 		if not v:is_dead() then
-			table.insert(list,v)
+			table.insert(list, v)
 		end
 	end
 
@@ -479,7 +479,7 @@ pve_game_ctrl.get_all_alive_monsters_in_cur_round_queue = function(self)
 	
 	for _,v in pairs(self.cur_round_monster_queue) do
 		if not v:is_dead() then
-			table.insert(list,v)
+			table.insert(list, v)
 		end
 	end
 

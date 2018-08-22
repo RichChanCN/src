@@ -48,7 +48,7 @@ end
 
 function monster_info_view:initEvents()
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:closeMonsterInfoView()
+        self.ctrl:close_monster_info_view()
     end)
 
     self.left_btn:addClickEventListener(function(sender)

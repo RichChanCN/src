@@ -60,7 +60,7 @@ end
 function embattle_view:initEvents()
 	self:addArenaListener()
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:closeEmbattleView()
+        self.ctrl:close_embattle_view()
     end)
 
     uitool:makeImgToButton(self.fight_img,function()
@@ -70,7 +70,7 @@ function embattle_view:initEvents()
     	end
     	local left_team = self:makeTeam()
     	pve_game_ctrl:Instance():initGame(left_team,self.enemy_team,self.other_gezi,self.chapter_num,self.level_num)
-        self.ctrl:goToFightScene()
+        self.ctrl:go_to_fight_scene()
     end)
 end
 

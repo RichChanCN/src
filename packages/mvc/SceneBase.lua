@@ -17,7 +17,7 @@ function SceneBase:ctor(app, name)
         self:createLayoutBinding(binding)
     end
     
-    if self.onCreate then self:onCreate() end
+    if self.on_create then self:on_create() end
 end
 
 function SceneBase:getApp()

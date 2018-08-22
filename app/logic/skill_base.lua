@@ -47,9 +47,9 @@ skill_base.use = function(self, target_pos_num)
 	else
 		for i,v in ipairs(monster_list) do
 			if not monster_list[i+1] then
-				v:beAffectedBySkill(self,true)
+				v:be_affected_by_skill(self,true)
 			else
-				v:beAffectedBySkill(self)
+				v:be_affected_by_skill(self)
 			end
 		end
 	end
