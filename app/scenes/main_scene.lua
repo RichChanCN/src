@@ -1,5 +1,5 @@
 
-local main_scene = class("main_scene", cc.load("mvc").scene_base)
+local main_scene = class("main_scene", cc.load("mvc").SceneBase)
 
 
 main_scene.RESOURCE_FILENAME = "main_scene.csb"
@@ -26,8 +26,8 @@ main_scene.RESOURCE_BINDING = {
 main_scene.VIEW_PATH = "app.views.mainscene"
 
 main_scene.on_create = function(self)
-	game_data_ctrl:instance():register_scene(self)
-	self:view_init()
+	GameDataCtrl:Instance():register_scene(self)
+	self:viewInit()
 end
 
 main_scene.onEnter = function(self)
@@ -38,7 +38,7 @@ end
 main_scene.onExit = function(self)
 end
 
-main_scene.view_init = function(self)
+main_scene.viewInit = function(self)
 	self.main_view:init()
 	self.title_right_view:init()
 	self.setting_view:init()
@@ -51,7 +51,7 @@ end
 
 main_scene.go_to_fight_scene = function(self)
 	local scene = cc.Scene:create()
-	local layer = self.app_:create_scene("fight_scene")
+	local layer = self.app_:create_view("FightScene")
 	scene:addChild(layer)
 	if scene then
 		local ts = cc.TransitionFade:create(0.5, scene)

@@ -1,4 +1,4 @@
-local view = require("packages.mvc.view_base")
+local view = require("packages.mvc.ViewBase")
 
 local main_view = view:instance()
 
@@ -44,7 +44,7 @@ function main_view:initEvents()
 end
 
 function main_view:updateInfo()
-    local player_data = game_data_ctrl:instance():get_player_data()
+    local player_data = game_data_ctrl:Instance():get_player_data()
     self.nickname = player_data.nickname
     self.face_sp = player_data.face_sp
     self.exp = player_data.exp

@@ -1,5 +1,5 @@
 
-local pre_scene = class("pre_scene", cc.load("mvc").scene_base)
+local pre_scene = class("pre_scene", cc.load("mvc").SceneBase)
 
 
 -- 加载csb文件
@@ -40,7 +40,7 @@ end
 
 pre_scene.pre_load_main_scene = function(self)
 	local start_time = os.clock();
-    self:get_app():create_scene("main_scene")
+    self.app_:create_view("main_scene")
 	local end_time = os.clock();
 
 	print(string.format("cost time  : %.4f", end_time - start_time))
@@ -48,7 +48,7 @@ end
 
 pre_scene.go_to_main_scene = function(self)
 	local start_time = os.clock();
-	local layer = self:get_app():create_scene("main_scene")
+	local layer = self.app_:create_view("main_scene")
 	local end_time = os.clock();
 	print(string.format("cost time  : %.4f", end_time - start_time))
 	local scene = cc.Scene:create()

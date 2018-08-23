@@ -26,7 +26,7 @@ local function main()
 
 	game_data_ctrl:instance():init()
 
-    require("app.my_app"):create():run()
+    require("app.MyApp"):create():run("pre_scene")
 end
 
 local status, msg = xpcall(main, __G__TRACKBACK__)

@@ -13,21 +13,21 @@ game_data_ctrl.new = function(self)
 end
  
 game_data_ctrl.instance = function(self)
-	if not self._instance then
-		self._instance = self:new()
+	if not self.instance then
+		self.instance = self:new()
 	end
-	return self._instance
+	return self.instance
 end
 
 game_data_ctrl.init = function(self)
  	self._save_data = require("app.data.save_data")
  	self._save_data:init()
  	self._map_data = require("app.data.map_data")
- 	self._monster_data = require("app.data.monster_data")
+ 	self._monster_data = require("app.data.mosnter_data")
  end
 
 game_data_ctrl.register_scene = function(self, scene)
-	self[scene:get_name()] = scene
+	self[scene:getName()] = scene
 end
 
 game_data_ctrl.get_map_data = function(self)

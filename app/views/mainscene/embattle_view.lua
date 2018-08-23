@@ -1,4 +1,4 @@
-local view = require("packages.mvc.view_base")
+local view = require("packages.mvc.ViewBase")
 
 local embattle_view = view:instance()
 
@@ -31,7 +31,7 @@ function embattle_view:updateInfo(map_data)
 	--上场怪物数量限制
 	self.monster_num_limit = map_data.monster_num_limit
 	--可以使用的怪物信息
-	self.can_use_monster_list = map_data.can_use_monster_list or game_data_ctrl:instance():get_collected_monster_list()
+	self.can_use_monster_list = map_data.can_use_monster_list or game_data_ctrl:Instance():get_collected_monster_list()
 	--竞技场的布局信息
 	self.enable_gezi = map_data.enable_gezi
 	self.other_gezi = map_data.other_gezi
@@ -93,7 +93,7 @@ function embattle_view:onOpen(...)
 	local level_num = params[2]
 
 	if chapter_num and level_num then
-		local map_data = game_data_ctrl:instance():get_map_data_by_chapter_and_level(chapter_num,level_num)
+		local map_data = game_data_ctrl:Instance():get_map_data_by_chapter_and_level(chapter_num,level_num)
 		self:resetArena()
 		self.monster_lv:removeAllItems()
 		self.hex_node:removeAllChildren()
@@ -438,7 +438,7 @@ function embattle_view:updateArena()
 	end
 
 	for k,v in pairs(self.enemy_team) do
-		local chesspiece = self:createChesspiece(v,300+v:get_id())
+		local chesspiece = self:createChesspiece(v,300+v.id)
 		local pos = v.start_pos
 		chesspiece:setPosition(self["gezi_"..pos.x.."_"..pos.y]:getPosition())
 	end

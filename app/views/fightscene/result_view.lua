@@ -1,4 +1,4 @@
-local view = require("packages.mvc.view_base")
+local view = require("packages.mvc.ViewBase")
 
 local result_view = view:instance()
 
@@ -17,18 +17,18 @@ result_view.RESOURCE_BINDING = {
 
 function result_view:initEvents()
     uitool:makeImgToButton(self.left_btn_img,function(sender)
-    	self.ctrl:close_result_view()
-    	self.ctrl:go_to_main_scene()
+    	self.ctrl:closeResultView()
+    	self.ctrl:goToMainScene()
     end)
 
     uitool:makeImgToButton(self.right_btn_img,function(sender)
-    	self.ctrl:close_result_view()
-    	self.ctrl:go_to_main_scene()
+    	self.ctrl:closeResultView()
+    	self.ctrl:goToMainScene()
     end)
 end
 
 function result_view:updateInfo()
-    self.reward_data = game_data_ctrl:instance():get_reward_by_chapter_and_level(self.result.chapter_num, self.result.level_num)
+    self.reward_data = game_data_ctrl:Instance():get_reward_by_chapter_and_level(self.result.chapter_num, self.result.level_num)
     self.reward_list = {}
 end
 
@@ -40,7 +40,7 @@ function result_view:updateView()
             self["star_"..i]:loadTexture(g_config.sprite.result_star_gray)
         end
     end
-    local last_star_num = game_data_ctrl:instance():get_star_num_by_chapter_and_level(self.result.chapter_num,self.result.level_num)
+    local last_star_num = game_data_ctrl:Instance():get_star_num_by_chapter_and_level(self.result.chapter_num,self.result.level_num)
 
     if self.result.star_num > 0 then
         self.result_bg_img:loadTexture(g_config.sprite.result_win_bg)
@@ -89,12 +89,12 @@ function result_view:updateReward()
 end
 
 function result_view:dealWithResultAndReward()
-    game_data_ctrl:instance():set_star_num(self.result.chapter_num, self.result.level_num, self.result.star_num)
-    game_data_ctrl:instance():add_reward_to_save_data(self.reward_data)
+    game_data_ctrl:Instance():set_star_num(self.result.chapter_num, self.result.level_num, self.result.star_num)
+    game_data_ctrl:Instance():add_reward_to_save_data(self.reward_data)
     self.result = nil
 end
 
-function result_view:set_result(result)
+function result_view:setResult(result)
     self.result = result
 end
 

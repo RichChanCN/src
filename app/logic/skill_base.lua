@@ -40,7 +40,7 @@ skill_base.use = function(self, target_pos_num)
 		return
 	end
 	local monster_list = self:get_be_affected_monster_list()
-	--pve_game_ctrl:instance():getScene():get_particle_node():removeChildByName(self._name)
+	--pve_game_ctrl:instance():getScene():getParticleNode():removeChildByName(self._name)
 	if #monster_list < 1 then
 		uitool:createTopTip("no monster is affected by "..self._name)
 		pve_game_ctrl:instance():next_monster_activate()
@@ -70,7 +70,7 @@ skill_base.play = function(self)
 		particle:setGlobalZOrder(uitool:mid_z_order())
 		particle:setPosition(self._particle_pos)
 		if self._range < 1 then
-			pve_game_ctrl:instance():getScene():get_particle_node():addChild(particle)
+			pve_game_ctrl:instance():getScene():getParticleNode():addChild(particle)
 		else
 			local map_info = pve_game_ctrl:instance():get_map_info()
 			map_info[self._caster:get_cur_pos_num()].node:addChild(particle)

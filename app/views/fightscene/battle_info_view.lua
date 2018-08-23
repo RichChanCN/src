@@ -1,4 +1,4 @@
-local view = require("packages.mvc.view_base")
+local view = require("packages.mvc.ViewBase")
 
 local battle_info_view = view:instance()
 
@@ -102,7 +102,7 @@ function battle_info_view:initRightBottomEvents()
     end)
 
     uitool:makeImgToButtonNoScale(self.exit_img, function()
-        self.ctrl:go_to_main_scene()
+        self.ctrl:goToMainScene()
     end)
 end
 
@@ -181,7 +181,7 @@ function battle_info_view:addQueueItemEvent(img)
         local node = event:getCurrentTarget()
         if pve_game_ctrl:Instance():is_wait_order() then
             if uitool:is_touch_in_node_rect(node,touch,event) then
-                self.ctrl:show_other_around_info(node.monster)
+                self.ctrl:showOtherAroundInfo(node.monster)
                 return true
             end
         end
@@ -189,7 +189,7 @@ function battle_info_view:addQueueItemEvent(img)
     end
 
     local function touchEnded( touch, event )
-        self.ctrl:hide_other_around_info()
+        self.ctrl:hideOtherAroundInfo()
     end
 
     img.listener = cc.EventListenerTouchOneByOne:create()

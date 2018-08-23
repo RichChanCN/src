@@ -29,7 +29,7 @@ pve_game_ctrl.order = {
 pve_game_ctrl.OPERATE = {
 	[0] = function(is_wait, round_num)
 		if pve_game_ctrl:Instance().scene.battle_info_view:isInited() then
-			pve_game_ctrl:Instance().scene:update_battle_queue(is_wait)
+			pve_game_ctrl:Instance().scene:updateBattleQueue(is_wait)
 		end
 		pve_game_ctrl:Instance().cur_active_monster:on_active(round_num)
 	end,
@@ -190,7 +190,7 @@ end
 pve_game_ctrl.change_game_status = function(self, status)
 	self.cur_game_status = status
 	self:update_map_info()
-	self.scene:update_map_view()
+	self.scene:updateMapView()
 end
 
 pve_game_ctrl.select_pos = function(self, node)

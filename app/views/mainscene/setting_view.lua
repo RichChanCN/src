@@ -1,4 +1,4 @@
-local view = require("packages.mvc.view_base")
+local view = require("packages.mvc.ViewBase")
 
 local setting_view = view:instance()
 
