@@ -185,7 +185,7 @@ save_data.load_data = function(self)
 	self:init_collected_monsters()
 end
 
-save_data.load_help(xml)
+save_data.load_help = function(self, xml)
 	local data = {}
 	if type(xml) == "table" then
 		for index,value in ipairs(xml) do

@@ -1,4 +1,4 @@
-local view = require("packages.mvc.ViewBase")
+local view = require("packages.mvc.view_base")
 
 local map_view = view:instance()
 
@@ -42,7 +42,7 @@ end
 
 function map_view:updateView()
 	if Judgment:Instance():is_wait_order() then
-		self:showGuide()
+		self:show_guide()
 	else
 		self:hideGuide()
 	end
@@ -68,13 +68,13 @@ function map_view:endAnimation()
 	self:hideGuide()
 	local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time,1))
 	local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,0.75))
-	local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.openResultView))
+	local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.open_result_view))
 
 	local seq = cc.Sequence:create(ac1,ac2,callback)
 		
 	self.root:runAction(seq)
 	self:hideMask()
-	self.ctrl:closeBattleInfoView()
+	self.ctrl:close_battle_info_view()
 end
 
 function map_view:get_position_by_int(num)
@@ -85,17 +85,17 @@ end
 ----------------------------------------------------------------
 -------------------------------Ë½ÓÐ·½·¨--------------------------
 ----------------------------------------------------------------
-function map_view:showOtherAroundInfo(monster)
+function map_view:show_other_around_info(monster)
 	self:hideGuide()
-	self:showGuide(monster)
+	self:show_guide(monster)
 end
 
-function map_view:hideOtherAroundInfo()
+function map_view:hide_other_around_info()
 	self:hideGuide()
-	self:showGuide()
+	self:show_guide()
 end
 
-function map_view:showGuide(monster)
+function map_view:show_guide(monster)
 	local cur_active_monster = monster or Judgment:Instance():get_cur_active_monster()
 	
 	local gezi_list = cur_active_monster:getAroundInfo(monster)

@@ -1,4 +1,4 @@
-local view = require("packages.mvc.ViewBase")
+local view = require("packages.mvc.view_base")
 
 local adventure_view = view:instance()
 
@@ -69,7 +69,7 @@ end
 function adventure_view:updateView()
 	for i=1,1 do
 		for j=1,5 do
-			local star_num = game_data_ctrl:Instance():get_star_num_by_chapter_and_level(i, j)
+			local star_num = game_data_ctrl:instance():get_star_num_by_chapter_and_level(i, j)
 			self["site_"..i.."_"..j.."_img"]:loadTexture(g_config.sprite["star_"..star_num.."_site"])
 			
 			local challenge_img = self["site_"..i.."_"..j.."_img"]:getChildByName("challenged_img")

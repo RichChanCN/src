@@ -49,16 +49,16 @@ monster_base.new = function(self, data, team_side, arena_pos)
 	team_side = team_side or self.TeamSide.NONE
 	pos = pos or cc.p(1,1)
 
-	self._id 					= data.id
-	self._name 					= data.name
-	self._level 				= data.level
-	self._rarity				= data.rarity
-	self._attack_type			= data.attack_type
-	self._attack_particle		= data.attack_particle
-	self._move_type 			= data.move_type
+	self.id 					= data.id
+	self.name 					= data.name
+	self.level 					= data.level
+	self.rarity					= data.rarity
+	self.attack_type			= data.attack_type
+	self.attack_particle		= data.attack_particle
+	self.move_type 				= data.move_type
 	
-	self._model_path 			= data.model_path
-	self._char_img_path			= data.char_img_path
+	self.model_path 			= data.model_path
+	self.char_img_path			= data.char_img_path
 
 	self._max_anger				= data.anger
 	
@@ -92,7 +92,7 @@ monster_base.new = function(self, data, team_side, arena_pos)
 	self._buff_list				= {}
 	self._debuff_list			= {}
 
-	self.tag = self._id * 100 + self._start_pos.x * 10 + self._start_pos.y
+	self._tag = self.id * 100 + self._start_pos.x * 10 + self._start_pos.y
 	
 	if data.skill then
 		local skill_base = require("app.logic.skill_base")
@@ -103,7 +103,11 @@ monster_base.new = function(self, data, team_side, arena_pos)
 end
 
 monster_base.getTag = function(self)
-	return self.tag
+	return self._tag
+end
+
+monster_base.get_id = function(self)
+	return self.id
 end
 
 monster_base.get_cur_pos_num = function(self)
@@ -374,7 +378,7 @@ monster_base.attack = function(self, target, distance)
 	pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 	
 	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target.cur_pos)) then
-		self:move_and_Attack(targeta
+		self:move_and_Attack(target)
 	else
 		if self._attack_particle then
 			self:create_attack_particle(target)
@@ -1239,7 +1243,7 @@ end
 ----------------------------×´Ì¬¶¯×÷----------------------------------
 ----------------------------×´Ì¬¶¯×÷----------------------------------
 ----------------------------×´Ì¬¶¯×÷----------------------------------
-monster_base.change_monster_status(status)
+monster_base.change_monster_status = function(self, status)
 	status = status or self.last_status or monster_base.status.ALIVE
 	self.last_status = self._status
 	self._status = status
@@ -1336,7 +1340,7 @@ monster_base.run_ai = function(self)
 			return self:use_skill(target_enemy:get_cur_pos_num())
 		end
 		if self:is_melee() then
-			self:move_and_Attack(target_enemya
+			self:move_and_Attack(target_enemy)
 		else
 			if distance<6 and distance > 2 then
 				self:attack(target_enemy, distance)
@@ -1526,7 +1530,7 @@ monster_base.get_back_first_near_pos_num = function(self, num, target_toward)
 	end
 end
 
-monster_base.get_near_pos_plus(num)
+monster_base.get_near_pos_plus = function(self, num)
 	if num%2 == 0 then
 		if gtool:isLegalPosNum(num + 10) then
 			return num + 10
