@@ -1,4 +1,4 @@
-local view= require("packages.mvc.ViewBase")
+local view= require("packages.mvc.view_base")
 
 local title_right_view = view:instance()
 
@@ -30,7 +30,7 @@ function title_right_view:initEvents()
 end
 
 function title_right_view:updateInfo()
-    local player_data = game_data_ctrl:Instance():get_player_data()
+    local player_data = game_data_ctrl:instance():get_player_data()
     self.coin_num = player_data.coin_num
     self.crystal_num = player_data.crystal_num
 end

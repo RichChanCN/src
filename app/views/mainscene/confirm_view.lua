@@ -1,4 +1,4 @@
-local view = require("packages.mvc.ViewBase")
+local view = require("packages.mvc.view_base")
 
 local confirm_view = view:instance()
 
@@ -32,10 +32,10 @@ function confirm_view:initEvents()
 end
 
 function confirm_view:updateInfo(chapter_num,level_num)
-	self.reward_data = game_data_ctrl:Instance():get_reward_by_chapter_and_level(chapter_num, level_num)
+	self.reward_data = game_data_ctrl:instance():get_reward_by_chapter_and_level(chapter_num, level_num)
 	self.reward_list = {}
 
-	self.star_num = game_data_ctrl:Instance():get_star_num_by_chapter_and_level(chapter_num, level_num)
+	self.star_num = game_data_ctrl:instance():get_star_num_by_chapter_and_level(chapter_num, level_num)
 	self.all_star_condition = "emmmmmmmmm"
 
 	self.chapter_num = chapter_num

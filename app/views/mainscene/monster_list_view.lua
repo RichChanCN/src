@@ -1,4 +1,4 @@
-local view = require("packages.mvc.ViewBase")
+local view = require("packages.mvc.view_base")
 
 local monster_list_view = view:instance()
 
@@ -22,8 +22,8 @@ function monster_list_view:initEvents()
 end
 
 function monster_list_view:updateInfo()
-    self.collected_monster_list = game_data_ctrl:Instance():get_collected_monster_list()
-	self.uncollected_monster_list = game_data_ctrl:Instance():get_not_collected_monster_list()
+    self.collected_monster_list = game_data_ctrl:instance():get_collected_monster_list()
+	self.uncollected_monster_list = game_data_ctrl:instance():get_not_collected_monster_list()
 end
 
 function monster_list_view:updateView()

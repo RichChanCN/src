@@ -1,4 +1,4 @@
-local view = require("packages.mvc.ViewBase")
+local view = require("packages.mvc.view_base")
 
 local monster_info_view = view:instance()
 
@@ -60,7 +60,7 @@ function monster_info_view:initEvents()
     end)
     uitool:makeImgToButton(self.upgrade_img,function()
         if self.monster_data.card_num and not(self.monster_data.card_num < self.monster_data.level) then
-            game_data_ctrl:Instance():requestUpgradeMonster(self.monster_data.id)
+            game_data_ctrl:instance():requestUpgradeMonster(self.monster_data.id)
             self:upgradeUpdate()
         end
     end)
@@ -91,11 +91,11 @@ end
 ----------------------------------------------------------------
 
 function monster_info_view:updateMonsterByID(id)
-    self.monster_list[self.cur_index] = game_data_ctrl:Instance():get_save_monster_data_by_id(id)
+    self.monster_list[self.cur_index] = game_data_ctrl:instance():get_save_monster_data_by_id(id)
 end
 
 function monster_info_view:upgradeUpdate()
-    local card_num,level = game_data_ctrl:Instance():get_monster_card_num_and_level_by_id(self.monster_data.id)
+    local card_num,level = game_data_ctrl:instance():get_monster_card_num_and_level_by_id(self.monster_data.id)
     print(card_num,level)
     self.title_text:setString("LEVEL "..level.." "..self.monster_data.name)
     self.progress_text:setString(card_num .."/"..level)
