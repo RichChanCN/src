@@ -9,20 +9,20 @@ adventure_view.RESOURCE_BINDING = {
 	["right_btn"]			= {["varname"] = "right_btn"},
 }
 
-function adventure_view:init_ui()
-	for i=1,1 do
+adventure_view.init_ui = function(self)
+	for i = 1, 1 do
 		self["chapter_"..i.."_node"] = self.chapter_sv:getChildByName("chapter_"..i.."_node")
-		for j=1,5 do
+		for j = 1, 5 do
 			self["site_"..i.."_"..j.."_img"] = self["chapter_"..i.."_node"]:getChildByName("site_"..i.."_"..j.."_img")
 		end
 	end
 end
 
-function adventure_view:init_info()
+adventure_view.init_info = function(self)
 	self.cur_chapter_num = 1
 end
 
-function adventure_view:init_events()
+adventure_view.init_events = function(self)
 
 	self.back_btn:addClickEventListener(function(sender)
         self:get_ctrl():close_adventure_view()
@@ -36,11 +36,11 @@ function adventure_view:init_events()
 
 	self.right_btn:addClickEventListener(function(sender)
 		if self.cur_chapter_num == 1 then
-			self.chapter_sv:scrollToPercentHorizontal(50,0.5,true)
+			self.chapter_sv:scrollToPercentHorizontal(50, 0.5, true)
 			self.cur_chapter_num = 2
 			self.left_btn:setVisible(true)
 		elseif self.cur_chapter_num == 2 then
-			self.chapter_sv:scrollToRight(0.5,true)
+			self.chapter_sv:scrollToRight(0.5, true)
 			self.cur_chapter_num = 3
 			self.right_btn:setVisible(false)
 		end
@@ -48,27 +48,27 @@ function adventure_view:init_events()
 
 	self.left_btn:addClickEventListener(function(sender)
 		if self.cur_chapter_num == 2 then
-			self.chapter_sv:scrollToLeft(0.5,true)
+			self.chapter_sv:scrollToLeft(0.5, true)
 			self.left_btn:setVisible(false)
 			self.cur_chapter_num = 1
 		elseif self.cur_chapter_num == 3 then
-			self.chapter_sv:scrollToPercentHorizontal(50,0.5,true)
+			self.chapter_sv:scrollToPercentHorizontal(50, 0.5, true)
 			self.right_btn:setVisible(true)
 			self.cur_chapter_num = 2
 		end
     end)
 
-	for i=1,5 do
+	for i = 1, 5 do
 		self["site_1_"..i.."_img"]:addClickEventListener(function(sender)
-			self:get_ctrl():open_confirm_view(1,i)
+			self:get_ctrl():open_confirm_view(1, i)
 		end)
 	end
 
 end
 
-function adventure_view:update_view()
-	for i=1,1 do
-		for j=1,5 do
+adventure_view.update_view = function(self)
+	for i = 1, 1 do
+		for j = 1, 5 do
 			local star_num = game_data_ctrl:instance():get_star_num_by_chapter_and_level(i, j)
 			self["site_"..i.."_"..j.."_img"]:loadTexture(g_config.sprite["star_"..star_num.."_site"])
 			
@@ -83,7 +83,7 @@ function adventure_view:update_view()
 				challenge_img:setVisible(false)
 			end
 
-			for n=1,3 do
+			for n = 1, 3 do
 				local star = self["site_"..i.."_"..j.."_img"]:getChildByName("star_"..n)
 				if not (n > star_num) then
 					star:loadTexture(g_config.sprite.site_star_get)
@@ -95,7 +95,7 @@ function adventure_view:update_view()
 	end
 end
 
-function adventure_view:on_open()
+adventure_view.on_open = function(self)
 	self:update_view()
 end
 

@@ -37,7 +37,7 @@ function map_view:init_info()
 end
 
 function map_view:init_events()
-	self:pauseArenaListener()
+	self:pause_arena_listener()
 end
 
 function map_view:update_view()
@@ -297,7 +297,7 @@ function map_view:initArena()
 			self["gezi_"..x.."_"..y.."_black"] = self.arena_bottom_node:getChildByName("gezi_"..x.."_"..y)
 			if self["gezi_"..x.."_"..y] then
 				self["gezi_"..x.."_"..y].arena_pos = cc.p(x,y)
-                self:addArenaListener(self["gezi_"..x.."_"..y])
+                self:add_arena_listener(self["gezi_"..x.."_"..y])
 			end
 		end
 	end
@@ -305,7 +305,7 @@ function map_view:initArena()
 end
 
 --ÒòÎªÆåÅÌ×ö¹ýÇãÐ±´¦Àí£¬ËùÒÔÕâÀïÒªÓÃÉäÏßÀ´´¦Àí
-function map_view:addArenaListener(gezi)
+function map_view:add_arena_listener(gezi)
     local function touchBegan( touch, event )
         local node = event:getCurrentTarget()
 		local start_location = touch:getLocation()
@@ -353,7 +353,7 @@ function map_view:addArenaListener(gezi)
     self.eventDispatcher:addEventListenerWithSceneGraphPriority(gezi.listener, gezi)
 end
 
-function map_view:resumeArenaListener()
+function map_view:resume_arena_listener()
 	
 	for x=1,8 do
 		for y=1,7 do 
@@ -364,7 +364,7 @@ function map_view:resumeArenaListener()
 	end
 end
 
-function map_view:pauseArenaListener()
+function map_view:pause_arena_listener()
 	
 	for x=1,8 do
 		for y=1,7 do 

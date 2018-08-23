@@ -164,7 +164,7 @@ function uitool:set_node_to_global_top(node,z)
 end
 
 function uitool:makeImgToButton(img,callback)
-    local function touchBegan( touch, event )
+    local touchBegan = function(touch, event)
         local node = event:getCurrentTarget()
 
         if self:is_touch_in_node_rect(node,touch,event) then
@@ -175,7 +175,7 @@ function uitool:makeImgToButton(img,callback)
         return false
     end
 
-    local function touchMoved( touch, event )
+    local touchMoved = function(touch, event)
         local node = event:getCurrentTarget()
 
         if self:is_touch_in_node_rect(node,touch,event) then
@@ -185,7 +185,7 @@ function uitool:makeImgToButton(img,callback)
         end
     end
 
-    local function touchEnded( touch, event )
+    local touchEnded = function(touch, event)
         local node = event:getCurrentTarget()
         
         if self:is_touch_in_node_rect(node,touch,event) then
@@ -206,7 +206,7 @@ function uitool:makeImgToButton(img,callback)
 end
 
 function uitool:makeImgToButtonNoScale(img,callback)
-    local function touchBegan( touch, event )
+    local touchBegan = function(touch, event)
         local node = event:getCurrentTarget()
 
         if self:is_touch_in_node_rect(node,touch,event) then
@@ -216,7 +216,7 @@ function uitool:makeImgToButtonNoScale(img,callback)
         return false
     end
 
-    local function touchEnded( touch, event )
+    local touchEnded = function(touch, event)
         local node = event:getCurrentTarget()
         
         if self:is_touch_in_node_rect(node,touch,event) then
@@ -235,7 +235,7 @@ function uitool:makeImgToButtonNoScale(img,callback)
 end
 
 function uitool:makeImgToButtonHT(img,camera,callback)
-    local function touchBegan( touch, event )
+    local touchBegan = function(touch, event)
         local node = event:getCurrentTarget()
         local start_location = touch:getLocation()
 
@@ -246,7 +246,7 @@ function uitool:makeImgToButtonHT(img,camera,callback)
         return false
     end
 
-    local function touchEnded( touch, event )
+    local touchEnded = function(touch, event)
         local node = event:getCurrentTarget()
         local end_location = touch:getLocation()
 

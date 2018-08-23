@@ -177,7 +177,7 @@ function battle_info_view:updateLVItem(item,monster,update_only)
 end
 
 function battle_info_view:addQueueItemEvent(img)
-    local function touchBegan( touch, event )
+    local touchBegan = function(touch, event)
         local node = event:getCurrentTarget()
         if pve_game_ctrl:instance():is_wait_order() then
             if uitool:is_touch_in_node_rect(node,touch,event) then
@@ -188,7 +188,7 @@ function battle_info_view:addQueueItemEvent(img)
         return false
     end
 
-    local function touchEnded( touch, event )
+    local touchEnded = function(touch, event)
         self:get_ctrl():hide_other_around_info()
     end
 

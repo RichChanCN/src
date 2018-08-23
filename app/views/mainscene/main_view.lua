@@ -12,13 +12,13 @@ main_view.RESOURCE_BINDING = {
     ["monster_btn"]         = {["varname"] = "monster_btn"},
 }
 
-function main_view:init_ui()
-    self:initTitleLeftNode()
-    self:initCenterNode()
-    self:initBottomNode()
+main_view.init_ui = function(self)
+    self:init_title_left_node()
+    self:init_center_node()
+    self:init_bottom_node()
 end
 
--- function main_view:init_info()
+-- main_view.init_info()
 --     local player_data = self:get_ctrl():get_player_data()
 --     self.nickname = player_data.nickname
 --     self.face_sp = player_data.face_sp
@@ -26,7 +26,7 @@ end
 --     self.level = player_data.level
 -- end
 
-function main_view:init_events()
+main_view.init_events = function(self)
 	uitool:makeImgToButton(self.adventure_img,function(sender)
         self:get_ctrl():open_adventure_view()
         self:close_view()
@@ -40,10 +40,10 @@ function main_view:init_events()
         self:get_ctrl():open_setting_view()
     end)
 
-    self:initRightBottomBtnEvents()
+    self:init_right_bottom_btn_events()
 end
 
-function main_view:update_info()
+main_view.update_info = function(self)
     local player_data = game_data_ctrl:instance():get_player_data()
     self.nickname = player_data.nickname
     self.face_sp = player_data.face_sp
@@ -52,7 +52,7 @@ function main_view:update_info()
     self.level = player_data.level
 end
 
-function main_view:update_view()
+main_view.update_view = function(self)
     self.nickname_text:setString(self.nickname)
     self.title_face_sp:setTexture(g_config.monster_img_path..self.face_sp)
     self.nickname_text:setString(self.nickname)
@@ -60,7 +60,7 @@ function main_view:update_view()
     uitool:set_progress_bar(self.exp_now_img, self.exp/self.cur_max_exp)
 end
 
-function main_view:on_open()
+main_view.on_open = function(self)
     self:update_info()
     self:update_view()
 end
@@ -68,7 +68,7 @@ end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
-function main_view:initTitleLeftNode()
+main_view.init_title_left_node = function(self)
     self.title_face_sp          = self.title_left_node:getChildByName("title_face_sp")
     self.title_face_frame_sp    = self.title_left_node:getChildByName("title_face_frame_sp")
     self.flag_sp                = self.title_left_node:getChildByName("flag_sp")
@@ -79,16 +79,16 @@ function main_view:initTitleLeftNode()
     self.level_text             = self.exp_node:getChildByName("level_text")
 end
 
-function main_view:initCenterNode()
+main_view.init_center_node = function(self)
     self.adventure_img = self.center_node:getChildByName("adventure_img")
     self.train_img = self.center_node:getChildByName("train_img")
 end
 
-function main_view:initBottomNode()
+main_view.init_bottom_node = function(self)
     self.monster_btn = self.bottom_node:getChildByName("monster_btn")
 end
 
-function main_view:initRightBottomBtnEvents()
+main_view.init_right_bottom_btn_events = function(self)
     self.monster_btn:addClickEventListener(function(sender)
         self:get_ctrl():open_monster_list_view()
     end)

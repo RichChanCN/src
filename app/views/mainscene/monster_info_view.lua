@@ -12,7 +12,7 @@ monster_info_view.RESOURCE_BINDING = {
 
 monster_info_view.init_ui = function(self)
     self:init_left_model_node()
-    self:initRightInfoNode()
+    self:init_right_info_node()
 end
 
 monster_info_view.init_info = function(self)
@@ -65,14 +65,14 @@ monster_info_view.init_events = function(self)
         end
     end)
     --------------左边节点事件-------------
-    self:initModelEvents()
+    self:init_model_events()
 end
 
 monster_info_view.update_view = function(self, monster_list, index)
 	self.title_text:setString("LEVEL "..monster_list[index].level.." "..monster_list[index].name)
     self:update_info(monster_list,index)
-    self:updateLeftModelNode(monster_list[index])
-    self:updateRightInfoNode(monster_list[index])
+    self:update_left_model_node(monster_list[index])
+    self:update_right_info_node(monster_list[index])
 end
 
 monster_info_view.on_open = function(self, ...)
@@ -117,11 +117,11 @@ monster_info_view.init_left_model_node = function(self)
     self.up_sp		 		= self.left_node:getChildByName("up_sp")
     self.model_panel 		= self.left_node:getChildByName("model_panel")
 
-    --self:initModelCamera()
+    --self:init_model_camera()
 end
 
-monster_info_view.updateLeftModelNode = function(self, data)
-    self:createModel(data)
+monster_info_view.update_left_model_node = function(self, data)
+    self:create_model(data)
 
     self.rarity_sp:setTexture(g_config.sprite["rarity_sp_"..data.rarity])
     self.type_sp:setTexture(g_config.sprite["attack_type_"..data.attack_type])
@@ -138,7 +138,7 @@ monster_info_view.updateLeftModelNode = function(self, data)
     end
 end
 
-monster_info_view.createModel = function(self, data)
+monster_info_view.create_model = function(self, data)
     if self.monster_model then
         self.model_panel:removeChild(self.monster_model)
     end
@@ -168,7 +168,7 @@ monster_info_view.createModel = function(self, data)
     
 end
 
-monster_info_view.initModelCamera = function(self)
+monster_info_view.init_model_camera = function(self)
 	local size = self.model_panel:getContentSize()
 	self.model_camera = cc.Camera:createPerspective(45,size.width / size.height,1,5000)
 
@@ -180,8 +180,8 @@ monster_info_view.initModelCamera = function(self)
     self.model_panel:addChild(self.model_camera)
 end
 
-monster_info_view.initModelEvents = function(self)
-	local function touchBegan( touch, event )
+monster_info_view.init_model_events = function(self)
+	local touchBegan = function(touch, event)
 	    local node = event:getCurrentTarget()
 
 	    if uitool:is_touch_in_node_rect(node, touch, event) and self.is_model_loaded then
@@ -191,7 +191,7 @@ monster_info_view.initModelEvents = function(self)
 	    return false
 	end
 
-	local function touchMoved( touch, event )
+	local touchMoved = function(touch, event)
 	    local node = event:getCurrentTarget()
 		local diff = touch:getDelta()
 		local pos_3d = self.monster_model:getRotation3D()
@@ -201,13 +201,13 @@ monster_info_view.initModelEvents = function(self)
 		local x = 1
 	end
 
-	local function touchEnded( touch, event )
+	local touchEnded = function(touch, event)
 	    local node = event:getCurrentTarget()
 	    local cur_pos = node:convertToNodeSpace(touch:getLocation())
 	    local start_pos = node:convertToNodeSpace(touch:getStartLocation())
 	    
 	    if cur_pos.x - start_pos.x < 5 and cur_pos.y - start_pos.y < 5 then
-	    	self:playAnAnimation()
+	    	self:play_an_animation()
 	    end
 	end
 
@@ -220,7 +220,7 @@ monster_info_view.initModelEvents = function(self)
 	eventDispatcher:addEventListenerWithSceneGraphPriority(self.model_panel.listener, self.model_panel)
 end
 
-monster_info_view.playAnAnimation = function(self)
+monster_info_view.play_an_animation = function(self)
     self.monster_model:stopAllActions()
     local animate = g_config.monster_animate[self.cur_monster_id][self.next_animate](self.animation)
 
@@ -231,7 +231,7 @@ end
 --------------------左边相关结束----------------------
 
 --------------------右边相关开始----------------------
-monster_info_view.initRightInfoNode = function(self)
+monster_info_view.init_right_info_node = function(self)
 	self.upgrade_img				= self.info_bg_img:getChildByName("upgrade_img")
 	self.details_btn 				= self.info_bg_img:getChildByName("details_btn")
 	self.video_btn	 				= self.info_bg_img:getChildByName("video_btn")
@@ -249,7 +249,7 @@ monster_info_view.initRightInfoNode = function(self)
     self.skill_description_text     = self.info_bg_img:getChildByName("skill_description_text")
 end
 
-monster_info_view.updateRightInfoNode = function(self, data)
+monster_info_view.update_right_info_node = function(self, data)
 	self.hp_text:setString(data.hp)
 	self.damage_text:setString(data.damage)
 	self.physical_defense_text:setString(data.physical_defense)
