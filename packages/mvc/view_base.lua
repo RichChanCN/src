@@ -18,8 +18,8 @@ function view_base:init()
 		uitool:create_ui_binding(self, self.RESOURCE_BINDING)
 
 		self:init_info()
-		self:initUI()
-		self:initEvents()
+		self:init_ui()
+		self:init_events()
 
 		self.is_inited = true
 	else
@@ -27,16 +27,16 @@ function view_base:init()
 	end
 end
 
-function view_base:initUI()
-	print("warning! you should implement initUI() in instance!---"..self.name)
+function view_base:init_ui()
+	print("warning! you should implement init_ui() in instance!---"..self.name)
 end
 
 function view_base:init_info()
 	print("warning! you should implement init_info() in instance!---"..self.name)
 end
 
-function view_base:initEvents()
-	print("warning! you should implement initEvents() in instance")
+function view_base:init_events()
+	print("warning! you should implement init_events() in instance")
 end
 
 function view_base:onOpen(...)

@@ -12,7 +12,7 @@ main_view.RESOURCE_BINDING = {
     ["monster_btn"]         = {["varname"] = "monster_btn"},
 }
 
-function main_view:initUI()
+function main_view:init_ui()
     self:initTitleLeftNode()
     self:initCenterNode()
     self:initBottomNode()
@@ -26,7 +26,7 @@ end
 --     self.level = player_data.level
 -- end
 
-function main_view:initEvents()
+function main_view:init_events()
 	uitool:makeImgToButton(self.adventure_img,function(sender)
         self.ctrl:open_adventure_view()
         self:closeView()

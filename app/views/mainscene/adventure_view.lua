@@ -9,7 +9,7 @@ adventure_view.RESOURCE_BINDING = {
 	["right_btn"]			= {["varname"] = "right_btn"},
 }
 
-function adventure_view:initUI()
+function adventure_view:init_ui()
 	for i=1,1 do
 		self["chapter_"..i.."_node"] = self.chapter_sv:getChildByName("chapter_"..i.."_node")
 		for j=1,5 do
@@ -22,7 +22,7 @@ function adventure_view:init_info()
 	self.cur_chapter_num = 1
 end
 
-function adventure_view:initEvents()
+function adventure_view:init_events()
 
 	self.back_btn:addClickEventListener(function(sender)
         self.ctrl:close_adventure_view()

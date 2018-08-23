@@ -21,7 +21,7 @@ function confirm_view:init_info()
 	self.reward_list = {}
 end
 
-function confirm_view:initEvents()
+function confirm_view:init_events()
 	self.close_btn:addClickEventListener(function(sender)
         self.ctrl:close_confirm_view()
     end)

@@ -28,30 +28,30 @@ pve_game_ctrl.order = {
 
 pve_game_ctrl.OPERATE = {
 	[0] = function(is_wait, round_num)
-		if pve_game_ctrl:Instance().scene.battle_info_view:isInited() then
-			pve_game_ctrl:Instance().scene:update_battle_queue(is_wait)
+		if pve_game_ctrl:instance().scene.battle_info_view:isInited() then
+			pve_game_ctrl:instance().scene:update_battle_queue(is_wait)
 		end
-		pve_game_ctrl:Instance().cur_active_monster:on_active(round_num)
+		pve_game_ctrl:instance().cur_active_monster:on_active(round_num)
 	end,
 
 	[1] = function(arena_pos)
-		pve_game_ctrl:Instance().cur_active_monster:move_to(arena_pos)
+		pve_game_ctrl:instance().cur_active_monster:move_to(arena_pos)
 	end,
 
 	[2] = function(target,distance)
-		pve_game_ctrl:Instance().cur_active_monster:attack(target,distance)
+		pve_game_ctrl:instance().cur_active_monster:attack(target,distance)
 	end,
 
 	[3] = function()
-		pve_game_ctrl:Instance().cur_active_monster:defend()
+		pve_game_ctrl:instance().cur_active_monster:defend()
 	end,
 
 	[4] = function()
-		pve_game_ctrl:Instance().cur_active_monster:wait()
+		pve_game_ctrl:instance().cur_active_monster:wait()
 	end,
 
 	[5] = function(target_pos_num)
-		pve_game_ctrl:Instance().cur_active_monster:use_skill(target_pos_num)
+		pve_game_ctrl:instance().cur_active_monster:use_skill(target_pos_num)
 	end,
 }
 
@@ -71,10 +71,10 @@ pve_game_ctrl.new = function(self)
 end
  
 pve_game_ctrl.instance = function(self)
-	if self.instance == nil then
-		self.instance = self:new()
+	if self._instance == nil then
+		self._instance = self:new()
 	end
-	return self.instance
+	return self._instance
 end
 
 pve_game_ctrl.init_game = function(self, left_team,right_team,map,chapter_num,level_num)

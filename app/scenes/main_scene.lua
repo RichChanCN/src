@@ -51,7 +51,7 @@ end
 
 main_scene.go_to_fight_scene = function(self)
 	local scene = cc.Scene:create()
-	local layer = self.app_:create_scene("fight_scene")
+	local layer = self:get_app():create_scene("fight_scene")
 	scene:addChild(layer)
 	if scene then
 		local ts = cc.TransitionFade:create(0.5, scene)

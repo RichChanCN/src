@@ -10,7 +10,7 @@ monster_info_view.RESOURCE_BINDING = {
 
 }
 
-function monster_info_view:initUI()
+function monster_info_view:init_ui()
     self:initLeftModelNode()
     self:initRightInfoNode()
 end
@@ -46,7 +46,7 @@ function monster_info_view:updateInfo(monster_list,index)
     end
 end
 
-function monster_info_view:initEvents()
+function monster_info_view:init_events()
 	self.back_btn:addClickEventListener(function(sender)
         self.ctrl:close_monster_info_view()
     end)

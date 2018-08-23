@@ -15,7 +15,7 @@ function monster_list_view:init_info()
 	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
 
-function monster_list_view:initEvents()
+function monster_list_view:init_events()
 	self.back_btn:addClickEventListener(function(sender)
         self.ctrl:close_monster_list_view()
     end)

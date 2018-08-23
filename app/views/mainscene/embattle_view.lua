@@ -16,7 +16,7 @@ embattle_view.RESOURCE_BINDING = {
 ----------------------------------------------------------------
 -------------------------------公有方法--------------------------
 ----------------------------------------------------------------
-function embattle_view:initUI()
+function embattle_view:init_ui()
 	self:initArena()
 end
 
@@ -57,7 +57,7 @@ function embattle_view:updateInfo(map_data)
 	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
 
-function embattle_view:initEvents()
+function embattle_view:init_events()
 	self:addArenaListener()
 	self.back_btn:addClickEventListener(function(sender)
         self.ctrl:close_embattle_view()
@@ -69,7 +69,7 @@ function embattle_view:initEvents()
     		return
     	end
     	local left_team = self:makeTeam()
-    	pve_game_ctrl:Instance():initGame(left_team,self.enemy_team,self.other_gezi,self.chapter_num,self.level_num)
+    	pve_game_ctrl:instance():init_game(left_team,self.enemy_team,self.other_gezi,self.chapter_num,self.level_num)
         self.ctrl:go_to_fight_scene()
     end)
 end
@@ -77,7 +77,7 @@ end
 function embattle_view:updateView(map_data)
 		self:updateInfo(map_data)
 		self:updateArena()
-		self:initEvents()
+		self:init_events()
 		self:initMonsterLV()
 		self:updateMonstersNum()
 		self.is_updated = true 
@@ -439,7 +439,7 @@ function embattle_view:updateArena()
 
 	for k,v in pairs(self.enemy_team) do
 		local chesspiece = self:createChesspiece(v,300+v:get_id())
-		local pos = v.start_pos
+		local pos = v:get_start_pos()
 		chesspiece:setPosition(self["gezi_"..pos.x.."_"..pos.y]:getPosition())
 	end
 

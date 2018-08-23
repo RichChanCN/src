@@ -15,7 +15,7 @@ result_view.RESOURCE_BINDING = {
     ["reward_template"]     = {["varname"] = "reward_template"},
 }
 
-function result_view:initEvents()
+function result_view:init_events()
     uitool:makeImgToButton(self.left_btn_img,function(sender)
     	self.ctrl:close_result_view()
     	self.ctrl:go_to_main_scene()

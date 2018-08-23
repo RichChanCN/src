@@ -47,7 +47,6 @@ end
 monster_base.new = function(self, data, team_side, arena_pos)
 
 	team_side = team_side or self.TeamSide.NONE
-	pos = pos or cc.p(1,1)
 
 	self.id 					= data.id
 	self.name 					= data.name
@@ -108,6 +107,10 @@ end
 
 monster_base.get_id = function(self)
 	return self.id
+end
+
+monster_base.get_start_pos = function(self)
+	return self._start_pos
 end
 
 monster_base.get_cur_pos_num = function(self)
@@ -173,9 +176,9 @@ end
 monster_base.get_alive_enemy_monsters = function(self)
 	local enemy_list
 	if self:is_player() then
-		enemy_list = pve_game_ctrl:Instance():get_right_alive_monsters()
+		enemy_list = pve_game_ctrl:instance():get_right_alive_monsters()
 	else
-		enemy_list = pve_game_ctrl:Instance():get_left_alive_monsters()
+		enemy_list = pve_game_ctrl:instance():get_left_alive_monsters()
 	end
 
 	return enemy_list
@@ -184,9 +187,9 @@ end
 monster_base.get_alive_friend_monsters = function(self)
 	local friend_list
 	if not self:is_player() then
-		friend_list = pve_game_ctrl:Instance():get_right_alive_monsters()
+		friend_list = pve_game_ctrl:instance():get_right_alive_monsters()
 	else
-		friend_list = pve_game_ctrl:Instance():get_left_alive_monsters()
+		friend_list = pve_game_ctrl:instance():get_left_alive_monsters()
 	end
 
 	return friend_list
@@ -311,7 +314,7 @@ monster_base.on_active = function(self, round_num)
 	if self:can_active() then
 		self:active()
 	else
-		pve_game_ctrl:Instance():next_monster_activate()
+		pve_game_ctrl:instance():next_monster_activate()
 	end
 end
 
@@ -320,9 +323,9 @@ monster_base.active = function(self)
 	self.node:stopAction(ac1)
 	local cb = function()
 		self.node:setVisible(true)
-		if self:is_player() and not pve_game_ctrl:Instance():get_auto() then
+		if self:is_player() and not pve_game_ctrl:instance():get_auto() then
 			self:change_monster_status(monster_base.status.ALIVE)
-			pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.WAIT_ORDER)
+			pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.WAIT_ORDER)
 		else
 			self:run_ai()
 		end
@@ -348,7 +351,7 @@ end
 ----------------------------Ö÷¶¯´¥·¢----------------------------------
 ----------------------------Ö÷¶¯´¥·¢----------------------------------
 monster_base.move_to = function(self, arena_pos, attack_target, skill_target_pos)
-	pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 	local cb = function()
 		self._cur_pos = arena_pos
 		if attack_target then
@@ -359,9 +362,9 @@ monster_base.move_to = function(self, arena_pos, attack_target, skill_target_pos
 		else
 			self:change_monster_status(monster_base.status.ALIVE)
 			if self:nothing_can_do() then
-				pve_game_ctrl:Instance():next_monster_activate()
+				pve_game_ctrl:instance():next_monster_activate()
 			else
-				pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.WAIT_ORDER)
+				pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.WAIT_ORDER)
 			end
 		end
 	end
@@ -375,7 +378,7 @@ monster_base.move_to = function(self, arena_pos, attack_target, skill_target_pos
 end
 
 monster_base.attack = function(self, target, distance)
-	pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 	
 	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target.cur_pos)) then
 		self:move_and_Attack(target)
@@ -403,23 +406,23 @@ monster_base.wait = function(self, is_auto)
 	else
 		self:change_monster_status(monster_base.status.WAITING)
 		self._has_waited = true
-		pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
-		pve_game_ctrl:Instance():next_monster_activate(true)
+		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+		pve_game_ctrl:instance():next_monster_activate(true)
 	end
 end
 
 monster_base.defend = function(self)
 	self:change_monster_status(monster_base.status.DEFEND)
 	self:add_buff({Config.Buff.defend})
-	pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
-	pve_game_ctrl:Instance():next_monster_activate()
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+	pve_game_ctrl:instance():next_monster_activate()
 end
 
 monster_base.use_skill = function(self, target_pos_num)
 	if (not self.skill:is_need_target()) or (self:is_melee() and self:is_near(target_pos_num)) or (not self:is_melee()) then
 		self.skill:play()
 		self:minus_anger(self.skill.cost)
-		pve_game_ctrl:Instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 		local cb = function()
 			self.skill:use(target_pos_num)
 		end
@@ -441,8 +444,8 @@ monster_base.die = function(self, is_buff_or_skill)
 	local ac = self.model:runAction(cc.FadeOut:create(1))
 	local cb = function()
 		self.node:setVisible(false)
-		if not pve_game_ctrl:Instance():is_game_over() then
-			pve_game_ctrl:Instance():check_game_over(is_buff_or_skill)
+		if not pve_game_ctrl:instance():is_game_over() then
+			pve_game_ctrl:instance():check_game_over(is_buff_or_skill)
 		end
 	end
 
@@ -464,7 +467,7 @@ monster_base.be_attacked = function(self, murderer, is_counter_attack, distance)
 				self:counter_attack(murderer)
 			else
 				self:toward_to_int_pos(cur_num, to_num)
-				pve_game_ctrl:Instance():next_monster_activate()
+				pve_game_ctrl:instance():next_monster_activate()
 			end
 		end
 		local callback = cc.CallFunc:create(handler(self, cb))
@@ -502,7 +505,7 @@ monster_base.be_affected_by_skill = function(self, skill, is_last)
 
 	if is_last then 
 		local cb = function()
-			pve_game_ctrl:Instance():next_monster_activate()
+			pve_game_ctrl:instance():next_monster_activate()
 		end
 		local callback = cc.CallFunc:create(cb)
 		self:do_something_later(callback,0.6)
@@ -811,7 +814,7 @@ monster_base.move_follow_path = function(self, arena_pos, callback_final)
 	local next_pos
 
 	for i = #path, 1, -1 do
-		local pos = pve_game_ctrl:Instance():get_position_by_int(path[i])
+		local pos = pve_game_ctrl:instance():get_position_by_int(path[i])
 		
 		if self:is_fly() then
 			pos.y = pos.y + 10
@@ -896,11 +899,11 @@ monster_base.create_attack_particle = function(self, target)
 	local particle = cc.ParticleSystemQuad:create(self._attack_particle)
 	particle:setScale(0.3)
 	particle:setName("attack")
-	local start_pos = pve_game_ctrl:Instance():get_position_by_int(self:get_cur_pos_num())
+	local start_pos = pve_game_ctrl:instance():get_position_by_int(self:get_cur_pos_num())
 	particle:setPosition(start_pos.x, start_pos.y)
-	local node = pve_game_ctrl:Instance():get_map_top_arena_node()
+	local node = pve_game_ctrl:instance():get_map_top_arena_node()
 	node:addChild(particle)
-	local end_pos = pve_game_ctrl:Instance():get_position_by_int(target:get_cur_pos_num())
+	local end_pos = pve_game_ctrl:instance():get_position_by_int(target:get_cur_pos_num())
 	local ac1 = particle:runAction(cc.MoveTo:create(0.5,cc.p(start_pos.x, start_pos.y + 30)))
 	particle:stopAction(ac1)
 	local ac2 = particle:runAction(cc.MoveTo:create(0.3,cc.p(end_pos.x, end_pos.y + 15)))
@@ -920,7 +923,7 @@ monster_base.get_around_info = function(self, is_to_show)
 		end
 	end
 
-	local map_info = pve_game_ctrl:Instance():get_map_info()
+	local map_info = pve_game_ctrl:instance():get_map_info()
 	self.can_reach_area_info = {}
 
 	if steps>0 then
@@ -1179,7 +1182,7 @@ end
 ----------------------------¸¨ÖúÅÐ¶Ï----------------------------------
 ----------------------------¸¨ÖúÅÐ¶Ï----------------------------------
 monster_base.nothing_can_do = function(self)
-	if pve_game_ctrl:Instance():get_auto() then
+	if pve_game_ctrl:instance():get_auto() then
 		return true
 	end
 	if not self:is_melee() then
@@ -1312,7 +1315,7 @@ end
 
 monster_base.do_something_later = function(self, callback, time)
 	local ac_node = cc.Node:create()
-    pve_game_ctrl:Instance():get_action_node():addChild(ac_node)
+    pve_game_ctrl:instance():get_action_node():addChild(ac_node)
     local default_ac = ac_node:runAction(cc.ScaleTo:create(time,1))
     local seq = cc.Sequence:create(default_ac,callback)
     ac_node:runAction(seq)
@@ -1355,7 +1358,7 @@ monster_base.run_ai = function(self)
 		end
 
 	else
-		local map_info = pve_game_ctrl:Instance():get_map_info()
+		local map_info = pve_game_ctrl:instance():get_map_info()
 		self:move_close_to_lowest_hp_enemy(enemy_list,map_info)
 	end
 end

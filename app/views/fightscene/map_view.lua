@@ -16,13 +16,13 @@ map_view.RESOURCE_BINDING = {
     ["logo_node"]			= {["varname"] = "logo_node"},
 }
 
-function map_view:initUI()
+function map_view:init_ui()
 	self:initPrePanel()
 	self:initArena()
 	self:initArenaBottomNode()
 end
 
-function map_view:initInfo()
+function map_view:init_info()
 	self.monster_model_list = {}
 	self.model_node_list = {}
 	self.monster_loaded_num = 0
@@ -36,7 +36,7 @@ function map_view:initInfo()
     self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
 
-function map_view:initEvents()
+function map_view:init_events()
 	self:pauseArenaListener()
 end
 
@@ -194,7 +194,7 @@ function map_view:createMonsterModel(monster)
 	local callback = function(model)
 		model:setScale(0.5)
 		local node = self.model_node_list[monster:getTag()]
-		local pos = monster.start_pos
+		local pos = monster:get_start_pos()
         local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
         if monster:is_fly() then
         	node:setPosition(x,y+10)

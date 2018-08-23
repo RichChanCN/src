@@ -10,7 +10,7 @@ setting_view.RESOURCE_BINDING = {
 function setting_view:init_info()
 end
 
-function setting_view:initEvents()
+function setting_view:init_events()
 	self.close_btn:addClickEventListener(function(sender)
         self:closeView()
     end)
