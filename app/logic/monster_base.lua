@@ -47,7 +47,6 @@ end
 monster_base.new = function(self, data, team_side, arena_pos)
 
 	team_side = team_side or self.TeamSide.NONE
-	pos = pos or cc.p(1,1)
 
 	self._id 					= data.id
 	self._name 					= data.name
