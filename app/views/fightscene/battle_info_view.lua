@@ -23,7 +23,7 @@ function battle_info_view:init_info()
 end
 
 function battle_info_view:init_events()
-    uitool:makeImgToButtonNoScale(self.skill_sp, function()
+    uitool:make_img_to_button_no_scale(self.skill_sp, function()
         if pve_game_ctrl:instance():is_wait_order() then
             if not self.queue_first.monster.skill:is_need_target() then
                 pve_game_ctrl:instance():runGame(pve_game_ctrl.order.USE_SKILL)
@@ -79,19 +79,19 @@ function battle_info_view:initRightBottom()
 end
 
 function battle_info_view:initRightBottomEvents()
-    uitool:makeImgToButtonNoScale(self.defend_img, function()
+    uitool:make_img_to_button_no_scale(self.defend_img, function()
         if pve_game_ctrl:instance():is_wait_order() then
             pve_game_ctrl:instance():request_defend()
         end
     end)
 
-    uitool:makeImgToButtonNoScale(self.wait_img, function()
+    uitool:make_img_to_button_no_scale(self.wait_img, function()
         if pve_game_ctrl:instance():is_wait_order() then
             pve_game_ctrl:instance():request_wait()
         end
     end)
 
-    uitool:makeImgToButtonNoScale(self.auto_img, function()
+    uitool:make_img_to_button_no_scale(self.auto_img, function()
         if pve_game_ctrl:instance():is_wait_order() then
             self.auto_icon:loadTexture(g_config.sprite.autoOn)
             pve_game_ctrl:instance():request_auto()
@@ -101,7 +101,7 @@ function battle_info_view:initRightBottomEvents()
         end
     end)
 
-    uitool:makeImgToButtonNoScale(self.exit_img, function()
+    uitool:make_img_to_button_no_scale(self.exit_img, function()
         self:get_ctrl():go_to_main_scene()
     end)
 end
@@ -146,7 +146,7 @@ function battle_info_view:updateLVItem(item,monster,update_only)
     item.child.level_text = item:getChildByName("level_text")
     
     item:loadTexture(monster.char_img_path)
-    item.child.border_img:loadTexture(g_config.sprite["team_card_border_"..monster.team_side])
+    item.child.border_img:loadTexture(g_config.sprite["team_card_border_"..monster:get_team_side()])
     item.child.level_text:setString(monster.level)
 
     self:updateAnger(item)

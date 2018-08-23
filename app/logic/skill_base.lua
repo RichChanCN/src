@@ -36,13 +36,13 @@ skill_base.use = function(self, target_pos_num)
 	if (not target_pos_num) and (not self._is_need_target) or self._range < 1 then
 		self.target_pos_num = self._caster:get_cur_pos_num()
 	elseif (not target_pos_num) and self._is_need_target then 
-		uitool:createTopTip(self._name.." need a target pos !")
+		uitool:create_top_tip(self._name.." need a target pos !")
 		return
 	end
 	local monster_list = self:get_be_affected_monster_list()
 	--pve_game_ctrl:instance():getScene():get_particle_node():removeChildByName(self._name)
 	if #monster_list < 1 then
-		uitool:createTopTip("no monster is affected by "..self._name)
+		uitool:create_top_tip("no monster is affected by "..self._name)
 		pve_game_ctrl:instance():next_monster_activate()
 	else
 		for i,v in ipairs(monster_list) do

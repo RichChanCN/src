@@ -63,9 +63,9 @@ embattle_view.init_events = function(self)
         self:get_ctrl():close_embattle_view()
     end)
 
-    uitool:makeImgToButton(self.fight_img,function()
+    uitool:make_img_to_button(self.fight_img,function()
     	if self.team_size < 1 then
-    		uitool:createTopTip("you should select 1 monster at least!", "red")
+    		uitool:create_top_tip("you should select 1 monster at least!", "red")
     		return
     	end
     	local left_team = self:make_team()
@@ -215,7 +215,7 @@ embattle_view.add_monster_card_event = function(self, img, index)
 					self:select_card(node)
 					self.target_node = nil
 				else
-					uitool:createTopTip("can't add more monsters!", "red")
+					uitool:create_top_tip("can't add more monsters!", "red")
 					uitool:move_to_and_fade_out(self.cur_drag_chesspiece, pos)
 				end
 			end

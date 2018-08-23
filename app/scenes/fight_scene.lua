@@ -28,7 +28,7 @@ fight_scene.onEnter = function(self)
 	self:view_init()
 	self:init_model()
 	self.map_view:initEnterAnimation()
-	self.map_view.root:setScale(0.75)
+	self.map_view:get_root():setScale(0.75)
 end
 
 fight_scene.onExit = function(self)
@@ -42,7 +42,7 @@ fight_scene.onEnterTransitionFinish = function(self)
 end
 
 fight_scene.start_game = function(self)
-	pve_game_ctrl:instance():setScene(self)
+	pve_game_ctrl:instance():set_scene(self)
 	pve_game_ctrl:instance():start_game()
 	self:open_battle_info_view()
 end
@@ -84,6 +84,10 @@ end
 
 fight_scene.get_particle_node = function(self)
 	return self.battle_info_view.particle_node
+end
+
+fight_scene.get_battle_info_view = function(self)
+	return self.battle_info_view
 end
 
 fight_scene.open_battle_info_view = function(self)

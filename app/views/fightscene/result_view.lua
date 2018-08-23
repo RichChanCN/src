@@ -16,12 +16,12 @@ result_view.RESOURCE_BINDING = {
 }
 
 function result_view:init_events()
-    uitool:makeImgToButton(self.left_btn_img,function(sender)
+    uitool:make_img_to_button(self.left_btn_img,function(sender)
     	self:get_ctrl():close_result_view()
     	self:get_ctrl():go_to_main_scene()
     end)
 
-    uitool:makeImgToButton(self.right_btn_img,function(sender)
+    uitool:make_img_to_button(self.right_btn_img,function(sender)
     	self:get_ctrl():close_result_view()
     	self:get_ctrl():go_to_main_scene()
     end)
@@ -63,13 +63,13 @@ function result_view:updateReward()
         if k1 == "monster" then
             for k2,v2 in pairs(v1) do
                 local card = self.reward_template:clone()
-                uitool:initMonsterCardWithIDAndNum(card, k2, v2)
+                uitool:init_monster_card_with_id_and_num(card, k2, v2)
                 self.reward_node:addChild(card)
                 table.insert(self.reward_list,card)
             end
         elseif (k1 == "coin" or k1 == "crystal") and v1 > 0 then
             local card = self.reward_template:clone()
-            uitool:initOtherCardWithTypeAndNum(card, k1, v1)
+            uitool:init_other_card_with_type_and_num(card, k1, v1)
             self.reward_node:addChild(card)
             table.insert(self.reward_list,card)
         end

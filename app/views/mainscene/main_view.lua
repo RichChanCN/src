@@ -27,16 +27,16 @@ end
 -- end
 
 main_view.init_events = function(self)
-	uitool:makeImgToButton(self.adventure_img,function(sender)
+	uitool:make_img_to_button(self.adventure_img,function(sender)
         self:get_ctrl():open_adventure_view()
         self:close_view()
     end)
 
-    uitool:makeImgToButton(self.train_img,function()
-        uitool:createTopTip("unenble yet!")
+    uitool:make_img_to_button(self.train_img,function()
+        uitool:create_top_tip("unenble yet!")
     end)
 
-    uitool:makeImgToButtonNoScale(self.title_face_sp, function ()
+    uitool:make_img_to_button_no_scale(self.title_face_sp, function ()
         self:get_ctrl():open_setting_view()
     end)
 

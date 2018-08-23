@@ -46,7 +46,7 @@ end
 
 monster_base.new = function(self, data, team_side, arena_pos)
 
-	team_side = team_side or self.TeamSide.NONE
+	team_side = team_side or monster_base.TeamSide.NONE
 
 	self.id 					= data.id
 	self.name 					= data.name
@@ -109,8 +109,16 @@ monster_base.get_id = function(self)
 	return self.id
 end
 
+monster_base.get_team_side = function(self)
+	return self._team_side
+end
+
 monster_base.get_start_pos = function(self)
 	return self._start_pos
+end
+
+monster_base.get_cur_pos = function(self)
+	return self._cur_pos
 end
 
 monster_base.get_cur_pos_num = function(self)
@@ -229,7 +237,7 @@ monster_base.is_monster = function(self)
 end
 
 monster_base.is_fly = function(self)
-	return self._move_type == Config.Monster_move_type.FLY
+	return self._move_type == g_config.monster_move_type.FLY
 end
 
 monster_base.is_dead = function(self)
@@ -241,7 +249,7 @@ monster_base.is_defend = function(self)
 end
 
 monster_base.is_melee = function(self)
-	return self._attack_type < Config.Monster_attack_type.SHOOTER
+	return self._attack_type < g_config.monster_attack_type.SHOOTER
 end
 
 monster_base.is_physical = function(self)
@@ -261,7 +269,7 @@ monster_base.is_player = function(self)
 end
 
 monster_base.is_enemy = function(self, monster)
-	return self._team_side ~= monster.team_side
+	return self._team_side ~= monster:get_team_side()
 end
 
 monster_base.is_be_back_attacked = function(self, murderer)
@@ -413,7 +421,7 @@ end
 
 monster_base.defend = function(self)
 	self:change_monster_status(monster_base.status.DEFEND)
-	self:add_buff({Config.Buff.defend})
+	self:add_buff({g_config.Buff.defend})
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 	pve_game_ctrl:instance():next_monster_activate()
 end
@@ -935,7 +943,7 @@ monster_base.get_around_info = function(self, is_to_show)
 		end
 
 		for k,v in pairs(map_info) do
-			if type(v) == type({}) and v.team_side == self._team_side then
+			if type(v) == type({}) and v:get_team_side() == self._team_side then
 				self.can_reach_area_info[k] = pve_game_ctrl.map_item.FRIEND
 			end
 		end
@@ -943,7 +951,7 @@ monster_base.get_around_info = function(self, is_to_show)
 
 	local can_attack_table = {}
 	for k,v in pairs(map_info) do
-		if type(v) == type({}) and v.team_side ~= self._team_side then
+		if type(v) == type({}) and v:get_team_side() ~= self._team_side then
 			if self:can_reach_and_attack(k) then
 				table.insert(can_attack_table,k)
 			else
@@ -1285,8 +1293,8 @@ monster_base.go_back_repeat_animate = function(self)
 end
 
 monster_base.repeat_animation = function(self, name)
-	if Config.Monster_animate[self._id][name] then
-    	local animate = Config.Monster_animate[self._id][name](self.animation)
+	if g_config.monster_animate[self:get_id()][name] then
+    	local animate = g_config.monster_animate[self:get_id()][name](self.animation)
 		self.model:stopAllActions()
         self.model:runAction(cc.RepeatForever:create(animate))
 
@@ -1297,8 +1305,8 @@ monster_base.repeat_animation = function(self, name)
 end
 
 monster_base.do_animation = function(self, name, cb)
-	if Config.Monster_animate[self._id][name] then
-    	local animate = Config.Monster_animate[self._id][name](self.animation)
+	if g_config.monster_animate[self:get_id()][name] then
+    	local animate = g_config.monster_animate[self:get_id()][name](self.animation)
 		local callback = cc.CallFunc:create(handler(self,self.go_back_repeat_animate))
 		self.model:stopAllActions()
 		local seq

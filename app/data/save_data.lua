@@ -121,7 +121,7 @@ save_data.add_exp = function(self, exp)
 		self.player.exp = 0
 		self.player.cur_max_exp = (100 + (self.player.level - 1) * 20)
 		self:add_exp(exp)
-		uitool:createTopTip("Level up!", "green")
+		uitool:create_top_tip("Level up!", "green")
 	end
 end
 

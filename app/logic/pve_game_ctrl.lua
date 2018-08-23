@@ -28,30 +28,30 @@ pve_game_ctrl.order = {
 
 pve_game_ctrl.OPERATE = {
 	[0] = function(is_wait, round_num)
-		if pve_game_ctrl:instance().scene.battle_info_view:is_inited() then
-			pve_game_ctrl:instance().scene:update_battle_queue(is_wait)
+		if pve_game_ctrl:instance():get_scene():get_battle_info_view():is_inited() then
+			pve_game_ctrl:instance():get_scene():update_battle_queue(is_wait)
 		end
-		pve_game_ctrl:instance().cur_active_monster:on_active(round_num)
+		pve_game_ctrl:instance():get_cur_active_monster():on_active(round_num)
 	end,
 
 	[1] = function(arena_pos)
-		pve_game_ctrl:instance().cur_active_monster:move_to(arena_pos)
+		pve_game_ctrl:instance():get_cur_active_monster():move_to(arena_pos)
 	end,
 
 	[2] = function(target,distance)
-		pve_game_ctrl:instance().cur_active_monster:attack(target,distance)
+		pve_game_ctrl:instance():get_cur_active_monster():attack(target,distance)
 	end,
 
 	[3] = function()
-		pve_game_ctrl:instance().cur_active_monster:defend()
+		pve_game_ctrl:instance():get_cur_active_monster():defend()
 	end,
 
 	[4] = function()
-		pve_game_ctrl:instance().cur_active_monster:wait()
+		pve_game_ctrl:instance():get_cur_active_monster():wait()
 	end,
 
 	[5] = function(target_pos_num)
-		pve_game_ctrl:instance().cur_active_monster:use_skill(target_pos_num)
+		pve_game_ctrl:instance():get_cur_active_monster():use_skill(target_pos_num)
 	end,
 }
 
@@ -60,13 +60,13 @@ pve_game_ctrl.new = function(self)
 	setmetatable(o,self)
 	self.__index = self
 	
-	self.left_team = {}
-	self.right_team = {}
-	self.wait_list = {}
-	self.all_monsters = {}
-	self.map_info = {}
-	self.cur_round_monster_queue = {}
-	self.next_round_monster_queue = {}
+	self._left_team = {}
+	self._right_team = {}
+	self._all_monsters = {}
+	self._map_info = {}
+	self._cur_round_monster_queue = {}
+	self._next_round_monster_queue = {}
+
 	return o
 end
  
@@ -78,31 +78,31 @@ pve_game_ctrl.instance = function(self)
 end
 
 pve_game_ctrl.init_game = function(self, left_team,right_team,map,chapter_num,level_num)
-	self.game_speed = 1
-	self.is_use_skill = false
-	self.map = map
-	self.chapter_num = chapter_num
-	self.level_num = level_num
+	self._game_speed = 1
+	self._is_use_skill = false
+	self._map = map
+	self._chapter_num = chapter_num
+	self._level_num = level_num
 
-	self.left_team = {}
+	self._left_team = {}
 	for k,v in pairs(left_team) do
-		table.insert(self.left_team,v)
+		table.insert(self._left_team,v)
 	end
-	self.right_team = {}
+	self._right_team = {}
 	for k,v in pairs(right_team) do
-		table.insert(self.right_team,v)
+		table.insert(self._right_team,v)
 	end
 
 	self:sort_all_monsters_by_initiative()
-	self.cur_round_monster_queue = self:get_all_monsters()
+	self._cur_round_monster_queue = self:get_all_monsters()
 end
 
 pve_game_ctrl.start_game = function(self)
-	self.is_auto = false
-	self.cur_round_num = 1
-	self.cur_active_monster_index = 1
-	self.cur_active_monster = self.cur_round_monster_queue[self.cur_active_monster_index]
-	self.cur_game_status = pve_game_ctrl.game_status.ACTIVE
+	self._is_auto = false
+	self._cur_round_num = 1
+	self._cur_active_monster_index = 1
+	self._cur_active_monster = self._cur_round_monster_queue[self._cur_active_monster_index]
+	self._cur_game_status = pve_game_ctrl.game_status.ACTIVE
 	self:update_map_info()
 	self:run_game(pve_game_ctrl.order.ACTIVATE)
 end
@@ -115,7 +115,7 @@ end
 pve_game_ctrl.game_over = function(self, win_side)
 	self:set_game_status(pve_game_ctrl.game_status.OVER)
 	local result = self:get_game_result(win_side)
-	self.scene:game_over(result)
+	self._scene:game_over(result)
 	if win_side == 1 then
 		local table = self:get_left_alive_monsters()
 		for k,v in pairs(table) do
@@ -132,17 +132,17 @@ end
 pve_game_ctrl.next_monster_activate = function(self, is_wait)
 	self:set_is_use_skill(false)
 	if is_wait then
-		table.insert(self.cur_round_monster_queue,self.cur_active_monster)
-		table.insert(self.next_round_monster_queue,self.cur_active_monster)
+		table.insert(self._cur_round_monster_queue,self._cur_active_monster)
+		table.insert(self._next_round_monster_queue,self._cur_active_monster)
 	end
-	if not self.cur_active_monster:has_waited() then
-		table.insert(self.next_round_monster_queue,self.cur_active_monster)
+	if not self._cur_active_monster:has_waited() then
+		table.insert(self._next_round_monster_queue,self._cur_active_monster)
 	end
-	self.cur_active_monster = self:get_next_monster()
+	self._cur_active_monster = self:get_next_monster()
 
-	if not self.cur_active_monster then
+	if not self._cur_active_monster then
 		self:start_next_round()
-	elseif self.cur_active_monster:is_dead() then
+	elseif self._cur_active_monster:is_dead() then
 		self:next_monster_activate()
 	else
 		self:run_game(pve_game_ctrl.order.ACTIVATE,is_wait)
@@ -150,19 +150,19 @@ pve_game_ctrl.next_monster_activate = function(self, is_wait)
 end
 
 pve_game_ctrl.start_next_round = function(self)
-	print("round "..self.cur_round_num.."finish")
-	self.cur_round_num = self.cur_round_num + 1
-	self.cur_active_monster_index = 1
-	self.cur_round_monster_queue = self.next_round_monster_queue
-	self.next_round_monster_queue = {}
+	print("round "..self._cur_round_num.."finish")
+	self._cur_round_num = self._cur_round_num + 1
+	self._cur_active_monster_index = 1
+	self._cur_round_monster_queue = self._next_round_monster_queue
+	self._next_round_monster_queue = {}
 	
 	self:alive_monster_enter_new_round()
 	
-	self.cur_active_monster = self.cur_round_monster_queue[self.cur_active_monster_index]
-	while self.cur_active_monster:is_dead() do
-		self.cur_active_monster = self:get_next_monster()
+	self._cur_active_monster = self._cur_round_monster_queue[self._cur_active_monster_index]
+	while self._cur_active_monster:is_dead() do
+		self._cur_active_monster = self:get_next_monster()
 	end
-	self.cur_game_status = pve_game_ctrl.game_status.ACTIVE
+	self._cur_game_status = pve_game_ctrl.game_status.ACTIVE
 	self:update_map_info()
 	self:run_game(pve_game_ctrl.order.ACTIVATE)
 end
@@ -170,41 +170,41 @@ end
 pve_game_ctrl.alive_monster_enter_new_round = function(self)
 	local all_alive_monster = self:get_all_alive_monsters()
 	for k,v in pairs(all_alive_monster) do
-		v:on_enter_new_round(self.cur_round_num)
+		v:on_enter_new_round(self._cur_round_num)
 	end
 end
 
 pve_game_ctrl.update_map_info = function(self)
-	self.map_info = {}
+	self._map_info = {}
 
-	for k,v in pairs(self.map) do
-		table.insert(self.map_info,k,v)
+	for k,v in pairs(self._map) do
+		table.insert(self._map_info,k,v)
 	end
 	
 	local monsters = self:get_all_alive_monsters()
 	for k,v in pairs(monsters) do
-		self.map_info[gtool:ccp_2_int(v.cur_pos)] = v
+		self._map_info[gtool:ccp_2_int(v:get_cur_pos())] = v
 	end
 end
 
 pve_game_ctrl.change_game_status = function(self, status)
-	self.cur_game_status = status
+	self._cur_game_status = status
 	self:update_map_info()
-	self.scene:update_map_view()
+	self._scene:update_map_view()
 end
 
 pve_game_ctrl.select_pos = function(self, node)
-	if self.map_info[gtool:ccp_2_int(node.arena_pos)] then
-		uitool:createTopTip("you can't do that!")
+	if self._map_info[gtool:ccp_2_int(node.arena_pos)] then
+		uitool:create_top_tip("you can't do that!")
 	else
 		self:run_game(pve_game_ctrl.order.MOVE, node.arena_pos)
 	end
 end
 
 pve_game_ctrl.select_target = function(self, num, distance)
-	if self.map_info[num] and self.map_info[num]:is_monster() then
+	if self._map_info[num] and self._map_info[num]:is_monster() then
 		if not self:get_is_use_skill() then
-			self:run_game(pve_game_ctrl.order.ATTACK, self.map_info[num],distance)
+			self:run_game(pve_game_ctrl.order.ATTACK, self._map_info[num],distance)
 		else
 			self:run_game(pve_game_ctrl.order.USE_SKILL, num)
 			self:set_is_use_skill(false)
@@ -224,7 +224,7 @@ end
 pve_game_ctrl.request_auto = function(self)
 	self:set_auto(true)
 	if self:get_game_status() == pve_game_ctrl.game_status.WAIT_ORDER then
-		self.cur_active_monster:runAI()
+		self._cur_active_monster:runAI()
 	end
 	self:set_game_status(pve_game_ctrl.game_status.AUTO)
 end
@@ -248,17 +248,17 @@ pve_game_ctrl.check_game_over = function(self, is_buff)
 end
 
 pve_game_ctrl.set_is_use_skill = function(self, is_use_skill)
-	self.is_use_skill = is_use_skill
+	self._is_use_skill = is_use_skill
 end
 
 pve_game_ctrl.set_scene = function(self, scene)
-	self.action_node = cc.Node:create()
-	self.scene = scene
-	self.scene:addChild(self.action_node)
+	self._action_node = cc.Node:create()
+	self._scene = scene
+	self._scene:addChild(self._action_node)
 end
 
-pve_game_ctrl.get_scene = function(self, scene)
-	return self.scene
+pve_game_ctrl.get_scene = function(self)
+	return self._scene
 end
 
 pve_game_ctrl.get_game_result = function(self, win_side)
@@ -267,7 +267,7 @@ pve_game_ctrl.get_game_result = function(self, win_side)
 
 	if win_side == 1 then
 		star_num = star_num + 1
-		if self.cur_round_num < 6 then
+		if self._cur_round_num < 6 then
 			star_num = star_num + 1
 		end
 		if self:get_dead_monster_num() < 1 then
@@ -277,8 +277,8 @@ pve_game_ctrl.get_game_result = function(self, win_side)
 
 	result.star_num = star_num 
 
-	result.chapter_num = self.chapter_num
-	result.level_num = self.level_num
+	result.chapter_num = self._chapter_num
+	result.level_num = self._level_num
 
 	return result
 end
@@ -286,7 +286,7 @@ end
 pve_game_ctrl.get_dead_monster_num = function(self)
 	local num = 0
 
-	for k,v in pairs(self.left_team) do
+	for k,v in pairs(self._left_team) do
 		if v:is_dead() then
 			num = num + 1
 		end
@@ -296,91 +296,91 @@ pve_game_ctrl.get_dead_monster_num = function(self)
 end
 
 pve_game_ctrl.get_next_monster = function(self)
-	self.cur_active_monster_index = self.cur_active_monster_index + 1
-	return self.cur_round_monster_queue[self.cur_active_monster_index]
+	self._cur_active_monster_index = self._cur_active_monster_index + 1
+	return self._cur_round_monster_queue[self._cur_active_monster_index]
 end
 
 pve_game_ctrl.get_is_use_skill = function(self)
-	return self.is_use_skill
+	return self._is_use_skill
 end
 
 pve_game_ctrl.set_auto = function(self, is_auto)
-	self.is_auto = is_auto
+	self._is_auto = is_auto
 end
 
 pve_game_ctrl.get_auto = function(self)
-	return self.is_auto
+	return self._is_auto
 end
 
 pve_game_ctrl.get_map = function(self)
-	return self.map
+	return self._map
 end
 
 pve_game_ctrl.get_map_info = function(self)
 	self:update_map_info()
-	return self.map_info
+	return self._map_info
 end
 
 pve_game_ctrl.get_action_node = function(self)
-	return self.action_node
+	return self._action_node
 end
 
 pve_game_ctrl.set_game_status = function(self, status)
-	self.cur_game_status = status
+	self._cur_game_status = status
 end
 
 pve_game_ctrl.get_game_status = function(self)
-	return self.cur_game_status
+	return self._cur_game_status
 end
 
 pve_game_ctrl.set_game_speed = function(self, speed)
-	self.game_speed = speed
+	self._game_speed = speed
 end
 
 pve_game_ctrl.get_game_speed = function(self)
-	return self.game_speed
+	return self._game_speed
 end
 
 pve_game_ctrl.get_cur_round_num = function(self)
-	return self.cur_round_num
+	return self._cur_round_num
 end
 
 pve_game_ctrl.get_cur_active_monster_index = function(self)
-	return self.cur_active_monster_index
+	return self._cur_active_monster_index
 end
 
 pve_game_ctrl.get_cur_active_monster = function(self)
-	return self.cur_active_monster
+	return self._cur_active_monster
 end
 
 pve_game_ctrl.get_cur_round_monster_queue = function(self)
-	return self.cur_round_monster_queue
+	return self._cur_round_monster_queue
 end
 
 pve_game_ctrl.get_next_round_monster_queue = function(self)
-	return self.next_round_monster_queue
+	return self._next_round_monster_queue
 end
 
 pve_game_ctrl.get_cur_chapter_and_level = function(self)
-	return self.chapter_num, self.level_num
+	return self._chapter_num, self._level_num
 end
 
 pve_game_ctrl.is_wait_order = function(self)
-	return self.cur_game_status == pve_game_ctrl.game_status.WAIT_ORDER
+	return self._cur_game_status == pve_game_ctrl.game_status.WAIT_ORDER
 end
 
 pve_game_ctrl.is_game_over = function(self)
-	return self.cur_game_status == pve_game_ctrl.game_status.OVER
+	return self._cur_game_status == pve_game_ctrl.game_status.OVER
 end
 
 pve_game_ctrl.get_all_monsters = function(self)
 	local all = {}
 	
-	for _,v in pairs(self.left_team) do
+	for _,v in pairs(self._left_team) do
 		table.insert(all,v)
 	end
 
-	for _,v in pairs(self.right_team) do
+	for _,v in pairs(self._right_team) do
 		table.insert(all,v)
 	end
 
@@ -391,13 +391,13 @@ end
 pve_game_ctrl.get_all_alive_monsters = function(self)
 	local all = {}
 	
-	for _,v in pairs(self.left_team) do
+	for _,v in pairs(self._left_team) do
 		if not v:is_dead() then
 			table.insert(all, v)
 		end
 	end
 
-	for _,v in pairs(self.right_team) do
+	for _,v in pairs(self._right_team) do
 		if not v:is_dead() then
 			table.insert(all, v)
 		end
@@ -409,7 +409,7 @@ end
 pve_game_ctrl.get_left_alive_monsters = function(self)
 	local all = {}
 	
-	for _,v in pairs(self.left_team) do
+	for _,v in pairs(self._left_team) do
 		if not v:is_dead() then
 			table.insert(all, v)
 		end
@@ -421,7 +421,7 @@ end
 pve_game_ctrl.get_right_alive_monsters = function(self)
 	local all = {}
 	
-	for _,v in pairs(self.right_team) do
+	for _,v in pairs(self._right_team) do
 		if not v:is_dead() then
 			table.insert(all,v)
 		end
@@ -443,7 +443,7 @@ pve_game_ctrl.sort_all_monsters_by_initiative = function(self)
 		end
 	end
 
-	table.sort(self.all_monsters,sort_by_initiative)
+	table.sort(self._all_monsters,sort_by_initiative)
 end
 
 pve_game_ctrl.sort_monsters_by_initiative = function(self, list)
@@ -465,7 +465,7 @@ end
 pve_game_ctrl.get_all_alive_monsters_in_next_round_queue = function(self)
 	local list = {}
 	
-	for _,v in pairs(self.next_round_monster_queue) do
+	for _,v in pairs(self._next_round_monster_queue) do
 		if not v:is_dead() then
 			table.insert(list, v)
 		end
@@ -477,7 +477,7 @@ end
 pve_game_ctrl.get_all_alive_monsters_in_cur_round_queue = function(self)
 	local list = {}
 	
-	for _,v in pairs(self.cur_round_monster_queue) do
+	for _,v in pairs(self._cur_round_monster_queue) do
 		if not v:is_dead() then
 			table.insert(list, v)
 		end
@@ -515,16 +515,16 @@ pve_game_ctrl.get_monster_index_in_cur_round_alive_monster = function(self, mons
 end
 
 pve_game_ctrl.get_position_by_int = function(self, num)
-	return self.scene.map_view:get_position_by_int(num)
+	return self._scene.map_view:get_position_by_int(num)
 end
 
 pve_game_ctrl.get_map_top_arena_node = function(self)
-	return self.scene.map_view.arena_top_node
+	return self._scene.map_view.arena_top_node
 end
 
 pve_game_ctrl.clear_team = function(self)
-	self.left_team = {}
+	self._left_team = {}
 
-	self.right_team = {}
+	self._right_team = {}
 
 end

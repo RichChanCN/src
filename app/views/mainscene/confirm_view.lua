@@ -25,7 +25,7 @@ confirm_view.init_events = function(self)
 	self.close_btn:addClickEventListener(function(sender)
         self:get_ctrl():close_confirm_view()
     end)
-    uitool:makeImgToButton(self.go_img, function(sender)
+    uitool:make_img_to_button(self.go_img, function(sender)
     	self:get_ctrl():close_confirm_view()
     	self:get_ctrl():open_specific_embattle_view(self.chapter_num, self.level_num)
     end)
@@ -69,13 +69,13 @@ confirm_view.updateReward = function(self)
 			if k1 == "monster" then
 				for k2, v2 in pairs(v1) do
 					local card = self.reward_template:clone()
-					uitool:initMonsterCardWithIDAndNum(card, k2, v2)
+					uitool:init_monster_card_with_id_and_num(card, k2, v2)
 					self.reward_node:addChild(card)
 					table.insert(self.reward_list,card)
 				end
 			elseif (k1 == "coin" or k1 == "crystal") and v1 > 0 then
 				local card = self.reward_template:clone()
-				uitool:initOtherCardWithTypeAndNum(card, k1, v1)
+				uitool:init_other_card_with_type_and_num(card, k1, v1)
 				self.reward_node:addChild(card)
 				table.insert(self.reward_list,card)
 			end

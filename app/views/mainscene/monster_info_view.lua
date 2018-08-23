@@ -58,7 +58,7 @@ monster_info_view.init_events = function(self)
     self.right_btn:addClickEventListener(function(sender)
         self:update_view(self.monster_list,self.last_index)
     end)
-    uitool:makeImgToButton(self.upgrade_img,function()
+    uitool:make_img_to_button(self.upgrade_img,function()
         if self.monster_data.card_num and not(self.monster_data.card_num < self.monster_data.level) then
             game_data_ctrl:instance():requestUpgradeMonster(self.monster_data.id)
             self:upgrade_update()
