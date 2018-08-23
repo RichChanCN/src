@@ -74,7 +74,7 @@ fight_scene.view_init = function(self)
 end
 
 fight_scene.update_map_view = function(self)
-	self.map_view:updateView()
+	self.map_view:update_view()
 end
 
 
@@ -87,11 +87,11 @@ fight_scene.get_particle_node = function(self)
 end
 
 fight_scene.open_battle_info_view = function(self)
-	self.battle_info_view:openView()
+	self.battle_info_view:open_view()
 end
 
 fight_scene.close_battle_info_view = function(self)
-	self.battle_info_view:closeView()
+	self.battle_info_view:close_view()
 end
 
 fight_scene.set_result = function(self, result)
@@ -99,11 +99,11 @@ fight_scene.set_result = function(self, result)
 end
 
 fight_scene.open_result_view = function(self)
-	self.result_view:openView()
+	self.result_view:open_view()
 end
 
 fight_scene.close_result_view = function(self)
-	self.result_view:closeView()
+	self.result_view:close_view()
 end
 
 fight_scene.show_guide = function(self)

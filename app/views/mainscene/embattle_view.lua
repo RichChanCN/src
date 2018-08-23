@@ -25,7 +25,7 @@ function embattle_view:init_info()
 	self.other_gezi = {}
 end
 
-function embattle_view:updateInfo(map_data)
+function embattle_view:update_info(map_data)
 	self.chapter_num = map_data.chapter_num
 	self.level_num = map_data.level_num
 	--上场怪物数量限制
@@ -60,7 +60,7 @@ end
 function embattle_view:init_events()
 	self:addArenaListener()
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:close_embattle_view()
+        self:get_ctrl():close_embattle_view()
     end)
 
     uitool:makeImgToButton(self.fight_img,function()
@@ -70,15 +70,15 @@ function embattle_view:init_events()
     	end
     	local left_team = self:makeTeam()
     	pve_game_ctrl:instance():init_game(left_team,self.enemy_team,self.other_gezi,self.chapter_num,self.level_num)
-        self.ctrl:go_to_fight_scene()
+        self:get_ctrl():go_to_fight_scene()
     end)
 end
 
-function embattle_view:updateView(map_data)
-		self:updateInfo(map_data)
+function embattle_view:update_view(map_data)
+		self:update_info(map_data)
 		self:updateArena()
 		self:init_events()
-		self:initMonsterLV()
+		self:init_monster_lv()
 		self:updateMonstersNum()
 		self.is_updated = true 
 end
@@ -87,7 +87,7 @@ function embattle_view:updateMonstersNum()
 	self.select_num_text:setString("MonsterSelect ("..self.team_size.."/"..self.monster_num_limit..")")
 end
 
-function embattle_view:onOpen(...)
+function embattle_view:on_open(...)
 	local params = {...}
 	local chapter_num = params[1]
 	local level_num = params[2]
@@ -97,15 +97,15 @@ function embattle_view:onOpen(...)
 		self:resetArena()
 		self.monster_lv:removeAllItems()
 		self.hex_node:removeAllChildren()
-		self:updateView(map_data)
+		self:update_view(map_data)
 	end
 	if self.is_updated then
-		self:resumeMonsterListListener()
+		self:resume_monster_list_listener()
 		self:resumeArenaListener()
 	end
 end
 
-function embattle_view:onClose()
+function embattle_view:on_close()
 	self:removeArenaListener()
 	self:removeMonsterListListener()
 	self:resetArena()
@@ -124,7 +124,7 @@ function embattle_view:makeTeam()
 	return team
 end
 ------------左边卡池部分开始------------
-function embattle_view:initMonsterLV()
+function embattle_view:init_monster_lv()
 	local monsters_num = #self.can_use_monster_list
 	local mod_num = monsters_num%3
 	local rows_num = monsters_num/3
@@ -135,12 +135,12 @@ function embattle_view:initMonsterLV()
 
 	for i = 1, rows_num do
 		local item = self.template_panel:clone()
-		self:initLVItem(item, i-1) --这里-1是为了里面好计算正真的索引值
+		self:init_lv_item(item, i-1) --这里-1是为了里面好计算正真的索引值
 		self.monster_lv:pushBackCustomItem(item)
 	end
 end
 
-function embattle_view:initLVItem(item, index)
+function embattle_view:init_lv_item(item, index)
 	for i=1,3 do
 		local cur_index = i+3*index
 		local cur_monster = {}
@@ -259,7 +259,7 @@ function embattle_view:unselectTheCard(card)
 	end
 end
 
-function embattle_view:resumeMonsterListListener()
+function embattle_view:resume_monster_list_listener()
 	for _,v in pairs(self.card_list) do
 		if not v.selected then
 			self.eventDispatcher:resumeEventListenersForTarget(v)
@@ -267,7 +267,7 @@ function embattle_view:resumeMonsterListListener()
 	end
 end
 
-function embattle_view:pauseMonsterListListener()
+function embattle_view:pause_monster_list_listener()
 	for _,v in pairs(self.card_list) do
 		if not v.selected then
 			self.eventDispatcher:pauseEventListenersForTarget(v)

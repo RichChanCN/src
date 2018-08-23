@@ -40,7 +40,7 @@ function map_view:init_events()
 	self:pauseArenaListener()
 end
 
-function map_view:updateView()
+function map_view:update_view()
 	if Judgment:Instance():is_wait_order() then
 		self:show_guide()
 	else

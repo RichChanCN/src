@@ -19,7 +19,7 @@ function main_view:init_ui()
 end
 
 -- function main_view:init_info()
---     local player_data = self.ctrl:get_player_data()
+--     local player_data = self:get_ctrl():get_player_data()
 --     self.nickname = player_data.nickname
 --     self.face_sp = player_data.face_sp
 --     self.exp = player_data.exp
@@ -28,8 +28,8 @@ end
 
 function main_view:init_events()
 	uitool:makeImgToButton(self.adventure_img,function(sender)
-        self.ctrl:open_adventure_view()
-        self:closeView()
+        self:get_ctrl():open_adventure_view()
+        self:close_view()
     end)
 
     uitool:makeImgToButton(self.train_img,function()
@@ -37,13 +37,13 @@ function main_view:init_events()
     end)
 
     uitool:makeImgToButtonNoScale(self.title_face_sp, function ()
-        self.ctrl:open_setting_view()
+        self:get_ctrl():open_setting_view()
     end)
 
     self:initRightBottomBtnEvents()
 end
 
-function main_view:updateInfo()
+function main_view:update_info()
     local player_data = game_data_ctrl:instance():get_player_data()
     self.nickname = player_data.nickname
     self.face_sp = player_data.face_sp
@@ -52,7 +52,7 @@ function main_view:updateInfo()
     self.level = player_data.level
 end
 
-function main_view:updateView()
+function main_view:update_view()
     self.nickname_text:setString(self.nickname)
     self.title_face_sp:setTexture(g_config.monster_img_path..self.face_sp)
     self.nickname_text:setString(self.nickname)
@@ -60,9 +60,9 @@ function main_view:updateView()
     uitool:set_progress_bar(self.exp_now_img, self.exp/self.cur_max_exp)
 end
 
-function main_view:onOpen()
-    self:updateInfo()
-    self:updateView()
+function main_view:on_open()
+    self:update_info()
+    self:update_view()
 end
 
 ----------------------------------------------------------------
@@ -90,7 +90,7 @@ end
 
 function main_view:initRightBottomBtnEvents()
     self.monster_btn:addClickEventListener(function(sender)
-        self.ctrl:open_monster_list_view()
+        self:get_ctrl():open_monster_list_view()
     end)
 end
 

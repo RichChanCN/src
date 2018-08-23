@@ -23,15 +23,15 @@ end
 
 function confirm_view:init_events()
 	self.close_btn:addClickEventListener(function(sender)
-        self.ctrl:close_confirm_view()
+        self:get_ctrl():close_confirm_view()
     end)
     uitool:makeImgToButton(self.go_img,function(sender)
-    	self.ctrl:close_confirm_view()
-    	self.ctrl:open_specific_embattle_view(self.chapter_num,self.level_num)
+    	self:get_ctrl():close_confirm_view()
+    	self:get_ctrl():open_specific_embattle_view(self.chapter_num,self.level_num)
     end)
 end
 
-function confirm_view:updateInfo(chapter_num,level_num)
+function confirm_view:update_info(chapter_num,level_num)
 	self.reward_data = game_data_ctrl:instance():get_reward_by_chapter_and_level(chapter_num, level_num)
 	self.reward_list = {}
 
@@ -42,7 +42,7 @@ function confirm_view:updateInfo(chapter_num,level_num)
 	self.level_num = level_num
 end
 
-function confirm_view:updateView()
+function confirm_view:update_view()
 	self.stage_text:setString("Stage "..self.chapter_num.."-"..self.level_num)
 
 	for i=1,3 do
@@ -94,10 +94,10 @@ function confirm_view:updateReward()
 
 end
 
-function confirm_view:onOpen(...)
+function confirm_view:on_open(...)
 	local params = {...}
-	self:updateInfo(params[1],params[2])
-	self:updateView()
+	self:update_info(params[1],params[2])
+	self:update_view()
 end
 
 

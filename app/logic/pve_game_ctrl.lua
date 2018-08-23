@@ -28,7 +28,7 @@ pve_game_ctrl.order = {
 
 pve_game_ctrl.OPERATE = {
 	[0] = function(is_wait, round_num)
-		if pve_game_ctrl:instance().scene.battle_info_view:isInited() then
+		if pve_game_ctrl:instance().scene.battle_info_view:is_inited() then
 			pve_game_ctrl:instance().scene:update_battle_queue(is_wait)
 		end
 		pve_game_ctrl:instance().cur_active_monster:on_active(round_num)

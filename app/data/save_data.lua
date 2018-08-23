@@ -10,7 +10,7 @@ save_data.number_index = {
 }
 
 save_data.init = function(self, ctrl)
-	self.ctrl = ctrl
+	self._ctrl = ctrl
 	self.collected_monsters = {}
 	self:init_info()
 	self:load_data()

@@ -17,22 +17,22 @@ result_view.RESOURCE_BINDING = {
 
 function result_view:init_events()
     uitool:makeImgToButton(self.left_btn_img,function(sender)
-    	self.ctrl:close_result_view()
-    	self.ctrl:go_to_main_scene()
+    	self:get_ctrl():close_result_view()
+    	self:get_ctrl():go_to_main_scene()
     end)
 
     uitool:makeImgToButton(self.right_btn_img,function(sender)
-    	self.ctrl:close_result_view()
-    	self.ctrl:go_to_main_scene()
+    	self:get_ctrl():close_result_view()
+    	self:get_ctrl():go_to_main_scene()
     end)
 end
 
-function result_view:updateInfo()
+function result_view:update_info()
     self.reward_data = game_data_ctrl:instance():get_reward_by_chapter_and_level(self.result.chapter_num, self.result.level_num)
     self.reward_list = {}
 end
 
-function result_view:updateView()
+function result_view:update_view()
     for i=1,3 do
         if not (i > self.result.star_num) then
             self["star_"..i]:loadTexture(g_config.sprite.result_star_got)
@@ -98,10 +98,10 @@ function result_view:set_result(result)
     self.result = result
 end
 
-function result_view:onOpen()
+function result_view:on_open()
     if self.result and type(self.result) == type({}) then
-       self:updateInfo()
-       self:updateView()
+       self:update_info()
+       self:update_view()
     end
 end
 

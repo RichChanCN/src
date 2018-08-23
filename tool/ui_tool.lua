@@ -35,9 +35,9 @@ function uitool:get_node_bottom_center_position(node)
 end
 
 function uitool:create_ui_binding(panel,binding)
-    assert(panel.root, "uitool:createResourceBinding() - not load resource node")
+    assert(panel:get_root(), "uitool:createResourceBinding() - not load resource node")
 	for nodeName, nodeBinding in pairs(binding) do
-        local node = self:seek_child_node(panel.root, nodeName);
+        local node = self:seek_child_node(panel:get_root(), nodeName);
         if nodeBinding.varname then
             panel[nodeBinding.varname] = node
         end

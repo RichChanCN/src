@@ -61,100 +61,100 @@ end
 
 main_scene.open_main_view = function(self)
 	if self.main_view then
-		self.main_view:openView()
+		self.main_view:open_view()
 	end
 end
 
 main_scene.close_main_view = function(self)
 	if self.main_view then
-		self.main_view:closeView()
+		self.main_view:close_view()
 	end
 end
 
 main_scene.open_title_right_view = function(self)
 	if self.title_right_view then
-		self.title_right_view:openView()
+		self.title_right_view:open_view()
 	end
 end
 
 main_scene.open_monster_list_view = function(self)
 	if self.monster_list_view then
-		self.main_view:closeView()
-		self.monster_list_view:openView()
+		self.main_view:close_view()
+		self.monster_list_view:open_view()
 	end
 end
 
 main_scene.close_monster_list_view = function(self)
 	if self.monster_list_view then
-        self.main_view:openView()
-		self.monster_list_view:closeView()
+        self.main_view:open_view()
+		self.monster_list_view:close_view()
 	end
 end
 
 main_scene.open_monster_info_view = function(self, monster_list, index)
 	if self.monster_info_view then
-		self.monster_list_view:closeView()
-		self.monster_info_view:openView(monster_list,index)
+		self.monster_list_view:close_view()
+		self.monster_info_view:open_view(monster_list,index)
 	end
 end
 
 main_scene.close_monster_info_view = function(self)
 	if self.monster_info_view then
-        self.monster_list_view:openView()
-		self.monster_info_view:closeView()
+        self.monster_list_view:open_view()
+		self.monster_info_view:close_view()
 	end
 end
 
 main_scene.open_adventure_view = function(self)
 	if self.adventure_view then
-		self.main_view:closeView()
-		self.adventure_view:openView()
+		self.main_view:close_view()
+		self.adventure_view:open_view()
 	end
 end
 
 main_scene.close_adventure_view = function(self)
 	if self.adventure_view then
-        self.main_view:openView()
-		self.adventure_view:closeView()
+        self.main_view:open_view()
+		self.adventure_view:close_view()
 	end
 end
 
 main_scene.open_embattle_view = function(self)
 	if self.embattle_view then
-        self.adventure_view:closeView()
-		self.embattle_view:openView()
+        self.adventure_view:close_view()
+		self.embattle_view:open_view()
 	end
 end
 
 main_scene.open_specific_embattle_view = function(self, chapter_num, level_num)
 	if self.embattle_view then
-        self.adventure_view:closeView()
-		self.embattle_view:openView(chapter_num, level_num)
+        self.adventure_view:close_view()
+		self.embattle_view:open_view(chapter_num, level_num)
 	end
 end
 
 main_scene.close_embattle_view = function(self)
 	if self.embattle_view then
-        self.adventure_view:openView()
-		self.embattle_view:closeView()
+        self.adventure_view:open_view()
+		self.embattle_view:close_view()
 	end
 end
 
 main_scene.open_confirm_view = function(self, chapter_num, level_num)
 	if self.confirm_view then
-		self.confirm_view:openView(chapter_num,level_num,reward_data)
+		self.confirm_view:open_view(chapter_num,level_num,reward_data)
 	end
 end
 
 main_scene.close_confirm_view = function(self)
 	if self.confirm_view then
-		self.confirm_view:closeView()
+		self.confirm_view:close_view()
 	end
 end
 
 main_scene.open_setting_view = function(self)
 	if self.setting_view then
-		self.setting_view:openView()
+		self.setting_view:open_view()
 	end
 end
 

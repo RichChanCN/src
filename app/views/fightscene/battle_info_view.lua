@@ -19,7 +19,7 @@ function battle_info_view:init_info()
     self.right_bottom_node_start_pos = cc.p(1750,-400)
     self.right_bottom_node_end_pos   = cc.p(1750,150)
 
-    self:updateInfo()
+    self:update_info()
 end
 
 function battle_info_view:init_events()
@@ -37,28 +37,28 @@ function battle_info_view:init_events()
     self:initRightBottomEvents()
 end
 
-function battle_info_view:updateInfo()
+function battle_info_view:update_info()
     self.cur_active_index = pve_game_ctrl:instance():getCurActiveMonsterIndex()
     self.cur_round = pve_game_ctrl:instance():get_cur_round_num()
     self.cur_queue = pve_game_ctrl:instance():get_cur_round_monster_queue()
     self.next_queue = pve_game_ctrl:instance():get_next_round_monster_queue()
 end
 
-function battle_info_view:updateView()
-    self:updateInfo()
+function battle_info_view:update_view()
+    self:update_info()
 end
 
-function battle_info_view:openView()
+function battle_info_view:open_view()
     if not self.is_inited then
         self:init()
     end
-    self:updateView()
+    self:update_view()
     self.root:setPosition(uitool:zero())
     self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self.left_bottom_img_end_pos))
     self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self.right_bottom_node_end_pos))
 end
 
-function battle_info_view:closeView()
+function battle_info_view:close_view()
     self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self.left_bottom_img_start_pos))
     self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self.right_bottom_node_start_pos))
 end
@@ -102,7 +102,7 @@ function battle_info_view:initRightBottomEvents()
     end)
 
     uitool:makeImgToButtonNoScale(self.exit_img, function()
-        self.ctrl:go_to_main_scene()
+        self:get_ctrl():go_to_main_scene()
     end)
 end
 
@@ -181,7 +181,7 @@ function battle_info_view:addQueueItemEvent(img)
         local node = event:getCurrentTarget()
         if pve_game_ctrl:instance():is_wait_order() then
             if uitool:is_touch_in_node_rect(node,touch,event) then
-                self.ctrl:show_other_around_info(node.monster)
+                self:get_ctrl():show_other_around_info(node.monster)
                 return true
             end
         end
@@ -189,7 +189,7 @@ function battle_info_view:addQueueItemEvent(img)
     end
 
     local function touchEnded( touch, event )
-        self.ctrl:hide_other_around_info()
+        self:get_ctrl():hide_other_around_info()
     end
 
     img.listener = cc.EventListenerTouchOneByOne:create()
@@ -212,7 +212,7 @@ function battle_info_view:updateAnger(item)
 end
 
 function battle_info_view:updateRightBottomQueue(is_wait)
-    self:updateInfo()
+    self:update_info()
 
     local last_item = self.queue_template:clone()
     self:updateLVItem(last_item,self.queue_first.monster)

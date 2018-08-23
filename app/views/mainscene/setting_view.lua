@@ -7,16 +7,16 @@ setting_view.RESOURCE_BINDING = {
 }
 
 
-function setting_view:init_info()
+setting_view.init_info = function(self)
 end
 
-function setting_view:init_events()
+setting_view.init_events = function(self)
 	self.close_btn:addClickEventListener(function(sender)
-        self:closeView()
+        self:close_view()
     end)
 end
 
-function setting_view:updateView()
+setting_view.update_view = function(self)
 
 end
 

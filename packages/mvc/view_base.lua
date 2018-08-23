@@ -1,72 +1,84 @@
 local view_base = {}
 
-function view_base:instance()
+view_base.instance = function(self)
 	return setmetatable({}, { __index = self })
 end
 
-function view_base:new( name, root, ctrl)
-	self.name = name
-	self.root = root
-	self.ctrl = ctrl
-	self.is_inited = false
+view_base.new = function(self, name, root, ctrl)
+	self._name = name
+	self._root = root
+	self._ctrl = ctrl
+	self._is_inited = false
 
 	return self
 end
 
-function view_base:init()
-	if not self.is_inited then
+view_base.get_ctrl = function(self)
+	return self._ctrl
+end
+
+view_base.get_root = function(self)
+	return self._root
+end
+
+view_base.get_name = function(self)
+	return self._name
+end
+
+view_base.init = function(self)
+	if not self._is_inited then
 		uitool:create_ui_binding(self, self.RESOURCE_BINDING)
 
 		self:init_info()
 		self:init_ui()
 		self:init_events()
 
-		self.is_inited = true
+		self._is_inited = true
 	else
-		print(self.name.." is inited! scape the init()")
+		print(self._name.." is inited! scape the init()")
 	end
 end
 
-function view_base:init_ui()
-	print("warning! you should implement init_ui() in instance!---"..self.name)
+view_base.init_ui = function(self)
+	print("warning! you should implement init_ui() in instance!---"..self._name)
 end
 
-function view_base:init_info()
-	print("warning! you should implement init_info() in instance!---"..self.name)
+view_base.init_info = function(self)
+	print("warning! you should implement init_info() in instance!---"..self._name)
 end
 
-function view_base:init_events()
+view_base.init_events = function(self)
 	print("warning! you should implement init_events() in instance")
 end
 
-function view_base:onOpen(...)
+view_base.on_open = function(self, ...)
 	-- body
 end
 
-function view_base:onClose()
+view_base.on_close = function(self)
 	-- body
 end
 
-function view_base:openView(...)
-	if not self.is_inited then
+view_base.open_view = function(self, ...)
+	if not self._is_inited then
 		self:init()
 	end
-	self:onOpen(...)
+	self:on_open(...)
 
-	if self.view_pos then
-		self.root:setPosition(self.view_pos)
+	if self._view_pos then
+		self._root:setPosition(self._view_pos)
 	else
-		self.root:setPosition(uitool:zero())
+		self._root:setPosition(uitool:zero())
 	end
 end
 
-function view_base:closeView()
-	self:onClose()
-	self.root:setPosition(uitool:far_away())
+view_base.close_view = function(self)
+	self:on_close()
+	self._root:setPosition(uitool:far_away())
 end
 
-function view_base:isInited()
-	return self.is_inited
+view_base.is_inited = function(self)
+	return self._is_inited
 end
 
 return view_base

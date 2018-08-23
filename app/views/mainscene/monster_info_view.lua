@@ -10,16 +10,16 @@ monster_info_view.RESOURCE_BINDING = {
 
 }
 
-function monster_info_view:init_ui()
-    self:initLeftModelNode()
+monster_info_view.init_ui = function(self)
+    self:init_left_model_node()
     self:initRightInfoNode()
 end
 
-function monster_info_view:init_info()
-    self.left_node_start_pos = cc.p(-545,540)
-    self.left_node_final_pos = cc.p(545,540)
-    self.right_node_start_pos = cc.p(2350,500)
-    self.right_node_final_pos = cc.p(1490,500)
+monster_info_view.init_info = function(self)
+    self.left_node_start_pos = cc.p(-545, 540)
+    self.left_node_final_pos = cc.p(545, 540)
+    self.right_node_start_pos = cc.p(2350, 500)
+    self.right_node_final_pos = cc.p(1490, 500)
 
     self.monster_list = {}
     self.next_animate = 2
@@ -29,7 +29,7 @@ function monster_info_view:init_info()
     self.monster_data = {}
 end
 
-function monster_info_view:updateInfo(monster_list,index)
+monster_info_view.update_info = function(self, monster_list,index)
     self.next_animate = 2
     self.is_model_loaded = false
     self.monster_list = monster_list
@@ -46,43 +46,43 @@ function monster_info_view:updateInfo(monster_list,index)
     end
 end
 
-function monster_info_view:init_events()
+monster_info_view.init_events = function(self)
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:close_monster_info_view()
+        self:get_ctrl():close_monster_info_view()
     end)
 
     self.left_btn:addClickEventListener(function(sender)
-        self:updateView(self.monster_list,self.next_index)
+        self:update_view(self.monster_list,self.next_index)
     end)
 
     self.right_btn:addClickEventListener(function(sender)
-        self:updateView(self.monster_list,self.last_index)
+        self:update_view(self.monster_list,self.last_index)
     end)
     uitool:makeImgToButton(self.upgrade_img,function()
         if self.monster_data.card_num and not(self.monster_data.card_num < self.monster_data.level) then
             game_data_ctrl:instance():requestUpgradeMonster(self.monster_data.id)
-            self:upgradeUpdate()
+            self:upgrade_update()
         end
     end)
     --------------左边节点事件-------------
     self:initModelEvents()
 end
 
-function monster_info_view:updateView(monster_list,index)
+monster_info_view.update_view = function(self, monster_list, index)
 	self.title_text:setString("LEVEL "..monster_list[index].level.." "..monster_list[index].name)
-    self:updateInfo(monster_list,index)
+    self:update_info(monster_list,index)
     self:updateLeftModelNode(monster_list[index])
     self:updateRightInfoNode(monster_list[index])
 end
 
-function monster_info_view:onOpen(...)
+monster_info_view.on_open = function(self, ...)
     local params = {...}
-    self:updateView(params[1],params[2])
+    self:update_view(params[1],params[2])
     self.left_node:runAction(cc.MoveTo:create(0.2,self.left_node_final_pos))
     self.info_bg_img:runAction(cc.MoveTo:create(0.2,self.right_node_final_pos))
 end
 
-function monster_info_view:onClose()
+monster_info_view.on_close = function(self)
     self.left_node:setPosition(self.left_node_start_pos)
     self.info_bg_img:setPosition(self.right_node_start_pos)
 end
@@ -90,21 +90,21 @@ end
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 
-function monster_info_view:updateMonsterByID(id)
+monster_info_view.update_monster_by_id = function(self, id)
     self.monster_list[self.cur_index] = game_data_ctrl:instance():get_save_monster_data_by_id(id)
 end
 
-function monster_info_view:upgradeUpdate()
+monster_info_view.upgrade_update = function(self)
     local card_num,level = game_data_ctrl:instance():get_monster_card_num_and_level_by_id(self.monster_data.id)
     print(card_num,level)
     self.title_text:setString("LEVEL "..level.." "..self.monster_data.name)
     self.progress_text:setString(card_num .."/"..level)
-    uitool:set_progress_bar(self.progress_img, card_num/level)
-    self:updateMonsterByID(self.monster_data.id)
+    uitool:set_progress_bar(self.progress_img, card_num / level)
+    self:update_monster_by_id(self.monster_data.id)
 end
 
 --------------------左边相关开始----------------------
-function monster_info_view:initLeftModelNode()
+monster_info_view.init_left_model_node = function(self)
     self.left_btn 			= self.left_node:getChildByName("left_btn")
     self.right_btn 			= self.left_node:getChildByName("right_btn")
     self.rarity_sp 			= self.left_node:getChildByName("rarity_sp")
@@ -120,7 +120,7 @@ function monster_info_view:initLeftModelNode()
     --self:initModelCamera()
 end
 
-function monster_info_view:updateLeftModelNode(data)
+monster_info_view.updateLeftModelNode = function(self, data)
     self:createModel(data)
 
     self.rarity_sp:setTexture(g_config.sprite["rarity_sp_"..data.rarity])
@@ -134,11 +134,11 @@ function monster_info_view:updateLeftModelNode(data)
         uitool:set_progress_bar(self.progress_img, 0)
     else
         self.progress_text:setString(data.card_num.."/"..data.level)
-        uitool:set_progress_bar(self.progress_img, data.card_num/data.level)
+        uitool:set_progress_bar(self.progress_img, data.card_num / data.level)
     end
 end
 
-function monster_info_view:createModel(data)
+monster_info_view.createModel = function(self, data)
     if self.monster_model then
         self.model_panel:removeChild(self.monster_model)
     end
@@ -146,7 +146,7 @@ function monster_info_view:createModel(data)
 	local callback = function(model)
 
 		model:setScale(4.5)
-        model:setRotation3D(cc.vec3(0,-90,0))
+        model:setRotation3D(cc.vec3(0, -90, 0))
         if data.move_type == g_config.monster_move_type.FLY then
             model:setPosition(uitool:get_node_center_position(self.model_panel))
         else
@@ -164,27 +164,27 @@ function monster_info_view:createModel(data)
 		self.model_panel:addChild(model)
 		self.is_model_loaded = true
 	end
-    cc.Sprite3D:createAsync(data.model_path,callback)
+    cc.Sprite3D:createAsync(data.model_path, callback)
     
 end
 
-function monster_info_view:initModelCamera()
+monster_info_view.initModelCamera = function(self)
 	local size = self.model_panel:getContentSize()
-	self.model_camera = cc.Camera:createPerspective(45,size.width/size.height,1,5000)
+	self.model_camera = cc.Camera:createPerspective(45,size.width / size.height,1,5000)
 
-    self.model_camera:setPosition3D(cc.vec3(400,500,933))
-    self.model_camera:lookAt(cc.vec3(400,300,0))
+    self.model_camera:setPosition3D(cc.vec3(400, 500, 933))
+    self.model_camera:lookAt(cc.vec3(400, 300, 0))
     self.model_camera:setCameraFlag(cc.CameraFlag.USER1)
 	self.model_camera:setName("model_camera")
     self.model_camera:setDepth(1)
     self.model_panel:addChild(self.model_camera)
 end
 
-function monster_info_view:initModelEvents()
+monster_info_view.initModelEvents = function(self)
 	local function touchBegan( touch, event )
 	    local node = event:getCurrentTarget()
 
-	    if uitool:is_touch_in_node_rect(node,touch,event) and self.is_model_loaded then
+	    if uitool:is_touch_in_node_rect(node, touch, event) and self.is_model_loaded then
 	        return true
 	    end
 
@@ -195,7 +195,7 @@ function monster_info_view:initModelEvents()
 	    local node = event:getCurrentTarget()
 		local diff = touch:getDelta()
 		local pos_3d = self.monster_model:getRotation3D()
-		pos_3d.y = pos_3d.y + (diff.x)/5
+		pos_3d.y = pos_3d.y + diff.x / 5
 		self.monster_model:setRotation3D(pos_3d)
 
 		local x = 1
@@ -220,7 +220,7 @@ function monster_info_view:initModelEvents()
 	eventDispatcher:addEventListenerWithSceneGraphPriority(self.model_panel.listener, self.model_panel)
 end
 
-function monster_info_view:playAnAnimation()
+monster_info_view.playAnAnimation = function(self)
     self.monster_model:stopAllActions()
     local animate = g_config.monster_animate[self.cur_monster_id][self.next_animate](self.animation)
 
@@ -231,7 +231,7 @@ end
 --------------------左边相关结束----------------------
 
 --------------------右边相关开始----------------------
-function monster_info_view:initRightInfoNode()
+monster_info_view.initRightInfoNode = function(self)
 	self.upgrade_img				= self.info_bg_img:getChildByName("upgrade_img")
 	self.details_btn 				= self.info_bg_img:getChildByName("details_btn")
 	self.video_btn	 				= self.info_bg_img:getChildByName("video_btn")
@@ -249,7 +249,7 @@ function monster_info_view:initRightInfoNode()
     self.skill_description_text     = self.info_bg_img:getChildByName("skill_description_text")
 end
 
-function monster_info_view:updateRightInfoNode(data)
+monster_info_view.updateRightInfoNode = function(self, data)
 	self.hp_text:setString(data.hp)
 	self.damage_text:setString(data.damage)
 	self.physical_defense_text:setString(data.physical_defense)

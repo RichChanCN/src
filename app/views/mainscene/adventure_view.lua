@@ -25,7 +25,7 @@ end
 function adventure_view:init_events()
 
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:close_adventure_view()
+        self:get_ctrl():close_adventure_view()
     end)
     
 	if self.cur_chapter_num == 1 then
@@ -60,13 +60,13 @@ function adventure_view:init_events()
 
 	for i=1,5 do
 		self["site_1_"..i.."_img"]:addClickEventListener(function(sender)
-			self.ctrl:open_confirm_view(1,i)
+			self:get_ctrl():open_confirm_view(1,i)
 		end)
 	end
 
 end
 
-function adventure_view:updateView()
+function adventure_view:update_view()
 	for i=1,1 do
 		for j=1,5 do
 			local star_num = game_data_ctrl:instance():get_star_num_by_chapter_and_level(i, j)
@@ -95,8 +95,8 @@ function adventure_view:updateView()
 	end
 end
 
-function adventure_view:onOpen()
-	self:updateView()
+function adventure_view:on_open()
+	self:update_view()
 end
 
 return adventure_view
