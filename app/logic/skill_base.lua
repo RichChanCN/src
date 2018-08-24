@@ -36,7 +36,7 @@ skill_base.use = function(self, target_pos_num)
 		return
 	end
 	local monster_list = self:get_be_affected_monster_list()
-	--pve_game_ctrl:instance():getScene():get_particle_node():removeChildByName(self._name)
+	
 	if #monster_list < 1 then
 		uitool:create_top_tip("no monster is affected by " .. self._name)
 		pve_game_ctrl:instance():next_monster_activate()
@@ -98,7 +98,7 @@ skill_base.get_be_affected_monster_list = function(self)
 		local map_info = pve_game_ctrl:instance():get_map_info()
 		for k,v in pairs(pos_list) do
 			if map_info[k] and type(map_info[k]) == type({}) and self._caster:is_enemy(map_info[k]) then
-				table.insert(monster_list,map_info[k])
+				table.insert(monster_list, map_info[k])
 			end
 		end
 	elseif self.target_pos_num and self._range > 1 then

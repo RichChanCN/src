@@ -585,75 +585,18 @@ monster_base.be_affected_by_skill = function(self, skill, is_last)
 end
 
 monster_base.toward_to = function(self, num)
+	if not num then 
+		return
+	end
 	self._cur_towards = num
 	self.model:setRotation3D(cc.vec3(0, (1 - num) * 60, 0))
 end
 
 
 monster_base.toward_to_int_pos = function(self, cur_num, to_num, only_get)
-	if not to_num then 
-		return
-	end
-
-	local result_towards
-
-	local toward_to_help = function ()
-		local to_pos = gtool:int_2_ccp(to_num)
-		local cur_pos = gtool:int_2_ccp(cur_num)
-		if to_num > cur_num then
-			if to_pos.x - cur_pos.x > math.abs(to_pos.y - cur_pos.y) then
-				result_towards = 1
-			elseif to_pos.y > cur_pos.y then
-				result_towards = 6
-			else
-				result_towards = 2
-			end
-		else
-			if cur_pos.x - to_pos.x > math.abs(to_pos.y - cur_pos.y) then
-				result_towards = 4
-			elseif to_pos.y>cur_pos.y then
-				result_towards = 5
-			else
-				result_towards = 3
-			end
-		end
-	end
-
-	local deta = to_num - cur_num
-	if cur_num % 2 == 0 then
-		if deta == 10 then
-			result_towards = 1
-		elseif deta == 9 then
-			result_towards = 2
-		elseif deta == -1 then
-			result_towards = 3
-		elseif deta == -10 then
-			result_towards = 4
-		elseif deta == 1 then
-			result_towards = 5
-		elseif deta == 11 then
-			result_towards = 6
-		else
-			toward_to_help()
-		end
-	else
-		if deta == 10 then
-			result_towards = 1
-		elseif deta == -1 then
-			result_towards = 2
-		elseif deta == -11 then
-			result_towards = 3
-		elseif deta == -10 then
-			result_towards = 4
-		elseif deta == -9 then
-			result_towards = 5
-		elseif deta == 1 then
-			result_towards = 6
-		else
-			toward_to_help()
-		end
-	end
-
+	
+	result_towards = gtool:get_toward_to_int_pos(cur_num, to_num)
+	
 	if only_get then
 		return result_towards
 	else
@@ -1042,26 +985,11 @@ monster_base.get_can_reach_area_info = function(self, center_pos_num, map_info, 
     
     local path_find_help = function(pos, num)
         if not area_table[num] and gtool:is_legal_pos_num(num) and ((not map_info[num]) or self:is_fly()) then
-            
             area_table[num] = pos
         end
     end
-    
-    local find_gezi = function(pos)
-        path_find_help(pos, pos + 10)
-        path_find_help(pos, pos - 10)
-        path_find_help(pos, pos + 1)
-        path_find_help(pos, pos - 1)
-        if pos % 2 == 0 then
-            path_find_help(pos, pos + 11)
-            path_find_help(pos, pos + 9)
-        else
-            path_find_help(pos, pos - 11)
-            path_find_help(pos, pos - 9)
-        end
-    end
 
-    find_gezi(center_pos_num)
+    gtool:find_gezi(center_pos_num, path_find_help)
     for k, v in pairs(area_table) do
         table.insert(temp_list, k)
     end
@@ -1069,7 +997,7 @@ monster_base.get_can_reach_area_info = function(self, center_pos_num, map_info, 
     for i = 2, steps do
         for _, v in pairs(temp_list) do
 
-            find_gezi(v)
+            gtool:find_gezi(v, path_find_help)
             
         end
         temp_list = {}
@@ -1091,22 +1019,8 @@ monster_base.get_fly_path = function(self)
             fly_path[num] = pos
         end
     end
-    
-    local find_gezi = function(pos)
-        path_find_help(pos,pos + 10)
-        path_find_help(pos,pos - 10)
-        path_find_help(pos,pos + 1)
-        path_find_help(pos,pos - 1)
-        if pos % 2 == 0 then
-            path_find_help(pos,pos + 11)
-            path_find_help(pos,pos + 9)
-        else
-            path_find_help(pos,pos - 11)
-            path_find_help(pos,pos - 9)
-        end
-    end
 
-    find_gezi(self:get_cur_pos_num())
+    gtool:find_gezi(self:get_cur_pos_num(), path_find_help)
     for k, v in pairs(fly_path) do
         table.insert(temp_list, k)
     end
@@ -1118,7 +1032,7 @@ monster_base.get_fly_path = function(self)
 
     for i = 2, steps do
         for _, v in pairs(temp_list) do
-            find_gezi(v)      
+            gtool:find_gezi(v, path_find_help)    
         end
         temp_list = {}
 
@@ -1470,7 +1384,7 @@ monster_base.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_info
 
 	local path
 	if all_path[pos_num] then
-		path = self:get_path_to_posPlus(pos_num, all_path)
+		path = self:get_path_to_pos_plus(pos_num, all_path)
 	end
 
 	if path then
@@ -1541,7 +1455,7 @@ monster_base.get_pos_num_by_direction_and_steps = function(self, pos, towards, s
 	end
 end
 
-monster_base.get_path_to_posPlus = function(self, num, all_path, path_table)
+monster_base.get_path_to_pos_plus = function(self, num, all_path, path_table)
 	path_table = path_table or {}
 	table.insert(path_table, num)
 	local last_geizi
@@ -1554,7 +1468,7 @@ monster_base.get_path_to_posPlus = function(self, num, all_path, path_table)
 	if self:get_cur_pos_num() == last_geizi then
 		return path_table
 	else
-		return self:get_path_to_posPlus(last_geizi, all_path, path_table)
+		return self:get_path_to_pos_plus(last_geizi, all_path, path_table)
 	end
 end
 
@@ -1607,40 +1521,6 @@ monster_base.get_back_first_near_pos_num = function(self, num, target_toward)
 	if help(temp_table[target_toward]) then
 		return temp_table[target_toward]
 	end
-end
-
-monster_base.get_near_pos_plus = function(self, num)
-	if num % 2 == 0 then
-		if gtool:is_legal_pos_num(num + 10) then
-			return num + 10
-		elseif gtool:is_legal_pos_num(num - 10) then
-			return num - 10
-		elseif gtool:is_legal_pos_num(num + 1) then
-			return num + 1
-		elseif gtool:is_legal_pos_num(num - 1) then
-			return num - 1
-		elseif gtool:is_legal_pos_num(num + 11) then
-			return num + 11
-		elseif gtool:is_legal_pos_num(num + 9) then
-			return num + 9
-		end
-	else
-		if gtool:is_legal_pos_num(num + 10) then
-			return num + 10
-		elseif gtool:is_legal_pos_num(num - 10) then
-			return num - 10
-		elseif gtool:is_legal_pos_num(num + 1) then
-			return num + 1
-		elseif gtool:is_legal_pos_num(num - 1) then
-			return num - 1
-		elseif gtool:is_legal_pos_num(num - 11) then
-			return num - 11
-		elseif gtool:is_legal_pos_num(num - 9) then
-			return num - 9
-		end
-	end
-
-	return false
 end
 
 return monster_base
