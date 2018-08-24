@@ -162,7 +162,7 @@ end
 
 embattle_view.add_monster_card_event = function(self, img, index)
 	   
-	local touchBegan = function(touch, event)
+	local touch_began = function(touch, event)
         local node = event:getCurrentTarget()
         local locationInNode = node:convertToNodeSpace(touch:getLocation())
         local s = node:getContentSize()
@@ -175,7 +175,7 @@ embattle_view.add_monster_card_event = function(self, img, index)
         return false
     end
 
-    local touchMoved = function(touch, event)
+    local touch_moved = function(touch, event)
         local node = event:getCurrentTarget()
 		local cur_pos = self.hex_node:convertToNodeSpace(touch:getLocation())
 		local start_pos = self.hex_node:convertToNodeSpace(touch:getStartLocation())
@@ -197,7 +197,7 @@ embattle_view.add_monster_card_event = function(self, img, index)
         end
     end
 
-    local touchEnded = function(touch, event)
+    local touch_ended = function(touch, event)
         local node = event:getCurrentTarget()
 		local pos = self.hex_node:convertToNodeSpace(touch:getStartLocation())
         
@@ -234,9 +234,9 @@ embattle_view.add_monster_card_event = function(self, img, index)
 
     img.listener = cc.EventListenerTouchOneByOne:create()
     --img.listener:setSwallowTouches(true)
-    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    img.listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
-    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
+    img.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
+    img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
     
     self.eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
@@ -447,7 +447,7 @@ end
 
 embattle_view.add_arena_listener = function(self)
 
-	local touchBegan = function(touch, event)
+	local touch_began = function(touch, event)
 		local node = event:getCurrentTarget()
 		if uitool:is_touch_in_node_rect(node, touch, event ,0.8) then
 			if node.chesspiece then
@@ -460,7 +460,7 @@ embattle_view.add_arena_listener = function(self)
 		return true
 	end
 
-	local touchMoved = function(touch, event)
+	local touch_moved = function(touch, event)
 		local node = event:getCurrentTarget()
 		local x,y = node:getPosition()
 		local cur_pos = self.hex_node:convertToNodeSpace(touch:getLocation())
@@ -478,7 +478,7 @@ embattle_view.add_arena_listener = function(self)
 		end
 	end
 
-	local touchEnded = function(touch, event)
+	local touch_ended = function(touch, event)
 		local node = event:getCurrentTarget()
 		local cur_pos = self.hex_node:convertToNodeSpace(touch:getLocation())
 
@@ -513,9 +513,9 @@ embattle_view.add_arena_listener = function(self)
 
 	local listener = cc.EventListenerTouchOneByOne:create()
 	--listener:setSwallowTouches(true)
-	listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-	listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
-	listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+	listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
+	listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
+	listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
 	
 	
 	--注意！！！如果一个界面监听的事件很多会导致降帧！

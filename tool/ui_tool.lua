@@ -164,7 +164,7 @@ uitool.set_node_to_global_top = function(self, node, z)
 end
 
 uitool.make_img_to_button = function(self, img, callback)
-    local touchBegan = function(touch, event)
+    local touch_began = function(touch, event)
         local node = event:getCurrentTarget()
 
         if self:is_touch_in_node_rect(node,touch,event) then
@@ -175,7 +175,7 @@ uitool.make_img_to_button = function(self, img, callback)
         return false
     end
 
-    local touchMoved = function(touch, event)
+    local touch_moved = function(touch, event)
         local node = event:getCurrentTarget()
 
         if self:is_touch_in_node_rect(node,touch,event) then
@@ -185,7 +185,7 @@ uitool.make_img_to_button = function(self, img, callback)
         end
     end
 
-    local touchEnded = function(touch, event)
+    local touch_ended = function(touch, event)
         local node = event:getCurrentTarget()
         
         if self:is_touch_in_node_rect(node,touch,event) then
@@ -198,15 +198,15 @@ uitool.make_img_to_button = function(self, img, callback)
 
     img.listener = cc.EventListenerTouchOneByOne:create()
     img.listener:setSwallowTouches(true)
-    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    --img.listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
-    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
+    --img.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
+    img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
 uitool.make_img_to_button_no_scale = function(self, img, callback)
-    local touchBegan = function(touch, event)
+    local touch_began = function(touch, event)
         local node = event:getCurrentTarget()
 
         if self:is_touch_in_node_rect(node, touch, event) then
@@ -216,7 +216,7 @@ uitool.make_img_to_button_no_scale = function(self, img, callback)
         return false
     end
 
-    local touchEnded = function(touch, event)
+    local touch_ended = function(touch, event)
         local node = event:getCurrentTarget()
         
         if self:is_touch_in_node_rect(node, touch, event) then
@@ -228,14 +228,14 @@ uitool.make_img_to_button_no_scale = function(self, img, callback)
 
     img.listener = cc.EventListenerTouchOneByOne:create()
     img.listener:setSwallowTouches(true)
-    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
+    img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
 uitool.make_img_to_button_ht = function(self, img, camera, callback)
-    local touchBegan = function(touch, event)
+    local touch_began = function(touch, event)
         local node = event:getCurrentTarget()
         local start_location = touch:getLocation()
 
@@ -246,7 +246,7 @@ uitool.make_img_to_button_ht = function(self, img, camera, callback)
         return false
     end
 
-    local touchEnded = function(touch, event)
+    local touch_ended = function(touch, event)
         local node = event:getCurrentTarget()
         local end_location = touch:getLocation()
 
@@ -259,8 +259,8 @@ uitool.make_img_to_button_ht = function(self, img, camera, callback)
 
     img.listener = cc.EventListenerTouchOneByOne:create()
     img.listener:setSwallowTouches(true)
-    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
+    img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end

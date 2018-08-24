@@ -18,7 +18,7 @@ g_config.skill =
 		--技能消耗的怒气值
 		cost = 4,
 		--技能的伤害
-		damage = 100,
+		damage = 80,
 		--怪物等级对技能伤害的加成
 		damage_level_plus = 10,
 		--治疗量
@@ -78,7 +78,7 @@ g_config.skill =
 		img_path = g_config.monster_img_path.."icon_skill_holy_slash.png",
 		range = 1,
 		is_need_target = true,
-		cost = 2,
+		cost = 3,
 		damage = 50,
 		damage_level_plus = 5,
 
@@ -103,7 +103,7 @@ g_config.skill =
 		img_path = g_config.monster_img_path.."icon_skill_eager_for_fight.png",
 		range = 0,
 		is_need_target = false,
-		cost = 3,
+		cost = 0,
 		damage = 0,
 		damage_level_plus = 0,
 

@@ -8,66 +8,62 @@ battle_info_view.RESOURCE_BINDING = {
     ["particle_node"]           = {["varname"] = "particle_node"},
 }
 
-function battle_info_view:init_ui()
-    self:initRightBottom()
-    self:initLeftBottom()
+battle_info_view.init_ui = function(self)
+    self:init_right_bottom()
+    self:init_left_bottom()
 end
 
-function battle_info_view:init_info()
-    self.left_bottom_img_start_pos = cc.p(0,-530)
-    self.left_bottom_img_end_pos   = cc.p(0,0)
-    self.right_bottom_node_start_pos = cc.p(1750,-400)
-    self.right_bottom_node_end_pos   = cc.p(1750,150)
+battle_info_view.init_info = function(self)
+    self._left_bottom_img_start_pos = cc.p(0, -530)
+    self._left_bottom_img_end_pos   = cc.p(0, 0)
+    self._right_bottom_node_start_pos = cc.p(1750, -400)
+    self._right_bottom_node_end_pos   = cc.p(1750, 150)
 
     self:update_info()
 end
 
-function battle_info_view:init_events()
+battle_info_view.init_events = function(self)
     uitool:make_img_to_button_no_scale(self.skill_sp, function()
         if pve_game_ctrl:instance():is_wait_order() then
-            if not self.queue_first.monster.skill:is_need_target() then
-                pve_game_ctrl:instance():runGame(pve_game_ctrl.order.USE_SKILL)
+            if not self.queue_first.monster:get_skill():is_need_target() then
+                pve_game_ctrl:instance():run_game(pve_game_ctrl.order.USE_SKILL)
             else
                 pve_game_ctrl:instance():set_is_use_skill(not pve_game_ctrl:instance():get_is_use_skill())
-                self:updateSkillImage()
+                self:update_skill_image()
             end
         end
     end)
 
-    self:initRightBottomEvents()
+    self:init_right_bottom_events()
 end
 
-function battle_info_view:update_info()
-    self.cur_active_index = pve_game_ctrl:instance():getCurActiveMonsterIndex()
+battle_info_view.update_info = function(self)
+    self.cur_active_index = pve_game_ctrl:instance():get_cur_active_monster_index()
     self.cur_round = pve_game_ctrl:instance():get_cur_round_num()
     self.cur_queue = pve_game_ctrl:instance():get_cur_round_monster_queue()
     self.next_queue = pve_game_ctrl:instance():get_next_round_monster_queue()
 end
 
-function battle_info_view:update_view()
+battle_info_view.update_view = function(self)
     self:update_info()
 end
 
-function battle_info_view:open_view()
-    if not self.is_inited then
-        self:init()
-    end
+battle_info_view.on_open = function(self)
     self:update_view()
-    self.root:setPosition(uitool:zero())
-    self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self.left_bottom_img_end_pos))
-    self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self.right_bottom_node_end_pos))
+    self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self._left_bottom_img_end_pos))
+    self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self._right_bottom_node_end_pos))
 end
 
-function battle_info_view:close_view()
-    self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self.left_bottom_img_start_pos))
-    self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self.right_bottom_node_start_pos))
+battle_info_view.on_close = function(self)
+    self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self._left_bottom_img_start_pos))
+    self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self._right_bottom_node_start_pos))
 end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 
 -----------------------右下按钮节点开始-----------------------
-function battle_info_view:initRightBottom()
+battle_info_view.init_right_bottom = function(self)
     self.defend_img     = self.right_bottom_node:getChildByName("defend_img")
     self.wait_img       = self.right_bottom_node:getChildByName("wait_img")
     self.auto_img       = self.right_bottom_node:getChildByName("auto_img")
@@ -78,7 +74,7 @@ function battle_info_view:initRightBottom()
     self.speed_icon = self.speed_img:getChildByName("img")
 end
 
-function battle_info_view:initRightBottomEvents()
+battle_info_view.init_right_bottom_events = function(self)
     uitool:make_img_to_button_no_scale(self.defend_img, function()
         if pve_game_ctrl:instance():is_wait_order() then
             pve_game_ctrl:instance():request_defend()
@@ -110,7 +106,7 @@ end
 
 -----------------------左下队列节点开始-----------------------
 
-function battle_info_view:initLeftBottom()
+battle_info_view.init_left_bottom = function(self)
     self.round_text = self.left_bottom_img:getChildByName("round_text")
     self.queue_lv = self.left_bottom_img:getChildByName("queue_lv")
     self.queue_template = self.left_bottom_img:getChildByName("queue_template")
@@ -118,28 +114,28 @@ function battle_info_view:initLeftBottom()
     self.round_img = self.left_bottom_img:getChildByName("round_img")
     self.skill_sp = self.left_bottom_img:getChildByName("skill_sp")
     self.skill_icon_sp = self.skill_sp:getChildByName("skill_icon_sp")
-    self:initQueueLV()
+    self:init_queue_lv()
 end
 
-function battle_info_view:initQueueLV()
+battle_info_view.init_queue_lv = function(self)
     --self.queue = {}
-    for i=1,#self.cur_queue do
+    for i = 1, #self.cur_queue do
         if i == 1 then
             self.queue_first = self.cur_monster_img
-            self:updateLVItem(self.queue_first,self.cur_queue[i])
+            self:update_lv_item(self.queue_first, self.cur_queue[i])
         else
             local item = self.queue_template:clone()
-            self:updateLVItem(item,self.cur_queue[i])
+            self:update_lv_item(item, self.cur_queue[i])
             self.queue_lv:pushBackCustomItem(item)
         end
     end
 
     self.next_round_in_queue = self.round_img:clone()
     self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
-    self:updateSkillImage()
+    self:update_skill_image()
 end
 
-function battle_info_view:updateLVItem(item,monster,update_only)
+battle_info_view.update_lv_item = function(self, item, monster, update_only)
     item.monster = monster 
     item.child = {}
     item.child.border_img = item:getChildByName("border_img")
@@ -149,15 +145,15 @@ function battle_info_view:updateLVItem(item,monster,update_only)
     item.child.border_img:loadTexture(g_config.sprite["team_card_border_"..monster:get_team_side()])
     item.child.level_text:setString(monster.level)
 
-    self:updateAnger(item)
+    self:update_anger(item)
     if update_only then
         return
     end
 
     local update = function(anger)
-        for i=1,item.monster.max_anger do
+        for i = 1, item.monster:get_max_anger() do
             local star = item:getChildByName("star_img_"..i)
-            if not (i>anger) then
+            if not (i > anger) then
                 star:setVisible(true)
             else
                 star:setVisible(false)
@@ -165,19 +161,19 @@ function battle_info_view:updateLVItem(item,monster,update_only)
         end
     end
 
-    local removeSelf = function()
+    local remove_self = function()
         self.queue_lv:removeChild(item)
     end
 
     item.update = update
-    item.removeSelf = removeSelf
+    item.remove_self = remove_self
 
     monster.card = item
-    self:addQueueItemEvent(item)
+    self:add_queue_item_event(item)
 end
 
-function battle_info_view:addQueueItemEvent(img)
-    local touchBegan = function(touch, event)
+battle_info_view.add_queue_item_event = function(self, img)
+    local touch_began = function(touch, event)
         local node = event:getCurrentTarget()
         if pve_game_ctrl:instance():is_wait_order() then
             if uitool:is_touch_in_node_rect(node,touch,event) then
@@ -188,22 +184,22 @@ function battle_info_view:addQueueItemEvent(img)
         return false
     end
 
-    local touchEnded = function(touch, event)
+    local touch_ended = function(touch, event)
         self:get_ctrl():hide_other_around_info()
     end
 
     img.listener = cc.EventListenerTouchOneByOne:create()
     --img.listener:setSwallowTouches(true)
-    img.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    img.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+    img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
+    img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
     local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
     eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
-function battle_info_view:updateAnger(item)
-    for i=1,item.monster.max_anger do
+battle_info_view.update_anger = function(self, item)
+    for i = 1, item.monster:get_max_anger() do
         local star = item:getChildByName("star_img_"..i)
-        if not (i>item.monster.cur_anger) then
+        if not (i > item.monster:get_cur_anger()) then
             star:setVisible(true)
         else
             star:setVisible(false)
@@ -211,17 +207,17 @@ function battle_info_view:updateAnger(item)
     end
 end
 
-function battle_info_view:updateRightBottomQueue(is_wait)
+battle_info_view.update_right_bottom_queue = function(self, is_wait)
     self:update_info()
 
     local last_item = self.queue_template:clone()
-    self:updateLVItem(last_item,self.queue_first.monster)
+    self:update_lv_item(last_item, self.queue_first.monster)
     
     if self.animate_card then 
         self.left_bottom_img:removeChild(self.animate_card)
     end
     self.animate_card = last_item:clone()
-    self:updateLVItem(self.animate_card,self.queue_first.monster,true)
+    self:update_lv_item(self.animate_card,self.queue_first.monster, true)
     
     self.left_bottom_img:addChild(self.animate_card)
     self.animate_card:setPosition(self.queue_first:getPosition())
@@ -231,6 +227,9 @@ function battle_info_view:updateRightBottomQueue(is_wait)
     self.animate_card:runAction(cc.ScaleTo:create(0.7,0.3))
     
     if not is_wait then
+        if not self.queue_lv:getItem(0) then
+            return
+        end
         if not self.queue_lv:getItem(0).monster then
             self.queue_lv:removeItem(0)
 
@@ -238,9 +237,9 @@ function battle_info_view:updateRightBottomQueue(is_wait)
                 return
             end
             if not last_item.monster:is_dead() then
-                local index = pve_game_ctrl:instance():get_monster_index_in_cur_round_alive_monster(last_item.monster)-1
+                local index = pve_game_ctrl:instance():get_monster_index_in_cur_round_alive_monster(last_item.monster) - 1
                 if self.queue_lv:getItem(index) then
-                    self.queue_lv:insertCustomItem(last_item,index)
+                    self.queue_lv:insertCustomItem(last_item, index)
                 else
                     self.queue_lv:pushBackCustomItem(last_item)
                 end
@@ -248,25 +247,25 @@ function battle_info_view:updateRightBottomQueue(is_wait)
                 last_item:setOpacity(0)
                 last_item:runAction(cc.FadeIn:create(0.3))
             end
-            self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
+            self:update_lv_item(self.queue_first,self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
 
             
             self.next_round_in_queue = self.round_img:clone()
             local text = self.next_round_in_queue:getChildByName("round_text")
-            text:setString(self.cur_round+1)
+            text:setString(self.cur_round + 1)
             self.round_text:setString("ROUND "..self.cur_round)
             
             self.queue_lv:pushBackCustomItem(self.next_round_in_queue)
         else
-            self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
+            self:update_lv_item(self.queue_first, self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
 
             if not last_item.monster:is_dead() then
                 local index = self.queue_lv:getIndex(self.next_round_in_queue)
                 index = index + pve_game_ctrl:instance():get_monster_index_in_next_round_alive_monster(last_item.monster)
                 if self.queue_lv:getItem(index) then
-                    self.queue_lv:insertCustomItem(last_item,index)
+                    self.queue_lv:insertCustomItem(last_item, index)
                 else
                     self.queue_lv:pushBackCustomItem(last_item)
                 end
@@ -279,15 +278,15 @@ function battle_info_view:updateRightBottomQueue(is_wait)
         if not self.queue_lv:getItem(0).monster then
             return
         end
-        self:updateLVItem(self.queue_first,self.queue_lv:getItem(0).monster)
+        self:update_lv_item(self.queue_first, self.queue_lv:getItem(0).monster)
         self.queue_lv:removeItem(0)
         local index = self.queue_lv:getIndex(self.next_round_in_queue)
-        self.queue_lv:insertCustomItem(last_item,index)
+        self.queue_lv:insertCustomItem(last_item, index)
     end
-    self:updateSkillImage()
+    self:update_skill_image()
 end
 
-function battle_info_view:updateSkillImage()
+battle_info_view.update_skill_image = function(self)
     if self.queue_first.monster:can_use_skill() then
         if self.skill_sp.particle then
             self.skill_sp:removeChildByName("skillicon")
@@ -302,7 +301,7 @@ function battle_info_view:updateSkillImage()
             self.skill_sp.particle = particle
             self.skill_sp:setVisible(true)
         else
-            self.skill_sp:setTexture(self.queue_first.monster.skill.img_path)
+            self.skill_sp:setTexture(self.queue_first.monster:get_skill():get_img_path())
             local particle = cc.ParticleSystemQuad:create(g_config.Particle.skill_can_use)
             particle:setName("skillicon")
             particle:setScale(1)

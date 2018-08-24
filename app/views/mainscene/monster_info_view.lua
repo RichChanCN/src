@@ -181,7 +181,7 @@ monster_info_view.init_model_camera = function(self)
 end
 
 monster_info_view.init_model_events = function(self)
-	local touchBegan = function(touch, event)
+	local touch_began = function(touch, event)
 	    local node = event:getCurrentTarget()
 
 	    if uitool:is_touch_in_node_rect(node, touch, event) and self.is_model_loaded then
@@ -191,7 +191,7 @@ monster_info_view.init_model_events = function(self)
 	    return false
 	end
 
-	local touchMoved = function(touch, event)
+	local touch_moved = function(touch, event)
 	    local node = event:getCurrentTarget()
 		local diff = touch:getDelta()
 		local pos_3d = self.monster_model:getRotation3D()
@@ -201,7 +201,7 @@ monster_info_view.init_model_events = function(self)
 		local x = 1
 	end
 
-	local touchEnded = function(touch, event)
+	local touch_ended = function(touch, event)
 	    local node = event:getCurrentTarget()
 	    local cur_pos = node:convertToNodeSpace(touch:getLocation())
 	    local start_pos = node:convertToNodeSpace(touch:getStartLocation())
@@ -213,9 +213,9 @@ monster_info_view.init_model_events = function(self)
 
 	self.model_panel.listener = cc.EventListenerTouchOneByOne:create()
 	self.model_panel.listener:setSwallowTouches(true)
-	self.model_panel.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-	self.model_panel.listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
-	self.model_panel.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
+	self.model_panel.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
+	self.model_panel.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
+	self.model_panel.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
 	local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 	eventDispatcher:addEventListenerWithSceneGraphPriority(self.model_panel.listener, self.model_panel)
 end

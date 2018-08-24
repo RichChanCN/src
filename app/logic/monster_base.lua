@@ -95,7 +95,7 @@ monster_base.new = function(self, data, team_side, arena_pos)
 	
 	if data.skill then
 		local skill_base = require("app.logic.skill_base")
-		self.skill = skill_base:instance():new(self,data.skill)
+		self._skill = skill_base:instance():new(self,data.skill)
 	end
 
 	return self
@@ -121,19 +121,47 @@ monster_base.get_cur_pos = function(self)
 	return self._cur_pos
 end
 
+monster_base.get_cur_hp = function(self)
+	return self._cur_hp
+end
+
 monster_base.get_cur_pos_num = function(self)
 	return gtool:ccp_2_int(self._cur_pos)
 end
 
-monster_base.get_cur_damage = function(self)
+monster_base.get_skill = function(self)
+	return self._skill
+end
+
+monster_base.get_max_anger = function(self)
+	return self._max_anger
+end
+
+monster_base.get_cur_anger = function(self)
+	return self._cur_anger
+end
+
+monster_base.get_cur_damage = function(self, no_update)
+	if no_update then
+		return self._cur_damage
+	end
+
 	self._cur_damage = self._damage
 
 	self:update_cur_attribute()
 
-	return self.cur_damage
+	return self._cur_damage
 end
 
-monster_base.get_cur_max_hp = function(self)
+monster_base.set_cur_damage = function(self, cd)
+	self._cur_damage = cd
+end
+
+monster_base.get_cur_max_hp = function(self, no_update)
+	if no_update then
+		return self._cur_max_hp
+	end
+
 	self._cur_max_hp = self._max_hp
 
 	self:update_cur_attribute()
@@ -141,7 +169,11 @@ monster_base.get_cur_max_hp = function(self)
 	return self._cur_max_hp
 end
 
-monster_base.get_cur_pysical_defense = function(self)
+monster_base.get_cur_physical_defense = function(self, no_update)
+	if no_update then
+		return self._cur_physical_defense
+	end
+
 	self._cur_physical_defense = self._physical_defense
 	
 	self:update_cur_attribute()
@@ -149,7 +181,15 @@ monster_base.get_cur_pysical_defense = function(self)
 	return self._cur_physical_defense
 end
 
-monster_base.get_cur_magic_defense = function(self)
+monster_base.set_cur_physical_defense = function(self, pd)
+	self._cur_physical_defense = pd
+end
+
+monster_base.get_cur_magic_defense = function(self, no_update)
+	if no_update then
+		return self._cur_magic_defense
+	end
+
 	self._cur_magic_defense = self._magic_defense
 	
 	self:update_cur_attribute()
@@ -157,7 +197,15 @@ monster_base.get_cur_magic_defense = function(self)
 	return self._cur_magic_defense
 end
 
-monster_base.get_cur_mobility = function(self)
+monster_base.set_cur_magic_defense = function(self, md)
+	self._cur_magic_defense = md
+end
+
+monster_base.get_cur_mobility = function(self, no_update)
+	if no_update then
+		return self._cur_mobility
+	end
+
 	self._cur_mobility = self._mobility
 	
 	self:update_cur_attribute()
@@ -165,7 +213,15 @@ monster_base.get_cur_mobility = function(self)
 	return self._cur_mobility
 end
 
-monster_base.get_cur_initiative = function(self)
+monster_base.set_cur_mobility = function(self, cm)
+	self._cur_mobility = cm
+end
+
+monster_base.get_cur_initiative = function(self, no_update)
+	if no_update then
+		return self._cur_initiative
+	end
+
 	self._cur_initiative = self._initiative
 	
 	self:update_cur_attribute()
@@ -173,7 +229,11 @@ monster_base.get_cur_initiative = function(self)
 	return self._cur_initiative
 end
 
-monster_base.get_cur_defense_penetration = function(self)
+monster_base.get_cur_defense_penetration = function(self, no_update)
+	if no_update then
+		return self._cur_defense_penetration
+	end
+
 	self._cur_defense_penetration = self._defense_penetration
 	
 	self:update_cur_attribute()
@@ -216,7 +276,7 @@ monster_base.reset = function(self)
 	self._cur_max_hp 				= self._max_hp 			
 	self._cur_damage 				= self._damage 			
 	self._cur_physical_defense 		= self._physical_defense 	
-	self._cur_magic_defense 			= self._magic_defense 		
+	self._cur_magic_defense 		= self._magic_defense 		
 	self._cur_mobility 				= self._mobility 			
 	self._cur_initiative 			= self._initiative 		
 	self._cur_defense_penetration 	= self._defense_penetration
@@ -249,11 +309,11 @@ monster_base.is_defend = function(self)
 end
 
 monster_base.is_melee = function(self)
-	return self._attack_type < g_config.monster_attack_type.SHOOTER
+	return self.attack_type < g_config.monster_attack_type.SHOOTER
 end
 
 monster_base.is_physical = function(self)
-	return self._attack_type%2 == 1
+	return self.attack_type % 2 == 1
 end
 
 monster_base.has_waited = function(self)
@@ -273,26 +333,26 @@ monster_base.is_enemy = function(self, monster)
 end
 
 monster_base.is_be_back_attacked = function(self, murderer)
-	return self._cur_towards == murderer.cur_towards
+	return self._cur_towards == murderer._cur_towards
 end
 
 monster_base.is_be_side_attacked = function(self, murderer)
-	return self._cur_towards+1 == murderer.cur_towards
-			or self._cur_towards+1 == murderer.cur_towards + 6
-			or self._cur_towards-1 == murderer.cur_towards
-			or self._cur_towards-1 == murderer.cur_towards - 6
+	return self._cur_towards+1 == murderer._cur_towards
+			or self._cur_towards+1 == murderer._cur_towards + 6
+			or self._cur_towards-1 == murderer._cur_towards
+			or self._cur_towards-1 == murderer._cur_towards - 6
 end
 
 monster_base.can_counter_attack = function(self, murderer)
 	return self:is_melee()
 			and self:can_attack()
 			and murderer:is_melee() 
-			and self:is_near(gtool:ccp_2_int(murderer.cur_pos)) 
+			and self:is_near(gtool:ccp_2_int(murderer._cur_pos)) 
 			and not(self:is_be_side_attacked(murderer) or self:is_be_back_attacked(murderer))
 end
 
 monster_base.can_use_skill = function(self)
-	return self.skill and not(self._cur_anger < self.skill.cost)
+	return self._skill and not(self._cur_anger < self._skill:get_cost())
 end
 
 monster_base.can_active = function(self)
@@ -388,8 +448,8 @@ end
 monster_base.attack = function(self, target, distance)
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 	
-	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target.cur_pos)) then
-		self:move_and_Attack(target)
+	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target._cur_pos)) then
+		self:move_and_attack(target)
 	else
 		if self._attack_particle then
 			self:create_attack_particle(target)
@@ -397,7 +457,7 @@ monster_base.attack = function(self, target, distance)
 
 		self:add_anger()
 		local cur_num = self:get_cur_pos_num()
-		local to_num = gtool:ccp_2_int(target.cur_pos)
+		local to_num = gtool:ccp_2_int(target._cur_pos)
 		self:toward_to_int_pos(cur_num,to_num)
 		self:do_animation("attack1")
 		target:be_attacked(self,false,distance)
@@ -421,18 +481,18 @@ end
 
 monster_base.defend = function(self)
 	self:change_monster_status(monster_base.status.DEFEND)
-	self:add_buff({g_config.Buff.defend})
+	self:add_buff({g_config.buff.defend})
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 	pve_game_ctrl:instance():next_monster_activate()
 end
 
 monster_base.use_skill = function(self, target_pos_num)
-	if (not self.skill:is_need_target()) or (self:is_melee() and self:is_near(target_pos_num)) or (not self:is_melee()) then
-		self.skill:play()
-		self:minus_anger(self.skill.cost)
+	if (not self._skill:is_need_target()) or (self:is_melee() and self:is_near(target_pos_num)) or (not self:is_melee()) then
+		self._skill:play()
+		self:minus_anger(self._skill:get_cost())
 		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
 		local cb = function()
-			self.skill:use(target_pos_num)
+			self._skill:use(target_pos_num)
 		end
 		local callback = cc.CallFunc:create(cb)
 		self:toward_to_int_pos(self:get_cur_pos_num(), target_pos_num)
@@ -447,7 +507,7 @@ end
 
 monster_base.die = function(self, is_buff_or_skill)
 	self._status = monster_base.status.DEAD
-	self.card.removeSelf()
+	self.card.remove_self()
 
 	local ac = self.model:runAction(cc.FadeOut:create(1))
 	local cb = function()
@@ -463,13 +523,13 @@ monster_base.die = function(self, is_buff_or_skill)
 end
 
 monster_base.be_attacked = function(self, murderer, is_counter_attack, distance)
-	local damage,damage_type = self:get_final_attack_damage(murderer, distance)
+	local damage, damage_type = self:get_final_attack_damage(murderer, distance)
 
 	if self:minus_hp(damage, damage_type) then
 		self:add_anger()
 		local cb = function()
 			local cur_num = self:get_cur_pos_num()
-			local to_num = gtool:ccp_2_int(murderer.cur_pos)
+			local to_num = gtool:ccp_2_int(murderer._cur_pos)
 			if (not is_counter_attack) and self:can_counter_attack(murderer) then
 				self:toward_to_int_pos(cur_num, to_num)
 				self:counter_attack(murderer)
@@ -485,7 +545,7 @@ end
 
 monster_base.counter_attack = function(self, target)
 	local cur_num = self:get_cur_pos_num()
-	local to_num = gtool:ccp_2_int(target.cur_pos)
+	local to_num = gtool:ccp_2_int(target._cur_pos)
 	self:toward_to_int_pos(cur_num, to_num)
 	self:do_animation("attack1")
 	self:add_anger()
@@ -493,21 +553,21 @@ monster_base.counter_attack = function(self, target)
 end
 
 monster_base.be_affected_by_skill = function(self, skill, is_last)
-	if self:is_enemy(skill.caster) then
-		if skill.damage > 0 then
-			local damage,damage_type = self:get_final_skill_damage(skill)
-			self:minus_hp(damage,damage_type,true)
+	if self:is_enemy(skill:get_caster()) then
+		if skill:get_damage() > 0 then
+			local damage, damage_type = self:get_final_skill_damage(skill)
+			self:minus_hp(damage, damage_type, true)
 		end
-		if #skill.debuff > 0 then
-			self:add_debuff(skill.debuff)
+		if #skill:get_debuff() > 0 then
+			self:add_debuff(skill:get_debuff())
 		end
 	else
-		if skill.healing > 0 then
-			local healing,htype = self:get_final_healing(skill)
-			self:add_hp(healing,htype)
+		if skill:get_healing() > 0 then
+			local healing, htype = self:get_final_healing(skill)
+			self:add_hp(healing, htype)
 		end
-		if #skill.buff > 0 then
-			self:add_buff(skill.buff)
+		if #skill:get_buff() > 0 then
+			self:add_buff(skill:get_buff())
 		end
 	end
 
@@ -614,7 +674,7 @@ monster_base.get_final_attack_damage = function(self, murderer, distance)
 	
 	local defense
 	if murderer:is_physical() then
-		defense = self:get_cur_pysical_defense() - murderer:get_cur_defense_penetration()
+		defense = self:get_cur_physical_defense() - murderer:get_cur_defense_penetration()
 	else
 		defense = self:get_cur_magic_defense() - murderer:get_cur_defense_penetration()
 	end
@@ -643,22 +703,22 @@ monster_base.get_final_attack_damage = function(self, murderer, distance)
 end
 
 monster_base.get_final_healing = function(self, skill)
-	local healing = skill.healing
+	local healing = skill:get_healing()
 
-	healing = healing + skill.caster.level * skill.healing_level_plus
+	healing = healing + skill:get_caster().level * skill:get_healing_level_plus()
 
 	return healing, monster_base.damage_level.HEAL
 end
 
 monster_base.get_final_skill_damage = function(self, skill)
-	local damage = skill.damage
-	local caster = skill.caster
+	local damage = skill:get_damage()
+	local caster = skill:get_caster()
 
-	damage = damage + caster.level * skill.damage_level_plus
+	damage = damage + caster.level * skill:get_damage_level_plus()
 
 	local defense
 	if caster:is_physical() then
-		defense = self:get_cur_pysical_defense() - caster:get_cur_defense_penetration()
+		defense = self:get_cur_physical_defense() - caster:get_cur_defense_penetration()
 	else
 		defense = self:get_cur_magic_defense() - caster:get_cur_defense_penetration()
 	end
@@ -678,15 +738,15 @@ monster_base.add_hp = function(self, healing, htype)
 	local hp = self._cur_hp + healing
 
 	local max_hp = self:get_cur_max_hp()
-	if hp>max_hp then
+	if hp > max_hp then
 		hp = max_hp
 	end
 
 	local cb = function()
-		self.blood_bar.updateHP(hp / self._max_hp, healing, htype)
+		self.blood_bar.updae_hp(hp / self._max_hp, healing, htype)
 	end
-	local callback = cc.CallFunc:create(handler(self,cb))
-	self:do_something_later(callback,0.3)
+	local callback = cc.CallFunc:create(handler(self, cb))
+	self:do_something_later(callback, 0.3)
 	self:set_hp(hp)
 end
 
@@ -694,16 +754,16 @@ monster_base.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
 	local hp = self._cur_hp - damage
 
 	local cb = function()
-		self.blood_bar.updateHP(hp / self._max_hp , damage , damage_type)
+		self.blood_bar.updae_hp(hp / self._max_hp , damage , damage_type)
 		if hp<1 then
 			self:die()
 		end
 	end
 	if not is_buff_or_skill then
 		local callback = cc.CallFunc:create(handler(self, cb))
-		self:do_something_later(callback,0.5)
+		self:do_something_later(callback, 0.5)
 	else
-		self.blood_bar.updateHP(hp / self._max_hp, damage, damage_type)
+		self.blood_bar.updae_hp(hp / self._max_hp, damage, damage_type)
 		if hp<1 then
 			self:die(is_buff_or_skill)
 		end
@@ -730,7 +790,7 @@ monster_base.set_hp = function(self, hp)
 end
 
 monster_base.add_anger = function(self, num)
-	if self._cur_anger>self._max_anger-1 then 
+	if self._cur_anger > self._max_anger - 1 then 
 		return
 	end
 	num = num or 1
@@ -747,7 +807,7 @@ monster_base.set_anger = function(self, angle)
 
 	local cb = function()
 		self.card.update(self._cur_anger)
-		self.blood_bar.updateAnger(self._cur_anger)
+		self.blood_bar.update_anger(self._cur_anger)
 	end
 	local callback = cc.CallFunc:create(handler(self,cb))
 
@@ -801,8 +861,8 @@ end
 ----------------------------¹¥»÷ ¼¼ÄÜ¸¨Öú----------------------------------
 
 monster_base.move_and_attack = function(self, target)
-	local num = gtool:ccp_2_int(target.cur_pos)
-	local pos = gtool:int_2_ccp(self:get_back_first_near_pos_num(num,target.cur_towards))
+	local num = gtool:ccp_2_int(target._cur_pos)
+	local pos = gtool:int_2_ccp(self:get_back_first_near_pos_num(num,target._cur_towards))
 
 	self:move_to(pos, target)
 end
@@ -850,9 +910,9 @@ end
 
 monster_base.get_distance_to_pos = function(self, num, update)
 	if update then
-		self.distance_info = self:get_distance_info()
+		self._distance_info = self:get_distance_info()
 	end
-	return self.distance_info[num]
+	return self._distance_info[num]
 end
 
 monster_base.get_distance_info = function(self)
@@ -932,19 +992,19 @@ monster_base.get_around_info = function(self, is_to_show)
 	end
 
 	local map_info = pve_game_ctrl:instance():get_map_info()
-	self.can_reach_area_info = {}
+	self._can_reach_area_info = {}
 
 	if steps>0 then
 		
-		self.can_reach_area_info = self:get_can_reach_area_info(self:get_cur_pos_num(), map_info, steps)
+		self._can_reach_area_info = self:get_can_reach_area_info(self:get_cur_pos_num(), map_info, steps)
 
 		if self:is_fly() then
-			self.fly_path = self:get_fly_path()
+			self._fly_path = self:get_fly_path()
 		end
 
 		for k,v in pairs(map_info) do
 			if type(v) == type({}) and v:get_team_side() == self._team_side then
-				self.can_reach_area_info[k] = pve_game_ctrl.map_item.FRIEND
+				self._can_reach_area_info[k] = pve_game_ctrl.map_item.FRIEND
 			end
 		end
 	end
@@ -955,21 +1015,21 @@ monster_base.get_around_info = function(self, is_to_show)
 			if self:can_reach_and_attack(k) then
 				table.insert(can_attack_table,k)
 			else
-				self.can_reach_area_info[k] = nil
+				self._can_reach_area_info[k] = nil
 			end
 		else 
-			self.can_reach_area_info[k] = nil
+			self._can_reach_area_info[k] = nil
 		end
 	end
 
-	self.distance_info = self:get_distance_info()
+	self._distance_info = self:get_distance_info()
 	
 	for k,v in pairs(can_attack_table) do
-		self.can_reach_area_info[v] = pve_game_ctrl.map_item.ENEMY*100 + self:get_distance_to_pos(v)
+		self._can_reach_area_info[v] = pve_game_ctrl.map_item.ENEMY*100 + self:get_distance_to_pos(v)
 	end
 	
-	self.can_reach_area_info[0] = self._cur_pos
-	return self.can_reach_area_info
+	self._can_reach_area_info[0] = self._cur_pos
+	return self._can_reach_area_info
 end
 
 monster_base.get_can_reach_area_info = function(self, center_pos_num, map_info, steps)
@@ -1139,9 +1199,9 @@ monster_base.get_path_to_pos = function(self, num, path_table)
 	table.insert(path_table,num)
 	local last_geizi
 	if self:is_fly() then 
-		last_geizi = self.fly_path[num]
+		last_geizi = self._fly_path[num]
 	else
-		last_geizi = self.can_reach_area_info[num]
+		last_geizi = self._can_reach_area_info[num]
 	end
 
 	if self:get_cur_pos_num() == last_geizi then
@@ -1199,7 +1259,7 @@ monster_base.nothing_can_do = function(self)
 		self:get_around_info()
 		
 		local count = 0
-		for k,v in pairs(self.can_reach_area_info) do
+		for k,v in pairs(self._can_reach_area_info) do
 		    count = count + 1
 		    if count > 1 then
 		    	return false
@@ -1249,14 +1309,14 @@ monster_base.is_near = function(self, num)
 end
 
 monster_base.can_move_to_pos_num = function(self, num)
-	return self.can_reach_area_info[num] and self.can_reach_area_info[num] > 10 and 100 > self.can_reach_area_info[num]
+	return self._can_reach_area_info[num] and self._can_reach_area_info[num] > 10 and 100 > self._can_reach_area_info[num]
 end
 ----------------------------×´Ì¬¶¯×÷----------------------------------
 ----------------------------×´Ì¬¶¯×÷----------------------------------
 ----------------------------×´Ì¬¶¯×÷----------------------------------
 monster_base.change_monster_status = function(self, status)
-	status = status or self.last_status or monster_base.status.ALIVE
-	self.last_status = self._status
+	status = status or self._last_status or monster_base.status.ALIVE
+	self._last_status = self._status
 	self._status = status
 	
 	if status == monster_base.status.ALIVE then
@@ -1269,12 +1329,12 @@ monster_base.change_monster_status = function(self, status)
 end
 
 monster_base.add_monster_status = function(self, status)
-	self.last_status = self._status
+	self._last_status = self._status
 	self._status = self._status + status
 end
 
 monster_base.remove_monster_status = function(self, status)
-	self.last_status = self._status
+	self._last_status = self._status
 	self._status = self._status - status
 
 	if self._status < monster_base.status.CANT_ATTACK then
@@ -1340,18 +1400,18 @@ end
 monster_base.run_ai = function(self)
 	local enemy_list = self:get_alive_enemy_monsters()
 
-	self.can_reach_area_info = self:get_around_info()
+	self._can_reach_area_info = self:get_around_info()
 	
 	local target_enemy = self:get_enemy_can_attack(enemy_list)
 	
 	if target_enemy then
-		local pos_num = gtool:ccp_2_int(target_enemy.cur_pos)
+		local pos_num = gtool:ccp_2_int(target_enemy._cur_pos)
 		local distance = self:get_distance_to_pos(pos_num)
 		if self:can_use_skill() then
 			return self:use_skill(target_enemy:get_cur_pos_num())
 		end
 		if self:is_melee() then
-			self:move_and_Attack(target_enemy)
+			self:move_and_attack(target_enemy)
 		else
 			if distance<6 and distance > 2 then
 				self:attack(target_enemy, distance)
@@ -1374,7 +1434,7 @@ end
 monster_base.get_enemy_can_attack = function(self, enemy_list)
 	local can_attack_list = {}
 	for k,v in pairs(enemy_list) do
-		if self:can_reach_and_attack(gtool:ccp_2_int(v.cur_pos)) then
+		if self:can_reach_and_attack(gtool:ccp_2_int(v._cur_pos)) then
 			table.insert(can_attack_list,v)
 		end
 	end
@@ -1384,7 +1444,7 @@ end
 
 monster_base.get_lowest_hp_enemy = function(self, enemy_list)
 	local sort_by_hp = function(a,b)
-		return a.cur_hp < b.cur_hp
+		return a:get_cur_hp() < b:get_cur_hp()
 	end
 
 	if #enemy_list>2 then
@@ -1400,7 +1460,7 @@ monster_base.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_info
 	if not enemy then
 		return
 	end
-	local pos_num = gtool:ccp_2_int(enemy.cur_pos)
+	local pos_num = gtool:ccp_2_int(enemy._cur_pos)
 
 	local all_path = self:get_path_info_to_target(map_info,pos_num)
 
@@ -1412,7 +1472,7 @@ monster_base.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_info
 	if path then
 		local index
 		for i,v in ipairs(path) do
-			if self.can_reach_area_info[v] and self.can_reach_area_info[v]<100 and self.can_reach_area_info[v]>10 then
+			if self._can_reach_area_info[v] and self._can_reach_area_info[v]<100 and self._can_reach_area_info[v]>10 then
 				index = i
 				break
 			end
@@ -1478,7 +1538,7 @@ monster_base.get_path_to_posPlus = function(self, num, all_path, path_table)
 	table.insert(path_table,num)
 	local last_geizi
 	if self:is_fly() then 
-		last_geizi = self.fly_path[num]
+		last_geizi = self._fly_path[num]
 	else
 		last_geizi = all_path[num]
 	end

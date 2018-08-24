@@ -20,20 +20,20 @@ fight_scene.Wait_Time = 1
 fight_scene.Action_Time = 0.3
 
 fight_scene.on_create = function(self)
-	self.map_data = require("app.data.map_data")
+	self._map_data = require("app.data.map_data")
     cc.Director:getInstance():setProjection(cc.DIRECTOR_PROJECTION2_D)
 end
 
 fight_scene.onEnter = function(self)
 	self:view_init()
 	self:init_model()
-	self.map_view:initEnterAnimation()
+	self.map_view:init_enter_animation()
 	self.map_view:get_root():setScale(0.75)
 end
 
 fight_scene.onExit = function(self)
 	pve_game_ctrl:instance():clear_team()
-	self.map_view:clearModelPanel()
+	self.map_view:clear_model_panel()
 end
 
 fight_scene.onEnterTransitionFinish = function(self)
@@ -59,12 +59,12 @@ end
 fight_scene.init_model = function(self)
 	local map = pve_game_ctrl:instance():get_map()
 	for k,v in pairs(map) do
-		self.map_view:createOtherModel(v,gtool:int_2_ccp(k))
+		self.map_view:create_other_model(v,gtool:int_2_ccp(k))
 	end
 
 	local all_monster = pve_game_ctrl:instance():get_all_monsters()
 	for _,v in pairs(all_monster) do
-		self.map_view:createMonsterModel(v)
+		self.map_view:create_monster_model(v)
 	end
 end
 
@@ -79,7 +79,7 @@ end
 
 
 fight_scene.update_battle_queue = function(self, is_wait)
-	self.battle_info_view:updateRightBottomQueue(is_wait)
+	self.battle_info_view:update_right_bottom_queue(is_wait)
 end
 
 fight_scene.get_particle_node = function(self)
@@ -120,6 +120,10 @@ end
 
 fight_scene.hide_other_around_info = function(self)
 	self.map_view:hide_other_around_info()
+end
+
+fight_scene.get_map_data = function(self)
+	return self._map_data
 end
 
 return fight_scene

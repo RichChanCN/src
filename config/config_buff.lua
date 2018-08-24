@@ -28,8 +28,8 @@ g_config.buff =
 		end,
 		--计算对象属性时候会调用
 		apply = function(monster)
-			monster.cur_physical_defense = monster.cur_physical_defense * 2
-			monster.cur_magic_defense = monster.cur_magic_defense * 2
+			monster:set_cur_physical_defense(monster:get_cur_physical_defense(true) * 2)
+			monster:set_cur_magic_defense(monster:get_cur_magic_defense(true) * 2)
 		end,
 		--buff从对象上移除后会调用的
 		finish = function(monster)
@@ -67,7 +67,7 @@ g_config.buff =
 		end,
 
 		apply = function(monster)
-			monster.cur_damage = monster.cur_damage * 1.3
+			monster:set_cur_damage(monster:get_cur_damage(true) * 1.3)
 		end,
 		
 		finish = function(monster)
@@ -107,7 +107,7 @@ g_config.buff =
 		end,
 
 		apply = function(monster)
-			monster.cur_mobility = monster.mobility - 1
+			monster:set_cur_mobility(monster:get_cur_mobility(true) - 1)
 		end,
 
 		finish = function(monster)
@@ -138,7 +138,7 @@ g_config.buff =
 			particle:setPosition(0, 40)
 			monster.node:addChild(particle)
 			local monster_base = require("app.logic.monster_base")
-			monster:addMonsterStatus(monster_base.status.STUN)
+			monster:add_monster_status(monster_base.status.STUN)
 		end,
 
 		once_a_round = function(monster)
@@ -149,7 +149,7 @@ g_config.buff =
 
 		finish = function(monster)
 			local monster_base = require("app.logic.monster_base")
-			monster:removeMonsterStatus(monster_base.status.STUN)
+			monster:remove_monster_status(monster_base.status.STUN)
 			monster.node:removeChildByName("stun")
 		end,
 
@@ -180,10 +180,10 @@ g_config.buff =
 		end,
 		once_a_round = function(monster)
 			local monster_base = require("app.logic.monster_base")
-			monster:minusHP(40, monster_base.damage_level.POISON,true)
+			monster:minus_hp(40, monster_base.damage_level.POISON, true)
 		end,
 		apply = function(monster)
-			monster.cur_damage = monster.cur_damage * 0.9
+			monster:set_cur_damage(monster:get_cur_damage(true) * 0.9)
 		end,
 		finish = function(monster)
 			monster.node:removeChildByName("poison")

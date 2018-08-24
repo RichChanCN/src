@@ -24,7 +24,7 @@ pre_scene.begin_animation = function(self)
 	local ac6 = self.game_logo_sp:runAction(cc.DelayTime:create(1))
 	local ac7 = self.game_logo_sp:runAction(cc.FadeOut:create(1))
 	
-	local callback = cc.CallFunc:create(handler(self,self.go_to_main_scene))
+	local callback = cc.CallFunc:create(handler(self, self.go_to_main_scene))
 
 	-- local cb = function()
 	-- 	self:go_to_main_scene()
@@ -32,9 +32,9 @@ pre_scene.begin_animation = function(self)
 	
 	-- local callback = cc.CallFunc:create(handler(self,cb))
 	
-	local seq1 = cc.Sequence:create(ac0,ac1,ac2,ac3)
+	local seq1 = cc.Sequence:create(ac0, ac1, ac2, ac3)
 	self.cocos_logo_sp:runAction(seq1)
-	local seq2 = cc.Sequence:create(ac4,ac5,ac6,ac7,callback)
+	local seq2 = cc.Sequence:create(ac4, ac5, ac6, ac7, callback)
 	self.game_logo_sp:runAction(seq2)
 end
 

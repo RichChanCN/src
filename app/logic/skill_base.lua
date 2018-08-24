@@ -26,10 +26,6 @@ skill_base.new = function(self, monster, skill_data)
 	return self
 end
 
-skill_base.is_need_target = function(self)
-	return self._is_need_target
-end
-
 skill_base.use = function(self, target_pos_num)
 	self.target_pos_num = target_pos_num
 	
@@ -70,7 +66,7 @@ skill_base.play = function(self)
 		particle:setGlobalZOrder(uitool:mid_z_order())
 		particle:setPosition(self._particle_pos)
 		if self._range < 1 then
-			pve_game_ctrl:instance():getScene():get_particle_node():addChild(particle)
+			pve_game_ctrl:instance():get_scene():get_particle_node():addChild(particle)
 		else
 			local map_info = pve_game_ctrl:instance():get_map_info()
 			map_info[self._caster:get_cur_pos_num()].node:addChild(particle)
@@ -119,6 +115,54 @@ skill_base.get_be_affected_monster_list = function(self)
 	end
 
 	return monster_list
+end
+
+skill_base.is_need_target = function(self)
+	return self._is_need_target
+end
+
+skill_base.get_img_path = function(self)
+	return self._img_path
+end
+
+skill_base.get_cost = function(self)
+	return self._cost
+end
+
+skill_base.get_name = function(self)
+	return self._name
+end
+
+skill_base.get_caster = function(self)
+	return self._caster
+end
+
+skill_base.get_damage_level_plus = function(self)
+	return self._damage_level_plus
+end
+
+skill_base.get_damage = function(self)
+	return self._damage
+end
+
+skill_base.get_healing_level_plus = function(self)
+	return self._healing_level_plus
+end
+
+skill_base.get_healing = function(self)
+	return self._healing
+end
+
+skill_base.get_buff = function(self)
+	return self._buff
+end
+
+skill_base.get_debuff = function(self)
+	return self._debuff
+end
+
+skill_base.get_description = function(self)
+	return self._description
 end
 
 return skill_base

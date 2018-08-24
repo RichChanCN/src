@@ -54,10 +54,10 @@ confirm_view.update_view = function(self)
 			self["star_"..i.."_sp"]:setScale(1.5)
 		end
 	end
-	self:updateReward()
+	self:update_reward()
 end
 
-confirm_view.updateReward = function(self)
+confirm_view.update_reward = function(self)
 	-- if self.star_num > 0 then
 	-- 	self.got_img:setVisible(true)
 	-- 	self.reward_node:setVisible(false)

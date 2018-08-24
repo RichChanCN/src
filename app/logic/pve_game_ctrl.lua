@@ -224,7 +224,7 @@ end
 pve_game_ctrl.request_auto = function(self)
 	self:set_auto(true)
 	if self:get_game_status() == pve_game_ctrl.game_status.WAIT_ORDER then
-		self._cur_active_monster:runAI()
+		self._cur_active_monster:run_ai()
 	end
 	self:set_game_status(pve_game_ctrl.game_status.AUTO)
 end

@@ -11,6 +11,8 @@ save_data.number_index = {
 
 save_data.init = function(self, ctrl)
 	self._ctrl = ctrl
+	self._load_file = "save_show.data"
+	self._save_file = "data2.data"
 	self.collected_monsters = {}
 	self:init_info()
 	self:load_data()
@@ -148,7 +150,7 @@ save_data.get_monster_data_by_id = function(self, id)
 end
 
 save_data.load_data = function(self)
-	local xmlfile = xml.load(g_config.xml_path.."save1.data")
+	local xmlfile = xml.load(g_config.xml_path..self._load_file)
 	self.time = xmlfile.time
 
 	for key,value in pairs(self) do
@@ -180,7 +182,7 @@ save_data.load_data = function(self)
 		end
 	end
 
-	self.player.cur_max_exp = (100 + (self.player.level-1) * 20)
+	self.player.cur_max_exp = (100 + (self.player.level - 1) * 20)
 
 	self:init_collected_monsters()
 end
@@ -237,7 +239,7 @@ save_data.save = function(self)
 			monster:append(k1)[1] = v1
 		end
 	end
-	xmlfile:save(g_config.xml_path.."save1.data")
+	xmlfile:save(g_config.xml_path..self._save_file)
 end
 
 return save_data
