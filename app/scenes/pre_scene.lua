@@ -1,5 +1,5 @@
 
-local pre_scene = class("pre_scene", cc.load("mvc").SceneBase)
+local pre_scene = class("pre_scene", cc.load("mvc").scene_base)
 
 
 -- 加载csb文件
@@ -24,7 +24,7 @@ pre_scene.begin_animation = function(self)
 	local ac6 = self.game_logo_sp:runAction(cc.DelayTime:create(1))
 	local ac7 = self.game_logo_sp:runAction(cc.FadeOut:create(1))
 	
-	local callback = cc.CallFunc:create(handler(self,self.go_to_main_scene))
+	local callback = cc.CallFunc:create(handler(self, self.go_to_main_scene))
 
 	-- local cb = function()
 	-- 	self:go_to_main_scene()
@@ -32,15 +32,15 @@ pre_scene.begin_animation = function(self)
 	
 	-- local callback = cc.CallFunc:create(handler(self,cb))
 	
-	local seq1 = cc.Sequence:create(ac0,ac1,ac2,ac3)
+	local seq1 = cc.Sequence:create(ac0, ac1, ac2, ac3)
 	self.cocos_logo_sp:runAction(seq1)
-	local seq2 = cc.Sequence:create(ac4,ac5,ac6,ac7,callback)
+	local seq2 = cc.Sequence:create(ac4, ac5, ac6, ac7, callback)
 	self.game_logo_sp:runAction(seq2)
 end
 
 pre_scene.pre_load_main_scene = function(self)
 	local start_time = os.clock();
-    self.app_:create_view("main_scene")
+    self:get_app():create_scene("main_scene")
 	local end_time = os.clock();
 
 	print(string.format("cost time  : %.4f", end_time - start_time))
@@ -48,7 +48,7 @@ end
 
 pre_scene.go_to_main_scene = function(self)
 	local start_time = os.clock();
-	local layer = self.app_:create_view("main_scene")
+	local layer = self:get_app():create_scene("main_scene")
 	local end_time = os.clock();
 	print(string.format("cost time  : %.4f", end_time - start_time))
 	local scene = cc.Scene:create()

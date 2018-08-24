@@ -1,4 +1,4 @@
-local view = require("packages.mvc.ViewBase")
+local view = require("packages.mvc.view_base")
 
 local map_view = view:instance()
 
@@ -16,194 +16,191 @@ map_view.RESOURCE_BINDING = {
     ["logo_node"]			= {["varname"] = "logo_node"},
 }
 
-function map_view:initUI()
-	self:initPrePanel()
-	self:initArena()
-	self:initArenaBottomNode()
+map_view.init_ui = function(self)
+	self:init_pre_panel()
+	self:init_arena()
+	self:init_arena_bottom_node()
 end
 
-function map_view:initInfo()
-	self.monster_model_list = {}
-	self.model_node_list = {}
-	self.monster_loaded_num = 0
-	self.skew_angle = 60
-	self.arena_event_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
-	self.arena_show_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
-	self.arena_bottom_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
-	self.arena_top_node:setRotation3D(cc.vec3(self.skew_angle,0,0))
-	self.model_panel:setRotation3D(cc.vec3(self.skew_angle,0,0))
-    self.camera = self.ctrl:getScene():getDefaultCamera()
-    self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+map_view.init_info = function(self)
+	self._monster_model_list = {}
+	self._model_node_list = {}
+	self._monster_loaded_num = 0
+	self._skew_angle = 60
+	self.arena_event_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
+	self.arena_show_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
+	self.arena_bottom_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
+	self.arena_top_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
+	self.model_panel:setRotation3D(cc.vec3(self._skew_angle,0,0))
+    self._camera = self:get_ctrl():getScene():getDefaultCamera()
 end
 
-function map_view:initEvents()
-	self:pauseArenaListener()
+map_view.init_events = function(self)
+	self:pause_arena_listener()
 end
 
-function map_view:updateView()
-	if Judgment:Instance():is_wait_order() then
-		self:showGuide()
+map_view.update_view = function(self)
+	if pve_game_ctrl:instance():is_wait_order() then
+		self:show_guide()
 	else
-		self:hideGuide()
+		self:hide_guide()
 	end
 end
 
-function map_view:beginAnimation()
-	self:playEnterAnimation()
+map_view.beginAnimation = function(self)
+	self:play_enter_animation()
 	self:cameraAnimation()
 end
 
-function map_view:cameraAnimation()
-	local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time+3,0.75))
-	local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,1))
-	local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.startGame))
+map_view.cameraAnimation = function(self)
+	local ac1 = self:get_root():runAction(cc.ScaleTo:create(self:get_ctrl().Wait_Time + 3, 0.75))
+	local ac2 = self:get_root():runAction(cc.ScaleTo:create(self:get_ctrl().Action_Time, 1))
+	local callback = cc.CallFunc:create(handler(self:get_ctrl(), self:get_ctrl().start_game))
 
 	local seq = cc.Sequence:create(ac1,ac2,callback)
 		
-	self:showMask()
-	self.root:runAction(seq)
+	self:show_mask()
+	self:get_root():runAction(seq)
 end
 
-function map_view:endAnimation()
-	self:hideGuide()
-	local ac1 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Wait_Time,1))
-	local ac2 = self.root:runAction(cc.ScaleTo:create(self.ctrl.Action_Time,0.75))
-	local callback = cc.CallFunc:create(handler(self.ctrl,self.ctrl.openResultView))
+map_view.endAnimation = function(self)
+	self:hide_guide()
+	local ac1 = self:get_root():runAction(cc.ScaleTo:create(self:get_ctrl().Wait_Time, 1))
+	local ac2 = self:get_root():runAction(cc.ScaleTo:create(self:get_ctrl().Action_Time, 0.75))
+	local callback = cc.CallFunc:create(handler(self:get_ctrl(), self:get_ctrl().open_result_view))
 
-	local seq = cc.Sequence:create(ac1,ac2,callback)
+	local seq = cc.Sequence:create(ac1, ac2, callback)
 		
-	self.root:runAction(seq)
-	self:hideMask()
-	self.ctrl:closeBattleInfoView()
+	self:get_root():runAction(seq)
+	self:hide_mask()
+	self:get_ctrl():close_battle_info_view()
 end
 
-function map_view:get_position_by_int(num)
+map_view.get_position_by_int = function(self, num)
 	local pos = gtool:int_2_ccp(num)
-	local a,b = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
-	return cc.p(a,b)
-end
-----------------------------------------------------------------
--------------------------------Ë½ÓÐ·½·¨--------------------------
-----------------------------------------------------------------
-function map_view:showOtherAroundInfo(monster)
-	self:hideGuide()
-	self:showGuide(monster)
+	local a, b = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
+	return cc.p(a, b)
 end
 
-function map_view:hideOtherAroundInfo()
-	self:hideGuide()
-	self:showGuide()
+map_view.show_other_around_info = function(self, monster)
+	self:hide_guide()
+	self:show_guide(monster)
 end
 
-function map_view:showGuide(monster)
-	local cur_active_monster = monster or Judgment:Instance():get_cur_active_monster()
+map_view.hide_other_around_info = function(self)
+	self:hide_guide()
+	self:show_guide()
+end
+
+map_view.show_guide = function(self, monster)
+	local cur_active_monster = monster or pve_game_ctrl:instance():get_cur_active_monster()
 	
-	local gezi_list = cur_active_monster:getAroundInfo(monster)
+	local gezi_list = cur_active_monster:get_around_info(monster)
 
-	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
-	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
+	local a, b = self["gezi_" .. gezi_list[0].x .. "_" .. gezi_list[0].y .. "_black"]:getPosition()
+	self.cur_monster_pos_sp:setPosition(cc.p(a, b))
 	
-	for k,v in pairs(gezi_list) do
-		if k>10 and v<100 and v>10 then
-			self:showCanMoveToGezi(k)
-		elseif k>10 and v>100 then
-			if math.floor(v/100) == Judgment.MapItem.ENEMY then
-				self:showEnemy(k,monster,v%100)
+	for k, v in pairs(gezi_list) do
+		if k > 10 and v < 100 and v > 10 then
+			self:show_can_move_to_gezi(k)
+		elseif k > 10 and v > 100 then
+			if math.floor(v / 100) == pve_game_ctrl.map_item.ENEMY then
+				self:show_enemy(k, monster, v % 100)
 			end
 		end
     end
 end
 
-function map_view:showEnemy(num,monster,distance)
-	local cur_active_monster = monster or Judgment:Instance():get_cur_active_monster()
+map_view.show_enemy = function(self, num, monster, distance)
+	local cur_active_monster = monster or pve_game_ctrl:instance():get_cur_active_monster()
 	local atk_img
 	
 	if cur_active_monster:is_melee() then
 		atk_img = self.close_attack_img:clone()
-	elseif distance>5 or distance < 3 then
+	elseif distance > 5 or distance < 3 then
 		atk_img = self.too_far_attack_img:clone()
 	else
 		atk_img = self.far_attack_img:clone()
 	end
 
-	local x,y = math.modf(num/10),num%10
-	atk_img:setPosition(self["gezi_"..x.."_"..y]:getPosition())
+	local x, y = math.modf(num / 10), num % 10
+	atk_img:setPosition(self["gezi_" .. x .. "_" .. y]:getPosition())
 
 	self.arena_top_node:addChild(atk_img)
 	uitool:repeat_fade_in_and_out(atk_img)
 
 	local img = atk_img:getChildByName("img")
-	uitool:makeImgToButtonHT(img,self.camera,function()
-		Judgment:Instance():select_target(num,distance)
+	uitool:make_img_to_button_ht(img, self._camera, function()
+		pve_game_ctrl:instance():select_target(num, distance)
 	end)
 end
 
-function map_view:showCanMoveToGezi(num)
-	local x,y = math.modf(num/10),num%10
-	if self["gezi_"..x.."_"..y.."_black"] then 
-		self["gezi_"..x.."_"..y.."_black"]:setVisible(true)
-		self["gezi_"..x.."_"..y.."_black"]:setScale(0.1)
-		local time = math.random()/3+0.1
-		self["gezi_"..x.."_"..y.."_black"]:runAction(cc.FadeIn:create(time))
-		self["gezi_"..x.."_"..y.."_black"]:runAction(cc.ScaleTo:create(time,1))
-		self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
+map_view.show_can_move_to_gezi = function(self, num)
+	local x, y = math.modf(num / 10), num % 10
+	if self["gezi_" .. x .. "_" .. y .. "_black"] then 
+		self["gezi_" .. x .. "_" .. y .. "_black"]:setVisible(true)
+		self["gezi_" .. x .. "_" .. y .. "_black"]:setScale(0.1)
+		local time = math.random() / 3 + 0.1
+		self["gezi_" .. x .. "_" .. y .. "_black"]:runAction(cc.FadeIn:create(time))
+		self["gezi_" .. x .. "_" .. y .. "_black"]:runAction(cc.ScaleTo:create(time, 1))
+		self._eventDispatcher:resumeEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 	end
 end
 
-function map_view:hideGuide()
+map_view.hide_guide = function(self)
 	self.arena_top_node:removeAllChildren()
-	self.cur_monster_pos_sp:setPosition(uitool:farAway())
-    for x=1,8 do
-    	for y=1,7 do
+	self.cur_monster_pos_sp:setPosition(uitool:far_away())
+    for x = 1, 8 do
+    	for y = 1, 7 do
     		if self["gezi_"..x.."_"..y.."_black"] then 
     			self["gezi_"..x.."_"..y.."_black"]:setOpacity(0)
     			self["gezi_"..x.."_"..y.."_black"]:setVisible(false)
-    			self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..x.."_"..y])
+    			self._eventDispatcher:pauseEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
     		end
     	end
     end
 end
 
-function map_view:showMask()
-	local ac1 = self.mask_img:runAction(cc.FadeOut:create(self.ctrl.Wait_Time+3))
-	local ac2 = self.mask_img:runAction(cc.FadeIn:create(self.ctrl.Action_Time))
+map_view.show_mask = function(self)
+	local ac1 = self.mask_img:runAction(cc.FadeOut:create(self:get_ctrl().Wait_Time + 3))
+	local ac2 = self.mask_img:runAction(cc.FadeIn:create(self:get_ctrl().Action_Time))
 
-	local seq = cc.Sequence:create(ac1,ac2)
+	local seq = cc.Sequence:create(ac1, ac2)
 	
 	self.mask_img:runAction(seq)
 end
 
-function map_view:hideMask()
-	local ac1 = self.mask_img:runAction(cc.FadeIn:create(self.ctrl.Wait_Time))
-	local ac2 = self.mask_img:runAction(cc.FadeOut:create(self.ctrl.Action_Time))
+map_view.hide_mask = function(self)
+	local ac1 = self.mask_img:runAction(cc.FadeIn:create(self:get_ctrl().Wait_Time))
+	local ac2 = self.mask_img:runAction(cc.FadeOut:create(self:get_ctrl().Action_Time))
 
-	local seq = cc.Sequence:create(ac1,ac2)
+	local seq = cc.Sequence:create(ac1, ac2)
 	
 	self.mask_img:runAction(seq)
 end
 --------------------------Õ½³¡²¿·Ö¿ªÊ¼-------------------------
-function map_view:createMonsterModel(monster)
+map_view.create_monster_model = function(self, monster)
     if monster.model then
         self.model_panel:removeChild(monster.model)
         monster.model = nil
     end
 
-	self.model_node_list[monster:getTag()] = cc.Node:create()
-	self.model_node_list[monster:getTag()]:retain()
+	self._model_node_list[monster:get_tag()] = cc.Node:create()
+	self._model_node_list[monster:get_tag()]:retain()
 	
 	local callback = function(model)
 		model:setScale(0.5)
-		local node = self.model_node_list[monster:getTag()]
-		local pos = monster.start_pos
-        local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
+		local node = self._model_node_list[monster:get_tag()]
+		local pos = monster:get_start_pos()
+        local x,y = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
         if monster:is_fly() then
-        	node:setPosition(x,y+10)
+        	node:setPosition(x, y + 10)
         else
-        	node:setPosition(x,y-10)
+        	node:setPosition(x, y - 10)
         end
 		node:addChild(model)
         monster.node = node
-		local blood_bar = self:initBloodBar(node,monster)
+		local blood_bar = self:init_blood_bar(node, monster)
 		self.model_panel:addChild(node)
 
 		monster.model = model
@@ -211,53 +208,53 @@ function map_view:createMonsterModel(monster)
 		monster:reset()
 
 		
-		self.monster_loaded_num = self.monster_loaded_num + 1
+		self._monster_loaded_num = self._monster_loaded_num + 1
 		
 	end
-    cc.Sprite3D:createAsync(monster.model_path,callback)
+    cc.Sprite3D:createAsync(monster.model_path, callback)
     
 end
 
-function map_view:createOtherModel(other_model,pos)
+map_view.create_other_model = function(self, other_model, pos)
 	local callback = function(model)
 		model:setScale(4)
-        local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
-        model:setPosition(x,y)
+        local x,y = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
+        model:setPosition(x, y)
 		self.model_panel:addChild(model)
 	end
 	if other_model == 2 then
-		local chapter_num, level_num = Judgment:Instance():get_cur_chapter_and_level()
-		local barrier = self.ctrl.map_data:getBarrierModelByChapterAndLevel(chapter_num, level_num)
-    	cc.Sprite3D:createAsync(barrier,callback)
+		local chapter_num, level_num = pve_game_ctrl:instance():get_cur_chapter_and_level()
+		local barrier = self:get_ctrl():get_map_data():get_barrier_model_by_chapter_and_level(chapter_num, level_num)
+    	cc.Sprite3D:createAsync(barrier, callback)
     end
 end
 
-function map_view:initBloodBar(node,monster)
+map_view.init_blood_bar = function(self, node, monster)
 	local blood_bar = self.blood_template:clone()
 	blood_bar.child = {}
 	blood_bar.child.blood_img = blood_bar:getChildByName("blood_img")
 	blood_bar.child.level_text = blood_bar:getChildByName("level_text")
 
-	blood_bar.child.blood_img:loadTexture(Config.sprite["team_hp_img_"..monster.team_side])
+	blood_bar.child.blood_img:loadTexture(g_config.sprite["team_hp_img_" .. monster:get_team_side()])
 	blood_bar.child.level_text:setString(monster.level)
 
-	local updateHP = function(percent,damage,type)
-		self:createDamageFlyWords(damage,monster,type)
-		uitool:set_progress_bar(blood_bar.child.blood_img,percent)
+	local updae_hp = function(percent, damage, type)
+		self:create_damage_fly_words(damage, monster, type)
+		uitool:set_progress_bar(blood_bar.child.blood_img, percent)
 	end
 
-	local updateAnger = function(anger)
-		for i=1,4 do
-			if not (i>anger) then
-				blood_bar:getChildByName("star_"..i):setVisible(true)
+	local update_anger = function(anger)
+		for i = 1, 4 do
+			if not (i > anger) then
+				blood_bar:getChildByName("star_" .. i):setVisible(true)
 			else
-				blood_bar:getChildByName("star_"..i):setVisible(false)
+				blood_bar:getChildByName("star_" .. i):setVisible(false)
 			end
 		end
 	end
 
-	blood_bar.updateHP = updateHP
-	blood_bar.updateAnger = updateAnger
+	blood_bar.updae_hp = updae_hp
+	blood_bar.update_anger = update_anger
 	blood_bar:setPosition(0,75)
 	uitool:set_node_to_global_top(blood_bar)
 	blood_bar:setName("blood_bar")
@@ -265,54 +262,52 @@ function map_view:initBloodBar(node,monster)
 	node:addChild(blood_bar)
 end
 
-function map_view:createDamageFlyWords(damage,monster,level)
+map_view.create_damage_fly_words = function(self, damage, monster, level)
 	local fly_word = self.fly_word_template:clone()
 	fly_word:setString(damage)
-	fly_word:setTextColor(Config.color["damage_"..level])
+	fly_word:setTextColor(g_config.color["damage_" .. level])
 	local x,y = monster.node:getPosition()
 
-	fly_word:setPosition(x,y+60)
+	fly_word:setPosition(x, y + 60)
 	--fly_word:setGlobalZOrder(uitool:top_z_order())
 	fly_word:setScale(0.2)
 	
 	self.arena_top_node:addChild(fly_word)
 
-	local ac1 = fly_word:runAction(cc.ScaleTo:create(0.2,1))
+	local ac1 = fly_word:runAction(cc.ScaleTo:create(0.2, 1))
 	fly_word:stopAction(ac1)
-	local ac2 = fly_word:runAction(cc.MoveTo:create(0.5,cc.p(x,y+80)))
+	local ac2 = fly_word:runAction(cc.MoveTo:create(0.5, cc.p(x, y + 80)))
 	fly_word:stopAction(ac2)
 	local ac3 = fly_word:runAction(cc.FadeOut:create(0.1))
 	fly_word:stopAction(ac3)
 	
-	local seq = cc.Sequence:create(ac1,ac2,ac3)
+	local seq = cc.Sequence:create(ac1, ac2, ac3)
 
 	fly_word:runAction(seq)
 end
 
-function map_view:initArena()
-	for x=1,8 do
-		for y=1,7 do
-			--ÕâÀïÎªÁËÌá¸ßÐ§ÂÊ£¬µ÷ÓÃÁËÔ­±¾µÄ½Ó¿Ú£¬Ö»ÔÚÒ»²ãÀïÃæÑ°ÕÒ½Úµã¡£
-			self["gezi_"..x.."_"..y] = self.arena_event_node:getChildByName("gezi_"..x.."_"..y)
-			self["gezi_"..x.."_"..y.."_black"] = self.arena_bottom_node:getChildByName("gezi_"..x.."_"..y)
-			if self["gezi_"..x.."_"..y] then
-				self["gezi_"..x.."_"..y].arena_pos = cc.p(x,y)
-                self:addArenaListener(self["gezi_"..x.."_"..y])
+map_view.init_arena = function(self)
+	for x = 1, 8 do
+		for y = 1, 7 do
+			self["gezi_" .. x .. "_" .. y] = self.arena_event_node:getChildByName("gezi_" .. x .. "_" .. y)
+			self["gezi_" .. x .. "_" .. y .. "_black"] = self.arena_bottom_node:getChildByName("gezi_" .. x .. "_" .. y)
+			if self["gezi_" .. x .. "_" .. y] then
+				self["gezi_" .. x .. "_" .. y].arena_pos = cc.p(x, y)
+                self:add_arena_listener(self["gezi_" .. x .. "_" .. y])
 			end
 		end
 	end
 
 end
 
---ÒòÎªÆåÅÌ×ö¹ýÇãÐ±´¦Àí£¬ËùÒÔÕâÀïÒªÓÃÉäÏßÀ´´¦Àí
-function map_view:addArenaListener(gezi)
-    local function touchBegan( touch, event )
+map_view.add_arena_listener = function(self, gezi)
+    local touch_began = function(touch, event)
         local node = event:getCurrentTarget()
 		local start_location = touch:getLocation()
-		if Judgment:Instance():is_wait_order() then
-        	if node:hitTest(start_location, self.camera, nil) then
-        		local x,y = node:getPosition()
-        		self.moveto_point_sp:setPosition(x,y)
+		if pve_game_ctrl:instance():is_wait_order() then
+        	if node:hitTest(start_location, self._camera, nil) then
+        		local x, y = node:getPosition()
+        		self.moveto_point_sp:setPosition(x, y)
         		self.target_gezi = node
         	end
         	return true
@@ -321,61 +316,61 @@ function map_view:addArenaListener(gezi)
         end
     end
 
-    local function touchMoved( touch, event )
+    local touch_moved = function(touch, event)
         local node = event:getCurrentTarget()
         local cur_location = touch:getLocation()
 
-        if node:hitTest(cur_location, self.camera, nil) then
-        	local x,y = node:getPosition()
-        	self.moveto_point_sp:setPosition(x,y)
+        if node:hitTest(cur_location, self._camera, nil) then
+        	local x, y = node:getPosition()
+        	self.moveto_point_sp:setPosition(x, y)
         	self.target_gezi = node
         elseif self.target_gezi and self.target_gezi:getTag() == node:getTag() then
-        	self.moveto_point_sp:setPosition(uitool:farAway())
+        	self.moveto_point_sp:setPosition(uitool:far_away())
             self.target_gezi = nil
         end
     end
 
-    local function touchEnded( touch, event )
+    local touch_ended = function(touch, event)
         local node = event:getCurrentTarget()
         local cur_location = touch:getLocation()
-        self.moveto_point_sp:setPosition(uitool:farAway())
+        self.moveto_point_sp:setPosition(uitool:far_away())
 
-        if node:hitTest(cur_location, self.camera, nil) then
-            Judgment:Instance():select_pos(node)
+        if node:hitTest(cur_location, self._camera, nil) then
+            pve_game_ctrl:instance():select_pos(node)
         end
     end
 
     gezi.listener = cc.EventListenerTouchOneByOne:create()
     --gezi.listener:setSwallowTouches(true)
-    gezi.listener:registerScriptHandler(touchBegan, cc.Handler.EVENT_TOUCH_BEGAN)
-    gezi.listener:registerScriptHandler(touchMoved, cc.Handler.EVENT_TOUCH_MOVED)
-    gezi.listener:registerScriptHandler(touchEnded, cc.Handler.EVENT_TOUCH_ENDED)
-    self.eventDispatcher:addEventListenerWithSceneGraphPriority(gezi.listener, gezi)
+    gezi.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
+    gezi.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
+    gezi.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
+    self._eventDispatcher:addEventListenerWithSceneGraphPriority(gezi.listener, gezi)
 end
 
-function map_view:resumeArenaListener()
+map_view.resume_arena_listener = function(self)
 	
-	for x=1,8 do
-		for y=1,7 do 
-			if self["gezi_"..x.."_"..y] then
-				self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
+	for x = 1, 8 do
+		for y = 1, 7 do 
+			if self["gezi_" .. x .. "_" .. y] then
+				self._eventDispatcher:resumeEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 			end
 		end
 	end
 end
 
-function map_view:pauseArenaListener()
+map_view.pause_arena_listener = function(self)
 	
-	for x=1,8 do
-		for y=1,7 do 
-			if self["gezi_"..x.."_"..y] then
-				self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..x.."_"..y])
+	for x = 1, 8 do
+		for y = 1, 7 do 
+			if self["gezi_" .. x .. "_" .. y] then
+				self._eventDispatcher:pauseEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 			end
 		end
 	end
 end
 
-function map_view:initArenaBottomNode()
+map_view.init_arena_bottom_node = function(self)
 	self.moveto_point_sp 		= self.arena_bottom_node:getChildByName("moveto_point_sp")
 	self.cur_monster_pos_sp 	= self.arena_bottom_node:getChildByName("cur_monster_pos_sp")
 	self.far_attack_img 		= self.arena_bottom_node:getChildByName("far_attack_img")
@@ -383,15 +378,11 @@ function map_view:initArenaBottomNode()
 	self.close_attack_img 		= self.arena_bottom_node:getChildByName("close_attack_img")
 end
 
-function map_view:clearModelPanel()
+map_view.clear_model_panel = function(self)
 	self.model_panel:removeAllChildren()
 end
 
---------------------------Õ½³¡²¿·Ö½áÊø-------------------------
-
-
---------------------------½ø³¡¶¯»­¿ªÊ¼-------------------------
-function map_view:initPrePanel()
+map_view.init_pre_panel = function(self)
 	self.shield_img 	= self.logo_node:getChildByName("shield_img")
 	self.sword_img	 	= self.logo_node:getChildByName("sword_img")
 	self.em_img 		= self.logo_node:getChildByName("em_img")
@@ -400,53 +391,53 @@ function map_view:initPrePanel()
 
 end
 
-function map_view:playEnterAnimation()
+map_view.play_enter_animation = function(self)
 
 	self.shield_img:runAction(cc.FadeIn:create(0.5))
 	local a1 = self.word_img:runAction(cc.FadeIn:create(0.5))
-	local a2 = self.word_img:runAction(cc.ScaleTo:create(0.4,1))
-	local seq1 = cc.Sequence:create(a1,a2)
+	local a2 = self.word_img:runAction(cc.ScaleTo:create(0.4, 1))
+	local seq1 = cc.Sequence:create(a1, a2)
 	self.word_img:runAction(seq1)
 
-	local ac1 = self.sword_img:runAction(cc.ScaleTo:create(0.4,1.2))
+	local ac1 = self.sword_img:runAction(cc.ScaleTo:create(0.4, 1.2))
 	self.sword_img:stopAction(ac1)
-	local ac2 = self.sword_img:runAction(cc.MoveTo:create(0.3,uitool:zero()))
+	local ac2 = self.sword_img:runAction(cc.MoveTo:create(0.3, uitool:zero()))
 	self.sword_img:stopAction(ac2)
 	local callback = function()
 		self.word_img:setVisible(true)
-		self.ts_img:runAction(cc.RotateTo:create(0.4,0))
-		self.em_img:runAction(cc.RotateTo:create(0.4,0))
+		self.ts_img:runAction(cc.RotateTo:create(0.4, 0))
+		self.em_img:runAction(cc.RotateTo:create(0.4, 0))
 		self.ts_img:runAction(cc.FadeIn:create(0.3))
 		self.em_img:runAction(cc.FadeIn:create(0.3))
 	end
 
 	callback = cc.CallFunc:create(callback)
 
-	local seq2 = cc.Sequence:create(ac1,ac2,callback)
+	local seq2 = cc.Sequence:create(ac1, ac2, callback)
 
 	self.sword_img:runAction(seq2)
 
 	local ac3 =  self.logo_node:runAction(cc.FadeIn:create(2))
 	self.logo_node:stopAction(ac3)
-	local ac4 =  self.logo_node:runAction(cc.ScaleTo:create(1,0))
+	local ac4 =  self.logo_node:runAction(cc.ScaleTo:create(1, 0))
 	self.logo_node:stopAction(ac4)
 
-	local seq3 = cc.Sequence:create(ac3,ac4)
+	local seq3 = cc.Sequence:create(ac3, ac4)
 
 	self.logo_node:runAction(seq3)
 
 
 	local ac5 =  self.pre_panel:runAction(cc.FadeIn:create(3))
 	self.pre_panel:stopAction(ac5)
-	local ac6 =  self.pre_panel:runAction(cc.MoveTo:create(0.2,cc.p(0,4000)))
+	local ac6 =  self.pre_panel:runAction(cc.MoveTo:create(0.2, cc.p(0, 4000)))
 	self.pre_panel:stopAction(ac6)
 
-	local seq4 = cc.Sequence:create(ac5,ac6)
+	local seq4 = cc.Sequence:create(ac5, ac6)
 
 	self.pre_panel:runAction(seq4)
 end
 
-function map_view:initEnterAnimation()
+map_view.init_enter_animation = function(self)
 	self.shield_img:setOpacity(0)
 
 	self.sword_img:setPositionY(1500)
@@ -465,6 +456,5 @@ function map_view:initEnterAnimation()
 
 	self.pre_panel:setPosition(960,216)
 end
---------------------------½ø³¡¶¯»­½áÊø-------------------------
 
 return map_view

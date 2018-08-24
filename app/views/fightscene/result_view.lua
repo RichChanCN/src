@@ -1,4 +1,4 @@
-local view = require("packages.mvc.ViewBase")
+local view = require("packages.mvc.view_base")
 
 local result_view = view:instance()
 
@@ -15,39 +15,39 @@ result_view.RESOURCE_BINDING = {
     ["reward_template"]     = {["varname"] = "reward_template"},
 }
 
-function result_view:initEvents()
-    uitool:makeImgToButton(self.left_btn_img,function(sender)
-    	self.ctrl:closeResultView()
-    	self.ctrl:goToMainScene()
+result_view.init_events = function(self)
+    uitool:make_img_to_button(self.left_btn_img, function(sender)
+    	self:get_ctrl():close_result_view()
+    	self:get_ctrl():go_to_main_scene()
     end)
 
-    uitool:makeImgToButton(self.right_btn_img,function(sender)
-    	self.ctrl:closeResultView()
-    	self.ctrl:goToMainScene()
+    uitool:make_img_to_button(self.right_btn_img, function(sender)
+    	self:get_ctrl():close_result_view()
+    	self:get_ctrl():go_to_main_scene()
     end)
 end
 
-function result_view:updateInfo()
-    self.reward_data = game_data_ctrl:Instance():get_reward_by_chapter_and_level(self.result.chapter_num, self.result.level_num)
-    self.reward_list = {}
+result_view.update_info = function(self)
+    self._reward_data = game_data_ctrl:instance():get_reward_by_chapter_and_level(self._result.chapter_num, self._result.level_num)
+    self._reward_list = {}
 end
 
-function result_view:updateView()
-    for i=1,3 do
-        if not (i > self.result.star_num) then
-            self["star_"..i]:loadTexture(g_config.sprite.result_star_got)
+result_view.update_view = function(self)
+    for i = 1, 3 do
+        if not (i > self._result.star_num) then
+            self["star_" .. i]:loadTexture(g_config.sprite.result_star_got)
         else
-            self["star_"..i]:loadTexture(g_config.sprite.result_star_gray)
+            self["star_" .. i]:loadTexture(g_config.sprite.result_star_gray)
         end
     end
-    local last_star_num = game_data_ctrl:Instance():get_star_num_by_chapter_and_level(self.result.chapter_num,self.result.level_num)
+    local last_star_num = game_data_ctrl:instance():get_star_num_by_chapter_and_level(self._result.chapter_num, self._result.level_num)
 
-    if self.result.star_num > 0 then
+    if self._result.star_num > 0 then
         self.result_bg_img:loadTexture(g_config.sprite.result_win_bg)
         self.result_band_img:loadTexture(g_config.sprite.result_win_band)
         self.result_text:setString(g_config.text.reward_first_get)
         self.reward_node:setVisible(true)
-        self:updateReward()
+        self:update_reward()
     else
         self.result_bg_img:loadTexture(g_config.sprite.result_defeat_bg)
         self.result_band_img:loadTexture(g_config.sprite.result_defeat_band)
@@ -57,51 +57,51 @@ function result_view:updateView()
 
 end
 
-function result_view:updateReward()
+result_view.update_reward = function(self)
     self.reward_node:removeAllChildren()
-    for k1,v1 in pairs(self.reward_data) do
+    for k1, v1 in pairs(self._reward_data) do
         if k1 == "monster" then
-            for k2,v2 in pairs(v1) do
+            for k2, v2 in pairs(v1) do
                 local card = self.reward_template:clone()
-                uitool:initMonsterCardWithIDAndNum(card, k2, v2)
+                uitool:init_monster_card_with_id_and_num(card, k2, v2)
                 self.reward_node:addChild(card)
-                table.insert(self.reward_list,card)
+                table.insert(self._reward_list,card)
             end
         elseif (k1 == "coin" or k1 == "crystal") and v1 > 0 then
             local card = self.reward_template:clone()
-            uitool:initOtherCardWithTypeAndNum(card, k1, v1)
+            uitool:init_other_card_with_type_and_num(card, k1, v1)
             self.reward_node:addChild(card)
-            table.insert(self.reward_list,card)
+            table.insert(self._reward_list, card)
         end
     end
     local offset = 0
-    local interval =  self.reward_template:getContentSize().width+50
-    if (#self.reward_list)%2 == 0 then
-        offset = interval/2
+    local interval =  self.reward_template:getContentSize().width + 50
+    if (#self._reward_list) % 2 == 0 then
+        offset = interval / 2
     end
-    local mid = math.floor((#self.reward_list)/2) + 1
+    local mid = math.floor((#self._reward_list) / 2) + 1
     
-    for i,v in ipairs(self.reward_list) do
-        v:setPosition((i-mid)*interval+offset,0)
+    for i, v in ipairs(self._reward_list) do
+        v:setPosition((i - mid) * interval + offset, 0)
     end
 
-    self:dealWithResultAndReward()
+    self:deal_with_result_and_reward()
 end
 
-function result_view:dealWithResultAndReward()
-    game_data_ctrl:Instance():set_star_num(self.result.chapter_num, self.result.level_num, self.result.star_num)
-    game_data_ctrl:Instance():add_reward_to_save_data(self.reward_data)
-    self.result = nil
+result_view.deal_with_result_and_reward = function(self)
+    game_data_ctrl:instance():set_star_num(self._result.chapter_num, self._result.level_num, self._result.star_num)
+    game_data_ctrl:instance():add_reward_to_save_data(self._reward_data)
+    self._result = nil
 end
 
-function result_view:setResult(result)
-    self.result = result
+result_view.set_result = function(self, result)
+    self._result = result
 end
 
-function result_view:onOpen()
-    if self.result and type(self.result) == type({}) then
-       self:updateInfo()
-       self:updateView()
+result_view.on_open = function(self)
+    if self._result and type(self._result) == type({}) then
+       self:update_info()
+       self:update_view()
     end
 end
 

@@ -1,4 +1,4 @@
-local view = require("packages.mvc.ViewBase")
+local view = require("packages.mvc.view_base")
 
 local monster_list_view = view:instance()
 
@@ -8,34 +8,31 @@ monster_list_view.RESOURCE_BINDING = {
     ["template_panel"]			= {["varname"] = "template_panel"},
 }
 
-function monster_list_view:init_info()
-	self.card_list = {}
-	
-	--事件分发器
-	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+monster_list_view.init_info = function(self)
+	self._card_list = {}
 end
 
-function monster_list_view:initEvents()
+monster_list_view.init_events = function(self)
 	self.back_btn:addClickEventListener(function(sender)
-        self.ctrl:close_monster_list_view()
+        self:get_ctrl():close_monster_list_view()
     end)
 end
 
-function monster_list_view:updateInfo()
-    self.collected_monster_list = game_data_ctrl:Instance():get_collected_monster_list()
-	self.uncollected_monster_list = game_data_ctrl:Instance():get_not_collected_monster_list()
+monster_list_view.update_info = function(self)
+    self.collected_monster_list = game_data_ctrl:instance():get_collected_monster_list()
+	self.uncollected_monster_list = game_data_ctrl:instance():get_not_collected_monster_list()
 end
 
-function monster_list_view:updateView()
-	self:initMonsterLV()
+monster_list_view.update_view = function(self)
+	self:init_monster_lv()
 end
 
-function monster_list_view:onOpen()
-	self:updateInfo()
-	self:updateView()
+monster_list_view.on_open = function(self)
+	self:update_info()
+	self:update_view()
 end
 
-function monster_list_view:onClose()
+monster_list_view.on_close = function(self)
 	local collected_title = self.monster_lv:getItem(0):clone()
 	self.monster_lv:removeAllItems()
 
@@ -45,20 +42,20 @@ end
 -------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 
-function monster_list_view:initMonsterLV()
-	self:initCollectedMonsterLV()
-	self:initNotCollectedMonsterLV()
+monster_list_view.init_monster_lv = function(self)
+	self:init_collected_monster_lv()
+	self:init_not_collected_monster_lv()
 end
 
-function monster_list_view:initCollectedMonsterLV()
+monster_list_view.init_collected_monster_lv = function(self)
 	local collected_title = self.monster_lv:getItem(0)
 	local title_tip = collected_title:getChildByName("tip_text")
 
 	title_tip:setString(g_config.text.collected_tip)
 
 	local monsters_num = #self.collected_monster_list
-	local mod_num = monsters_num%5
-	local rows_num = monsters_num/5
+	local mod_num = monsters_num % 5
+	local rows_num = monsters_num / 5
 
 	if mod_num ~= 0 then
 		rows_num = rows_num + 1
@@ -66,12 +63,12 @@ function monster_list_view:initCollectedMonsterLV()
 
 	for i = 1, rows_num do
 		local test_item = self.template_panel:clone()
-		self:initLVItem(self.collected_monster_list,test_item, i-1) --这里-1是为了里面好计算正真的索引值
+		self:init_lv_item(self.collected_monster_list,test_item, i - 1) --这里-1是为了里面好计算正真的索引值
 		self.monster_lv:pushBackCustomItem(test_item)
 	end
 end
 
-function monster_list_view:initNotCollectedMonsterLV()
+monster_list_view.init_not_collected_monster_lv = function(self)
 	local not_collected_title = self.monster_lv:getItem(0):clone()
 	local titile_text = not_collected_title:getChildByName("title_text")
 	local tip_text = not_collected_title:getChildByName("tip_text")
@@ -82,8 +79,8 @@ function monster_list_view:initNotCollectedMonsterLV()
 	self.monster_lv:pushBackCustomItem(not_collected_title)
 
 	local monsters_num = #self.uncollected_monster_list
-	local mod_num = monsters_num%5
-	local rows_num = monsters_num/5
+	local mod_num = monsters_num % 5
+	local rows_num = monsters_num / 5
 
 	if mod_num ~= 0 then
 		rows_num = rows_num + 1
@@ -91,42 +88,42 @@ function monster_list_view:initNotCollectedMonsterLV()
 
 	for i = 1, rows_num do
 		local test_item = self.template_panel:clone()
-		self:initLVItem(self.uncollected_monster_list,test_item, i-1) --这里-1是为了里面好计算正真的索引值
+		self:init_lv_item(self.uncollected_monster_list, test_item, i - 1) --这里-1是为了里面好计算正真的索引值
 		self.monster_lv:pushBackCustomItem(test_item)
 	end
 end
 
-function monster_list_view:initLVItem(monster_list ,item, index)
-	for i=1,5 do
-		local cur_index = i+5*index
+monster_list_view.init_lv_item = function(self, monster_list ,item, index)
+	for i = 1, 5 do
+		local cur_index = i + 5 * index
 		local cur_monster = {}
 		if monster_list[cur_index] then
-			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
+			cur_monster.head_img = item:getChildByName("monster_" .. i .. "_img")
 			cur_monster.head_img:loadTexture(monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
-			cur_monster.border_img:loadTexture(g_config.sprite["card_border_"..monster_list[cur_index].rarity])
+			cur_monster.border_img:loadTexture(g_config.sprite["card_border_" .. monster_list[cur_index].rarity])
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
-			cur_monster.type_img:loadTexture(g_config.sprite["attack_type_"..monster_list[cur_index].attack_type])
+			cur_monster.type_img:loadTexture(g_config.sprite["attack_type_" .. monster_list[cur_index].attack_type])
 			cur_monster.head_img:addClickEventListener(function(sender)
-				self.ctrl:open_monster_info_view(monster_list,cur_index)
+				self:get_ctrl():open_monster_info_view(monster_list, cur_index)
 			end)
-			table.insert(self.card_list,cur_monster.head_img)
+			table.insert(self._card_list, cur_monster.head_img)
 		else
-			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
+			cur_monster.head_img = item:getChildByName("monster_" .. i .. "_img")
 			cur_monster.head_img:setVisible(false)
 		end
 	end
 end
 
-function monster_list_view:resumeMonsterListListener()
-	for _,v in pairs(self.card_list) do
-		self.eventDispatcher:resumeEventListenersForTarget(v)
+monster_list_view.resume_monster_list_listener = function(self)
+	for _, v in pairs(self._card_list) do
+		self._eventDispatcher:resumeEventListenersForTarget(v)
 	end
 end
 
-function monster_list_view:pauseMonsterListListener()
-	for _,v in pairs(self.card_list) do
-		self.eventDispatcher:pauseEventListenersForTarget(v)
+monster_list_view.pause_monster_list_listener = function(self)
+	for _, v in pairs(self._card_list) do
+		self._eventDispatcher:pauseEventListenersForTarget(v)
 	end
 end
 

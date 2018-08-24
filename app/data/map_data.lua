@@ -11,14 +11,14 @@ map_data.get_map_data_by_chapter_and_level = function(self, chapter_num, level_n
 	ret_data.other_gezi = {}
 	ret_data.enemy_team = {}
 
-	for k,v in pairs(raw_data.arena_info) do
+	for k, v in pairs(raw_data.arena_info) do
 		if v == 0 then
-			table.insert(ret_data.enable_gezi,k,v)
+			table.insert(ret_data.enable_gezi, k, v)
 		elseif v > 1 and v < 10 then
-			table.insert(ret_data.other_gezi,k,v)
+			table.insert(ret_data.other_gezi, k, v)
 		elseif v and v > 100 then
-			local enemy = monster_base:instance():new(g_config.monter[v%100],monster_base.team_side.RIGHT,gtool:int_2_ccp(k))
-			table.insert(ret_data.enemy_team,enemy)
+			local enemy = monster_base:instance():new(g_config.monter[v % 100], monster_base.team_side.RIGHT, gtool:int_2_ccp(k))
+			table.insert(ret_data.enemy_team, enemy)
 		end
 	end
 	
@@ -27,7 +27,7 @@ map_data.get_map_data_by_chapter_and_level = function(self, chapter_num, level_n
 	ret_data.can_use_monster_list = {}
 	if raw_data.can_use_monster_list and type(raw_data.can_use_monster_list) == type({}) then
 		for k,v in pairs(raw_data.can_use_monster_list) do
-			table.insert(ret_data.can_use_monster_list,g_config.monter[v])
+			table.insert(ret_data.can_use_monster_list, g_config.monter[v])
 		end
 	else
 		ret_data.can_use_monster_list = nil

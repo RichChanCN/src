@@ -2,7 +2,7 @@ game_data_ctrl = game_data_ctrl or {}
 
 game_data_ctrl.new = function(self)
 	local o = {}
-	setmetatable(o,self)
+	setmetatable(o, self)
 	self.__index = self
 	
 	self._save_data = {}
@@ -13,21 +13,21 @@ game_data_ctrl.new = function(self)
 end
  
 game_data_ctrl.instance = function(self)
-	if not self.instance then
-		self.instance = self:new()
+	if not self._instance then
+		self._instance = self:new()
 	end
-	return self.instance
+	return self._instance
 end
 
 game_data_ctrl.init = function(self)
  	self._save_data = require("app.data.save_data")
  	self._save_data:init()
  	self._map_data = require("app.data.map_data")
- 	self._monster_data = require("app.data.mosnter_data")
+ 	self._monster_data = require("app.data.monster_data")
  end
 
 game_data_ctrl.register_scene = function(self, scene)
-	self[scene:getName()] = scene
+	self[scene:get_name()] = scene
 end
 
 game_data_ctrl.get_map_data = function(self)
@@ -51,14 +51,14 @@ game_data_ctrl.save_data_to_file = function(self)
 end
 
 game_data_ctrl.set_star_num = function(self, chapter_num, level_num, num)
-	self._save_data:set_star_num(chapter_num,level_num,num)
+	self._save_data:set_star_num(chapter_num, level_num, num)
 end
 
 game_data_ctrl.add_reward_to_save_data = function(self, reward)
-	for k1,v1 in pairs(reward) do
+	for k1, v1 in pairs(reward) do
 	    if k1 == "monster" then
-	        for k2,v2 in pairs(v1) do
-	            self._save_data:add_monster_card_num(k2,v2)
+	        for k2, v2 in pairs(v1) do
+	            self._save_data:add_monster_card_num(k2, v2)
 	        end
 	    elseif k1 == "coin" and v1 > 0 then
 	        self._save_data:add_coin_num(v1)
