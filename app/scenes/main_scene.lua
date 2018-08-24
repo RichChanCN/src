@@ -142,7 +142,7 @@ end
 
 main_scene.open_confirm_view = function(self, chapter_num, level_num)
 	if self.confirm_view then
-		self.confirm_view:open_view(chapter_num,level_num,reward_data)
+		self.confirm_view:open_view(chapter_num, level_num, reward_data)
 	end
 end
 

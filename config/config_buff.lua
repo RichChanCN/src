@@ -17,8 +17,8 @@ g_config.buff =
 			defend_sp:setPosition(0, 20)
 			defend_sp:setGlobalZOrder(uitool:top_z_order())
 			defend_sp:setName("defend")
-			defend_sp:setContentSize(50,75)
-			defend_sp:runAction(cc.ScaleTo:create(1,1.2))
+			defend_sp:setContentSize(50, 75)
+			defend_sp:runAction(cc.ScaleTo:create(1, 1.2))
 			defend_sp:runAction(cc.FadeOut:create(1))
 			monster.node:addChild(defend_sp)
 		end,

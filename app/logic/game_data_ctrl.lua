@@ -2,7 +2,7 @@ game_data_ctrl = game_data_ctrl or {}
 
 game_data_ctrl.new = function(self)
 	local o = {}
-	setmetatable(o,self)
+	setmetatable(o, self)
 	self.__index = self
 	
 	self._save_data = {}
@@ -51,14 +51,14 @@ game_data_ctrl.save_data_to_file = function(self)
 end
 
 game_data_ctrl.set_star_num = function(self, chapter_num, level_num, num)
-	self._save_data:set_star_num(chapter_num,level_num,num)
+	self._save_data:set_star_num(chapter_num, level_num, num)
 end
 
 game_data_ctrl.add_reward_to_save_data = function(self, reward)
-	for k1,v1 in pairs(reward) do
+	for k1, v1 in pairs(reward) do
 	    if k1 == "monster" then
-	        for k2,v2 in pairs(v1) do
-	            self._save_data:add_monster_card_num(k2,v2)
+	        for k2, v2 in pairs(v1) do
+	            self._save_data:add_monster_card_num(k2, v2)
 	        end
 	    elseif k1 == "coin" and v1 > 0 then
 	        self._save_data:add_coin_num(v1)

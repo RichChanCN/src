@@ -9,10 +9,7 @@ monster_list_view.RESOURCE_BINDING = {
 }
 
 monster_list_view.init_info = function(self)
-	self.card_list = {}
-	
-	--事件分发器
-	self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+	self._card_list = {}
 end
 
 monster_list_view.init_events = function(self)
@@ -101,32 +98,32 @@ monster_list_view.init_lv_item = function(self, monster_list ,item, index)
 		local cur_index = i + 5 * index
 		local cur_monster = {}
 		if monster_list[cur_index] then
-			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
+			cur_monster.head_img = item:getChildByName("monster_" .. i .. "_img")
 			cur_monster.head_img:loadTexture(monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
-			cur_monster.border_img:loadTexture(g_config.sprite["card_border_"..monster_list[cur_index].rarity])
+			cur_monster.border_img:loadTexture(g_config.sprite["card_border_" .. monster_list[cur_index].rarity])
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
-			cur_monster.type_img:loadTexture(g_config.sprite["attack_type_"..monster_list[cur_index].attack_type])
+			cur_monster.type_img:loadTexture(g_config.sprite["attack_type_" .. monster_list[cur_index].attack_type])
 			cur_monster.head_img:addClickEventListener(function(sender)
 				self:get_ctrl():open_monster_info_view(monster_list, cur_index)
 			end)
-			table.insert(self.card_list, cur_monster.head_img)
+			table.insert(self._card_list, cur_monster.head_img)
 		else
-			cur_monster.head_img = item:getChildByName("monster_"..i.."_img")
+			cur_monster.head_img = item:getChildByName("monster_" .. i .. "_img")
 			cur_monster.head_img:setVisible(false)
 		end
 	end
 end
 
 monster_list_view.resume_monster_list_listener = function(self)
-	for _,v in pairs(self.card_list) do
-		self.eventDispatcher:resumeEventListenersForTarget(v)
+	for _, v in pairs(self._card_list) do
+		self._eventDispatcher:resumeEventListenersForTarget(v)
 	end
 end
 
 monster_list_view.pause_monster_list_listener = function(self)
-	for _,v in pairs(self.card_list) do
-		self.eventDispatcher:pauseEventListenersForTarget(v)
+	for _, v in pairs(self._card_list) do
+		self._eventDispatcher:pauseEventListenersForTarget(v)
 	end
 end
 

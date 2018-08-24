@@ -58,19 +58,18 @@ end
 
 fight_scene.init_model = function(self)
 	local map = pve_game_ctrl:instance():get_map()
-	for k,v in pairs(map) do
-		self.map_view:create_other_model(v,gtool:int_2_ccp(k))
+	for k, v in pairs(map) do
+		self.map_view:create_other_model(v, gtool:int_2_ccp(k))
 	end
 
 	local all_monster = pve_game_ctrl:instance():get_all_monsters()
-	for _,v in pairs(all_monster) do
+	for _, v in pairs(all_monster) do
 		self.map_view:create_monster_model(v)
 	end
 end
 
 fight_scene.view_init = function(self)
 	self.map_view:init()
-	--self.battle_info_view:init()
 end
 
 fight_scene.update_map_view = function(self)

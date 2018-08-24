@@ -8,6 +8,10 @@ view_base.new = function(self, name, root, ctrl)
 	self._name = name
 	self._root = root
 	self._ctrl = ctrl
+
+	--事件分发器
+	self._eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+	
 	self._is_inited = false
 
 	return self

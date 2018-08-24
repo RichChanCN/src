@@ -20,19 +20,19 @@ end
 
 -- main_view.init_info()
 --     local player_data = self:get_ctrl():get_player_data()
---     self.nickname = player_data.nickname
---     self.face_sp = player_data.face_sp
---     self.exp = player_data.exp
---     self.level = player_data.level
+--     self._nickname = player_data.nickname
+--     self._face_sp = player_data.face_sp
+--     self._exp = player_data.exp
+--     self._level = player_data.level
 -- end
 
 main_view.init_events = function(self)
-	uitool:make_img_to_button(self.adventure_img,function(sender)
+	uitool:make_img_to_button(self.adventure_img, function(sender)
         self:get_ctrl():open_adventure_view()
         self:close_view()
     end)
 
-    uitool:make_img_to_button(self.train_img,function()
+    uitool:make_img_to_button(self.train_img, function()
         uitool:create_top_tip("unenble yet!")
     end)
 
@@ -45,19 +45,19 @@ end
 
 main_view.update_info = function(self)
     local player_data = game_data_ctrl:instance():get_player_data()
-    self.nickname = player_data.nickname
-    self.face_sp = player_data.face_sp
-    self.exp = player_data.exp
-    self.cur_max_exp = player_data.cur_max_exp
-    self.level = player_data.level
+    self._nickname = player_data.nickname
+    self._face_sp = player_data.face_sp
+    self._exp = player_data.exp
+    self._cur_max_exp = player_data.cur_max_exp
+    self._level = player_data.level
 end
 
 main_view.update_view = function(self)
-    self.nickname_text:setString(self.nickname)
-    self.title_face_sp:setTexture(g_config.monster_img_path..self.face_sp)
-    self.nickname_text:setString(self.nickname)
-    self.level_text:setString(self.level)
-    uitool:set_progress_bar(self.exp_now_img, self.exp/self.cur_max_exp)
+    self.nickname_text:setString(self._nickname)
+    self.title_face_sp:setTexture(g_config.monster_img_path .. self._face_sp)
+    self.nickname_text:setString(self._nickname)
+    self.level_text:setString(self._level)
+    uitool:set_progress_bar(self.exp_now_img, self._exp / self._cur_max_exp)
 end
 
 main_view.on_open = function(self)

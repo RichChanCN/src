@@ -101,7 +101,7 @@ monster_base.new = function(self, data, team_side, arena_pos)
 	return self
 end
 
-monster_base.getTag = function(self)
+monster_base.get_tag = function(self)
 	return self._tag
 end
 
@@ -337,10 +337,10 @@ monster_base.is_be_back_attacked = function(self, murderer)
 end
 
 monster_base.is_be_side_attacked = function(self, murderer)
-	return self._cur_towards+1 == murderer._cur_towards
-			or self._cur_towards+1 == murderer._cur_towards + 6
-			or self._cur_towards-1 == murderer._cur_towards
-			or self._cur_towards-1 == murderer._cur_towards - 6
+	return self._cur_towards + 1 == murderer._cur_towards
+			or self._cur_towards + 1 == murderer._cur_towards + 6
+			or self._cur_towards - 1 == murderer._cur_towards
+			or self._cur_towards - 1 == murderer._cur_towards - 6
 end
 
 monster_base.can_counter_attack = function(self, murderer)
@@ -399,17 +399,17 @@ monster_base.active = function(self)
 		end
 	end
 	local callback = cc.CallFunc:create(cb)
-	local seq = cc.Sequence:create(ac1,callback)
+	local seq = cc.Sequence:create(ac1, callback)
 	
 	self.node:runAction(seq)
 end
 
 monster_base.update_cur_attribute = function(self)
-	for k,v in pairs(self._buff_list) do
+	for k, v in pairs(self._buff_list) do
 		v.apply(self)
 	end
 
-	for k,v in pairs(self._debuff_list) do
+	for k, v in pairs(self._debuff_list) do
 		v.apply(self)
 	end
 
@@ -423,7 +423,7 @@ monster_base.move_to = function(self, arena_pos, attack_target, skill_target_pos
 	local cb = function()
 		self._cur_pos = arena_pos
 		if attack_target then
-			local distance = self:get_distance_to_pos(attack_target:get_cur_pos_num(),true)
+			local distance = self:get_distance_to_pos(attack_target:get_cur_pos_num(), true)
 			self:attack(attack_target, distance)
 		elseif skill_target_pos then
 			self:use_skill(skill_target_pos)
@@ -436,12 +436,12 @@ monster_base.move_to = function(self, arena_pos, attack_target, skill_target_pos
 			end
 		end
 	end
-	local callback = cc.CallFunc:create(handler(self,cb))
+	local callback = cc.CallFunc:create(handler(self, cb))
 	if gtool:ccp_2_int(arena_pos) == self:get_cur_pos_num() then
 		cb()
 	else
 		self:repeat_animation("walk")
-		self:move_follow_path(arena_pos,callback)
+		self:move_follow_path(arena_pos, callback)
 	end
 end
 
@@ -458,9 +458,9 @@ monster_base.attack = function(self, target, distance)
 		self:add_anger()
 		local cur_num = self:get_cur_pos_num()
 		local to_num = gtool:ccp_2_int(target._cur_pos)
-		self:toward_to_int_pos(cur_num,to_num)
+		self:toward_to_int_pos(cur_num, to_num)
 		self:do_animation("attack1")
-		target:be_attacked(self,false,distance)
+		target:be_attacked(self, false, distance)
 	end
 end
 
@@ -469,7 +469,7 @@ monster_base.wait = function(self, is_auto)
 		if is_auto then
 			self:defend()
 		else
-			uitool:createTopTip("you has been waited!")
+			uitool:create_top_tip("you has been waited!")
 		end
 	else
 		self:change_monster_status(monster_base.status.WAITING)
@@ -487,10 +487,14 @@ monster_base.defend = function(self)
 end
 
 monster_base.use_skill = function(self, target_pos_num)
-	if (not self._skill:is_need_target()) or (self:is_melee() and self:is_near(target_pos_num)) or (not self:is_melee()) then
+	if (not self._skill:is_need_target()) 
+		or (self:is_melee() and self:is_near(target_pos_num)) 
+		or (not self:is_melee()) then
+		
 		self._skill:play()
 		self:minus_anger(self._skill:get_cost())
 		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+		
 		local cb = function()
 			self._skill:use(target_pos_num)
 		end
@@ -518,7 +522,7 @@ monster_base.die = function(self, is_buff_or_skill)
 	end
 
 	local callback = cc.CallFunc:create(cb)
-	local seq = cc.Sequence:create(ac,callback)
+	local seq = cc.Sequence:create(ac, callback)
 	self:do_animation("die", seq)
 end
 
@@ -549,7 +553,7 @@ monster_base.counter_attack = function(self, target)
 	self:toward_to_int_pos(cur_num, to_num)
 	self:do_animation("attack1")
 	self:add_anger()
-	target:be_attacked(self,true)
+	target:be_attacked(self, true)
 end
 
 monster_base.be_affected_by_skill = function(self, skill, is_last)
@@ -576,13 +580,13 @@ monster_base.be_affected_by_skill = function(self, skill, is_last)
 			pve_game_ctrl:instance():next_monster_activate()
 		end
 		local callback = cc.CallFunc:create(cb)
-		self:do_something_later(callback,0.6)
+		self:do_something_later(callback, 0.6)
 	end
 end
 
 monster_base.toward_to = function(self, num)
 	self._cur_towards = num
-	self.model:setRotation3D(cc.vec3(0,(1-num)*60,0))
+	self.model:setRotation3D(cc.vec3(0, (1 - num) * 60, 0))
 end
 
 
@@ -597,15 +601,15 @@ monster_base.toward_to_int_pos = function(self, cur_num, to_num, only_get)
 		local to_pos = gtool:int_2_ccp(to_num)
 		local cur_pos = gtool:int_2_ccp(cur_num)
 		if to_num > cur_num then
-			if to_pos.x-cur_pos.x>math.abs(to_pos.y-cur_pos.y) then
+			if to_pos.x - cur_pos.x > math.abs(to_pos.y - cur_pos.y) then
 				result_towards = 1
-			elseif to_pos.y>cur_pos.y then
+			elseif to_pos.y > cur_pos.y then
 				result_towards = 6
 			else
 				result_towards = 2
 			end
 		else
-			if cur_pos.x-to_pos.x>math.abs(to_pos.y-cur_pos.y) then
+			if cur_pos.x - to_pos.x > math.abs(to_pos.y - cur_pos.y) then
 				result_towards = 4
 			elseif to_pos.y>cur_pos.y then
 				result_towards = 5
@@ -616,7 +620,7 @@ monster_base.toward_to_int_pos = function(self, cur_num, to_num, only_get)
 	end
 
 	local deta = to_num - cur_num
-	if cur_num%2 == 0 then
+	if cur_num % 2 == 0 then
 		if deta == 10 then
 			result_towards = 1
 		elseif deta == 9 then
@@ -723,7 +727,7 @@ monster_base.get_final_skill_damage = function(self, skill)
 		defense = self:get_cur_magic_defense() - caster:get_cur_defense_penetration()
 	end
 
-	damage = damage * (1 - defense/(defense + 10))
+	damage = damage * (1 - defense / (defense + 10))
 
 	damage = damage + (math.random() - 0.5) * 20
 
@@ -755,7 +759,7 @@ monster_base.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
 
 	local cb = function()
 		self.blood_bar.updae_hp(hp / self._max_hp , damage , damage_type)
-		if hp<1 then
+		if hp < 1 then
 			self:die()
 		end
 	end
@@ -764,7 +768,7 @@ monster_base.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
 		self:do_something_later(callback, 0.5)
 	else
 		self.blood_bar.updae_hp(hp / self._max_hp, damage, damage_type)
-		if hp<1 then
+		if hp < 1 then
 			self:die(is_buff_or_skill)
 		end
 	end
@@ -779,11 +783,11 @@ monster_base.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
 end
 
 monster_base.set_hp = function(self, hp)
-	if hp<0 then
+	if hp < 0 then
 		hp = 0
 	end
 	local max_hp = self:get_cur_max_hp()
-	if hp>max_hp then
+	if hp > max_hp then
 		hp = max_hp
 	end
 	self._cur_hp = hp
@@ -809,15 +813,15 @@ monster_base.set_anger = function(self, angle)
 		self.card.update(self._cur_anger)
 		self.blood_bar.update_anger(self._cur_anger)
 	end
-	local callback = cc.CallFunc:create(handler(self,cb))
+	local callback = cc.CallFunc:create(handler(self, cb))
 
-	self:do_something_later(callback,0.5)
+	self:do_something_later(callback, 0.5)
 end
 ----------------------------buffÏà¹Ø----------------------------------
 ----------------------------buffÏà¹Ø----------------------------------
 ----------------------------buffÏà¹Ø----------------------------------
 monster_base.add_buff = function(self, buff_list)
-	for k,v in pairs(buff_list) do
+	for k, v in pairs(buff_list) do
 		local buff = v:clone()
 		buff.affect_round = 0
 		buff.begin(self)
@@ -826,7 +830,7 @@ monster_base.add_buff = function(self, buff_list)
 end
 
 monster_base.add_debuff = function(self, debuff_list)
-	for k,v in pairs(debuff_list) do
+	for k, v in pairs(debuff_list) do
 		local buff = v:clone()
 		buff.affect_round = 0
 		buff.begin(self)
@@ -835,8 +839,8 @@ monster_base.add_debuff = function(self, debuff_list)
 end
 
 monster_base.deal_with_all_buff = function(self)
-	for k,v in pairs(self._buff_list) do
-		if v.affect_round<v.round then
+	for k, v in pairs(self._buff_list) do
+		if v.affect_round < v.round then
 			v.affect_round = v.affect_round + 1
 			v.once_a_round(self)
 		else
@@ -845,8 +849,8 @@ monster_base.deal_with_all_buff = function(self)
 		end
 	end
 
-	for k,v in pairs(self._debuff_list) do
-		if v.affect_round<v.round then
+	for k, v in pairs(self._debuff_list) do
+		if v.affect_round < v.round then
 			v.affect_round = v.affect_round + 1
 			v.once_a_round(self)
 		else
@@ -862,7 +866,7 @@ end
 
 monster_base.move_and_attack = function(self, target)
 	local num = gtool:ccp_2_int(target._cur_pos)
-	local pos = gtool:int_2_ccp(self:get_back_first_near_pos_num(num,target._cur_towards))
+	local pos = gtool:int_2_ccp(self:get_back_first_near_pos_num(num, target._cur_towards))
 
 	self:move_to(pos, target)
 end
@@ -870,7 +874,7 @@ end
 monster_base.move_and_use_skill = function(self, target_pos_num)
 	local pos = gtool:int_2_ccp(self:get_near_pos_num(target_pos_num))
 
-	self:move_to(pos,nil,target_pos_num)
+	self:move_to(pos, nil, target_pos_num)
 end
 
 monster_base.move_follow_path = function(self, arena_pos, callback_final)
@@ -894,14 +898,14 @@ monster_base.move_follow_path = function(self, arena_pos, callback_final)
 		self.node:stopAction(action)
 		
 		local cb = function()
-			self:toward_to_int_pos(path[i],path[i-1])
+			self:toward_to_int_pos(path[i], path[i - 1])
 		end
-		local callback = cc.CallFunc:create(handler(self,cb))
-		local seq = cc.Sequence:create(action,callback)
-		table.insert(ac_table,seq)
+		local callback = cc.CallFunc:create(handler(self, cb))
+		local seq = cc.Sequence:create(action, callback)
+		table.insert(ac_table, seq)
 	end
 	
-	table.insert(ac_table,callback_final)
+	table.insert(ac_table, callback_final)
 
 	local all_seq = cc.Sequence:create(unpack(ac_table))
 	self:toward_to_int_pos(self:get_cur_pos_num(), path[#path])
@@ -920,27 +924,27 @@ monster_base.get_distance_info = function(self)
     local temp_list = {}
     
     local path_find_help = function(num, step)
-        if not distanc_table[num] and gtool:isLegalPosNum(num) then
+        if not distanc_table[num] and gtool:is_legal_pos_num(num) then
             distanc_table[num] = step
         end
     end
     
     local find_gezi = function(pos, step)
-        path_find_help(pos+10,step)
-        path_find_help(pos-10,step)
-        path_find_help(pos+1,step)
-        path_find_help(pos-1,step)
-        if pos%2 == 0 then
-            path_find_help(pos+11,step)
-            path_find_help(pos+9,step)
+        path_find_help(pos + 10, step)
+        path_find_help(pos - 10, step)
+        path_find_help(pos + 1, step)
+        path_find_help(pos - 1, step)
+        if pos % 2 == 0 then
+            path_find_help(pos + 11,step)
+            path_find_help(pos + 9,step)
         else
-            path_find_help(pos-11,step)
-            path_find_help(pos-9,step)
+            path_find_help(pos - 11,step)
+            path_find_help(pos - 9,step)
         end
     end
 
     find_gezi(self:get_cur_pos_num(), 1)
-    for k,v in pairs(distanc_table) do
+    for k, v in pairs(distanc_table) do
         table.insert(temp_list, k)
     end
 
@@ -950,13 +954,13 @@ monster_base.get_distance_info = function(self)
 	end
 
     for i = 2, steps do
-        for _,v in pairs(temp_list) do
+        for _, v in pairs(temp_list) do
             find_gezi(v, i)      
         end
         temp_list = {}
 
-        for k,v in pairs(distanc_table) do
-            table.insert(temp_list,k)
+        for k, v in pairs(distanc_table) do
+            table.insert(temp_list, k)
         end
     end
 
@@ -976,7 +980,7 @@ monster_base.create_attack_particle = function(self, target)
 	particle:stopAction(ac1)
 	local ac2 = particle:runAction(cc.MoveTo:create(0.3,cc.p(end_pos.x, end_pos.y + 15)))
 	particle:stopAction(ac2)
-	local seq = cc.Sequence:create(ac1,ac2)
+	local seq = cc.Sequence:create(ac1, ac2)
 	particle:runAction(seq)
 end
 ----------------------------ÒÆ¶¯¸¨Öú----------------------------------
@@ -994,7 +998,7 @@ monster_base.get_around_info = function(self, is_to_show)
 	local map_info = pve_game_ctrl:instance():get_map_info()
 	self._can_reach_area_info = {}
 
-	if steps>0 then
+	if steps > 0 then
 		
 		self._can_reach_area_info = self:get_can_reach_area_info(self:get_cur_pos_num(), map_info, steps)
 
@@ -1002,7 +1006,7 @@ monster_base.get_around_info = function(self, is_to_show)
 			self._fly_path = self:get_fly_path()
 		end
 
-		for k,v in pairs(map_info) do
+		for k, v in pairs(map_info) do
 			if type(v) == type({}) and v:get_team_side() == self._team_side then
 				self._can_reach_area_info[k] = pve_game_ctrl.map_item.FRIEND
 			end
@@ -1010,10 +1014,10 @@ monster_base.get_around_info = function(self, is_to_show)
 	end
 
 	local can_attack_table = {}
-	for k,v in pairs(map_info) do
+	for k, v in pairs(map_info) do
 		if type(v) == type({}) and v:get_team_side() ~= self._team_side then
 			if self:can_reach_and_attack(k) then
-				table.insert(can_attack_table,k)
+				table.insert(can_attack_table, k)
 			else
 				self._can_reach_area_info[k] = nil
 			end
@@ -1024,8 +1028,8 @@ monster_base.get_around_info = function(self, is_to_show)
 
 	self._distance_info = self:get_distance_info()
 	
-	for k,v in pairs(can_attack_table) do
-		self._can_reach_area_info[v] = pve_game_ctrl.map_item.ENEMY*100 + self:get_distance_to_pos(v)
+	for k, v in pairs(can_attack_table) do
+		self._can_reach_area_info[v] = pve_game_ctrl.map_item.ENEMY * 100 + self:get_distance_to_pos(v)
 	end
 	
 	self._can_reach_area_info[0] = self._cur_pos
@@ -1037,41 +1041,41 @@ monster_base.get_can_reach_area_info = function(self, center_pos_num, map_info, 
     local temp_list = {}
     
     local path_find_help = function(pos, num)
-        if not area_table[num] and gtool:isLegalPosNum(num) and ((not map_info[num]) or self:is_fly()) then
+        if not area_table[num] and gtool:is_legal_pos_num(num) and ((not map_info[num]) or self:is_fly()) then
             
             area_table[num] = pos
         end
     end
     
     local find_gezi = function(pos)
-        path_find_help(pos,pos+10)
-        path_find_help(pos,pos-10)
-        path_find_help(pos,pos+1)
-        path_find_help(pos,pos-1)
-        if pos%2 == 0 then
-            path_find_help(pos,pos+11)
-            path_find_help(pos,pos+9)
+        path_find_help(pos, pos + 10)
+        path_find_help(pos, pos - 10)
+        path_find_help(pos, pos + 1)
+        path_find_help(pos, pos - 1)
+        if pos % 2 == 0 then
+            path_find_help(pos, pos + 11)
+            path_find_help(pos, pos + 9)
         else
-            path_find_help(pos,pos-11)
-            path_find_help(pos,pos-9)
+            path_find_help(pos, pos - 11)
+            path_find_help(pos, pos - 9)
         end
     end
 
     find_gezi(center_pos_num)
-    for k,v in pairs(area_table) do
-        table.insert(temp_list,k)
+    for k, v in pairs(area_table) do
+        table.insert(temp_list, k)
     end
 
-    for i=2,steps do
-        for _,v in pairs(temp_list) do
+    for i = 2, steps do
+        for _, v in pairs(temp_list) do
 
             find_gezi(v)
             
         end
         temp_list = {}
 
-        for k,v in pairs(area_table) do
-            table.insert(temp_list,k)
+        for k, v in pairs(area_table) do
+            table.insert(temp_list, k)
         end
     end
 
@@ -1083,7 +1087,7 @@ monster_base.get_fly_path = function(self)
     local temp_list = {}
     
     local path_find_help = function(pos, num)
-        if not fly_path[num] and gtool:isLegalPosNum(num) then
+        if not fly_path[num] and gtool:is_legal_pos_num(num) then
             fly_path[num] = pos
         end
     end
@@ -1103,7 +1107,7 @@ monster_base.get_fly_path = function(self)
     end
 
     find_gezi(self:get_cur_pos_num())
-    for k,v in pairs(fly_path) do
+    for k, v in pairs(fly_path) do
         table.insert(temp_list, k)
     end
 
@@ -1113,12 +1117,12 @@ monster_base.get_fly_path = function(self)
 	end
 
     for i = 2, steps do
-        for _,v in pairs(temp_list) do
+        for _, v in pairs(temp_list) do
             find_gezi(v)      
         end
         temp_list = {}
 
-        for k,v in pairs(fly_path) do
+        for k, v in pairs(fly_path) do
             table.insert(temp_list, k)
         end
     end
@@ -1136,7 +1140,7 @@ monster_base.get_path_info_to_target = function(self, map_info, target)
             return true
         end
         if not area_table[num] 
-        	and gtool:isLegalPosNum(num) 
+        	and gtool:is_legal_pos_num(num) 
         	and ((not map_info[num]) or self:is_fly()) then
             area_table[num] = pos
         end
@@ -1145,21 +1149,21 @@ monster_base.get_path_info_to_target = function(self, map_info, target)
     end
     
     local find_gezi = function(pos)
-        if path_find_help(pos,pos+10)
-            or path_find_help(pos,pos-10)
-            or path_find_help(pos,pos+1)
-            or path_find_help(pos,pos-1) then
+        if path_find_help(pos, pos + 10)
+            or path_find_help(pos, pos - 10)
+            or path_find_help(pos, pos + 1)
+            or path_find_help(pos, pos - 1) then
             return true
         end
-        if pos%2 == 0 then
-            if path_find_help(pos,pos+11)
-                or path_find_help(pos,pos+9) then
+        if pos % 2 == 0 then
+            if path_find_help(pos, pos + 11)
+                or path_find_help(pos, pos + 9) then
 
                 return true
             end
         else
-            if path_find_help(pos,pos-11)
-                or path_find_help(pos,pos-9) then
+            if path_find_help(pos, pos - 11)
+                or path_find_help(pos, pos - 9) then
 
                 return true
             end
@@ -1169,21 +1173,21 @@ monster_base.get_path_info_to_target = function(self, map_info, target)
     end
 
     find_gezi(self:get_cur_pos_num())
-    for k,v in pairs(area_table) do
+    for k, v in pairs(area_table) do
         table.insert(temp_list, k)
     end
 
     local last_list_size = #temp_list
 
-    for i=2,20 do
-        for _,v in pairs(temp_list) do
+    for i = 2, 20 do
+        for _, v in pairs(temp_list) do
             if find_gezi(v) then
                 return area_table
             end
         end
         temp_list = {}
 
-       	for k,v in pairs(area_table) do
+       	for k, v in pairs(area_table) do
        	    table.insert(temp_list, k)
        	end
        	if last_list_size == #temp_list then
@@ -1196,7 +1200,7 @@ end
 
 monster_base.get_path_to_pos = function(self, num, path_table)
 	path_table = path_table or {}
-	table.insert(path_table,num)
+	table.insert(path_table, num)
 	local last_geizi
 	if self:is_fly() then 
 		last_geizi = self._fly_path[num]
@@ -1207,39 +1211,39 @@ monster_base.get_path_to_pos = function(self, num, path_table)
 	if self:get_cur_pos_num() == last_geizi then
 		return path_table
 	else
-		return self:get_path_to_pos(last_geizi,path_table)
+		return self:get_path_to_pos(last_geizi, path_table)
 	end
 end
 
 monster_base.get_near_pos_num = function(self, num)
 
-	if num%2 == 0 then
-		if self:can_move_to_pos_num(num+10) then
-			return num+10
-		elseif self:can_move_to_pos_num(num-10) then
-			return num-10
-		elseif self:can_move_to_pos_num(num+1) then
-			return num+1
-		elseif self:can_move_to_pos_num(num-1) then
-			return num-1
-		elseif self:can_move_to_pos_num(num+11) then
-			return num+11
-		elseif self:can_move_to_pos_num(num+9) then
-			return num+9
+	if num % 2 == 0 then
+		if self:can_move_to_pos_num(num + 10) then
+			return num + 10
+		elseif self:can_move_to_pos_num(num - 10) then
+			return num - 10
+		elseif self:can_move_to_pos_num(num + 1) then
+			return num + 1
+		elseif self:can_move_to_pos_num(num - 1) then
+			return num - 1
+		elseif self:can_move_to_pos_num(num + 11) then
+			return num + 11
+		elseif self:can_move_to_pos_num(num + 9) then
+			return num + 9
 		end
 	else
-		if self:can_move_to_pos_num(num+10) then
-			return num+10
-		elseif self:can_move_to_pos_num(num-10) then
-			return num-10
-		elseif self:can_move_to_pos_num(num+1) then
-			return num+1
-		elseif self:can_move_to_pos_num(num-1) then
-			return num-1
-		elseif self:can_move_to_pos_num(num-11) then
-			return num-11
-		elseif self:can_move_to_pos_num(num-9) then
-			return num-9
+		if self:can_move_to_pos_num(num + 10) then
+			return num + 10
+		elseif self:can_move_to_pos_num(num - 10) then
+			return num - 10
+		elseif self:can_move_to_pos_num(num + 1) then
+			return num + 1
+		elseif self:can_move_to_pos_num(num - 1) then
+			return num - 1
+		elseif self:can_move_to_pos_num(num - 11) then
+			return num - 11
+		elseif self:can_move_to_pos_num(num - 9) then
+			return num - 9
 		end
 	end
 
@@ -1259,7 +1263,7 @@ monster_base.nothing_can_do = function(self)
 		self:get_around_info()
 		
 		local count = 0
-		for k,v in pairs(self._can_reach_area_info) do
+		for k, v in pairs(self._can_reach_area_info) do
 		    count = count + 1
 		    if count > 1 then
 		    	return false
@@ -1283,23 +1287,23 @@ end
 
 monster_base.is_near = function(self, num)
 	local cur = self:get_cur_pos_num()
-	if num%2 == 0 then
-		if cur == num+10
-			or cur == num-10
-			or cur == num+1
-			or cur == num-1
-			or cur == num+11
-			or cur == num+9 then
+	if num % 2 == 0 then
+		if cur == num + 10
+			or cur == num - 10
+			or cur == num + 1
+			or cur == num - 1
+			or cur == num + 11
+			or cur == num + 9 then
 			
 			return true
 		end
 	else
-		if cur == num+10
-			or cur == num-10
-			or cur == num+1
-			or cur == num-1
-			or cur == num-11
-			or cur == num-9 then
+		if cur == num + 10
+			or cur == num - 10
+			or cur == num + 1
+			or cur == num - 1
+			or cur == num - 11
+			or cur == num - 9 then
 			
 			return true
 		end
@@ -1367,25 +1371,25 @@ end
 monster_base.do_animation = function(self, name, cb)
 	if g_config.monster_animate[self:get_id()][name] then
     	local animate = g_config.monster_animate[self:get_id()][name](self.animation)
-		local callback = cc.CallFunc:create(handler(self,self.go_back_repeat_animate))
+		local callback = cc.CallFunc:create(handler(self, self.go_back_repeat_animate))
 		self.model:stopAllActions()
 		local seq
 		if self:is_dead() then
-			seq = cc.Sequence:create(animate,cb)
+			seq = cc.Sequence:create(animate, cb)
         else
-        	seq = cc.Sequence:create(animate,callback,cb)
+        	seq = cc.Sequence:create(animate, callback, cb)
         end
         self.model:runAction(seq)
     elseif cb then
-    	self:do_something_later(cb,1)
+    	self:do_something_later(cb, 1)
     end
 end
 
 monster_base.do_something_later = function(self, callback, time)
 	local ac_node = cc.Node:create()
     pve_game_ctrl:instance():get_action_node():addChild(ac_node)
-    local default_ac = ac_node:runAction(cc.ScaleTo:create(time,1))
-    local seq = cc.Sequence:create(default_ac,callback)
+    local default_ac = ac_node:runAction(cc.ScaleTo:create(time, 1))
+    local seq = cc.Sequence:create(default_ac, callback)
     ac_node:runAction(seq)
 end
 
@@ -1413,12 +1417,12 @@ monster_base.run_ai = function(self)
 		if self:is_melee() then
 			self:move_and_attack(target_enemy)
 		else
-			if distance<6 and distance > 2 then
+			if distance < 6 and distance > 2 then
 				self:attack(target_enemy, distance)
 			else
-				local pos = self:get_good_pos_to_attack(target_enemy,distance)
+				local pos = self:get_good_pos_to_attack(target_enemy, distance)
 				if pos then
-					self:move_to(pos,target_enemy)
+					self:move_to(pos, target_enemy)
 				else
 					self:attack(target_enemy, distance)
 				end
@@ -1427,15 +1431,15 @@ monster_base.run_ai = function(self)
 
 	else
 		local map_info = pve_game_ctrl:instance():get_map_info()
-		self:move_close_to_lowest_hp_enemy(enemy_list,map_info)
+		self:move_close_to_lowest_hp_enemy(enemy_list, map_info)
 	end
 end
 
 monster_base.get_enemy_can_attack = function(self, enemy_list)
 	local can_attack_list = {}
-	for k,v in pairs(enemy_list) do
+	for k, v in pairs(enemy_list) do
 		if self:can_reach_and_attack(gtool:ccp_2_int(v._cur_pos)) then
-			table.insert(can_attack_list,v)
+			table.insert(can_attack_list, v)
 		end
 	end
 	
@@ -1443,7 +1447,7 @@ monster_base.get_enemy_can_attack = function(self, enemy_list)
 end
 
 monster_base.get_lowest_hp_enemy = function(self, enemy_list)
-	local sort_by_hp = function(a,b)
+	local sort_by_hp = function(a, b)
 		return a:get_cur_hp() < b:get_cur_hp()
 	end
 
@@ -1471,10 +1475,14 @@ monster_base.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_info
 
 	if path then
 		local index
-		for i,v in ipairs(path) do
-			if self._can_reach_area_info[v] and self._can_reach_area_info[v]<100 and self._can_reach_area_info[v]>10 then
+		for i, v in ipairs(path) do
+			if self._can_reach_area_info[v] 
+				and self._can_reach_area_info[v] < 100 
+				and self._can_reach_area_info[v] > 10 then
+
 				index = i
 				break
+
 			end
 		end
 		
@@ -1488,7 +1496,7 @@ monster_base.get_good_pos_to_attack = function(self, enemy, distance)
 	local enemy_direction = self:toward_to_int_pos(self:get_cur_pos_num(), enemy:get_cur_pos_num(), true)
 	local pos_num
 	if distance < 3 then
-		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(),enemy_direction + 3,2)
+		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(),enemy_direction + 3, 2)
 	else
 		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(),enemy_direction,distance - 5)
 	end
@@ -1505,27 +1513,27 @@ monster_base.get_pos_num_by_direction_and_steps = function(self, pos, towards, s
 		return pos
 	end
 	local temp_table
-	if pos%2 == 0 then
+	if pos % 2 == 0 then
 		temp_table = {
-			[1] = pos+10,
-			[2] = pos+9,
-			[3] = pos-1,
-			[4] = pos-10,
-			[5] = pos+1,
-			[6] = pos+11,
+			[1] = pos + 10,
+			[2] = pos + 9,
+			[3] = pos - 1,
+			[4] = pos - 10,
+			[5] = pos + 1,
+			[6] = pos + 11,
 		}
 	else
 		temp_table = {
-			[1] = pos+10,
-			[2] = pos-1,
-			[3] = pos-11,
-			[4] = pos-10,
-			[5] = pos-9,
-			[6] = pos+1,
+			[1] = pos + 10,
+			[2] = pos - 1,
+			[3] = pos - 11,
+			[4] = pos - 10,
+			[5] = pos - 9,
+			[6] = pos + 1,
 		}
 	end
 
-	towards = gtool:normalizeTowards(towards)
+	towards = gtool:normalize_towards(towards)
 	if steps == 1 then
 		return temp_table[towards]
 	else
@@ -1535,7 +1543,7 @@ end
 
 monster_base.get_path_to_posPlus = function(self, num, all_path, path_table)
 	path_table = path_table or {}
-	table.insert(path_table,num)
+	table.insert(path_table, num)
 	local last_geizi
 	if self:is_fly() then 
 		last_geizi = self._fly_path[num]
@@ -1546,7 +1554,7 @@ monster_base.get_path_to_posPlus = function(self, num, all_path, path_table)
 	if self:get_cur_pos_num() == last_geizi then
 		return path_table
 	else
-		return self:get_path_to_posPlus(last_geizi,all_path,path_table)
+		return self:get_path_to_posPlus(last_geizi, all_path, path_table)
 	end
 end
 
@@ -1556,7 +1564,7 @@ monster_base.get_back_first_near_pos_num = function(self, num, target_toward)
 	end
 
 	local temp_table
-	if num%2 == 0 then
+	if num % 2 == 0 then
 		temp_table = {
 			[1] = num + 10,
 			[2] = num + 9,
@@ -1576,7 +1584,7 @@ monster_base.get_back_first_near_pos_num = function(self, num, target_toward)
 		}
 	end
 
-	local first_toward = gtool:normalizeTowards(target_toward - 3)
+	local first_toward = gtool:normalize_towards(target_toward - 3)
 
 	if help(temp_table[first_toward]) then
 		return temp_table[first_toward]
@@ -1584,12 +1592,12 @@ monster_base.get_back_first_near_pos_num = function(self, num, target_toward)
 	
 	local next_first
 
-	for i=1,2 do
-		next_first = gtool:normalizeTowards(first_toward - i)
+	for i = 1, 2 do
+		next_first = gtool:normalize_towards(first_toward - i)
 		if help(temp_table[next_first]) then
 			return temp_table[next_first]
 		end
-		next_first = gtool:normalizeTowards(first_toward + i)
+		next_first = gtool:normalize_towards(first_toward + i)
 		
 		if help(temp_table[next_first]) then
 			return temp_table[next_first]
@@ -1602,33 +1610,33 @@ monster_base.get_back_first_near_pos_num = function(self, num, target_toward)
 end
 
 monster_base.get_near_pos_plus = function(self, num)
-	if num%2 == 0 then
-		if gtool:isLegalPosNum(num + 10) then
+	if num % 2 == 0 then
+		if gtool:is_legal_pos_num(num + 10) then
 			return num + 10
-		elseif gtool:isLegalPosNum(num - 10) then
+		elseif gtool:is_legal_pos_num(num - 10) then
 			return num - 10
-		elseif gtool:isLegalPosNum(num + 1) then
+		elseif gtool:is_legal_pos_num(num + 1) then
 			return num + 1
-		elseif gtool:isLegalPosNum(num - 1) then
+		elseif gtool:is_legal_pos_num(num - 1) then
 			return num - 1
-		elseif gtool:isLegalPosNum(num + 11) then
+		elseif gtool:is_legal_pos_num(num + 11) then
 			return num + 11
-		elseif gtool:isLegalPosNum(num + 9) then
+		elseif gtool:is_legal_pos_num(num + 9) then
 			return num + 9
 		end
 	else
-		if gtool:isLegalPosNum(num + 10) then
-			return num+10
-		elseif gtool:isLegalPosNum(num - 10) then
-			return num-10
-		elseif gtool:isLegalPosNum(num + 1) then
-			return num+1
-		elseif gtool:isLegalPosNum(num - 1) then
-			return num-1
-		elseif gtool:isLegalPosNum(num - 11) then
-			return num-11
-		elseif gtool:isLegalPosNum(num - 9) then
-			return num-9
+		if gtool:is_legal_pos_num(num + 10) then
+			return num + 10
+		elseif gtool:is_legal_pos_num(num - 10) then
+			return num - 10
+		elseif gtool:is_legal_pos_num(num + 1) then
+			return num + 1
+		elseif gtool:is_legal_pos_num(num - 1) then
+			return num - 1
+		elseif gtool:is_legal_pos_num(num - 11) then
+			return num - 11
+		elseif gtool:is_legal_pos_num(num - 9) then
+			return num - 9
 		end
 	end
 

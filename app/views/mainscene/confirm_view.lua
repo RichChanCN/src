@@ -43,15 +43,15 @@ confirm_view.update_info = function(self, chapter_num, level_num)
 end
 
 confirm_view.update_view = function(self)
-	self.stage_text:setString("Stage "..self.chapter_num.."-"..self.level_num)
+	self.stage_text:setString("Stage " .. self.chapter_num .. "-" .. self.level_num)
 
 	for i = 1, 3 do
 		if not (i > self.star_num) then
-			self["star_"..i.."_sp"]:setTexture(g_config.sprite.lager_star_got)
-			self["star_"..i.."_sp"]:setScale(1)
+			self["star_" .. i .. "_sp"]:setTexture(g_config.sprite.lager_star_got)
+			self["star_" .. i .. "_sp"]:setScale(1)
 		else
-			self["star_"..i.."_sp"]:setTexture(g_config.sprite.lager_star_empty)
-			self["star_"..i.."_sp"]:setScale(1.5)
+			self["star_" .. i .. "_sp"]:setTexture(g_config.sprite.lager_star_empty)
+			self["star_" .. i .. "_sp"]:setScale(1.5)
 		end
 	end
 	self:update_reward()
@@ -71,13 +71,13 @@ confirm_view.update_reward = function(self)
 					local card = self.reward_template:clone()
 					uitool:init_monster_card_with_id_and_num(card, k2, v2)
 					self.reward_node:addChild(card)
-					table.insert(self.reward_list,card)
+					table.insert(self.reward_list, card)
 				end
 			elseif (k1 == "coin" or k1 == "crystal") and v1 > 0 then
 				local card = self.reward_template:clone()
 				uitool:init_other_card_with_type_and_num(card, k1, v1)
 				self.reward_node:addChild(card)
-				table.insert(self.reward_list,card)
+				table.insert(self.reward_list, card)
 			end
 		end
 		local offset = 0
@@ -96,7 +96,7 @@ end
 
 confirm_view.on_open = function(self, ...)
 	local params = {...}
-	self:update_info(params[1],params[2])
+	self:update_info(params[1], params[2])
 	self:update_view()
 end
 

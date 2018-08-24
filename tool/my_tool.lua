@@ -52,7 +52,7 @@ gtool.int_2_ccp = function(self, num)
     end
 end
 
-gtool.normalizeTowards = function(self, towards)
+gtool.normalize_towards = function(self, towards)
     local normal_towards = towards
     if towards % 6 == 0 then
         normal_towards = 6
@@ -65,7 +65,7 @@ gtool.normalizeTowards = function(self, towards)
     return normal_towards
 end
 
-gtool.isLegalPosNum = function(self, pos)
+gtool.is_legal_pos_num = function(self, pos)
     if pos > 11 and pos % 10 < 8 and pos % 10 > 0
         and pos ~= 17 and (pos < 78 or pos == 83 or pos == 85) then
         return true
@@ -74,12 +74,12 @@ gtool.isLegalPosNum = function(self, pos)
     return false
 end
 
-gtool.getPosListInRange = function(self, center_pos_num, range)
+gtool.get_pos_list_in_range = function(self, center_pos_num, range)
     local pos_list = {[center_pos_num] = 1}
     local temp_list = {[center_pos_num] = 1}
 
-    local pathFindHelp = function(num,step)
-        if not pos_list[num] and gtool:isLegalPosNum(num) then
+    local pathFindHelp = function(num, step)
+        if not pos_list[num] and gtool:is_legal_pos_num(num) then
             pos_list[num] = step
         end
     end
@@ -115,7 +115,7 @@ gtool.getPosListInRange = function(self, center_pos_num, range)
     return pos_list
 end
 
-gtool.doSomethingLater = function(self, callback, time)
+gtool.do_something_later = function(self, callback, time)
     local ac_node = cc.Node:create()
     pve_game_ctrl:instance():get_action_node():addChild(ac_node)
     local default_ac = ac_node:runAction(cc.ScaleTo:create(time, 1))

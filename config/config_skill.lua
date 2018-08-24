@@ -10,7 +10,7 @@ g_config.skill =
 		--技能描述
 		description = "Cost 4 anger points,deals 100+(10*level) damage to all enemies,And they add freezing to them, minus their mobility in next action.",
 		--技能图标路径
-		img_path = g_config.monster_img_path.."icon_skill_destructive_ray.png",
+		img_path = g_config.monster_img_path .. "icon_skill_destructive_ray.png",
 		--技能范围，0的话就是全范围
 		range = 0,
 		--技能是否需要选择目标
@@ -27,9 +27,9 @@ g_config.skill =
 		healing_level_plus = 0,
 
 		--技能粒子路径
-	 	particle_path = g_config.particle_path.."snowstorm.plist",
+	 	particle_path = g_config.particle_path .. "snowstorm.plist",
 	 	--粒子放置的位置
-	 	particle_pos = cc.p(500,1000),
+	 	particle_pos = cc.p(500, 1000),
 	 	--给队友加的buff列表
 		buff = 
 		{
@@ -46,7 +46,7 @@ g_config.skill =
 	{
 		name = "Impact Wave",
 		description = "Cost 4 anger points, deals 50+(10*5) damage to all enemies around self, And they can't do anything in next action.",
-		img_path = g_config.monster_img_path.."icon_skill_earth_shake.png",
+		img_path = g_config.monster_img_path .. "icon_skill_earth_shake.png",
 		range = 2,
 		is_need_target = false,
 		cost = 4,
@@ -56,8 +56,8 @@ g_config.skill =
 		healing = 0,
 		healing_level_plus = 0,
 
-	 	particle_path = g_config.particle_path.."impactwave.plist",
-	 	particle_pos = cc.p(0,0),
+	 	particle_path = g_config.particle_path .. "impactwave.plist",
+	 	particle_pos = cc.p(0, 0),
 	 	particle_scale = 0.5,
 	 	particle_delay_time = 0.7, 
 		buff = 
@@ -75,7 +75,7 @@ g_config.skill =
 	{
 		name = "Poison Blade",
 		description = "Cost 2 anger points, deals 50+(10*5) damage to an enemy, And it will minus 40 HP when begin next two action",
-		img_path = g_config.monster_img_path.."icon_skill_holy_slash.png",
+		img_path = g_config.monster_img_path .. "icon_skill_holy_slash.png",
 		range = 1,
 		is_need_target = true,
 		cost = 3,
@@ -100,7 +100,7 @@ g_config.skill =
 	{
 		name = "Battle Fury",
 		description = "Cost 3 anger points, increase all friend 30% damage 2 round.",
-		img_path = g_config.monster_img_path.."icon_skill_eager_for_fight.png",
+		img_path = g_config.monster_img_path .. "icon_skill_eager_for_fight.png",
 		range = 0,
 		is_need_target = false,
 		cost = 0,

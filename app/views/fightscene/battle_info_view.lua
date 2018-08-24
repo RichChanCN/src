@@ -50,13 +50,13 @@ end
 
 battle_info_view.on_open = function(self)
     self:update_view()
-    self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self._left_bottom_img_end_pos))
-    self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self._right_bottom_node_end_pos))
+    self.left_bottom_img:runAction(cc.MoveTo:create(0.3, self._left_bottom_img_end_pos))
+    self.right_bottom_node:runAction(cc.MoveTo:create(0.3, self._right_bottom_node_end_pos))
 end
 
 battle_info_view.on_close = function(self)
-    self.left_bottom_img:runAction(cc.MoveTo:create(0.3,self._left_bottom_img_start_pos))
-    self.right_bottom_node:runAction(cc.MoveTo:create(0.3,self._right_bottom_node_start_pos))
+    self.left_bottom_img:runAction(cc.MoveTo:create(0.3, self._left_bottom_img_start_pos))
+    self.right_bottom_node:runAction(cc.MoveTo:create(0.3, self._right_bottom_node_start_pos))
 end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
@@ -176,7 +176,7 @@ battle_info_view.add_queue_item_event = function(self, img)
     local touch_began = function(touch, event)
         local node = event:getCurrentTarget()
         if pve_game_ctrl:instance():is_wait_order() then
-            if uitool:is_touch_in_node_rect(node,touch,event) then
+            if uitool:is_touch_in_node_rect(node, touch, event) then
                 self:get_ctrl():show_other_around_info(node.monster)
                 return true
             end
@@ -217,14 +217,14 @@ battle_info_view.update_right_bottom_queue = function(self, is_wait)
         self.left_bottom_img:removeChild(self.animate_card)
     end
     self.animate_card = last_item:clone()
-    self:update_lv_item(self.animate_card,self.queue_first.monster, true)
+    self:update_lv_item(self.animate_card, self.queue_first.monster, true)
     
     self.left_bottom_img:addChild(self.animate_card)
     self.animate_card:setPosition(self.queue_first:getPosition())
     local x,y = self.animate_card:getPosition()
-    self.animate_card:runAction(cc.JumpTo:create(0.3, cc.p(x+700,y), 300, 1))
+    self.animate_card:runAction(cc.JumpTo:create(0.3, cc.p(x + 700, y), 300, 1))
     self.animate_card:runAction(cc.FadeOut:create(0.3))
-    self.animate_card:runAction(cc.ScaleTo:create(0.7,0.3))
+    self.animate_card:runAction(cc.ScaleTo:create(0.7, 0.3))
     
     if not is_wait then
         if not self.queue_lv:getItem(0) then
@@ -291,6 +291,7 @@ battle_info_view.update_skill_image = function(self)
         if self.skill_sp.particle then
             self.skill_sp:removeChildByName("skillicon")
         end
+
         if pve_game_ctrl:instance():get_is_use_skill() then
             local particle = cc.ParticleSystemQuad:create(g_config.Particle.skill_will_use)
             particle:setName("skillicon")
@@ -312,7 +313,6 @@ battle_info_view.update_skill_image = function(self)
             self.skill_sp:setVisible(true)
         end
     else
-
         self.skill_sp:setVisible(false)
     end
 end

@@ -38,8 +38,8 @@ pve_game_ctrl.OPERATE = {
 		pve_game_ctrl:instance():get_cur_active_monster():move_to(arena_pos)
 	end,
 
-	[2] = function(target,distance)
-		pve_game_ctrl:instance():get_cur_active_monster():attack(target,distance)
+	[2] = function(target, distance)
+		pve_game_ctrl:instance():get_cur_active_monster():attack(target, distance)
 	end,
 
 	[3] = function()
@@ -57,7 +57,7 @@ pve_game_ctrl.OPERATE = {
 
 pve_game_ctrl.new = function(self)
 	local o = {}
-	setmetatable(o,self)
+	setmetatable(o, self)
 	self.__index = self
 	
 	self._left_team = {}
@@ -77,7 +77,7 @@ pve_game_ctrl.instance = function(self)
 	return self._instance
 end
 
-pve_game_ctrl.init_game = function(self, left_team,right_team,map,chapter_num,level_num)
+pve_game_ctrl.init_game = function(self, left_team, right_team, map, chapter_num, level_num)
 	self._game_speed = 1
 	self._is_use_skill = false
 	self._map = map
@@ -85,12 +85,12 @@ pve_game_ctrl.init_game = function(self, left_team,right_team,map,chapter_num,le
 	self._level_num = level_num
 
 	self._left_team = {}
-	for k,v in pairs(left_team) do
-		table.insert(self._left_team,v)
+	for k, v in pairs(left_team) do
+		table.insert(self._left_team, v)
 	end
 	self._right_team = {}
-	for k,v in pairs(right_team) do
-		table.insert(self._right_team,v)
+	for k, v in pairs(right_team) do
+		table.insert(self._right_team, v)
 	end
 
 	self:sort_all_monsters_by_initiative()
@@ -109,7 +109,7 @@ end
 
 pve_game_ctrl.run_game = function(self, order, param1, param2)
 	local action = pve_game_ctrl.OPERATE[order]
-	action(param1,param2)
+	action(param1, param2)
 end
 
 pve_game_ctrl.game_over = function(self, win_side)
@@ -118,12 +118,12 @@ pve_game_ctrl.game_over = function(self, win_side)
 	self._scene:game_over(result)
 	if win_side == 1 then
 		local table = self:get_left_alive_monsters()
-		for k,v in pairs(table) do
+		for k, v in pairs(table) do
 			v:repeat_animation("victory")
 		end
 	else
 		local table = self:get_right_alive_monsters()
-		for k,v in pairs(table) do
+		for k, v in pairs(table) do
 			v:repeat_animation("victory")
 		end
 	end
@@ -132,11 +132,11 @@ end
 pve_game_ctrl.next_monster_activate = function(self, is_wait)
 	self:set_is_use_skill(false)
 	if is_wait then
-		table.insert(self._cur_round_monster_queue,self._cur_active_monster)
-		table.insert(self._next_round_monster_queue,self._cur_active_monster)
+		table.insert(self._cur_round_monster_queue, self._cur_active_monster)
+		table.insert(self._next_round_monster_queue, self._cur_active_monster)
 	end
 	if not self._cur_active_monster:has_waited() then
-		table.insert(self._next_round_monster_queue,self._cur_active_monster)
+		table.insert(self._next_round_monster_queue, self._cur_active_monster)
 	end
 	self._cur_active_monster = self:get_next_monster()
 
@@ -145,12 +145,11 @@ pve_game_ctrl.next_monster_activate = function(self, is_wait)
 	elseif self._cur_active_monster:is_dead() then
 		self:next_monster_activate()
 	else
-		self:run_game(pve_game_ctrl.order.ACTIVATE,is_wait)
+		self:run_game(pve_game_ctrl.order.ACTIVATE, is_wait)
 	end
 end
 
 pve_game_ctrl.start_next_round = function(self)
-	print("round "..self._cur_round_num.."finish")
 	self._cur_round_num = self._cur_round_num + 1
 	self._cur_active_monster_index = 1
 	self._cur_round_monster_queue = self._next_round_monster_queue
@@ -169,7 +168,7 @@ end
 
 pve_game_ctrl.alive_monster_enter_new_round = function(self)
 	local all_alive_monster = self:get_all_alive_monsters()
-	for k,v in pairs(all_alive_monster) do
+	for k, v in pairs(all_alive_monster) do
 		v:on_enter_new_round(self._cur_round_num)
 	end
 end
@@ -177,12 +176,12 @@ end
 pve_game_ctrl.update_map_info = function(self)
 	self._map_info = {}
 
-	for k,v in pairs(self._map) do
-		table.insert(self._map_info,k,v)
+	for k, v in pairs(self._map) do
+		table.insert(self._map_info, k, v)
 	end
 	
 	local monsters = self:get_all_alive_monsters()
-	for k,v in pairs(monsters) do
+	for k, v in pairs(monsters) do
 		self._map_info[gtool:ccp_2_int(v:get_cur_pos())] = v
 	end
 end
@@ -204,7 +203,7 @@ end
 pve_game_ctrl.select_target = function(self, num, distance)
 	if self._map_info[num] and self._map_info[num]:is_monster() then
 		if not self:get_is_use_skill() then
-			self:run_game(pve_game_ctrl.order.ATTACK, self._map_info[num],distance)
+			self:run_game(pve_game_ctrl.order.ATTACK, self._map_info[num], distance)
 		else
 			self:run_game(pve_game_ctrl.order.USE_SKILL, num)
 			self:set_is_use_skill(false)
@@ -286,7 +285,7 @@ end
 pve_game_ctrl.get_dead_monster_num = function(self)
 	local num = 0
 
-	for k,v in pairs(self._left_team) do
+	for k, v in pairs(self._left_team) do
 		if v:is_dead() then
 			num = num + 1
 		end
@@ -376,12 +375,12 @@ end
 pve_game_ctrl.get_all_monsters = function(self)
 	local all = {}
 	
-	for _,v in pairs(self._left_team) do
-		table.insert(all,v)
+	for _, v in pairs(self._left_team) do
+		table.insert(all, v)
 	end
 
-	for _,v in pairs(self._right_team) do
-		table.insert(all,v)
+	for _, v in pairs(self._right_team) do
+		table.insert(all, v)
 	end
 
 	return all
@@ -391,13 +390,13 @@ end
 pve_game_ctrl.get_all_alive_monsters = function(self)
 	local all = {}
 	
-	for _,v in pairs(self._left_team) do
+	for _, v in pairs(self._left_team) do
 		if not v:is_dead() then
 			table.insert(all, v)
 		end
 	end
 
-	for _,v in pairs(self._right_team) do
+	for _, v in pairs(self._right_team) do
 		if not v:is_dead() then
 			table.insert(all, v)
 		end
@@ -409,7 +408,7 @@ end
 pve_game_ctrl.get_left_alive_monsters = function(self)
 	local all = {}
 	
-	for _,v in pairs(self._left_team) do
+	for _, v in pairs(self._left_team) do
 		if not v:is_dead() then
 			table.insert(all, v)
 		end
@@ -421,9 +420,9 @@ end
 pve_game_ctrl.get_right_alive_monsters = function(self)
 	local all = {}
 	
-	for _,v in pairs(self._right_team) do
+	for _, v in pairs(self._right_team) do
 		if not v:is_dead() then
-			table.insert(all,v)
+			table.insert(all, v)
 		end
 	end
 
@@ -431,7 +430,7 @@ pve_game_ctrl.get_right_alive_monsters = function(self)
 end
 
 pve_game_ctrl.sort_all_monsters_by_initiative = function(self)
-	local sort_by_initiative = function(a,b)
+	local sort_by_initiative = function(a, b)
 		if a.initiative == b.initiative then
 			if a.level == b.level then
 				return a.rarity > b.rarity
@@ -443,7 +442,7 @@ pve_game_ctrl.sort_all_monsters_by_initiative = function(self)
 		end
 	end
 
-	table.sort(self._all_monsters,sort_by_initiative)
+	table.sort(self._all_monsters, sort_by_initiative)
 end
 
 pve_game_ctrl.sort_monsters_by_initiative = function(self, list)
@@ -465,7 +464,7 @@ end
 pve_game_ctrl.get_all_alive_monsters_in_next_round_queue = function(self)
 	local list = {}
 	
-	for _,v in pairs(self._next_round_monster_queue) do
+	for _, v in pairs(self._next_round_monster_queue) do
 		if not v:is_dead() then
 			table.insert(list, v)
 		end
@@ -477,7 +476,7 @@ end
 pve_game_ctrl.get_all_alive_monsters_in_cur_round_queue = function(self)
 	local list = {}
 	
-	for _,v in pairs(self._cur_round_monster_queue) do
+	for _, v in pairs(self._cur_round_monster_queue) do
 		if not v:is_dead() then
 			table.insert(list, v)
 		end
@@ -490,8 +489,8 @@ pve_game_ctrl.get_monster_index_in_next_round_alive_monster = function(self, mon
 	local next_round_alive_monsters = self:get_all_alive_monsters_in_next_round_queue()
 	local index = 1
 	--self:sort_monsters_by_initiative(next_round_alive_monsters)
-	for i,v in ipairs(next_round_alive_monsters) do
-		if v:getTag() == monster:getTag() then
+	for i, v in ipairs(next_round_alive_monsters) do
+		if v:get_tag() == monster:get_tag() then
 			index = i 
 			break
 		end
@@ -504,8 +503,8 @@ pve_game_ctrl.get_monster_index_in_cur_round_alive_monster = function(self, mons
 	local cur_round_alive_monsters = self:get_all_alive_monsters_in_cur_round_queue()
 	local index = 1
 	--self:sort_monsters_by_initiative(cur_round_alive_monsters)
-	for i,v in ipairs(cur_round_alive_monsters) do
-		if v:getTag() == monster:getTag() then
+	for i, v in ipairs(cur_round_alive_monsters) do
+		if v:get_tag() == monster:get_tag() then
 			index = i 
 			break
 		end

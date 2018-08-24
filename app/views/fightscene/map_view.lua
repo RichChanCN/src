@@ -33,7 +33,6 @@ map_view.init_info = function(self)
 	self.arena_top_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
 	self.model_panel:setRotation3D(cc.vec3(self._skew_angle,0,0))
     self._camera = self:get_ctrl():getScene():getDefaultCamera()
-    self.eventDispatcher = cc.Director:getInstance():getEventDispatcher()
 end
 
 map_view.init_events = function(self)
@@ -79,7 +78,7 @@ end
 
 map_view.get_position_by_int = function(self, num)
 	local pos = gtool:int_2_ccp(num)
-	local a, b = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
+	local a, b = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
 	return cc.p(a, b)
 end
 
@@ -98,8 +97,8 @@ map_view.show_guide = function(self, monster)
 	
 	local gezi_list = cur_active_monster:get_around_info(monster)
 
-	local a,b = self["gezi_"..gezi_list[0].x.."_"..gezi_list[0].y.."_black"]:getPosition()
-	self.cur_monster_pos_sp:setPosition(cc.p(a,b))
+	local a, b = self["gezi_" .. gezi_list[0].x .. "_" .. gezi_list[0].y .. "_black"]:getPosition()
+	self.cur_monster_pos_sp:setPosition(cc.p(a, b))
 	
 	for k, v in pairs(gezi_list) do
 		if k > 10 and v < 100 and v > 10 then
@@ -125,26 +124,26 @@ map_view.show_enemy = function(self, num, monster, distance)
 	end
 
 	local x, y = math.modf(num / 10), num % 10
-	atk_img:setPosition(self["gezi_"..x.."_"..y]:getPosition())
+	atk_img:setPosition(self["gezi_" .. x .. "_" .. y]:getPosition())
 
 	self.arena_top_node:addChild(atk_img)
 	uitool:repeat_fade_in_and_out(atk_img)
 
 	local img = atk_img:getChildByName("img")
-	uitool:make_img_to_button_ht(img,self._camera,function()
+	uitool:make_img_to_button_ht(img, self._camera, function()
 		pve_game_ctrl:instance():select_target(num, distance)
 	end)
 end
 
 map_view.show_can_move_to_gezi = function(self, num)
 	local x, y = math.modf(num / 10), num % 10
-	if self["gezi_"..x.."_"..y.."_black"] then 
-		self["gezi_"..x.."_"..y.."_black"]:setVisible(true)
-		self["gezi_"..x.."_"..y.."_black"]:setScale(0.1)
+	if self["gezi_" .. x .. "_" .. y .. "_black"] then 
+		self["gezi_" .. x .. "_" .. y .. "_black"]:setVisible(true)
+		self["gezi_" .. x .. "_" .. y .. "_black"]:setScale(0.1)
 		local time = math.random() / 3 + 0.1
-		self["gezi_"..x.."_"..y.."_black"]:runAction(cc.FadeIn:create(time))
-		self["gezi_"..x.."_"..y.."_black"]:runAction(cc.ScaleTo:create(time, 1))
-		self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
+		self["gezi_" .. x .. "_" .. y .. "_black"]:runAction(cc.FadeIn:create(time))
+		self["gezi_" .. x .. "_" .. y .. "_black"]:runAction(cc.ScaleTo:create(time, 1))
+		self._eventDispatcher:resumeEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 	end
 end
 
@@ -156,7 +155,7 @@ map_view.hide_guide = function(self)
     		if self["gezi_"..x.."_"..y.."_black"] then 
     			self["gezi_"..x.."_"..y.."_black"]:setOpacity(0)
     			self["gezi_"..x.."_"..y.."_black"]:setVisible(false)
-    			self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..x.."_"..y])
+    			self._eventDispatcher:pauseEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
     		end
     	end
     end
@@ -175,7 +174,7 @@ map_view.hide_mask = function(self)
 	local ac1 = self.mask_img:runAction(cc.FadeIn:create(self:get_ctrl().Wait_Time))
 	local ac2 = self.mask_img:runAction(cc.FadeOut:create(self:get_ctrl().Action_Time))
 
-	local seq = cc.Sequence:create(ac1,ac2)
+	local seq = cc.Sequence:create(ac1, ac2)
 	
 	self.mask_img:runAction(seq)
 end
@@ -186,14 +185,14 @@ map_view.create_monster_model = function(self, monster)
         monster.model = nil
     end
 
-	self._model_node_list[monster:getTag()] = cc.Node:create()
-	self._model_node_list[monster:getTag()]:retain()
+	self._model_node_list[monster:get_tag()] = cc.Node:create()
+	self._model_node_list[monster:get_tag()]:retain()
 	
 	local callback = function(model)
 		model:setScale(0.5)
-		local node = self._model_node_list[monster:getTag()]
+		local node = self._model_node_list[monster:get_tag()]
 		local pos = monster:get_start_pos()
-        local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
+        local x,y = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
         if monster:is_fly() then
         	node:setPosition(x, y + 10)
         else
@@ -219,7 +218,7 @@ end
 map_view.create_other_model = function(self, other_model, pos)
 	local callback = function(model)
 		model:setScale(4)
-        local x,y = self["gezi_"..pos.x.."_"..pos.y]:getPosition()
+        local x,y = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
         model:setPosition(x, y)
 		self.model_panel:addChild(model)
 	end
@@ -236,7 +235,7 @@ map_view.init_blood_bar = function(self, node, monster)
 	blood_bar.child.blood_img = blood_bar:getChildByName("blood_img")
 	blood_bar.child.level_text = blood_bar:getChildByName("level_text")
 
-	blood_bar.child.blood_img:loadTexture(g_config.sprite["team_hp_img_"..monster:get_team_side()])
+	blood_bar.child.blood_img:loadTexture(g_config.sprite["team_hp_img_" .. monster:get_team_side()])
 	blood_bar.child.level_text:setString(monster.level)
 
 	local updae_hp = function(percent, damage, type)
@@ -247,9 +246,9 @@ map_view.init_blood_bar = function(self, node, monster)
 	local update_anger = function(anger)
 		for i = 1, 4 do
 			if not (i > anger) then
-				blood_bar:getChildByName("star_"..i):setVisible(true)
+				blood_bar:getChildByName("star_" .. i):setVisible(true)
 			else
-				blood_bar:getChildByName("star_"..i):setVisible(false)
+				blood_bar:getChildByName("star_" .. i):setVisible(false)
 			end
 		end
 	end
@@ -266,7 +265,7 @@ end
 map_view.create_damage_fly_words = function(self, damage, monster, level)
 	local fly_word = self.fly_word_template:clone()
 	fly_word:setString(damage)
-	fly_word:setTextColor(g_config.color["damage_"..level])
+	fly_word:setTextColor(g_config.color["damage_" .. level])
 	local x,y = monster.node:getPosition()
 
 	fly_word:setPosition(x, y + 60)
@@ -277,7 +276,7 @@ map_view.create_damage_fly_words = function(self, damage, monster, level)
 
 	local ac1 = fly_word:runAction(cc.ScaleTo:create(0.2, 1))
 	fly_word:stopAction(ac1)
-	local ac2 = fly_word:runAction(cc.MoveTo:create(0.5, cc.p(x, y+80)))
+	local ac2 = fly_word:runAction(cc.MoveTo:create(0.5, cc.p(x, y + 80)))
 	fly_word:stopAction(ac2)
 	local ac3 = fly_word:runAction(cc.FadeOut:create(0.1))
 	fly_word:stopAction(ac3)
@@ -290,11 +289,11 @@ end
 map_view.init_arena = function(self)
 	for x = 1, 8 do
 		for y = 1, 7 do
-			self["gezi_"..x.."_"..y] = self.arena_event_node:getChildByName("gezi_"..x.."_"..y)
-			self["gezi_"..x.."_"..y.."_black"] = self.arena_bottom_node:getChildByName("gezi_"..x.."_"..y)
-			if self["gezi_"..x.."_"..y] then
-				self["gezi_"..x.."_"..y].arena_pos = cc.p(x, y)
-                self:add_arena_listener(self["gezi_"..x.."_"..y])
+			self["gezi_" .. x .. "_" .. y] = self.arena_event_node:getChildByName("gezi_" .. x .. "_" .. y)
+			self["gezi_" .. x .. "_" .. y .. "_black"] = self.arena_bottom_node:getChildByName("gezi_" .. x .. "_" .. y)
+			if self["gezi_" .. x .. "_" .. y] then
+				self["gezi_" .. x .. "_" .. y].arena_pos = cc.p(x, y)
+                self:add_arena_listener(self["gezi_" .. x .. "_" .. y])
 			end
 		end
 	end
@@ -307,8 +306,8 @@ map_view.add_arena_listener = function(self, gezi)
 		local start_location = touch:getLocation()
 		if pve_game_ctrl:instance():is_wait_order() then
         	if node:hitTest(start_location, self._camera, nil) then
-        		local x,y = node:getPosition()
-        		self.moveto_point_sp:setPosition(x,y)
+        		local x, y = node:getPosition()
+        		self.moveto_point_sp:setPosition(x, y)
         		self.target_gezi = node
         	end
         	return true
@@ -322,8 +321,8 @@ map_view.add_arena_listener = function(self, gezi)
         local cur_location = touch:getLocation()
 
         if node:hitTest(cur_location, self._camera, nil) then
-        	local x,y = node:getPosition()
-        	self.moveto_point_sp:setPosition(x,y)
+        	local x, y = node:getPosition()
+        	self.moveto_point_sp:setPosition(x, y)
         	self.target_gezi = node
         elseif self.target_gezi and self.target_gezi:getTag() == node:getTag() then
         	self.moveto_point_sp:setPosition(uitool:far_away())
@@ -346,15 +345,15 @@ map_view.add_arena_listener = function(self, gezi)
     gezi.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
     gezi.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
     gezi.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
-    self.eventDispatcher:addEventListenerWithSceneGraphPriority(gezi.listener, gezi)
+    self._eventDispatcher:addEventListenerWithSceneGraphPriority(gezi.listener, gezi)
 end
 
 map_view.resume_arena_listener = function(self)
 	
 	for x = 1, 8 do
 		for y = 1, 7 do 
-			if self["gezi_"..x.."_"..y] then
-				self.eventDispatcher:resumeEventListenersForTarget(self["gezi_"..x.."_"..y])
+			if self["gezi_" .. x .. "_" .. y] then
+				self._eventDispatcher:resumeEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 			end
 		end
 	end
@@ -364,8 +363,8 @@ map_view.pause_arena_listener = function(self)
 	
 	for x = 1, 8 do
 		for y = 1, 7 do 
-			if self["gezi_"..x.."_"..y] then
-				self.eventDispatcher:pauseEventListenersForTarget(self["gezi_"..x.."_"..y])
+			if self["gezi_" .. x .. "_" .. y] then
+				self._eventDispatcher:pauseEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 			end
 		end
 	end

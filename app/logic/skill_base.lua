@@ -38,12 +38,12 @@ skill_base.use = function(self, target_pos_num)
 	local monster_list = self:get_be_affected_monster_list()
 	--pve_game_ctrl:instance():getScene():get_particle_node():removeChildByName(self._name)
 	if #monster_list < 1 then
-		uitool:create_top_tip("no monster is affected by "..self._name)
+		uitool:create_top_tip("no monster is affected by " .. self._name)
 		pve_game_ctrl:instance():next_monster_activate()
 	else
-		for i,v in ipairs(monster_list) do
-			if not monster_list[i+1] then
-				v:be_affected_by_skill(self,true)
+		for i, v in ipairs(monster_list) do
+			if not monster_list[i + 1] then
+				v:be_affected_by_skill(self, true)
 			else
 				v:be_affected_by_skill(self)
 			end
@@ -75,7 +75,7 @@ skill_base.play = function(self)
 
 	if self._particle_delay_time then
 		local callback = cc.CallFunc:create(cb)
-		gtool:doSomethingLater(callback, self._particle_delay_time)
+		gtool:do_something_later(callback, self._particle_delay_time)
 	else
 		cb()
 	end
@@ -85,7 +85,7 @@ end
 
 skill_base.get_be_affected_monster_list = function(self)
 	local monster_list = {}
-	if self._range<1 then
+	if self._range < 1 then
 		if (self._damage > 0 or self._debuff) and (self._healing > 0 or self._buff) then
 			monster_list = pve_game_ctrl:instance():get_all_alive_monsters()
 		elseif self._damage > 0 or self._debuff then
@@ -94,7 +94,7 @@ skill_base.get_be_affected_monster_list = function(self)
 			monster_list = self._caster:get_alive_friend_monsters()
 		end
 	elseif (not self:is_need_target()) and self._range > 1 then
-		local pos_list = gtool:getPosListInRange(self._caster:get_cur_pos_num(), self._range)
+		local pos_list = gtool:get_pos_list_in_range(self._caster:get_cur_pos_num(), self._range)
 		local map_info = pve_game_ctrl:instance():get_map_info()
 		for k,v in pairs(pos_list) do
 			if map_info[k] and type(map_info[k]) == type({}) and self._caster:is_enemy(map_info[k]) then
@@ -102,11 +102,11 @@ skill_base.get_be_affected_monster_list = function(self)
 			end
 		end
 	elseif self.target_pos_num and self._range > 1 then
-		local pos_list = gtool:getPosListInRange(self.target_pos_num, self._range)
+		local pos_list = gtool:get_pos_list_in_range(self.target_pos_num, self._range)
 		local map_info = pve_game_ctrl:instance():get_map_info()
-		for k,v in pairs(pos_list) do
+		for k, v in pairs(pos_list) do
 			if map_info[k] and type(map_info[k]) == type({}) and self._caster:is_enemy(map_info[k]) then
-				table.insert(monster_list,map_info[k])
+				table.insert(monster_list, map_info[k])
 			end
 		end
 	elseif self._range == 1 then
