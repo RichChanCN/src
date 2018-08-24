@@ -103,6 +103,19 @@ uitool.move_to_and_fade_out = function(self, node, pos)
     node:runAction(seq1)
 end
 
+uitool.set_opacity = function(node, value)
+    value = value or 255
+    local children = node:getChildren()
+
+    if #children > 0 then
+        for i = 1, #children do
+            self:set_opacity(children[i])
+        end
+    end
+
+    node:setOpacity(value)
+end
+
 uitool.repeat_fade_in_and_out = function(self, node)
     local children = node:getChildren()
 

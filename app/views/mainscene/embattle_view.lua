@@ -106,7 +106,7 @@ end
 embattle_view.on_close = function(self)
 	self:remove_arena_listener()
 	self:remove_monster_list_listener()
-	self:reset_arena()
+	self:put_all_chesspiece()
 end
 ----------------------------------------------------------------
 -------------------------------私有方法--------------------------
@@ -218,6 +218,7 @@ embattle_view.add_monster_card_event = function(self, img, index)
 				else
 					uitool:create_top_tip("can't add more monsters!", "red")
 					uitool:move_to_and_fade_out(self._cur_drag_chesspiece, pos)
+					self:set_chesspiece_will_remove(self._cur_drag_chesspiece)
 				end
 			end
 		end
@@ -289,35 +290,16 @@ end
 ------------棋子部分开始------------
 embattle_view.create_chesspiece = function(self, monster, index)
 
-	local chesspiece = cc.Sprite:create(g_config.sprite.chesspiece_mask)
-	chesspiece:setScale(0.5)
-	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}
-	chesspiece:setBlendFunc(blendfunc)
-	
-	local face_sp = cc.Sprite:create(monster.char_img_path)
-	blendfunc = {src = gl.ONE_MINUS_DST_ALPHA, dst = gl.DST_ALPHA}
-	face_sp:setBlendFunc(blendfunc)
-	face_sp:setName("face_sp")
+	local chesspiece = chesspiece_pool_manager:instance():get(monster, index)
 
-	local hex_border = cc.Sprite:create(g_config.sprite["hex_border_" .. monster.rarity])
-	hex_border:setScale(2.0)
-	hex_border:setName("hex_border")
-	chesspiece:addChild(hex_border, uitool:bottom_z_order() + 5)
-	hex_border:setPosition(uitool:get_node_center_position(chesspiece))
-	chesspiece:addChild(face_sp, uitool:bottom_z_order())
-	face_sp:setPosition(uitool:get_node_center_position(chesspiece))
-	
-	chesspiece:setName("chesspiece_" .. index)
 	self.hex_node:addChild(chesspiece, uitool:bottom_z_order())
-
-	chesspiece.monster = monster
 
 	return chesspiece
 end
 
 embattle_view.set_chesspiece_will_remove = function(self, chesspiece)
 	if self._chesspiece_willbe_removed then
-		self.hex_node:removeChild(self._chesspiece_willbe_removed)
+		chesspiece_pool_manager:instance():put(self._chesspiece_willbe_removed)
 	end
 	self._chesspiece_willbe_removed = chesspiece
 end
@@ -400,7 +382,9 @@ embattle_view.remove_one_chesspiece_from_arena = function(self, chesspiece)
 	if chesspiece.from_card then
 		self:unselect_card(chesspiece.from_card)
 	end
-	self.hex_node:removeChild(chesspiece)
+
+	chesspiece_pool_manager:instance():put(chesspiece)
+
 	self:updateMonstersNum()
 end
 ------------棋子部分结束------------
@@ -439,7 +423,7 @@ embattle_view.update_arena = function(self)
 	end
 
 	for k, v in pairs(self._enemy_team) do
-		local chesspiece = self:create_chesspiece(v,300+v:get_id())
+		local chesspiece = self:create_chesspiece(v, 300 + v:get_id())
 		local pos = v:get_start_pos()
 		chesspiece:setPosition(self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition())
 	end
@@ -563,6 +547,10 @@ embattle_view.reset_arena = function(self)
 		self["gezi_" .. pos.x .. "_" .. pos.y]:loadTexture(g_config.sprite.gezi_disable)
 		self["gezi_" .. pos.x .. "_" .. pos.y]:setScale(1)
 	end
+end
+
+embattle_view.put_all_chesspiece = function(self)
+	chesspiece_pool_manager:recycle_all()
 end
 ------------右边战场部分结束------------
 
