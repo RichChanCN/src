@@ -1,10 +1,10 @@
-table.print = function( t )  
+table.print = function(t)  
     local print_r_cache = {}
     local function sub_print_r(t, indent)
         if (print_r_cache[tostring(t)]) then
             print(indent .. "*" .. tostring(t))
         else
-            print_r_cache[tostring(t)]=true
+            print_r_cache[tostring(t)] = true
             if (type(t) == "table") then
                 for pos,val in pairs(t) do
                     if (type(val) == "table") then
@@ -33,6 +33,53 @@ table.print = function( t )
 end
 
 gtool = {}
+
+gtool._class = {}
+
+gtool.class = function(super)
+    local class_type = {}
+    class_type.ctor = false
+    class_type.super = super
+    class_type.new = function(self, ...) 
+        local obj = {}
+        do
+            local create
+            create = function(c, ...)
+                if c.super then
+                    create(c.super, ...)
+                end
+                if c.ctor then
+                    c.ctor(obj, ...)
+                end
+            end
+
+            create(class_type, ...)
+        end
+        setmetatable(obj, { __index = gtool._class[class_type]})
+        return obj
+    end
+
+    local vtbl = {}
+    gtool._class[class_type] = vtbl
+ 
+    setmetatable(class_type,{__newindex =
+        function(t, k, v)
+            vtbl[k] = v
+        end
+    })
+ 
+    if super then
+        setmetatable(vtbl, {__index=
+            function(t, k)
+                local ret = gtool._class[super][k]
+                vtbl[k] = ret
+                return ret
+            end
+        })
+    end
+ 
+    return class_type
+end
 
 gtool.ccp_2_int = function(self, pos)
     if type(pos) == type({}) and pos.x and pos.y then

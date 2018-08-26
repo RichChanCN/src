@@ -17,7 +17,7 @@ map_data.get_map_data_by_chapter_and_level = function(self, chapter_num, level_n
 		elseif v > 1 and v < 10 then
 			table.insert(ret_data.other_gezi, k, v)
 		elseif v and v > 100 then
-			local enemy = monster_base:instance():new(g_config.monter[v % 100], monster_base.team_side.RIGHT, gtool:int_2_ccp(k))
+			local enemy = monster_factory:instance():create_monster(g_config.monter[v % 100], monster_base.team_side.RIGHT, gtool:int_2_ccp(k))
 			table.insert(ret_data.enemy_team, enemy)
 		end
 	end

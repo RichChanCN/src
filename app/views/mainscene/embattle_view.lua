@@ -116,7 +116,8 @@ embattle_view.make_team = function(self)
 	local monster_base = require("app.logic.monster_base")
 
 	for _, v in pairs(self._monster_team) do
-		table.insert(team, monster_base:instance():new(v.monster, monster_base.team_side.LEFT, v.arena_cell.pos))
+		local monster = monster_factory:instance():create_monster(v.monster, monster_base.team_side.LEFT, v.arena_cell.pos)
+		table.insert(team, monster)
 	end
 
 	return team
