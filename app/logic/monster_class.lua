@@ -452,7 +452,7 @@ end
 
 monster_class.attack_directly = function(self, target, distance)
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
-	if self._attack_particle then
+	if self.attack_particle then
 		self:create_attack_particle(target)
 	end
 
@@ -909,7 +909,7 @@ monster_class.get_distance_info = function(self)
 end
 
 monster_class.create_attack_particle = function(self, target)
-	local particle = cc.ParticleSystemQuad:create(self._attack_particle)
+	local particle = cc.ParticleSystemQuad:create(self.attack_particle)
 	particle:setScale(0.3)
 	particle:setName("attack")
 	local start_pos = pve_game_ctrl:instance():get_position_by_int(self:get_cur_pos_num())

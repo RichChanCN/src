@@ -20,8 +20,8 @@ require "app.logic.pve_game_ctrl"
 
 local function main()
 	collectgarbage("collect")
-	collectgarbage("setpause",100)
-	collectgarbage("setstepmul",5000)
+	collectgarbage("setpause", 100)
+	collectgarbage("setstepmul", 5000)
 
 	cc.FileUtils:getInstance():addSearchPath("src")
 	cc.FileUtils:getInstance():addSearchPath("res")
