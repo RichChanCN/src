@@ -873,17 +873,11 @@ monster_class.get_distance_info = function(self)
     end
     
     local find_gezi = function(pos, step)
-        path_find_help(pos + 10, step)
-        path_find_help(pos - 10, step)
-        path_find_help(pos + 1, step)
-        path_find_help(pos - 1, step)
-        if pos % 2 == 0 then
-            path_find_help(pos + 11,step)
-            path_find_help(pos + 9,step)
-        else
-            path_find_help(pos - 11,step)
-            path_find_help(pos - 9,step)
-        end
+    	local temp_table = gtool:get_towards_tbl(pos)
+    	
+    	for k, v in pairs(temp_table) do
+    		path_find_help(pos + v, step)
+    	end
     end
 
     find_gezi(self:get_cur_pos_num(), 1)
@@ -1063,25 +1057,13 @@ monster_class.get_path_info_to_target = function(self, map_info, target)
     end
     
     local find_gezi = function(pos)
-        if path_find_help(pos, pos + 10)
-            or path_find_help(pos, pos - 10)
-            or path_find_help(pos, pos + 1)
-            or path_find_help(pos, pos - 1) then
-            return true
-        end
-        if pos % 2 == 0 then
-            if path_find_help(pos, pos + 11)
-                or path_find_help(pos, pos + 9) then
+    	local temp_table = gtool:get_towards_tbl(pos)
 
-                return true
-            end
-        else
-            if path_find_help(pos, pos - 11)
-                or path_find_help(pos, pos - 9) then
-
-                return true
-            end
-        end
+    	for k, v in pairs(temp_table) do
+    		if path_find_help(pos, pos + v) then
+    			return true
+    		end
+    	end
 
         return false
     end
@@ -1130,34 +1112,11 @@ monster_class.get_path_to_pos = function(self, num, path_table)
 end
 
 monster_class.get_near_pos_num = function(self, num)
+	local temp_table = gtool:get_towards_tbl(num)
 
-	if num % 2 == 0 then
-		if self:can_move_to_pos_num(num + 10) then
-			return num + 10
-		elseif self:can_move_to_pos_num(num - 10) then
-			return num - 10
-		elseif self:can_move_to_pos_num(num + 1) then
-			return num + 1
-		elseif self:can_move_to_pos_num(num - 1) then
-			return num - 1
-		elseif self:can_move_to_pos_num(num + 11) then
-			return num + 11
-		elseif self:can_move_to_pos_num(num + 9) then
-			return num + 9
-		end
-	else
-		if self:can_move_to_pos_num(num + 10) then
-			return num + 10
-		elseif self:can_move_to_pos_num(num - 10) then
-			return num - 10
-		elseif self:can_move_to_pos_num(num + 1) then
-			return num + 1
-		elseif self:can_move_to_pos_num(num - 1) then
-			return num - 1
-		elseif self:can_move_to_pos_num(num - 11) then
-			return num - 11
-		elseif self:can_move_to_pos_num(num - 9) then
-			return num - 9
+	for k, v in pairs(temp_table) do
+		if self:can_move_to_pos_num(num + v) then
+			return num + v
 		end
 	end
 
@@ -1201,24 +1160,11 @@ end
 
 monster_class.is_near = function(self, num)
 	local cur = self:get_cur_pos_num()
-	if num % 2 == 0 then
-		if cur == num + 10
-			or cur == num - 10
-			or cur == num + 1
-			or cur == num - 1
-			or cur == num + 11
-			or cur == num + 9 then
-			
-			return true
-		end
-	else
-		if cur == num + 10
-			or cur == num - 10
-			or cur == num + 1
-			or cur == num - 1
-			or cur == num - 11
-			or cur == num - 9 then
-			
+
+	local temp_table = gtool:get_towards_tbl(num)
+
+	for k, v in pairs(temp_table) do
+		if cur == num + v then
 			return true
 		end
 	end

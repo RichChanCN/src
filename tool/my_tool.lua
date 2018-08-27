@@ -253,19 +253,19 @@ gtool.get_toward_to_int_pos = function(self, cur_num, to_num)
 end
 
 gtool.find_gezi = function(self, pos, help)
-    local tbl = gtool:get_around_tbl(pos)
+    local tbl = gtool:get_towards_tbl(pos)
     
     for k, v in pairs(tbl) do
-        help(pos, pos + k)
+        help(pos, pos + v)
     end
 end
 
 gtool.get_near_pos_plus = function(self, num)
-    local tbl = gtool:get_around_tbl(num)
+    local tbl = gtool:get_towards_tbl(num)
     
     for k, v in pairs(tbl) do
-        if is_legal_pos_num(num + k) then
-            return num + k
+        if is_legal_pos_num(num + v) then
+            return num + v
         end
     end
 
