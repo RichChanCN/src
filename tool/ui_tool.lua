@@ -88,10 +88,8 @@ end
 uitool.move_to_and_fade_out = function(self, node, pos)
     local children = node:getChildren()
 
-    if #children > 0 then
-        for i = 1, #children do
-            self:move_to_and_fade_out(children[i])
-        end
+    for i = 1, #children do
+        self:move_to_and_fade_out(children[i])
     end
 
     local ac1 = nil 
@@ -119,10 +117,8 @@ end
 uitool.repeat_fade_in_and_out = function(self, node)
     local children = node:getChildren()
 
-    if #children > 0 then
-        for i = 1, #children do
-            self:repeat_fade_in_and_out(children[i])
-        end
+    for i = 1, #children do
+        self:repeat_fade_in_and_out(children[i])
     end
 
     local ac1 = node:runAction(cc.FadeTo:create(1, 155)) 
@@ -136,10 +132,8 @@ end
 uitool.repeat_scale = function(self, node)
     local children = node:getChildren()
 
-    if #children > 0 then
-        for i = 1, #children do
-            self:repeat_scale(children[i])
-        end
+    for i = 1, #children do
+        self:repeat_scale(children[i])
     end
 
     local ac1 = node:runAction(cc.ScaleTo:create(0.5, 1.1)) 
@@ -167,10 +161,8 @@ uitool.set_node_to_global_top = function(self, node, z)
     z = z or self:top_z_order()
     local children = node:getChildren()
 
-    if #children > 0 then
-        for i = 1, #children do
-            self:set_node_to_global_top(children[i])
-        end
+    for i = 1, #children do
+        self:set_node_to_global_top(children[i])
     end
 
     node:setGlobalZOrder(z)
@@ -281,12 +273,12 @@ uitool.init_monster_card_with_id_and_num = function(self, card, id, num, click_e
     local monster = g_config.monter[id]
     card:loadTexture(monster.char_img_path)
     card.border_img = card:getChildByName("border_img")
-    card.border_img:loadTexture(g_config.sprite["card_border_"..monster.rarity])
+    card.border_img:loadTexture(g_config.sprite["card_border_" .. monster.rarity])
     card.type_img = card:getChildByName("type_img")
-    card.type_img:loadTexture(g_config.sprite["attack_type_"..monster.attack_type])
+    card.type_img:loadTexture(g_config.sprite["attack_type_" .. monster.attack_type])
     card.num_text = card:getChildByName("num_text")
-    card.num_text:setString("X"..num)
-    card.num_text:setTextColor(g_config.color["rarity_color_"..monster.rarity])
+    card.num_text:setString("X" .. num)
+    card.num_text:setTextColor(g_config.color["rarity_color_" .. monster.rarity])
     if click_event then 
         cur_monster.head_img:addClickEventListener(click_event)
     end
@@ -301,7 +293,7 @@ uitool.init_other_card_with_type_and_num = function(self, card, ctype, num, clic
     card.type_img = card:getChildByName("type_img")
     card.type_img:setVisible(false)
     card.num_text = card:getChildByName("num_text")
-    card.num_text:setString("+"..num)
+    card.num_text:setString("+" .. num)
     if ctype == "coin" then
         card:loadTexture(g_config.sprite.card_coin)
         card.num_text:setTextColor(g_config.color.coin)
