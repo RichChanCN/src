@@ -49,8 +49,8 @@ g_config.skill =
 		img_path = g_config:to_monster_img_path("icon_skill_earth_shake.png"),
 		range = 2,
 		is_need_target = false,
-		cost = 4,
-		damage = 50,
+		cost = 0,
+		damage = 100,
 		damage_level_plus = 5,
 
 		healing = 0,

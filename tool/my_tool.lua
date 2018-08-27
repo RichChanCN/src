@@ -122,51 +122,6 @@ gtool.is_legal_pos_num = function(self, pos)
     return false
 end
 
-gtool.get_pos_list_in_range = function(self, center_pos_num, range)
-    local pos_list = {[center_pos_num] = 1}
-    local temp_list = {[center_pos_num] = 1}
-
-    local path_find_help = function(num, step)
-        if not pos_list[num] and gtool:is_legal_pos_num(num) then
-            pos_list[num] = step
-        end
-    end
-    
-    local find_gezi = function(pos, step)
-        local temp_table = gtool:get_towards_tbl(pos)
-
-        for k, v in pairs(temp_table) do
-            if path_find_help(pos + v, step) then
-                return true
-            end
-        end
-    end
-
-    local i = 2
-    while range + 1 > i do
-        for k, v in pairs(temp_list) do
-            find_gezi(k, i)      
-        end
-        temp_list = {}
-
-        for k, v in pairs(pos_list) do
-            table.insert(temp_list, k)
-        end
-
-        i = i + 1
-    end
-
-    return pos_list
-end
-
-gtool.do_something_later = function(self, callback, time)
-    local ac_node = cc.Node:create()
-    pve_game_ctrl:instance():get_action_node():addChild(ac_node)
-    local default_ac = ac_node:runAction(cc.ScaleTo:create(time, 1))
-    local seq = cc.Sequence:create(default_ac, callback)
-    ac_node:runAction(seq)
-end
-
 gtool.around_pos_even = 
 {
     [10]    = 1,
@@ -206,6 +161,71 @@ gtool.towards_pos_odd =
     [5] = -9,
     [6] = 1,
 }
+
+gtool.bfs_distance = function(self, center_pos_num, range)
+    local pos_list = {[center_pos_num] = 0}
+    local temp_list = {[0] = center_pos_num}
+
+    local path_find_help = function(num, step)
+        if not pos_list[num] and gtool:is_legal_pos_num(num) then
+            pos_list[num] = step
+        end
+    end
+    
+    local find_gezi = function(pos, step)
+        local temp_table = gtool:get_towards_tbl(pos)
+
+        for k, v in pairs(temp_table) do
+            path_find_help(pos + v, step)
+        end
+    end
+
+    for i = 1, range do
+        for k, v in pairs(temp_list) do
+            find_gezi(v, i)      
+        end
+        temp_list = {}
+
+        for k, v in pairs(pos_list) do
+            table.insert(temp_list, k)
+        end
+    end
+
+    return pos_list
+end
+
+gtool.bfs_path = function(self, pos_num, steps, path_find_help)
+    local area_table = {}
+    local temp_list = {}
+
+    gtool:find_gezi(pos_num, path_find_help, area_table)
+    for k, v in pairs(area_table) do
+        table.insert(temp_list, k)
+    end
+
+    for i = 2, steps do
+        for _, v in pairs(temp_list) do
+
+            gtool:find_gezi(v, path_find_help, area_table)
+            
+        end
+        temp_list = {}
+
+        for k, v in pairs(area_table) do
+            table.insert(temp_list, k)
+        end
+    end
+
+    return area_table
+end
+
+gtool.do_something_later = function(self, callback, time)
+    local ac_node = cc.Node:create()
+    pve_game_ctrl:instance():get_action_node():addChild(ac_node)
+    local default_ac = ac_node:runAction(cc.ScaleTo:create(time, 1))
+    local seq = cc.Sequence:create(default_ac, callback)
+    ac_node:runAction(seq)
+end
 
 gtool.get_toward_to_int_pos = function(self, cur_num, to_num)
     if not to_num then 
@@ -248,11 +268,11 @@ gtool.get_toward_to_int_pos = function(self, cur_num, to_num)
     return result_towards
 end
 
-gtool.find_gezi = function(self, pos, help)
+gtool.find_gezi = function(self, pos, help, path_table)
     local tbl = gtool:get_towards_tbl(pos)
     
     for k, v in pairs(tbl) do
-        help(pos, pos + v)
+        help(pos, pos + v, path_table)
     end
 end
 

@@ -94,7 +94,7 @@ skill_base.get_be_affected_monster_list = function(self)
 			monster_list = self._caster:get_alive_friend_monsters()
 		end
 	elseif (not self:is_need_target()) and self._range > 1 then
-		local pos_list = gtool:get_pos_list_in_range(self._caster:get_cur_pos_num(), self._range)
+		local pos_list = gtool:bfs_distance(self._caster:get_cur_pos_num(), self._range - 1)
 		local map_info = pve_game_ctrl:instance():get_map_info()
 		for k, v in pairs(pos_list) do
 			if map_info[k] and type(map_info[k]) == type({}) and self._caster:is_enemy(map_info[k]) then
@@ -102,7 +102,7 @@ skill_base.get_be_affected_monster_list = function(self)
 			end
 		end
 	elseif self.target_pos_num and self._range > 1 then
-		local pos_list = gtool:get_pos_list_in_range(self.target_pos_num, self._range)
+		local pos_list = gtool:bfs_distance(self.target_pos_num, self._range - 1)
 		local map_info = pve_game_ctrl:instance():get_map_info()
 		for k, v in pairs(pos_list) do
 			if map_info[k] and type(map_info[k]) == type({}) and self._caster:is_enemy(map_info[k]) then
@@ -142,7 +142,7 @@ skill_base.get_damage_level_plus = function(self)
 end
 
 skill_base.get_damage = function(self)
-	return self._damage
+	return self._damage + self._caster.level * self._damage_level_plus
 end
 
 skill_base.get_healing_level_plus = function(self)

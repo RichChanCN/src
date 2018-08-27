@@ -43,8 +43,6 @@ monster_class.ctor = function(self, data, team_side, arena_pos)
 		[6] 	= 6,
 	}
 
-	team_side = team_side or monster_class.TeamSide.NONE
-
 	self.id 					= data.id
 	self.name 					= data.name
 	self.level 					= data.level
@@ -57,7 +55,6 @@ monster_class.ctor = function(self, data, team_side, arena_pos)
 	self.char_img_path			= data.char_img_path
 
 	self._max_anger				= data.anger
-	
 	self._max_hp 				= data.hp
 	self._damage 				= data.damage
 	self._physical_defense 		= data.physical_defense
@@ -79,7 +76,7 @@ monster_class.ctor = function(self, data, team_side, arena_pos)
 	self._steps 					= self._cur_mobility
 	self._cur_towards				= self._towards
 	
-	self._team_side				= team_side
+	self._team_side				= team_side or monster_class.TeamSide.NONE
 	self._towards				= self.TOWARDS[team_side]
 	self._has_waited			= false
 	self._start_pos 			= arena_pos
@@ -265,7 +262,7 @@ monster_class.is_monster = function(self)
 end
 
 monster_class.is_fly = function(self)
-	return self._move_type == g_config.monster_move_type.FLY
+	return self.move_type == g_config.monster_move_type.FLY
 end
 
 monster_class.is_dead = function(self)
@@ -531,7 +528,7 @@ monster_class.die = function(self, is_buff_or_skill)
 end
 
 monster_class.be_attacked = function(self, murderer, is_counter_attack, distance)
-	local damage, damage_type = self:get_final_attack_damage(murderer, distance)
+	local damage, damage_type = self:get_attack_damage(murderer, distance)
 
 	if self:minus_hp(damage, damage_type) then
 		self:add_anger()
@@ -563,7 +560,7 @@ end
 monster_class.be_affected_by_skill = function(self, skill, is_last)
 	if self:is_enemy(skill:get_caster()) then
 		if skill:get_damage() > 0 then
-			local damage, damage_type = self:get_final_skill_damage(skill)
+			local damage, damage_type = self:get_skill_damage(skill)
 			self:minus_hp(damage, damage_type, true)
 		end
 		if #skill:get_debuff() > 0 then
@@ -610,26 +607,21 @@ end
 --------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------
-monster_class.get_final_attack_damage = function(self, murderer, distance)
+monster_class.get_attack_damage = function(self, murderer, distance)
 	local damage = murderer:get_cur_damage()
 	local damage_type = self.DAMAGE_LEVEL.COMMON
 
-	if self:is_be_back_attacked(murderer) then
-		damage = damage * 1.5
-		damage_type = self.DAMAGE_LEVEL.HIGHER
-	elseif self:is_be_side_attacked(murderer) then
-		damage = damage * 1.2
-		damage_type = self.DAMAGE_LEVEL.HIGH
+	if murderer:is_melee() then
+		if self:is_be_back_attacked(murderer) then
+			damage = damage * 1.5
+			damage_type = self.DAMAGE_LEVEL.HIGHER
+		elseif self:is_be_side_attacked(murderer) then
+			damage = damage * 1.2
+			damage_type = self.DAMAGE_LEVEL.HIGH
+		end
 	end
 
-	
-	local defense
-	if murderer:is_physical() then
-		defense = self:get_cur_physical_defense() - murderer:get_cur_defense_penetration()
-	else
-		defense = self:get_cur_magic_defense() - murderer:get_cur_defense_penetration()
-	end
-	damage = damage * (1 - defense / (defense + 10))
+	damage = self:get_damage_after_defense(damage, murderer)
 	
 	if not murderer:is_melee() then
 		if distance > 5 then
@@ -644,13 +636,7 @@ monster_class.get_final_attack_damage = function(self, murderer, distance)
 		end
 	end
 
-	damage = damage + (math.random() - 0.5) * 10
-
-	if damage < 1 then
-		damage = 1
-	end
-
-	return math.floor(damage), damage_type
+	return self:get_final_damage(damage), damage_type
 end
 
 monster_class.get_final_healing = function(self, skill)
@@ -661,28 +647,32 @@ monster_class.get_final_healing = function(self, skill)
 	return healing, self.DAMAGE_LEVEL.HEAL
 end
 
-monster_class.get_final_skill_damage = function(self, skill)
-	local damage = skill:get_damage()
-	local caster = skill:get_caster()
+monster_class.get_skill_damage = function(self, skill)
+	local damage = self:get_damage_after_defense(skill:get_damage(), skill:get_caster())
 
-	damage = damage + caster.level * skill:get_damage_level_plus()
+	return self:get_final_damage(damage), self.DAMAGE_LEVEL.SKILL
 
+end
+
+monster_class.get_damage_after_defense = function(self, damage, muderer)
 	local defense
-	if caster:is_physical() then
-		defense = self:get_cur_physical_defense() - caster:get_cur_defense_penetration()
+	if muderer:is_physical() then
+		defense = self:get_cur_physical_defense() - muderer:get_cur_defense_penetration()
 	else
-		defense = self:get_cur_magic_defense() - caster:get_cur_defense_penetration()
+		defense = self:get_cur_magic_defense() - muderer:get_cur_defense_penetration()
 	end
 
-	damage = damage * (1 - defense / (defense + 10))
+	return damage * (1 - defense / (defense + 10))
+end
 
-	damage = damage + (math.random() - 0.5) * 20
+monster_class.get_final_damage = function(self, damage)
+	damage = damage + (math.random() - 0.5) * 10
 
 	if damage < 1 then
 		damage = 1
 	end
 
-	return math.floor(damage), self.DAMAGE_LEVEL.SKILL
+	return math.floor(damage)
 end
 
 monster_class.add_hp = function(self, healing, htype)
@@ -867,45 +857,12 @@ monster_class.get_distance_to_pos = function(self, num, update)
 end
 
 monster_class.get_distance_info = function(self)
-	local distanc_table = {}
-    local temp_list = {}
-    
-    local path_find_help = function(num, step)
-        if not distanc_table[num] and gtool:is_legal_pos_num(num) then
-            distanc_table[num] = step
-        end
-    end
-    
-    local find_gezi = function(pos, step)
-    	local temp_table = gtool:get_towards_tbl(pos)
-
-    	for k, v in pairs(temp_table) do
-    		path_find_help(pos + v, step)
-    	end
-    end
-
-    find_gezi(self:get_cur_pos_num(), 1)
-    for k, v in pairs(distanc_table) do
-        table.insert(temp_list, k)
-    end
-
 	local steps = math.abs(self._cur_pos.x - 4) + math.abs(self._cur_pos.y - 4) + 4
 	if steps > 8 then 
 		steps = 8 
 	end
 
-    for i = 2, steps do
-        for _, v in pairs(temp_list) do
-            find_gezi(v, i)      
-        end
-        temp_list = {}
-
-        for k, v in pairs(distanc_table) do
-            table.insert(temp_list, k)
-        end
-    end
-
-    return distanc_table
+    return gtool:bfs_distance(self:get_cur_pos_num(), steps)
 end
 
 monster_class.create_attack_particle = function(self, target)
@@ -978,49 +935,21 @@ monster_class.get_around_info = function(self, is_to_show)
 end
 
 monster_class.get_can_reach_area_info = function(self, center_pos_num, map_info, steps)
-    local area_table = {}
-    local temp_list = {}
-    
-    local path_find_help = function(pos, num)
-        if not area_table[num] and gtool:is_legal_pos_num(num) and ((not map_info[num]) or self:is_fly()) then
-            area_table[num] = pos
+    local path_find_help = function(pos, num, tbl)
+        if not tbl[num] and gtool:is_legal_pos_num(num) and ((not map_info[num]) or self:is_fly()) then
+            tbl[num] = pos
         end
     end
 
-    gtool:find_gezi(center_pos_num, path_find_help)
-    for k, v in pairs(area_table) do
-        table.insert(temp_list, k)
-    end
-
-    for i = 2, steps do
-        for _, v in pairs(temp_list) do
-
-            gtool:find_gezi(v, path_find_help)
-            
-        end
-        temp_list = {}
-
-        for k, v in pairs(area_table) do
-            table.insert(temp_list, k)
-        end
-    end
-
-    return area_table
+    return gtool:bfs_path(center_pos_num, steps, path_find_help)
 end
 
 monster_class.get_fly_path = function(self)
-    local fly_path = {}
-    local temp_list = {}
-    
-    local path_find_help = function(pos, num)
-        if not fly_path[num] and gtool:is_legal_pos_num(num) then
-            fly_path[num] = pos
-        end
-    end
 
-    gtool:find_gezi(self:get_cur_pos_num(), path_find_help)
-    for k, v in pairs(fly_path) do
-        table.insert(temp_list, k)
+    local path_find_help = function(pos, num, tbl)
+        if not tbl[num] and gtool:is_legal_pos_num(num) then
+            tbl[num] = pos
+        end
     end
 
 	local steps = math.abs(self._cur_pos.x - 4) + math.abs(self._cur_pos.y - 4) + 4
@@ -1028,18 +957,7 @@ monster_class.get_fly_path = function(self)
 		steps = 8 
 	end
 
-    for i = 2, steps do
-        for _, v in pairs(temp_list) do
-            gtool:find_gezi(v, path_find_help)    
-        end
-        temp_list = {}
-
-        for k, v in pairs(fly_path) do
-            table.insert(temp_list, k)
-        end
-    end
-
-    return fly_path
+    return gtool:bfs_path(self:get_cur_pos_num(), steps, path_find_help)
 end
 
 monster_class.get_path_info_to_target = function(self, map_info, target)
