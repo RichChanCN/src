@@ -1430,32 +1430,16 @@ monster_class.get_pos_num_by_direction_and_steps = function(self, pos, towards, 
 	if steps < 1 then
 		return pos
 	end
-	local temp_table
-	if pos % 2 == 0 then
-		temp_table = {
-			[1] = pos + 10,
-			[2] = pos + 9,
-			[3] = pos - 1,
-			[4] = pos - 10,
-			[5] = pos + 1,
-			[6] = pos + 11,
-		}
-	else
-		temp_table = {
-			[1] = pos + 10,
-			[2] = pos - 1,
-			[3] = pos - 11,
-			[4] = pos - 10,
-			[5] = pos - 9,
-			[6] = pos + 1,
-		}
-	end
 
+	local temp_table = gtool:get_towards_tbl(pos)
+	
 	towards = gtool:normalize_towards(towards)
+	local pos_num = pos + temp_table[towards]
+
 	if steps == 1 then
-		return temp_table[towards]
+		return pos_num
 	else
-		return self:get_pos_num_by_direction_and_steps(temp_table[towards], towards, steps - 1)
+		return self:get_pos_num_by_direction_and_steps(pos_num, towards, steps - 1)
 	end
 end
 
@@ -1481,49 +1465,35 @@ monster_class.get_back_first_near_pos_num = function(self, num, target_toward)
 		return self:can_move_to_pos_num(a) or a == self:get_cur_pos_num()
 	end
 
-	local temp_table
-	if num % 2 == 0 then
-		temp_table = {
-			[1] = num + 10,
-			[2] = num + 9,
-			[3] = num - 1,
-			[4] = num - 10,
-			[5] = num + 1,
-			[6] = num + 11,
-		}
-	else
-		temp_table = {
-			[1] = num + 10,
-			[2] = num - 1,
-			[3] = num - 11,
-			[4] = num - 10,
-			[5] = num - 9,
-			[6] = num + 1,
-		}
-	end
+	local temp_table = gtool:get_towards_tbl(num)
 
 	local first_toward = gtool:normalize_towards(target_toward - 3)
 
-	if help(temp_table[first_toward]) then
-		return temp_table[first_toward]
+	local pos_num = num + temp_table[first_toward]
+
+	if help(pos_num) then
+		return pos_num
 	end
 	
 	local next_first
 
-	for i = 1, 2 do
-		next_first = gtool:normalize_towards(first_toward - i)
-		if help(temp_table[next_first]) then
-			return temp_table[next_first]
+	for i = 2, 5 do
+		delta = math.floor(i / 2)
+		if gtool:is_even(i) then
+			next_first = gtool:normalize_towards(first_toward + delta)
+		else
+			next_first = gtool:normalize_towards(first_toward - delta)
 		end
-		next_first = gtool:normalize_towards(first_toward + i)
-		
-		if help(temp_table[next_first]) then
-			return temp_table[next_first]
+
+		pos_num = num + temp_table[next_first]
+		if help(pos_num) then
+			return pos_num
 		end
 	end
 
-	if help(temp_table[target_toward]) then
-		return temp_table[target_toward]
+	pos_num = num + temp_table[target_toward]
+	if help(pos_num) then
+		return pos_num
 	end
 end
 

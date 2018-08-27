@@ -221,7 +221,7 @@ battle_info_view.update_right_bottom_queue = function(self, is_wait)
     
     self.left_bottom_img:addChild(self.animate_card)
     self.animate_card:setPosition(self.queue_first:getPosition())
-    local x,y = self.animate_card:getPosition()
+    local x, y = self.animate_card:getPosition()
     self.animate_card:runAction(cc.JumpTo:create(0.3, cc.p(x + 700, y), 300, 1))
     self.animate_card:runAction(cc.FadeOut:create(0.3))
     self.animate_card:runAction(cc.ScaleTo:create(0.7, 0.3))

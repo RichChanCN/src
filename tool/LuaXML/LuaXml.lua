@@ -47,7 +47,7 @@ function str(var,indent,tagValue)
   if base.type(var)=="table" then
     local tag = var[0] or tagValue or base.type(var)
     local s = indentStr.."<"..tag
-    for k,v in base.pairs(var) do -- attributes 
+    for k, v in base.pairs(var) do -- attributes 
       if base.type(k)=="string" then
         if base.type(v)=="table" and k~="_M" then --  otherwise recursiveness imminent
           tableStr = tableStr..str(v,indent+1,k)
@@ -62,7 +62,7 @@ function str(var,indent,tagValue)
       s = s..">"..encode(base.tostring(var[1])).."</"..tag..">\n"
     else
       s = s..">\n"
-      for k,v in base.ipairs(var) do -- elements
+      for k, v in base.ipairs(var) do -- elements
         if base.type(v)=="string" then
           s = s..indentStr.."  "..encode(v).." \n"
         else
@@ -110,7 +110,7 @@ function find(var, tag, attributeKey,attributeValue)
     end
   end
   -- recursively parse subtags:
-  for k,v in base.ipairs(var) do
+  for k, v in base.ipairs(var) do
     if base.type(v)=="table" then
       local ret = find(v, tag, attributeKey,attributeValue)
       if ret ~= nil then return ret end

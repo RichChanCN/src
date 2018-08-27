@@ -38,21 +38,16 @@ view_base.init = function(self)
 		self:init_events()
 
 		self._is_inited = true
-	else
-		print(self._name.." is inited! scape the init()")
 	end
 end
 
 view_base.init_ui = function(self)
-	print("warning! you should implement init_ui() in instance!---"..self._name)
 end
 
 view_base.init_info = function(self)
-	print("warning! you should implement init_info() in instance!---"..self._name)
 end
 
 view_base.init_events = function(self)
-	print("warning! you should implement init_events() in instance")
 end
 
 view_base.on_open = function(self, ...)

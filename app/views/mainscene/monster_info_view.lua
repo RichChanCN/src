@@ -96,7 +96,7 @@ end
 
 monster_info_view.upgrade_update = function(self)
     local card_num,level = game_data_ctrl:instance():get_monster_card_num_and_level_by_id(self._monster_data.id)
-    print(card_num,level)
+
     self.title_text:setString("LEVEL " .. level .. " " .. self._monster_data.name)
     self.progress_text:setString(card_num  .. "/" .. level)
     uitool:set_progress_bar(self.progress_img, card_num / level)

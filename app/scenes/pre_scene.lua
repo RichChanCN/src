@@ -25,12 +25,6 @@ pre_scene.begin_animation = function(self)
 	local ac7 = self.game_logo_sp:runAction(cc.FadeOut:create(1))
 	
 	local callback = cc.CallFunc:create(handler(self, self.go_to_main_scene))
-
-	-- local cb = function()
-	-- 	self:go_to_main_scene()
-	-- end
-	
-	-- local callback = cc.CallFunc:create(handler(self,cb))
 	
 	local seq1 = cc.Sequence:create(ac0, ac1, ac2, ac3)
 	self.cocos_logo_sp:runAction(seq1)
@@ -39,18 +33,11 @@ pre_scene.begin_animation = function(self)
 end
 
 pre_scene.pre_load_main_scene = function(self)
-	local start_time = os.clock();
     self:get_app():create_scene("main_scene")
-	local end_time = os.clock();
-
-	print(string.format("cost time  : %.4f", end_time - start_time))
 end
 
 pre_scene.go_to_main_scene = function(self)
-	local start_time = os.clock();
 	local layer = self:get_app():create_scene("main_scene")
-	local end_time = os.clock();
-	print(string.format("cost time  : %.4f", end_time - start_time))
 	local scene = cc.Scene:create()
     scene:addChild(layer)
 	if scene then

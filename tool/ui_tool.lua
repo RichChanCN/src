@@ -24,9 +24,13 @@ uitool.screen_center_pos = function(self)
     return cc.p(960, 540)
 end
 
+uitool.to_sprite_path = function(file)
+    return 
+end
+
 uitool.get_node_center_position = function(self, node)
     local size = node:getContentSize()
-    return cc.p(size.width / 2,size.height / 2)
+    return cc.p(size.width / 2, size.height / 2)
 end
 
 uitool.get_node_bottom_center_position = function(self, node)
@@ -35,8 +39,7 @@ uitool.get_node_bottom_center_position = function(self, node)
 end
 
 uitool.create_ui_binding = function(self, panel, binding)
-    assert(panel:get_root(), "self:create_ui_binding() - not load resource node")
-	for node_name, node_binding in pairs(binding) do
+    for node_name, node_binding in pairs(binding) do
         local node = self:seek_child_node(panel:get_root(), node_name);
         if node_binding.varname then
             panel[node_binding.varname] = node
@@ -46,7 +49,6 @@ end
 
 uitool.seek_child_node = function(self, node, name)
     local child = node:getChildByName(name)
-    --print("find" .. name .. "in" .. node:getName())
     if child then
         return child 
     else
@@ -64,23 +66,23 @@ end
 uitool.is_touch_in_node_rect = function(self, node, touch, event, scale)
     local scale = scale or 1.0
     local node = event:getCurrentTarget()
-    local locationInNode = node:convertToNodeSpace(touch:getLocation())
+    local location_in_node = node:convertToNodeSpace(touch:getLocation())
     local border = node:getContentSize()
     local rect = cc.rect(0, 0, border.width * scale, border.height*scale)
     
-    return cc.rectContainsPoint(rect, locationInNode)
+    return cc.rectContainsPoint(rect, location_in_node)
 end
 
 
 uitool.is_touch_in_node_circle = function(self, node, touch, event, scale)
     local scale = scale or 1.0
     local node = event:getCurrentTarget()
-    local locationInNode = node:convertToNodeSpace(touch:getLocation())
-    local x,y = node:getPosition()
-    local radius = math.min(node:getContentSize().width,node:getContentSize().height)
+    local location_in_node = node:convertToNodeSpace(touch:getLocation())
+    local x, y = node:getPosition()
+    local radius = math.min(node:getContentSize().width, node:getContentSize().height)
     
 
-    return math.pow(locationInNode.x - x, 2) + math.pow(locationInNode.y - y, 2) < math.pow(radius)
+    return math.pow(location_in_node.x - x, 2) + math.pow(location_in_node.y - y, 2) < math.pow(radius)
 end
 
 uitool.move_to_and_fade_out = function(self, node, pos)
@@ -107,10 +109,8 @@ uitool.set_opacity = function(node, value)
     value = value or 255
     local children = node:getChildren()
 
-    if #children > 0 then
-        for i = 1, #children do
-            self:set_opacity(children[i])
-        end
+    for i = 1, #children do
+        self:set_opacity(children[i])
     end
 
     node:setOpacity(value)
@@ -212,10 +212,9 @@ uitool.make_img_to_button = function(self, img, callback)
     img.listener = cc.EventListenerTouchOneByOne:create()
     img.listener:setSwallowTouches(true)
     img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
-    --img.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
     img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
-    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+    local event_dispatcher = cc.Director:getInstance():getEventDispatcher()
+    event_dispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
 uitool.make_img_to_button_no_scale = function(self, img, callback)
@@ -243,8 +242,8 @@ uitool.make_img_to_button_no_scale = function(self, img, callback)
     img.listener:setSwallowTouches(true)
     img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
     img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
-    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+    local event_dispatcher = cc.Director:getInstance():getEventDispatcher()
+    event_dispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
 uitool.make_img_to_button_ht = function(self, img, camera, callback)
@@ -274,8 +273,8 @@ uitool.make_img_to_button_ht = function(self, img, camera, callback)
     img.listener:setSwallowTouches(true)
     img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
     img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
-    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+    local event_dispatcher = cc.Director:getInstance():getEventDispatcher()
+    event_dispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
 uitool.init_monster_card_with_id_and_num = function(self, card, id, num, click_event)
@@ -297,8 +296,8 @@ end
 uitool.init_other_card_with_type_and_num = function(self, card, ctype, num, click_event)
     card.border_img = card:getChildByName("border_img")
     card.border_img:loadTexture(g_config.sprite.card_border_0)
-    local x,y = card.border_img:getPosition()
-    card.border_img:setPosition(x+3,y)
+    local x, y = card.border_img:getPosition()
+    card.border_img:setPosition(x + 3, y)
     card.type_img = card:getChildByName("type_img")
     card.type_img:setVisible(false)
     card.num_text = card:getChildByName("num_text")

@@ -96,7 +96,7 @@ skill_base.get_be_affected_monster_list = function(self)
 	elseif (not self:is_need_target()) and self._range > 1 then
 		local pos_list = gtool:get_pos_list_in_range(self._caster:get_cur_pos_num(), self._range)
 		local map_info = pve_game_ctrl:instance():get_map_info()
-		for k,v in pairs(pos_list) do
+		for k, v in pairs(pos_list) do
 			if map_info[k] and type(map_info[k]) == type({}) and self._caster:is_enemy(map_info[k]) then
 				table.insert(monster_list, map_info[k])
 			end

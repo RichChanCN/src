@@ -71,7 +71,7 @@ end
 
 save_data.get_not_collected_monster_list = function(self)
 	local monster_list = {}
-	for k,v in pairs(g_config.monter) do
+	for k, v in pairs(g_config.monter) do
 		if not self._monsters[v.id] then
 			table.insert(monster_list, v)
 		end
@@ -140,7 +140,7 @@ end
 save_data.get_monster_data_by_id = function(self, id)
 	local value = self._monsters[id]
 	local monster = {}
-	for k,v in pairs(g_config.monter[id]) do
+	for k, v in pairs(g_config.monter[id]) do
 		monster[k] = v
 	end
 	monster.level = value.level

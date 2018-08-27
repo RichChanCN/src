@@ -26,7 +26,7 @@ map_data.get_map_data_by_chapter_and_level = function(self, chapter_num, level_n
 
 	ret_data.can_use_monster_list = {}
 	if raw_data.can_use_monster_list and type(raw_data.can_use_monster_list) == type({}) then
-		for k,v in pairs(raw_data.can_use_monster_list) do
+		for k, v in pairs(raw_data.can_use_monster_list) do
 			table.insert(ret_data.can_use_monster_list, g_config.monter[v])
 		end
 	else

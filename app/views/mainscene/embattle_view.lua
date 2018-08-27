@@ -448,7 +448,7 @@ embattle_view.add_arena_listener = function(self)
 
 	local touch_moved = function(touch, event)
 		local node = event:getCurrentTarget()
-		local x,y = node:getPosition()
+		local x, y = node:getPosition()
 		local cur_pos = self.hex_node:convertToNodeSpace(touch:getLocation())
 
 		if self._is_chesspiece_from_arena and self._cur_drag_chesspiece then
@@ -456,7 +456,7 @@ embattle_view.add_arena_listener = function(self)
 		end
 
 		if self._cur_drag_chesspiece and uitool:is_touch_in_node_rect(node, touch, event, 0.8) then
-			self:select_hex_effect(cc.p(x,y))
+			self:select_hex_effect(cc.p(x, y))
 			self._target_node = node
 		elseif self._target_node and self._target_node:getTag() == node:getTag() then
 			self:reset_select_hex_effect()
@@ -529,7 +529,7 @@ embattle_view.pause_arena_listener = function(self)
 end
 
 embattle_view.remove_arena_listener = function(self)
-	for k,v in pairs(self._enable_gezi) do
+	for k, v in pairs(self._enable_gezi) do
 		local pos = gtool:int_2_ccp(k)
 		self._eventDispatcher:removeEventListener(self["gezi_" .. pos.x .. "_" .. pos.y].listener)
 	end
