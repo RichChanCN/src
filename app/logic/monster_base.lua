@@ -1,12 +1,14 @@
 local monster_base = {}
 
-monster_base.team_side = {
+monster_base.team_side = 
+{
 	NONE 	= 0,
 	LEFT 	= 1,
 	RIGHT 	= 4,
 }
 
-monster_base.damage_level = {
+monster_base.damage_level = 
+{
     MISS 		= 0,
     LOW 		= 1,
 	COMMON 		= 2,
@@ -18,7 +20,8 @@ monster_base.damage_level = {
 	POISON 		= 8,
 }
 
-monster_base.status = {
+monster_base.status = 
+{
 	DEAD 		= 0,
 	ALIVE 		= 1,
 	DEFEND 		= 2,
@@ -28,7 +31,8 @@ monster_base.status = {
 	STUN 		= 1001,
 }
 
-monster_base.towards = {
+monster_base.towards = 
+{
 	[0]		= 1,
 	[1] 	= 1,
 	[2] 	= 2,

@@ -65,7 +65,7 @@ result_view.update_reward = function(self)
                 local card = self.reward_template:clone()
                 uitool:init_monster_card_with_id_and_num(card, k2, v2)
                 self.reward_node:addChild(card)
-                table.insert(self._reward_list,card)
+                table.insert(self._reward_list, card)
             end
         elseif (k1 == "coin" or k1 == "crystal") and v1 > 0 then
             local card = self.reward_template:clone()

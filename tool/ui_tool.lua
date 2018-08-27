@@ -160,7 +160,7 @@ uitool.set_progress_bar = function(self, img, percent)
     if percent > 1 then 
         percent = 1
     end
-    img:setContentSize(img.raw_size.width*percent,img.raw_size.height)
+    img:setContentSize(img.raw_size.width * percent, img.raw_size.height)
 end
 
 uitool.set_node_to_global_top = function(self, node, z)
@@ -180,7 +180,7 @@ uitool.make_img_to_button = function(self, img, callback)
     local touch_began = function(touch, event)
         local node = event:getCurrentTarget()
 
-        if self:is_touch_in_node_rect(node,touch,event) then
+        if self:is_touch_in_node_rect(node, touch, event) then
             node:setScale(1.06)
             return true
         end
@@ -191,7 +191,7 @@ uitool.make_img_to_button = function(self, img, callback)
     local touch_moved = function(touch, event)
         local node = event:getCurrentTarget()
 
-        if self:is_touch_in_node_rect(node,touch,event) then
+        if self:is_touch_in_node_rect(node, touch, event) then
             node:setScale(1.06)
         else
             node:setScale(1.0)
@@ -201,7 +201,7 @@ uitool.make_img_to_button = function(self, img, callback)
     local touch_ended = function(touch, event)
         local node = event:getCurrentTarget()
         
-        if self:is_touch_in_node_rect(node,touch,event) then
+        if self:is_touch_in_node_rect(node, touch, event) then
             if callback then
                 callback()
             end
@@ -349,7 +349,7 @@ uitool.create_top_tip = function(self, string, color)
     local ac = scene.top_tip:runAction(cc.FadeIn:create(1))
     scene.top_tip:stopAction(ac)
 
-    local seq = cc.Sequence:create(ac,callback)
+    local seq = cc.Sequence:create(ac, callback)
 
     scene.top_tip:runAction(seq)
 end

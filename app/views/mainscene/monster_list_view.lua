@@ -63,7 +63,7 @@ monster_list_view.init_collected_monster_lv = function(self)
 
 	for i = 1, rows_num do
 		local test_item = self.template_panel:clone()
-		self:init_lv_item(self.collected_monster_list,test_item, i - 1) --这里-1是为了里面好计算正真的索引值
+		self:init_lv_item(self.collected_monster_list, test_item, i - 1) --这里-1是为了里面好计算正真的索引值
 		self.monster_lv:pushBackCustomItem(test_item)
 	end
 end
@@ -117,13 +117,13 @@ end
 
 monster_list_view.resume_monster_list_listener = function(self)
 	for _, v in pairs(self._card_list) do
-		self._eventDispatcher:resumeEventListenersForTarget(v)
+		self._event_dispatcher:resumeEventListenersForTarget(v)
 	end
 end
 
 monster_list_view.pause_monster_list_listener = function(self)
 	for _, v in pairs(self._card_list) do
-		self._eventDispatcher:pauseEventListenersForTarget(v)
+		self._event_dispatcher:pauseEventListenersForTarget(v)
 	end
 end
 

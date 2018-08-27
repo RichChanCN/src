@@ -70,16 +70,16 @@ end
 
 monster_info_view.update_view = function(self, monster_list, index)
 	self.title_text:setString("LEVEL " .. monster_list[index].level .. " " .. monster_list[index].name)
-    self:update_info(monster_list,index)
+    self:update_info(monster_list, index)
     self:update_left_model_node(monster_list[index])
     self:update_right_info_node(monster_list[index])
 end
 
 monster_info_view.on_open = function(self, ...)
     local params = {...}
-    self:update_view(params[1],params[2])
-    self.left_node:runAction(cc.MoveTo:create(0.2,self._left_node_final_pos))
-    self.info_bg_img:runAction(cc.MoveTo:create(0.2,self._right_node_final_pos))
+    self:update_view(params[1], params[2])
+    self.left_node:runAction(cc.MoveTo:create(0.2, self._left_node_final_pos))
+    self.info_bg_img:runAction(cc.MoveTo:create(0.2, self._right_node_final_pos))
 end
 
 monster_info_view.on_close = function(self)
@@ -95,7 +95,7 @@ monster_info_view.update_monster_by_id = function(self, id)
 end
 
 monster_info_view.upgrade_update = function(self)
-    local card_num,level = game_data_ctrl:instance():get_monster_card_num_and_level_by_id(self._monster_data.id)
+    local card_num, level = game_data_ctrl:instance():get_monster_card_num_and_level_by_id(self._monster_data.id)
 
     self.title_text:setString("LEVEL " .. level .. " " .. self._monster_data.name)
     self.progress_text:setString(card_num  .. "/" .. level)
@@ -116,8 +116,6 @@ monster_info_view.init_left_model_node = function(self)
     self.progress_text 		= self.left_node:getChildByName("progress_text")
     self.up_sp		 		= self.left_node:getChildByName("up_sp")
     self.model_panel 		= self.left_node:getChildByName("model_panel")
-
-    --self:init_model_camera()
 end
 
 monster_info_view.update_left_model_node = function(self, data)
@@ -155,7 +153,10 @@ monster_info_view.create_model = function(self, data)
         
         self.animation = cc.Animation3D:create(data.model_path)
         if self.animation then
-            local animate = g_config.monster_animate[data.id].alive(self.animation)
+            local monster = {}
+            monster.id = data.id
+            monster.animation = self.animation
+            local animate = g_config:get_monster_animate(monster, "alive")
             model:runAction(cc.RepeatForever:create(animate))
         end
 
@@ -166,18 +167,6 @@ monster_info_view.create_model = function(self, data)
 	end
     cc.Sprite3D:createAsync(data.model_path, callback)
     
-end
-
-monster_info_view.init_model_camera = function(self)
-	local size = self.model_panel:getContentSize()
-	self._model_camera = cc.Camera:createPerspective(45, size.width / size.height, 1, 5000)
-
-    self._model_camera:setPosition3D(cc.vec3(400, 500, 933))
-    self._model_camera:lookAt(cc.vec3(400, 300, 0))
-    self._model_camera:setCameraFlag(cc.CameraFlag.USER1)
-	self._model_camera:setName("model_camera")
-    self._model_camera:setDepth(1)
-    self.model_panel:addChild(self._model_camera)
 end
 
 monster_info_view.init_model_events = function(self)
@@ -216,13 +205,16 @@ monster_info_view.init_model_events = function(self)
 	self.model_panel.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
 	self.model_panel.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
 	self.model_panel.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
-	local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-	eventDispatcher:addEventListenerWithSceneGraphPriority(self.model_panel.listener, self.model_panel)
+	local event_dispatcher = cc.Director:getInstance():getEventDispatcher()
+	event_dispatcher:addEventListenerWithSceneGraphPriority(self.model_panel.listener, self.model_panel)
 end
 
 monster_info_view.play_an_animation = function(self)
     self._monster_model:stopAllActions()
-    local animate = g_config.monster_animate[self._cur_monster_id][self._next_animate](self.animation)
+    local monster = {}
+    monster.id = self._cur_monster_id
+    monster.animation = self.animation
+    local animate = g_config:get_monster_animate(monster, self._next_animate)
 
     self._monster_model:runAction(cc.RepeatForever:create(animate))
 

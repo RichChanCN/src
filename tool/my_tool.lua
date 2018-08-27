@@ -6,10 +6,10 @@ table.print = function(t)
         else
             print_r_cache[tostring(t)] = true
             if (type(t) == "table") then
-                for pos,val in pairs(t) do
+                for pos, val in pairs(t) do
                     if (type(val) == "table") then
                         print(indent .. "[" .. pos .. "] => " .. tostring(t) .. " {")
-                        sub_print_r(val,indent .. string.rep(" ", string.len(pos) + 8))
+                        sub_print_r(val, indent .. string.rep(" ", string.len(pos) + 8))
                         print(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
                     elseif (type(val) == "string") then
                         print(indent .. "[" .. pos .. '] => "' .. val .. '"')
@@ -126,30 +126,26 @@ gtool.get_pos_list_in_range = function(self, center_pos_num, range)
     local pos_list = {[center_pos_num] = 1}
     local temp_list = {[center_pos_num] = 1}
 
-    local pathFindHelp = function(num, step)
+    local path_find_help = function(num, step)
         if not pos_list[num] and gtool:is_legal_pos_num(num) then
             pos_list[num] = step
         end
     end
     
-    local findGezi = function(pos,step)
-        pathFindHelp(pos + 10, step)
-        pathFindHelp(pos - 10, step)
-        pathFindHelp(pos + 1, step)
-        pathFindHelp(pos - 1, step)
-        if pos % 2 == 0 then
-            pathFindHelp(pos + 11, step)
-            pathFindHelp(pos + 9, step)
-        else
-            pathFindHelp(pos - 11, step)
-            pathFindHelp(pos - 9, step)
+    local find_gezi = function(pos, step)
+        local temp_table = gtool:get_towards_tbl(pos)
+
+        for k, v in pairs(temp_table) do
+            if path_find_help(pos + v, step) then
+                return true
+            end
         end
     end
 
     local i = 2
     while range + 1 > i do
         for k, v in pairs(temp_list) do
-            findGezi(k, i)      
+            find_gezi(k, i)      
         end
         temp_list = {}
 

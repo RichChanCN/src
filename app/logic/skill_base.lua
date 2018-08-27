@@ -111,7 +111,7 @@ skill_base.get_be_affected_monster_list = function(self)
 		end
 	elseif self._range == 1 then
 		local map_info = pve_game_ctrl:instance():get_map_info()
-		table.insert(monster_list,map_info[self.target_pos_num])
+		table.insert(monster_list, map_info[self.target_pos_num])
 	end
 
 	return monster_list

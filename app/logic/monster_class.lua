@@ -1,13 +1,15 @@
 monster_class = gtool.class()
 
 monster_class.ctor = function(self, data, team_side, arena_pos)
-	self.TEAM_SIDE = {
+	self.TEAM_SIDE = 
+	{
 		NONE 	= 0,
 		LEFT 	= 1,
 		RIGHT 	= 4,
 	}
 
-	self.DAMAGE_LEVEL = {
+	self.DAMAGE_LEVEL = 
+	{
 	    MISS 		= 0,
 	    LOW 		= 1,
 		COMMON 		= 2,
@@ -19,7 +21,8 @@ monster_class.ctor = function(self, data, team_side, arena_pos)
 		POISON 		= 8,
 	}
 
-	self.STATUS = {
+	self.STATUS = 
+	{
 		DEAD 		= 0,
 		ALIVE 		= 1,
 		DEFEND 		= 2,
@@ -29,7 +32,8 @@ monster_class.ctor = function(self, data, team_side, arena_pos)
 		STUN 		= 1001,
 	}
 
-	self.TOWARDS = {
+	self.TOWARDS = 
+	{
 		[0]		= 1,
 		[1] 	= 1,
 		[2] 	= 2,
@@ -88,7 +92,7 @@ monster_class.ctor = function(self, data, team_side, arena_pos)
 	
 	if data.skill then
 		local skill_base = require("app.logic.skill_base")
-		self._skill = skill_base:instance():new(self,data.skill)
+		self._skill = skill_base:instance():new(self, data.skill)
 	end
 
 	return self
@@ -874,7 +878,7 @@ monster_class.get_distance_info = function(self)
     
     local find_gezi = function(pos, step)
     	local temp_table = gtool:get_towards_tbl(pos)
-    	
+
     	for k, v in pairs(temp_table) do
     		path_find_help(pos + v, step)
     	end
@@ -913,9 +917,9 @@ monster_class.create_attack_particle = function(self, target)
 	local node = pve_game_ctrl:instance():get_map_top_arena_node()
 	node:addChild(particle)
 	local end_pos = pve_game_ctrl:instance():get_position_by_int(target:get_cur_pos_num())
-	local ac1 = particle:runAction(cc.MoveTo:create(0.5,cc.p(start_pos.x, start_pos.y + 30)))
+	local ac1 = particle:runAction(cc.MoveTo:create(0.5, cc.p(start_pos.x, start_pos.y + 30)))
 	particle:stopAction(ac1)
-	local ac2 = particle:runAction(cc.MoveTo:create(0.3,cc.p(end_pos.x, end_pos.y + 15)))
+	local ac2 = particle:runAction(cc.MoveTo:create(0.3, cc.p(end_pos.x, end_pos.y + 15)))
 	particle:stopAction(ac2)
 	local seq = cc.Sequence:create(ac1, ac2)
 	particle:runAction(seq)
@@ -1218,7 +1222,7 @@ end
 
 monster_class.repeat_animation = function(self, name)
 	if g_config.monster_animate[self:get_id()][name] then
-    	local animate = g_config.monster_animate[self:get_id()][name](self.animation)
+    	local animate = g_config:get_monster_animate(self, name)
 		self.model:stopAllActions()
         self.model:runAction(cc.RepeatForever:create(animate))
 
@@ -1230,7 +1234,7 @@ end
 
 monster_class.do_animation = function(self, name, cb)
 	if g_config.monster_animate[self:get_id()][name] then
-    	local animate = g_config.monster_animate[self:get_id()][name](self.animation)
+    	local animate = g_config:get_monster_animate(self, name)
 		local callback = cc.CallFunc:create(handler(self, self.go_back_repeat_animate))
 		self.model:stopAllActions()
 		local seq
@@ -1315,8 +1319,8 @@ monster_class.get_lowest_hp_enemy = function(self, enemy_list)
 		return a:get_cur_hp() < b:get_cur_hp()
 	end
 
-	if #enemy_list>2 then
-		table.sort(enemy_list,sort_by_hp)
+	if #enemy_list > 2 then
+		table.sort(enemy_list, sort_by_hp)
 	end
 	
 	return enemy_list[1]
@@ -1330,7 +1334,7 @@ monster_class.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_inf
 	end
 	local pos_num = gtool:ccp_2_int(enemy._cur_pos)
 
-	local all_path = self:get_path_info_to_target(map_info,pos_num)
+	local all_path = self:get_path_info_to_target(map_info, pos_num)
 
 	local path
 	if all_path[pos_num] then
@@ -1362,7 +1366,7 @@ monster_class.get_good_pos_to_attack = function(self, enemy, distance)
 	if distance < 3 then
 		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(),enemy_direction + 3, 2)
 	else
-		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(),enemy_direction,distance - 5)
+		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(),enemy_direction, distance - 5)
 	end
 
 	if self:can_move_to_pos_num(pos_num) then

@@ -61,7 +61,7 @@ embattle_view.init_events = function(self)
         self:get_ctrl():close_embattle_view()
     end)
 
-    uitool:make_img_to_button(self.fight_img,function()
+    uitool:make_img_to_button(self.fight_img, function()
     	if self._team_size < 1 then
     		uitool:create_top_tip("you should select 1 monster at least!", "red")
     		return
@@ -151,7 +151,7 @@ embattle_view.init_lv_item = function(self, item, index)
 			cur_monster.type_img = cur_monster.head_img:getChildByName("type_img")
 			cur_monster.type_img:loadTexture(g_config.sprite["attack_type_" .. self._can_use_monster_list[cur_index].attack_type])
 			self:add_monster_card_event(cur_monster.head_img, cur_index)
-			table.insert(self._card_list,cur_monster.head_img)
+			table.insert(self._card_list, cur_monster.head_img)
 		else
 			cur_monster.head_img = item:getChildByName("monster_" .. i .. "_img")
 			cur_monster.head_img:setVisible(false)
@@ -241,11 +241,11 @@ embattle_view.add_monster_card_event = function(self, img, index)
     img.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
     img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
     
-    self._eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+    self._event_dispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
 embattle_view.select_card = function(self, card)
-	self._eventDispatcher:pauseEventListenersForTarget(card)
+	self._event_dispatcher:pauseEventListenersForTarget(card)
 	local selected_sp = cc.Sprite:create(g_config.sprite.selected)
 	selected_sp:setName("selected_sp")
 	selected_sp:setScale(1.5)
@@ -255,7 +255,7 @@ embattle_view.select_card = function(self, card)
 end
 
 embattle_view.unselect_card = function(self, card)
-	self._eventDispatcher:resumeEventListenersForTarget(card)
+	self._event_dispatcher:resumeEventListenersForTarget(card)
 
 	if card:getChildByName("selected_sp") then
 		card:removeChildByName("selected_sp")
@@ -263,26 +263,26 @@ embattle_view.unselect_card = function(self, card)
 end
 
 embattle_view.resume_monster_list_listener = function(self)
-	for _,v in pairs(self._card_list) do
+	for _, v in pairs(self._card_list) do
 		if not v.selected then
-			self._eventDispatcher:resumeEventListenersForTarget(v)
+			self._event_dispatcher:resumeEventListenersForTarget(v)
 		end
 	end
 end
 
 embattle_view.pause_monster_list_listener = function(self)
-	for _,v in pairs(self._card_list) do
+	for _, v in pairs(self._card_list) do
 		if not v.selected then
-			self._eventDispatcher:pauseEventListenersForTarget(v)
+			self._event_dispatcher:pauseEventListenersForTarget(v)
 		end
 	end
 end
 
 
 embattle_view.remove_monster_list_listener = function(self)
-	for _,v in pairs(self._card_list) do
+	for _, v in pairs(self._card_list) do
 		if not v.selected then
-			self._eventDispatcher:removeEventListenersForTarget(v)
+			self._event_dispatcher:removeEventListenersForTarget(v)
 		end
 	end
 end
@@ -314,7 +314,7 @@ end
 embattle_view.put_in_hex_effect = function(self)
 	local ac1 = self.highlight_border_sp:runAction(cc.ScaleTo:create(1.0, 0.8))
     local ac2 = self.highlight_border_sp:runAction(cc.FadeOut:create(1.0))
-	local callback  = cc.CallFunc:create(handler(self,self.reset_select_hex_effect))
+	local callback  = cc.CallFunc:create(handler(self, self.reset_select_hex_effect))
 
 	local seq = cc.Sequence:create(ac1, ac2, callback)
 	self.highlight_border_sp:runAction(seq)
@@ -508,7 +508,7 @@ embattle_view.add_arena_listener = function(self)
 	for k, v in pairs(self._enable_gezi) do
 		local pos = gtool:int_2_ccp(k)
 		self["gezi_" .. pos.x .. "_" .. pos.y].listener = listener:clone()
-		self._eventDispatcher:addEventListenerWithSceneGraphPriority(self["gezi_" .. pos.x .. "_" .. pos.y].listener, self["gezi_" .. pos.x .. "_" .. pos.y])
+		self._event_dispatcher:addEventListenerWithSceneGraphPriority(self["gezi_" .. pos.x .. "_" .. pos.y].listener, self["gezi_" .. pos.x .. "_" .. pos.y])
 	end
 
 	self:pause_arena_listener()
@@ -517,21 +517,21 @@ end
 embattle_view.resume_arena_listener = function(self)
 	for k, v in pairs(self._enable_gezi) do
 		local pos = gtool:int_2_ccp(k)
-		self._eventDispatcher:resumeEventListenersForTarget(self["gezi_" .. pos.x .. "_" .. pos.y])
+		self._event_dispatcher:resumeEventListenersForTarget(self["gezi_" .. pos.x .. "_" .. pos.y])
 	end
 end
 
 embattle_view.pause_arena_listener = function(self)
 	for k, v in pairs(self._enable_gezi) do
 		local pos = gtool:int_2_ccp(k)
-		self._eventDispatcher:pauseEventListenersForTarget(self["gezi_" .. pos.x .. "_" .. pos.y])
+		self._event_dispatcher:pauseEventListenersForTarget(self["gezi_" .. pos.x .. "_" .. pos.y])
 	end
 end
 
 embattle_view.remove_arena_listener = function(self)
 	for k, v in pairs(self._enable_gezi) do
 		local pos = gtool:int_2_ccp(k)
-		self._eventDispatcher:removeEventListener(self["gezi_" .. pos.x .. "_" .. pos.y].listener)
+		self._event_dispatcher:removeEventListener(self["gezi_" .. pos.x .. "_" .. pos.y].listener)
 	end
 end
 

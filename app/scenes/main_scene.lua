@@ -94,7 +94,7 @@ end
 main_scene.open_monster_info_view = function(self, monster_list, index)
 	if self.monster_info_view then
 		self.monster_list_view:close_view()
-		self.monster_info_view:open_view(monster_list,index)
+		self.monster_info_view:open_view(monster_list, index)
 	end
 end
 

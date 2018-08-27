@@ -19,13 +19,9 @@ end
 
 title_right_view.init_events = function(self)
 	self.add_coin_btn:addClickEventListener(function(sender)
-        -- self.coin_num_text:setString(self._coin_num+1)
-		-- self._coin_num = self.coin_num_text:getString()
     end)
 
 	self.add_crystal_btn:addClickEventListener(function(sender)
-        -- self.crystal_num_text:setString(self._crystal_num + 1)
-		-- self._crystal_num = self.crystal_num_text:getString()
     end)
 end
 

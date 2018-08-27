@@ -27,11 +27,11 @@ map_view.init_info = function(self)
 	self._model_node_list = {}
 	self._monster_loaded_num = 0
 	self._skew_angle = 60
-	self.arena_event_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
-	self.arena_show_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
-	self.arena_bottom_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
-	self.arena_top_node:setRotation3D(cc.vec3(self._skew_angle,0,0))
-	self.model_panel:setRotation3D(cc.vec3(self._skew_angle,0,0))
+	self.arena_event_node:setRotation3D(cc.vec3(self._skew_angle, 0, 0))
+	self.arena_show_node:setRotation3D(cc.vec3(self._skew_angle, 0, 0))
+	self.arena_bottom_node:setRotation3D(cc.vec3(self._skew_angle, 0, 0))
+	self.arena_top_node:setRotation3D(cc.vec3(self._skew_angle, 0, 0))
+	self.model_panel:setRotation3D(cc.vec3(self._skew_angle, 0, 0))
     self._camera = self:get_ctrl():getScene():getDefaultCamera()
 end
 
@@ -57,7 +57,7 @@ map_view.cameraAnimation = function(self)
 	local ac2 = self:get_root():runAction(cc.ScaleTo:create(self:get_ctrl().Action_Time, 1))
 	local callback = cc.CallFunc:create(handler(self:get_ctrl(), self:get_ctrl().start_game))
 
-	local seq = cc.Sequence:create(ac1,ac2,callback)
+	local seq = cc.Sequence:create(ac1, ac2, callback)
 		
 	self:show_mask()
 	self:get_root():runAction(seq)
@@ -143,7 +143,7 @@ map_view.show_can_move_to_gezi = function(self, num)
 		local time = math.random() / 3 + 0.1
 		self["gezi_" .. x .. "_" .. y .. "_black"]:runAction(cc.FadeIn:create(time))
 		self["gezi_" .. x .. "_" .. y .. "_black"]:runAction(cc.ScaleTo:create(time, 1))
-		self._eventDispatcher:resumeEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
+		self._event_dispatcher:resumeEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 	end
 end
 
@@ -155,7 +155,7 @@ map_view.hide_guide = function(self)
     		if self["gezi_"..x.."_"..y.."_black"] then 
     			self["gezi_"..x.."_"..y.."_black"]:setOpacity(0)
     			self["gezi_"..x.."_"..y.."_black"]:setVisible(false)
-    			self._eventDispatcher:pauseEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
+    			self._event_dispatcher:pauseEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
     		end
     	end
     end
@@ -192,7 +192,7 @@ map_view.create_monster_model = function(self, monster)
 		model:setScale(0.5)
 		local node = self._model_node_list[monster:get_tag()]
 		local pos = monster:get_start_pos()
-        local x,y = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
+        local x, y = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
         if monster:is_fly() then
         	node:setPosition(x, y + 10)
         else
@@ -218,7 +218,7 @@ end
 map_view.create_other_model = function(self, other_model, pos)
 	local callback = function(model)
 		model:setScale(4)
-        local x,y = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
+        local x, y = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
         model:setPosition(x, y)
 		self.model_panel:addChild(model)
 	end
@@ -255,7 +255,7 @@ map_view.init_blood_bar = function(self, node, monster)
 
 	blood_bar.updae_hp = updae_hp
 	blood_bar.update_anger = update_anger
-	blood_bar:setPosition(0,75)
+	blood_bar:setPosition(0, 75)
 	uitool:set_node_to_global_top(blood_bar)
 	blood_bar:setName("blood_bar")
 	monster.blood_bar = blood_bar
@@ -266,7 +266,7 @@ map_view.create_damage_fly_words = function(self, damage, monster, level)
 	local fly_word = self.fly_word_template:clone()
 	fly_word:setString(damage)
 	fly_word:setTextColor(g_config.color["damage_" .. level])
-	local x,y = monster.node:getPosition()
+	local x, y = monster.node:getPosition()
 
 	fly_word:setPosition(x, y + 60)
 	--fly_word:setGlobalZOrder(uitool:top_z_order())
@@ -345,7 +345,7 @@ map_view.add_arena_listener = function(self, gezi)
     gezi.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
     gezi.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
     gezi.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
-    self._eventDispatcher:addEventListenerWithSceneGraphPriority(gezi.listener, gezi)
+    self._event_dispatcher:addEventListenerWithSceneGraphPriority(gezi.listener, gezi)
 end
 
 map_view.resume_arena_listener = function(self)
@@ -353,7 +353,7 @@ map_view.resume_arena_listener = function(self)
 	for x = 1, 8 do
 		for y = 1, 7 do 
 			if self["gezi_" .. x .. "_" .. y] then
-				self._eventDispatcher:resumeEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
+				self._event_dispatcher:resumeEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 			end
 		end
 	end
@@ -364,7 +364,7 @@ map_view.pause_arena_listener = function(self)
 	for x = 1, 8 do
 		for y = 1, 7 do 
 			if self["gezi_" .. x .. "_" .. y] then
-				self._eventDispatcher:pauseEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
+				self._event_dispatcher:pauseEventListenersForTarget(self["gezi_" .. x .. "_" .. y])
 			end
 		end
 	end
@@ -454,7 +454,7 @@ map_view.init_enter_animation = function(self)
 	self.logo_node:setScale(1)
 	self.logo_node:setVisible(true)
 
-	self.pre_panel:setPosition(960,216)
+	self.pre_panel:setPosition(960, 216)
 end
 
 return map_view

@@ -118,7 +118,6 @@ battle_info_view.init_left_bottom = function(self)
 end
 
 battle_info_view.init_queue_lv = function(self)
-    --self.queue = {}
     for i = 1, #self.cur_queue do
         if i == 1 then
             self.queue_first = self.cur_monster_img
@@ -189,11 +188,10 @@ battle_info_view.add_queue_item_event = function(self, img)
     end
 
     img.listener = cc.EventListenerTouchOneByOne:create()
-    --img.listener:setSwallowTouches(true)
     img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
     img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
-    local eventDispatcher = cc.Director:getInstance():getEventDispatcher()
-    eventDispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
+    local event_dispatcher = cc.Director:getInstance():getEventDispatcher()
+    event_dispatcher:addEventListenerWithSceneGraphPriority(img.listener, img)
 end
 
 battle_info_view.update_anger = function(self, item)
@@ -247,7 +245,7 @@ battle_info_view.update_right_bottom_queue = function(self, is_wait)
                 last_item:setOpacity(0)
                 last_item:runAction(cc.FadeIn:create(0.3))
             end
-            self:update_lv_item(self.queue_first,self.queue_lv:getItem(0).monster)
+            self:update_lv_item(self.queue_first, self.queue_lv:getItem(0).monster)
             self.queue_lv:removeItem(0)
 
             

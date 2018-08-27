@@ -25,7 +25,7 @@ g_config.Map =
 
 			monster_num_limit = 1,
 
-			barrier_model = g_config.model_path .. "tree.c3b",
+			barrier_model = g_config:to_model_path("tree.c3b"),
 			
 			arena_info = 
 			{
@@ -65,7 +65,7 @@ g_config.Map =
 
 			monster_num_limit = 5,
 
-			barrier_model = g_config.model_path .. "tree.c3b",
+			barrier_model = g_config:to_model_path("tree.c3b"),
 
 			arena_info = 
 			{
@@ -110,7 +110,7 @@ g_config.Map =
 
 			monster_num_limit = 5,
 
-			barrier_model = g_config.model_path .. "tree.c3b",
+			barrier_model = g_config:to_model_path("tree.c3b"),
 
 			arena_info = 
 			{
@@ -156,7 +156,7 @@ g_config.Map =
 
 			monster_num_limit = 5,
 
-			barrier_model = g_config.model_path .. "tree.c3b",
+			barrier_model = g_config:to_model_path("tree.c3b"),
 
 			arena_info = 
 			{
@@ -204,7 +204,7 @@ g_config.Map =
 
 			monster_num_limit = 5,
 
-			barrier_model = g_config.model_path .. "tree.c3b",
+			barrier_model = g_config:to_model_path("tree.c3b"),
 			
 			arena_info = 
 			{
