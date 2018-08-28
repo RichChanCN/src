@@ -5,9 +5,10 @@ game_data_ctrl.new = function(self)
 	setmetatable(o, self)
 	self.__index = self
 	
-	self._save_data = {}
-	self._map_data = {}
-	self._monster_data = {}
+	self._save_data 	= {}
+	self._map_data 		= {}
+	self._monster_data 	= {}
+	self._scene_list 	= {}
 
 	return o
 end
@@ -27,7 +28,7 @@ game_data_ctrl.init = function(self)
  end
 
 game_data_ctrl.register_scene = function(self, scene)
-	self[scene:get_name()] = scene
+	self._scene_list[scene:get_name()] = scene
 end
 
 game_data_ctrl.get_map_data = function(self)

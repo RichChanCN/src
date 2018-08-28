@@ -81,6 +81,9 @@ gtool.class = function(super)
     return class_type
 end
 
+gtool.get_monster_cfg_by_id = function(self, id)
+    return g_config.monster[id]
+end
 
 gtool.ccp_2_int = function(self, pos)
     if type(pos) == type({}) and pos.x and pos.y then

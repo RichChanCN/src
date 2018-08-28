@@ -47,7 +47,7 @@ scene_base.create_layout_binding = function(self, binding)
         if nodeBinding.varname then
             local path = rawget(self.class, "VIEW_PATH")
             if path then
-                self[nodeBinding.varname] = require(path.."."..nodeBinding.varname):new(nodeBinding.varname, node, self)
+                self[nodeBinding.varname] = require(path.."."..nodeName):new(nodeBinding.varname, node, self)
             else
                 self[nodeBinding.varname] = node
             end

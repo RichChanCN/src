@@ -13,6 +13,29 @@ battle_info_view.init_ui = function(self)
     self:init_left_bottom()
 end
 
+battle_info_view.init_right_bottom = function(self)
+    self.defend_img     = self.right_bottom_node:getChildByName("defend_img")
+    self.wait_img       = self.right_bottom_node:getChildByName("wait_img")
+    self.auto_img       = self.right_bottom_node:getChildByName("auto_img")
+    self.speed_img      = self.right_bottom_node:getChildByName("speed_img")
+    self.exit_img       = self.right_bottom_node:getChildByName("exit_img")
+
+    self.auto_icon      = self.auto_img:getChildByName("img")
+    self.speed_icon     = self.speed_img:getChildByName("img")
+end
+
+battle_info_view.init_left_bottom = function(self)
+    self.round_text         = self.left_bottom_img:getChildByName("round_text")
+    self.queue_lv           = self.left_bottom_img:getChildByName("queue_lv")
+    self.queue_template     = self.left_bottom_img:getChildByName("queue_template")
+    self.cur_monster_img    = self.left_bottom_img:getChildByName("cur_monster_img")
+    self.round_img          = self.left_bottom_img:getChildByName("round_img")
+    self.skill_sp           = self.left_bottom_img:getChildByName("skill_sp")
+    self.skill_icon_sp      = self.skill_sp:getChildByName("skill_icon_sp")
+    
+    self:init_queue_lv()
+end
+
 battle_info_view.init_info = function(self)
     self._left_bottom_img_start_pos = cc.p(0, -530)
     self._left_bottom_img_end_pos   = cc.p(0, 0)
@@ -26,7 +49,7 @@ battle_info_view.init_events = function(self)
     uitool:make_img_to_button_no_scale(self.skill_sp, function()
         if pve_game_ctrl:instance():is_wait_order() then
             if not self.queue_first.monster:get_skill():is_need_target() then
-                pve_game_ctrl:instance():run_game(pve_game_ctrl.order.USE_SKILL)
+                pve_game_ctrl:instance():run_game(pve_game_ctrl.ORDER.USE_SKILL)
             else
                 pve_game_ctrl:instance():set_is_use_skill(not pve_game_ctrl:instance():get_is_use_skill())
                 self:update_skill_image()
@@ -58,21 +81,8 @@ battle_info_view.on_close = function(self)
     self.left_bottom_img:runAction(cc.MoveTo:create(0.3, self._left_bottom_img_start_pos))
     self.right_bottom_node:runAction(cc.MoveTo:create(0.3, self._right_bottom_node_start_pos))
 end
-----------------------------------------------------------------
--------------------------------私有方法--------------------------
-----------------------------------------------------------------
 
 -----------------------右下按钮节点开始-----------------------
-battle_info_view.init_right_bottom = function(self)
-    self.defend_img     = self.right_bottom_node:getChildByName("defend_img")
-    self.wait_img       = self.right_bottom_node:getChildByName("wait_img")
-    self.auto_img       = self.right_bottom_node:getChildByName("auto_img")
-    self.speed_img      = self.right_bottom_node:getChildByName("speed_img")
-    self.exit_img       = self.right_bottom_node:getChildByName("exit_img")
-
-    self.auto_icon = self.auto_img:getChildByName("img")
-    self.speed_icon = self.speed_img:getChildByName("img")
-end
 
 battle_info_view.init_right_bottom_events = function(self)
     uitool:make_img_to_button_no_scale(self.defend_img, function()
@@ -91,7 +101,7 @@ battle_info_view.init_right_bottom_events = function(self)
         if pve_game_ctrl:instance():is_wait_order() then
             self.auto_icon:loadTexture(g_config.sprite.autoOn)
             pve_game_ctrl:instance():request_auto()
-        elseif pve_game_ctrl:instance():get_game_status() ~= pve_game_ctrl.game_status.WAIT_ORDER then
+        elseif pve_game_ctrl:instance():get_game_status() ~= pve_game_ctrl.GAME_STATUS.WAIT_ORDER then
             self.auto_icon:loadTexture(g_config.sprite.autoOff)
             pve_game_ctrl:instance():stop_auto()
         end
@@ -105,17 +115,6 @@ end
 -----------------------右下按钮节点结束-----------------------
 
 -----------------------左下队列节点开始-----------------------
-
-battle_info_view.init_left_bottom = function(self)
-    self.round_text = self.left_bottom_img:getChildByName("round_text")
-    self.queue_lv = self.left_bottom_img:getChildByName("queue_lv")
-    self.queue_template = self.left_bottom_img:getChildByName("queue_template")
-    self.cur_monster_img = self.left_bottom_img:getChildByName("cur_monster_img")
-    self.round_img = self.left_bottom_img:getChildByName("round_img")
-    self.skill_sp = self.left_bottom_img:getChildByName("skill_sp")
-    self.skill_icon_sp = self.skill_sp:getChildByName("skill_icon_sp")
-    self:init_queue_lv()
-end
 
 battle_info_view.init_queue_lv = function(self)
     for i = 1, #self.cur_queue do
@@ -140,7 +139,7 @@ battle_info_view.update_lv_item = function(self, item, monster, update_only)
     item.child.border_img = item:getChildByName("border_img")
     item.child.level_text = item:getChildByName("level_text")
     
-    item:loadTexture(monster.char_img_path)
+    item:loadTexture(gtool:get_monster_cfg_by_id(monster.id).char_img_path)
     item.child.border_img:loadTexture(g_config.sprite["team_card_border_"..monster:get_team_side()])
     item.child.level_text:setString(monster.level)
 

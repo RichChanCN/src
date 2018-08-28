@@ -58,40 +58,34 @@ confirm_view.update_view = function(self)
 end
 
 confirm_view.update_reward = function(self)
-	-- if self.star_num > 0 then
-	-- 	self.got_img:setVisible(true)
-	-- 	self.reward_node:setVisible(false)
-	-- else
-		self.reward_node:removeAllChildren()
-		self.got_img:setVisible(false)
-		self.reward_node:setVisible(true)
-		for k1, v1 in pairs(self.reward_data) do
-			if k1 == "monster" then
-				for k2, v2 in pairs(v1) do
-					local card = self.reward_template:clone()
-					uitool:init_monster_card_with_id_and_num(card, k2, v2)
-					self.reward_node:addChild(card)
-					table.insert(self.reward_list, card)
-				end
-			elseif (k1 == "coin" or k1 == "crystal") and v1 > 0 then
+	self.reward_node:removeAllChildren()
+	self.got_img:setVisible(false)
+	self.reward_node:setVisible(true)
+	for k1, v1 in pairs(self.reward_data) do
+		if k1 == "monster" then
+			for k2, v2 in pairs(v1) do
 				local card = self.reward_template:clone()
-				uitool:init_other_card_with_type_and_num(card, k1, v1)
+				uitool:init_monster_card_with_id_and_num(card, k2, v2)
 				self.reward_node:addChild(card)
 				table.insert(self.reward_list, card)
 			end
+		elseif (k1 == "coin" or k1 == "crystal") and v1 > 0 then
+			local card = self.reward_template:clone()
+			uitool:init_other_card_with_type_and_num(card, k1, v1)
+			self.reward_node:addChild(card)
+			table.insert(self.reward_list, card)
 		end
-		local offset = 0
-		local interval =  self.reward_template:getContentSize().width + 50
-		if (#self.reward_list) % 2 == 0 then
-			offset = interval / 2
-		end
-		local mid = math.floor((#self.reward_list) / 2) + 1
-		
-		for i, v in ipairs(self.reward_list) do
-			v:setPosition((i - mid) * interval + offset, 0)
-		end
-	--end
-
+	end
+	local offset = 0
+	local interval =  self.reward_template:getContentSize().width + 50
+	if (#self.reward_list) % 2 == 0 then
+		offset = interval / 2
+	end
+	local mid = math.floor((#self.reward_list) / 2) + 1
+	
+	for i, v in ipairs(self.reward_list) do
+		v:setPosition((i - mid) * interval + offset, 0)
+	end
 end
 
 confirm_view.on_open = function(self, ...)

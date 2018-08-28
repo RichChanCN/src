@@ -42,12 +42,12 @@ chesspiece_pool_manager.create_new_chesspiece = function(self, monster, index)
 	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}
 	chesspiece:setBlendFunc(blendfunc)
 	
-	chesspiece.face_sp = cc.Sprite:create(monster.char_img_path)
+	chesspiece.face_sp = cc.Sprite:create(gtool:get_monster_cfg_by_id(monster.id).char_img_path)
 	blendfunc = {src = gl.ONE_MINUS_DST_ALPHA, dst = gl.DST_ALPHA}
 	chesspiece.face_sp:setBlendFunc(blendfunc)
 	chesspiece.face_sp:setName("face_sp")
 
-	chesspiece.hex_border = cc.Sprite:create(g_config.sprite["hex_border_" .. monster.rarity])
+	chesspiece.hex_border = cc.Sprite:create(g_config.sprite["hex_border_" .. gtool:get_monster_cfg_by_id(monster.id).rarity])
 	chesspiece.hex_border:setScale(2.0)
 	chesspiece.hex_border:setName("hex_border")
 	chesspiece:addChild(chesspiece.hex_border, uitool:bottom_z_order() + 5)

@@ -15,6 +15,38 @@ monster_info_view.init_ui = function(self)
     self:init_right_info_node()
 end
 
+monster_info_view.init_left_model_node = function(self)
+    self.left_btn           = self.left_node:getChildByName("left_btn")
+    self.right_btn          = self.left_node:getChildByName("right_btn")
+    self.rarity_sp          = self.left_node:getChildByName("rarity_sp")
+    self.type_sp            = self.left_node:getChildByName("type_sp")
+    self.type_text          = self.left_node:getChildByName("type_text")
+    self.rarity_text        = self.left_node:getChildByName("rarity_text")
+    self.description_btn    = self.left_node:getChildByName("description_btn")
+    self.progress_img       = self.left_node:getChildByName("progress_img")
+    self.progress_text      = self.left_node:getChildByName("progress_text")
+    self.up_sp              = self.left_node:getChildByName("up_sp")
+    self.model_panel        = self.left_node:getChildByName("model_panel")
+end
+
+monster_info_view.init_right_info_node = function(self)
+    self.upgrade_img                = self.info_bg_img:getChildByName("upgrade_img")
+    self.details_btn                = self.info_bg_img:getChildByName("details_btn")
+    self.video_btn                  = self.info_bg_img:getChildByName("video_btn")
+    self.hp_text                    = self.info_bg_img:getChildByName("hp_text")
+    self.damage_text                = self.info_bg_img:getChildByName("damage_text")
+    self.physical_defense_text      = self.info_bg_img:getChildByName("physical_defense_text")
+    self.magic_defense_text         = self.info_bg_img:getChildByName("magic_defense_text")
+    self.initiative_text            = self.info_bg_img:getChildByName("initiative_text")
+    self.mobility_text              = self.info_bg_img:getChildByName("mobility_text")
+    self.defense_penetration_text   = self.info_bg_img:getChildByName("defense_penetration_text")
+
+    self.no_skill_text              = self.info_bg_img:getChildByName("no_skill_text")
+    self.skill_sp                   = self.info_bg_img:getChildByName("skill_sp")
+    self.skill_icon_sp              = self.skill_sp:getChildByName("skill_icon_sp")
+    self.skill_description_text     = self.info_bg_img:getChildByName("skill_description_text")
+end
+
 monster_info_view.init_info = function(self)
     self._left_node_start_pos = cc.p(-545, 540)
     self._left_node_final_pos = cc.p(545, 540)
@@ -87,7 +119,6 @@ monster_info_view.on_close = function(self)
     self.info_bg_img:setPosition(self._right_node_start_pos)
 end
 ----------------------------------------------------------------
--------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 
 monster_info_view.update_monster_by_id = function(self, id)
@@ -104,20 +135,6 @@ monster_info_view.upgrade_update = function(self)
 end
 
 --------------------左边相关开始----------------------
-monster_info_view.init_left_model_node = function(self)
-    self.left_btn 			= self.left_node:getChildByName("left_btn")
-    self.right_btn 			= self.left_node:getChildByName("right_btn")
-    self.rarity_sp 			= self.left_node:getChildByName("rarity_sp")
-    self.type_sp	 		= self.left_node:getChildByName("type_sp")
-    self.type_text	 		= self.left_node:getChildByName("type_text")
-    self.rarity_text 		= self.left_node:getChildByName("rarity_text")
-    self.description_btn	= self.left_node:getChildByName("description_btn")
-    self.progress_img 		= self.left_node:getChildByName("progress_img")
-    self.progress_text 		= self.left_node:getChildByName("progress_text")
-    self.up_sp		 		= self.left_node:getChildByName("up_sp")
-    self.model_panel 		= self.left_node:getChildByName("model_panel")
-end
-
 monster_info_view.update_left_model_node = function(self, data)
     self:create_model(data)
 
@@ -223,24 +240,6 @@ end
 --------------------左边相关结束----------------------
 
 --------------------右边相关开始----------------------
-monster_info_view.init_right_info_node = function(self)
-	self.upgrade_img				= self.info_bg_img:getChildByName("upgrade_img")
-	self.details_btn 				= self.info_bg_img:getChildByName("details_btn")
-	self.video_btn	 				= self.info_bg_img:getChildByName("video_btn")
-	self.hp_text	 				= self.info_bg_img:getChildByName("hp_text")
-	self.damage_text 				= self.info_bg_img:getChildByName("damage_text")
-	self.physical_defense_text 		= self.info_bg_img:getChildByName("physical_defense_text")
-	self.magic_defense_text 		= self.info_bg_img:getChildByName("magic_defense_text")
-	self.initiative_text 			= self.info_bg_img:getChildByName("initiative_text")
-	self.mobility_text 				= self.info_bg_img:getChildByName("mobility_text")
-	self.defense_penetration_text	= self.info_bg_img:getChildByName("defense_penetration_text")
-
-    self.no_skill_text              = self.info_bg_img:getChildByName("no_skill_text")
-    self.skill_sp                   = self.info_bg_img:getChildByName("skill_sp")
-    self.skill_icon_sp              = self.skill_sp:getChildByName("skill_icon_sp")
-    self.skill_description_text     = self.info_bg_img:getChildByName("skill_description_text")
-end
-
 monster_info_view.update_right_info_node = function(self, data)
 	self.hp_text:setString(data.hp)
 	self.damage_text:setString(data.damage)

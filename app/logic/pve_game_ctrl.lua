@@ -1,6 +1,6 @@
 pve_game_ctrl = pve_game_ctrl or {}
 
-pve_game_ctrl.map_item = {
+pve_game_ctrl.MAP_ITEM = {
 	EMPTY			= 0,
 	BARRIER			= 2,
 	ENEMY			= 3,
@@ -9,7 +9,7 @@ pve_game_ctrl.map_item = {
 	FRIEND			= 5,
 }
 
-pve_game_ctrl.game_status = {
+pve_game_ctrl.GAME_STATUS = {
 	ACTIVE 			= 0,
 	RUNNING			= 1,
 	WAIT_ORDER		= 2,
@@ -17,7 +17,7 @@ pve_game_ctrl.game_status = {
 	AUTO 			= 4,
 }
 
-pve_game_ctrl.order = {
+pve_game_ctrl.ORDER = {
 	ACTIVATE	= 0,
 	MOVE 		= 1,
 	ATTACK 		= 2,
@@ -60,12 +60,33 @@ pve_game_ctrl.new = function(self)
 	setmetatable(o, self)
 	self.__index = self
 	
-	self._left_team = {}
-	self._right_team = {}
-	self._all_monsters = {}
-	self._map_info = {}
-	self._cur_round_monster_queue = {}
-	self._next_round_monster_queue = {}
+	-- 怪物列表
+	self._left_team 	= {}
+	self._right_team 	= {}
+	self._all_monsters 	= {}
+	self._map_info 		= {}
+	self._cur_round_monster_queue 	= {}
+	self._next_round_monster_queue 	= {}
+
+	-- 当前战斗的固有属性
+	self._chapter_num 	= nil
+	self._level_num 	= nil
+	self._map 			= nil
+	self._scene 		= nil
+
+	-- 控制按钮的状态
+	self._is_auto 		= nil
+	self._is_use_skill 	= nil
+
+	-- 当前游戏的状态属性
+	self._game_speed 		= nil
+	self._cur_game_status 	= nil
+	self._cur_round_num 	= nil
+	self._cur_active_monster 		= nil
+	self._cur_active_monster_index 	= nil
+
+	-- 用来创建延时动作的节点
+	self._action_node = nil
 
 	return o
 end
@@ -102,9 +123,9 @@ pve_game_ctrl.start_game = function(self)
 	self._cur_round_num = 1
 	self._cur_active_monster_index = 1
 	self._cur_active_monster = self._cur_round_monster_queue[self._cur_active_monster_index]
-	self._cur_game_status = pve_game_ctrl.game_status.ACTIVE
+	self._cur_game_status = pve_game_ctrl.GAME_STATUS.ACTIVE
 	self:update_map_info()
-	self:run_game(pve_game_ctrl.order.ACTIVATE)
+	self:run_game(pve_game_ctrl.ORDER.ACTIVATE)
 end
 
 pve_game_ctrl.run_game = function(self, order, param1, param2)
@@ -113,7 +134,7 @@ pve_game_ctrl.run_game = function(self, order, param1, param2)
 end
 
 pve_game_ctrl.game_over = function(self, win_side)
-	self:set_game_status(pve_game_ctrl.game_status.OVER)
+	self:set_game_status(pve_game_ctrl.GAME_STATUS.OVER)
 	local result = self:get_game_result(win_side)
 	self._scene:game_over(result)
 	if win_side == 1 then
@@ -145,7 +166,7 @@ pve_game_ctrl.next_monster_activate = function(self, is_wait)
 	elseif self._cur_active_monster:is_dead() then
 		self:next_monster_activate()
 	else
-		self:run_game(pve_game_ctrl.order.ACTIVATE, is_wait)
+		self:run_game(pve_game_ctrl.ORDER.ACTIVATE, is_wait)
 	end
 end
 
@@ -161,9 +182,9 @@ pve_game_ctrl.start_next_round = function(self)
 	while self._cur_active_monster:is_dead() do
 		self._cur_active_monster = self:get_next_monster()
 	end
-	self._cur_game_status = pve_game_ctrl.game_status.ACTIVE
+	self._cur_game_status = pve_game_ctrl.GAME_STATUS.ACTIVE
 	self:update_map_info()
-	self:run_game(pve_game_ctrl.order.ACTIVATE)
+	self:run_game(pve_game_ctrl.ORDER.ACTIVATE)
 end
 
 pve_game_ctrl.alive_monster_enter_new_round = function(self)
@@ -196,36 +217,36 @@ pve_game_ctrl.select_pos = function(self, node)
 	if self._map_info[gtool:ccp_2_int(node.arena_pos)] then
 		uitool:create_top_tip("you can't do that!")
 	else
-		self:run_game(pve_game_ctrl.order.MOVE, node.arena_pos)
+		self:run_game(pve_game_ctrl.ORDER.MOVE, node.arena_pos)
 	end
 end
 
 pve_game_ctrl.select_target = function(self, num, distance)
 	if self._map_info[num] and self._map_info[num]:is_monster() then
 		if not self:get_is_use_skill() then
-			self:run_game(pve_game_ctrl.order.ATTACK, self._map_info[num], distance)
+			self:run_game(pve_game_ctrl.ORDER.ATTACK, self._map_info[num], distance)
 		else
-			self:run_game(pve_game_ctrl.order.USE_SKILL, num)
+			self:run_game(pve_game_ctrl.ORDER.USE_SKILL, num)
 			self:set_is_use_skill(false)
 		end
 	end
 end
 
 pve_game_ctrl.request_defend = function(self)
-	self:run_game(pve_game_ctrl.order.DEFEND)
+	self:run_game(pve_game_ctrl.ORDER.DEFEND)
 end
 
 pve_game_ctrl.request_wait = function(self)
-	self:run_game(pve_game_ctrl.order.WAIT)
+	self:run_game(pve_game_ctrl.ORDER.WAIT)
 
 end
 
 pve_game_ctrl.request_auto = function(self)
 	self:set_auto(true)
-	if self:get_game_status() == pve_game_ctrl.game_status.WAIT_ORDER then
+	if self:get_game_status() == pve_game_ctrl.GAME_STATUS.WAIT_ORDER then
 		self._cur_active_monster:run_ai()
 	end
-	self:set_game_status(pve_game_ctrl.game_status.AUTO)
+	self:set_game_status(pve_game_ctrl.GAME_STATUS.AUTO)
 end
 
 pve_game_ctrl.stop_auto = function(self)
@@ -365,11 +386,11 @@ pve_game_ctrl.get_cur_chapter_and_level = function(self)
 end
 
 pve_game_ctrl.is_wait_order = function(self)
-	return self._cur_game_status == pve_game_ctrl.game_status.WAIT_ORDER
+	return self._cur_game_status == pve_game_ctrl.GAME_STATUS.WAIT_ORDER
 end
 
 pve_game_ctrl.is_game_over = function(self)
-	return self._cur_game_status == pve_game_ctrl.game_status.OVER
+	return self._cur_game_status == pve_game_ctrl.GAME_STATUS.OVER
 end
 
 pve_game_ctrl.get_all_monsters = function(self)
@@ -488,7 +509,6 @@ end
 pve_game_ctrl.get_monster_index_in_next_round_alive_monster = function(self, monster)
 	local next_round_alive_monsters = self:get_all_alive_monsters_in_next_round_queue()
 	local index = 1
-	--self:sort_monsters_by_initiative(next_round_alive_monsters)
 	for i, v in ipairs(next_round_alive_monsters) do
 		if v:get_tag() == monster:get_tag() then
 			index = i 
@@ -502,7 +522,6 @@ end
 pve_game_ctrl.get_monster_index_in_cur_round_alive_monster = function(self, monster)
 	local cur_round_alive_monsters = self:get_all_alive_monsters_in_cur_round_queue()
 	local index = 1
-	--self:sort_monsters_by_initiative(cur_round_alive_monsters)
 	for i, v in ipairs(cur_round_alive_monsters) do
 		if v:get_tag() == monster:get_tag() then
 			index = i 
@@ -514,11 +533,11 @@ pve_game_ctrl.get_monster_index_in_cur_round_alive_monster = function(self, mons
 end
 
 pve_game_ctrl.get_position_by_int = function(self, num)
-	return self._scene.map_view:get_position_by_int(num)
+	return self._scene:get_map_view():get_position_by_int(num)
 end
 
 pve_game_ctrl.get_map_top_arena_node = function(self)
-	return self._scene.map_view.arena_top_node
+	return self._scene:get_map_view():get_arena_top_node()
 end
 
 pve_game_ctrl.clear_team = function(self)

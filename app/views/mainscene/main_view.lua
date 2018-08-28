@@ -18,13 +18,25 @@ main_view.init_ui = function(self)
     self:init_bottom_node()
 end
 
--- main_view.init_info()
---     local player_data = self:get_ctrl():get_player_data()
---     self._nickname = player_data.nickname
---     self._face_sp = player_data.face_sp
---     self._exp = player_data.exp
---     self._level = player_data.level
--- end
+main_view.init_title_left_node = function(self)
+    self.title_face_sp          = self.title_left_node:getChildByName("title_face_sp")
+    self.title_face_frame_sp    = self.title_left_node:getChildByName("title_face_frame_sp")
+    self.flag_sp                = self.title_left_node:getChildByName("flag_sp")
+    self.nickname_text          = self.title_left_node:getChildByName("nickname_text")
+    self.mail_btn               = self.title_left_node:getChildByName("mail_btn")
+    self.exp_node               = self.title_left_node:getChildByName("exp_node")
+    self.exp_now_img            = self.exp_node:getChildByName("exp_now_img")
+    self.level_text             = self.exp_node:getChildByName("level_text")
+end
+
+main_view.init_center_node = function(self)
+    self.adventure_img  = self.center_node:getChildByName("adventure_img")
+    self.train_img      = self.center_node:getChildByName("train_img")
+end
+
+main_view.init_bottom_node = function(self)
+    self.monster_btn    = self.bottom_node:getChildByName("monster_btn")
+end
 
 main_view.init_events = function(self)
 	uitool:make_img_to_button(self.adventure_img, function(sender)
@@ -63,29 +75,6 @@ end
 main_view.on_open = function(self)
     self:update_info()
     self:update_view()
-end
-
-----------------------------------------------------------------
--------------------------------私有方法--------------------------
-----------------------------------------------------------------
-main_view.init_title_left_node = function(self)
-    self.title_face_sp          = self.title_left_node:getChildByName("title_face_sp")
-    self.title_face_frame_sp    = self.title_left_node:getChildByName("title_face_frame_sp")
-    self.flag_sp                = self.title_left_node:getChildByName("flag_sp")
-    self.nickname_text          = self.title_left_node:getChildByName("nickname_text")
-    self.mail_btn               = self.title_left_node:getChildByName("mail_btn")
-    self.exp_node               = self.title_left_node:getChildByName("exp_node")
-    self.exp_now_img            = self.exp_node:getChildByName("exp_now_img")
-    self.level_text             = self.exp_node:getChildByName("level_text")
-end
-
-main_view.init_center_node = function(self)
-    self.adventure_img = self.center_node:getChildByName("adventure_img")
-    self.train_img = self.center_node:getChildByName("train_img")
-end
-
-main_view.init_bottom_node = function(self)
-    self.monster_btn = self.bottom_node:getChildByName("monster_btn")
 end
 
 main_view.init_right_bottom_btn_events = function(self)

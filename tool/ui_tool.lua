@@ -270,7 +270,7 @@ uitool.make_img_to_button_ht = function(self, img, camera, callback)
 end
 
 uitool.init_monster_card_with_id_and_num = function(self, card, id, num, click_event)
-    local monster = g_config.monter[id]
+    local monster = g_config.monster[id]
     card:loadTexture(monster.char_img_path)
     card.border_img = card:getChildByName("border_img")
     card.border_img:loadTexture(g_config.sprite["card_border_" .. monster.rarity])

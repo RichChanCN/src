@@ -20,10 +20,10 @@ monster_factory.new = function(self)
 end
 
 
-monster_factory.create_monster = function(self, data, team_side, arena_pos)
+monster_factory.create_monster = function(self, data, team_side, arena_pos, level)
 	if data.attack_type < g_config.monster_attack_type.SHOOTER then
-		return melee_monster_class:new(data, team_side, arena_pos)
+		return melee_monster_class:new(data, team_side, arena_pos, level)
 	else
-		return range_monster_class:new(data, team_side, arena_pos)
+		return range_monster_class:new(data, team_side, arena_pos, level)
 	end
 end

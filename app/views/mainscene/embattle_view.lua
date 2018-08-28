@@ -11,13 +11,27 @@ embattle_view.RESOURCE_BINDING = {
     ["hex_node"]			= {["varname"] = "hex_node"},
     ["select_num_text"]		= {["varname"] = "select_num_text"},
     ["fight_img"]           = {["varname"] = "fight_img"},
-
 }
 ----------------------------------------------------------------
 -------------------------------公有方法--------------------------
 ----------------------------------------------------------------
 embattle_view.init_ui = function(self)
 	self:init_arena()
+end
+
+embattle_view.init_arena = function(self)
+	for x = 1, 8 do
+		for y = 1, 7 do
+			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
+			self["gezi_" .. x .. "_" .. y] = self.arena_node:getChildByName("gezi_" .. x .. "_" .. y)
+			if self["gezi_" .. x .. "_" .. y] then
+				self["gezi_" .. x .. "_" .. y].pos = cc.p(x, y)
+			end
+		end
+	end
+
+	self.highlight_border_sp = self.arena_node:getChildByName("highlight_border_sp")
+	self.selected_sp = self.arena_node:getChildByName("selected_sp")
 end
 
 embattle_view.init_info = function(self)
@@ -113,10 +127,9 @@ end
 ----------------------------------------------------------------
 embattle_view.make_team = function(self)
 	local team = {}
-	local monster_base = require("app.logic.monster_base")
 
 	for _, v in pairs(self._monster_team) do
-		local monster = monster_factory:instance():create_monster(v.monster, monster_base.team_side.LEFT, v.arena_cell.pos)
+		local monster = monster_factory:instance():create_monster(v.monster, g_config.team_side.LEFT, v.arena_cell.pos)
 		table.insert(team, monster)
 	end
 
@@ -236,7 +249,6 @@ embattle_view.add_monster_card_event = function(self, img, index)
     end
 
     img.listener = cc.EventListenerTouchOneByOne:create()
-    --img.listener:setSwallowTouches(true)
     img.listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
     img.listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
     img.listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
@@ -391,20 +403,6 @@ end
 ------------棋子部分结束------------
 
 ------------右边战场部分开始------------
-embattle_view.init_arena = function(self)
-	for x = 1, 8 do
-		for y = 1, 7 do
-			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
-			self["gezi_" .. x .. "_" .. y] = self.arena_node:getChildByName("gezi_" .. x .. "_" .. y)
-			if self["gezi_" .. x .. "_" .. y] then
-				self["gezi_" .. x .. "_" .. y].pos = cc.p(x, y)
-			end
-		end
-	end
-
-	self.highlight_border_sp = self.arena_node:getChildByName("highlight_border_sp")
-	self.selected_sp = self.arena_node:getChildByName("selected_sp")
-end
 
 embattle_view.update_arena = function(self)
 

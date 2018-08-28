@@ -14,14 +14,12 @@ save_data.init = function(self, ctrl)
 	self._load_file = g_config:to_xml_path("save_show.data")
 	self._save_file = g_config:to_xml_path("data2.data")
 	self._collected_monsters = {}
-	self:init_info()
-	self:load_data()
-end
 
-save_data.init_info = function(self)
 	self._player = {}
 	self._story = {}
 	self._monsters = {}
+
+	self:load_data()
 end
 
 save_data.get_star_num_by_chapter_and_level = function(self, chapter_num, level_num)
@@ -44,7 +42,7 @@ end
 
 save_data.add_new_monster_in_collected = function(self, key, value)
 	local monster = {}
-	for k, v in pairs(g_config.monter[key]) do
+	for k, v in pairs(g_config.monster[key]) do
 		monster[k] = v
 	end
 	monster.level = value.level
@@ -71,7 +69,7 @@ end
 
 save_data.get_not_collected_monster_list = function(self)
 	local monster_list = {}
-	for k, v in pairs(g_config.monter) do
+	for k, v in pairs(g_config.monster) do
 		if not self._monsters[v.id] then
 			table.insert(monster_list, v)
 		end
@@ -140,7 +138,7 @@ end
 save_data.get_monster_data_by_id = function(self, id)
 	local value = self._monsters[id]
 	local monster = {}
-	for k, v in pairs(g_config.monter[id]) do
+	for k, v in pairs(g_config.monster[id]) do
 		monster[k] = v
 	end
 	monster.level = value.level

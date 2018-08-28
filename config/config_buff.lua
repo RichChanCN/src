@@ -137,8 +137,7 @@ g_config.buff =
 			particle:setGlobalZOrder(uitool:top_z_order())
 			particle:setPosition(0, 40)
 			monster.node:addChild(particle)
-			local monster_base = require("app.logic.monster_base")
-			monster:add_monster_status(monster_base.status.STUN)
+			monster:add_monster_status(g_config.monster_status.STUN)
 		end,
 
 		once_a_round = function(monster)
@@ -148,8 +147,7 @@ g_config.buff =
 		end,
 
 		finish = function(monster)
-			local monster_base = require("app.logic.monster_base")
-			monster:remove_monster_status(monster_base.status.STUN)
+			monster:remove_monster_status(g_config.monster_status.STUN)
 			monster.node:removeChildByName("stun")
 		end,
 
@@ -179,8 +177,7 @@ g_config.buff =
 			monster.node:addChild(particle)
 		end,
 		once_a_round = function(monster)
-			local monster_base = require("app.logic.monster_base")
-			monster:minus_hp(40, monster_base.damage_level.POISON, true)
+			monster:minus_hp(40, g_config.damage_level.POISON, true)
 		end,
 		apply = function(monster)
 			monster:set_cur_damage(monster:get_cur_damage(true) * 0.9)

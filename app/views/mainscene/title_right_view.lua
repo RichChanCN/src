@@ -9,10 +9,6 @@ title_right_view.RESOURCE_BINDING = {
     ["add_coin_btn"]		= {["varname"] = "add_coin_btn"},
 }
 
-title_right_view.init_ui = function(self)
-    
-end
-
 title_right_view.init_info = function(self)
     self._view_pos = cc.p(1850, 1025)
 end

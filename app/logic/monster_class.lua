@@ -1,59 +1,15 @@
 monster_class = gtool.class()
 
-monster_class.ctor = function(self, data, team_side, arena_pos)
-	self.TEAM_SIDE = 
-	{
-		NONE 	= 0,
-		LEFT 	= 1,
-		RIGHT 	= 4,
-	}
-
-	self.DAMAGE_LEVEL = 
-	{
-	    MISS 		= 0,
-	    LOW 		= 1,
-		COMMON 		= 2,
-		HIGH 		= 3,
-		HIGHER 		= 4,
-		HIGHEST 	= 5,
-		SKILL 		= 6,
-		HEAL		= 7,
-		POISON 		= 8,
-	}
-
-	self.STATUS = 
-	{
-		DEAD 		= 0,
-		ALIVE 		= 1,
-		DEFEND 		= 2,
-		WAITING 	= 3,
-		CANT_ATTACK = 100,
-		CANT_ACTIVE = 1000,
-		STUN 		= 1001,
-	}
-
-	self.TOWARDS = 
-	{
-		[0]		= 1,
-		[1] 	= 1,
-		[2] 	= 2,
-		[3] 	= 3,
-		[4] 	= 4,
-		[5] 	= 5,
-		[6] 	= 6,
-	}
-
+monster_class.ctor = function(self, data, team_side, arena_pos, level)
+	-- public 
 	self.id 					= data.id
-	self.name 					= data.name
-	self.level 					= data.level
-	self.rarity					= data.rarity
-	self.attack_type			= data.attack_type
-	self.attack_particle		= data.attack_particle
-	self.move_type 				= data.move_type
-	
-	self.model_path 			= data.model_path
-	self.char_img_path			= data.char_img_path
 
+	-- private
+	self._attack_type			= data.attack_type
+	self._attack_particle		= data.attack_particle
+	self._move_type 			= data.move_type
+
+	self._level 				= data.level or level
 	self._max_anger				= data.anger
 	self._max_hp 				= data.hp
 	self._damage 				= data.damage
@@ -77,11 +33,11 @@ monster_class.ctor = function(self, data, team_side, arena_pos)
 	self._cur_towards				= self._towards
 	
 	self._team_side				= team_side or monster_class.TeamSide.NONE
-	self._towards				= self.TOWARDS[team_side]
+	self._towards				= g_config.towards[team_side]
 	self._has_waited			= false
 	self._start_pos 			= arena_pos
 	self._cur_pos 				= arena_pos
-	self._status 				= self.STATUS.ALIVE
+	self._status 				= g_config.monster_status.ALIVE
 	self._buff_list				= {}
 	self._debuff_list			= {}
 
@@ -101,6 +57,10 @@ end
 
 monster_class.get_id = function(self)
 	return self.id
+end
+
+monster_class.get_level = function(self)
+	return self._level
 end
 
 monster_class.get_team_side = function(self)
@@ -262,23 +222,23 @@ monster_class.is_monster = function(self)
 end
 
 monster_class.is_fly = function(self)
-	return self.move_type == g_config.monster_move_type.FLY
+	return self._move_type == g_config.monster_move_type.FLY
 end
 
 monster_class.is_dead = function(self)
-	return self._status == self.STATUS.DEAD
+	return self._status == g_config.monster_status.DEAD
 end
 
 monster_class.is_defend = function(self)
-	return self._status == self.STATUS.DEFNED
+	return self._status == g_config.monster_status.DEFNED
 end
 
 monster_class.is_melee = function(self)
-	return self.attack_type < g_config.monster_attack_type.SHOOTER
+	return self._attack_type < g_config.monster_attack_type.SHOOTER
 end
 
 monster_class.is_physical = function(self)
-	return self.attack_type % 2 == 1
+	return self._attack_type % 2 == 1
 end
 
 monster_class.has_waited = function(self)
@@ -290,7 +250,7 @@ monster_class.has_last_round_waited = function(self)
 end
 
 monster_class.is_player = function(self)
-	return self._team_side == self.TEAM_SIDE.LEFT
+	return self._team_side == g_config.team_side.LEFT
 end
 
 monster_class.is_enemy = function(self, monster)
@@ -321,11 +281,11 @@ monster_class.can_use_skill = function(self)
 end
 
 monster_class.can_active = function(self)
-	return (not self:is_dead()) and self._status < self.STATUS.CANT_ACTIVE
+	return (not self:is_dead()) and self._status < g_config.monster_status.CANT_ACTIVE
 end
 
 monster_class.can_attack = function(self)
-	return self._status < self.STATUS.CANT_ATTACK
+	return self._status < g_config.monster_status.CANT_ATTACK
 end
 
 monster_class.reset = function(self)
@@ -354,7 +314,7 @@ monster_class.reset = function(self)
 
 	self:toward_to(self._cur_towards)
 
-	self:change_monster_status(self.STATUS.ALIVE)
+	self:change_monster_status(g_config.monster_status.ALIVE)
 end
 ---------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------
@@ -384,8 +344,8 @@ monster_class.active = function(self)
 	local cb = function()
 		self.node:setVisible(true)
 		if self:is_player() and not pve_game_ctrl:instance():get_auto() then
-			self:change_monster_status(self.STATUS.ALIVE)
-			pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.WAIT_ORDER)
+			self:change_monster_status(g_config.monster_status.ALIVE)
+			pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.WAIT_ORDER)
 		else
 			self:run_ai()
 		end
@@ -411,7 +371,7 @@ end
 -------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------
 monster_class.move_to = function(self, arena_pos, attack_target, skill_target_pos)
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	local cb = function()
 		self._cur_pos = arena_pos
 		if attack_target then
@@ -420,11 +380,11 @@ monster_class.move_to = function(self, arena_pos, attack_target, skill_target_po
 		elseif skill_target_pos then
 			self:use_skill(skill_target_pos)
 		else
-			self:change_monster_status(self.STATUS.ALIVE)
+			self:change_monster_status(g_config.monster_status.ALIVE)
 			if self:nothing_can_do() then
 				pve_game_ctrl:instance():next_monster_activate()
 			else
-				pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.WAIT_ORDER)
+				pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.WAIT_ORDER)
 			end
 		end
 	end
@@ -438,7 +398,7 @@ monster_class.move_to = function(self, arena_pos, attack_target, skill_target_po
 end
 
 monster_class.attack = function(self, target, distance)
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	
 	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target._cur_pos)) then
 		self:move_and_attack(target)
@@ -448,8 +408,8 @@ monster_class.attack = function(self, target, distance)
 end
 
 monster_class.attack_directly = function(self, target, distance)
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
-	if self.attack_particle then
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+	if self._attack_particle then
 		self:create_attack_particle(target)
 	end
 
@@ -469,17 +429,17 @@ monster_class.wait = function(self, is_auto)
 			uitool:create_top_tip("you has been waited!")
 		end
 	else
-		self:change_monster_status(self.STATUS.WAITING)
+		self:change_monster_status(g_config.monster_status.WAITING)
 		self._has_waited = true
-		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 		pve_game_ctrl:instance():next_monster_activate(true)
 	end
 end
 
 monster_class.defend = function(self)
-	self:change_monster_status(self.STATUS.DEFEND)
+	self:change_monster_status(g_config.monster_status.DEFEND)
 	self:add_buff({g_config.buff.defend})
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	pve_game_ctrl:instance():next_monster_activate()
 end
 
@@ -495,7 +455,7 @@ monster_class.use_skill = function(self, target_pos_num)
 end
 
 monster_class.use_skill_directly = function(self, target_pos_num)
-		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.game_status.RUNNING)
+		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 		self._skill:play()
 		self:minus_anger(self._skill:get_cost())
 		
@@ -511,7 +471,7 @@ end
 -------------------------------------------------------------------------------------------
 
 monster_class.die = function(self, is_buff_or_skill)
-	self._status = self.STATUS.DEAD
+	self._status = g_config.monster_status.DEAD
 	self.card.remove_self()
 
 	local ac = self.model:runAction(cc.FadeOut:create(1))
@@ -609,15 +569,15 @@ end
 --------------------------------------------------------------------------------------------
 monster_class.get_attack_damage = function(self, murderer, distance)
 	local damage = murderer:get_cur_damage()
-	local damage_type = self.DAMAGE_LEVEL.COMMON
+	local damage_type = g_config.damage_level.COMMON
 
 	if murderer:is_melee() then
 		if self:is_be_back_attacked(murderer) then
 			damage = damage * 1.5
-			damage_type = self.DAMAGE_LEVEL.HIGHER
+			damage_type = g_config.damage_level.HIGHER
 		elseif self:is_be_side_attacked(murderer) then
 			damage = damage * 1.2
-			damage_type = self.DAMAGE_LEVEL.HIGH
+			damage_type = g_config.damage_level.HIGH
 		end
 	end
 
@@ -626,13 +586,13 @@ monster_class.get_attack_damage = function(self, murderer, distance)
 	if not murderer:is_melee() then
 		if distance > 5 then
 			damage = damage * (1 - (distance - 5) * 2 / 10)
-			damage_type = self.DAMAGE_LEVEL.LOW
+			damage_type = g_config.damage_level.LOW
 		elseif distance < 3 then
 			damage = damage * (1 - (3 - distance) / 10)
-			damage_type = self.DAMAGE_LEVEL.LOW
+			damage_type = g_config.damage_level.LOW
 		else
 			damage = damage * 1.2
-			damage_type = self.DAMAGE_LEVEL.HIGH
+			damage_type = g_config.damage_level.HIGH
 		end
 	end
 
@@ -644,13 +604,13 @@ monster_class.get_final_healing = function(self, skill)
 
 	healing = healing + skill:get_caster().level * skill:get_healing_level_plus()
 
-	return healing, self.DAMAGE_LEVEL.HEAL
+	return healing, g_config.damage_level.HEAL
 end
 
 monster_class.get_skill_damage = function(self, skill)
 	local damage = self:get_damage_after_defense(skill:get_damage(), skill:get_caster())
 
-	return self:get_final_damage(damage), self.DAMAGE_LEVEL.SKILL
+	return self:get_final_damage(damage), g_config.damage_level.SKILL
 
 end
 
@@ -866,7 +826,7 @@ monster_class.get_distance_info = function(self)
 end
 
 monster_class.create_attack_particle = function(self, target)
-	local particle = cc.ParticleSystemQuad:create(self.attack_particle)
+	local particle = cc.ParticleSystemQuad:create(self._attack_particle)
 	particle:setScale(0.3)
 	particle:setName("attack")
 	local start_pos = pve_game_ctrl:instance():get_position_by_int(self:get_cur_pos_num())
@@ -906,7 +866,7 @@ monster_class.get_around_info = function(self, is_to_show)
 
 		for k, v in pairs(map_info) do
 			if type(v) == type({}) and v:get_team_side() == self._team_side then
-				self._can_reach_area_info[k] = pve_game_ctrl.map_item.FRIEND
+				self._can_reach_area_info[k] = pve_game_ctrl.MAP_ITEM.FRIEND
 			end
 		end
 	end
@@ -927,7 +887,7 @@ monster_class.get_around_info = function(self, is_to_show)
 	self._distance_info = self:get_distance_info()
 	
 	for k, v in pairs(can_attack_table) do
-		self._can_reach_area_info[v] = pve_game_ctrl.map_item.ENEMY * 100 + self:get_distance_to_pos(v)
+		self._can_reach_area_info[v] = pve_game_ctrl.MAP_ITEM.ENEMY * 100 + self:get_distance_to_pos(v)
 	end
 	
 	self._can_reach_area_info[0] = self._cur_pos
@@ -1101,15 +1061,15 @@ end
 ---------------------------------------------------------------------------
 ---------------------------------------------------------------------------
 monster_class.change_monster_status = function(self, status)
-	status = status or self._last_status or self.STATUS.ALIVE
+	status = status or self._last_status or g_config.monster_status.ALIVE
 	self._last_status = self._status
 	self._status = status
 	
-	if status == self.STATUS.ALIVE then
+	if status == g_config.monster_status.ALIVE then
 		self:repeat_animation("alive")
-	elseif status == self.STATUS.DEFEND then
+	elseif status == g_config.monster_status.DEFEND then
 		self:repeat_animation("defend")
-	elseif status == self.STATUS.WAITING then
+	elseif status == g_config.monster_status.WAITING then
 		self:do_animation("wait")
 	end
 end
@@ -1123,15 +1083,15 @@ monster_class.remove_monster_status = function(self, status)
 	self._last_status = self._status
 	self._status = self._status - status
 
-	if self._status < self.STATUS.CANT_ATTACK then
+	if self._status < g_config.monster_status.CANT_ATTACK then
 		self:repeat_animation("alive")
 	end
 end
 
 monster_class.go_back_repeat_animate = function(self)
-	if self._status == self.STATUS.ALIVE then
+	if self._status == g_config.monster_status.ALIVE then
 		self:repeat_animation("alive")
-	elseif self._status == self.STATUS.DEFEND then
+	elseif self._status == g_config.monster_status.DEFEND then
 		self:repeat_animation("defend")
 	else
 		self:repeat_animation("alive")

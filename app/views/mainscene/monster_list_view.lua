@@ -39,7 +39,6 @@ monster_list_view.on_close = function(self)
 	self.monster_lv:pushBackCustomItem(collected_title)
 end
 ----------------------------------------------------------------
--------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 
 monster_list_view.init_monster_lv = function(self)
