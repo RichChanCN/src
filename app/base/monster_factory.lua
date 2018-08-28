@@ -1,8 +1,9 @@
 monster_factory = {}
 
-require("app.logic.monster_class")
-require("app.logic.range_monster_class")
-require("app.logic.melee_monster_class")
+require("app.base.monster_class")
+require("app.base.range_monster_class")
+require("app.base.melee_monster_class")
+require("app.base.skill_class")
 
 monster_factory.instance = function(self)
 	if self._instance == nil then

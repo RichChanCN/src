@@ -1,22 +1,25 @@
 
 cc.FileUtils:getInstance():setPopupNotify(false)
 
-require "config.config"
+require "config"
 require "cocos.init"
-require "tool.lua_xml"
-require "tool.my_tool"
-require "tool.ui_tool"
-require "app.logic.monster_factory"
-require "app.logic.game_data_ctrl"
-require "app.logic.chesspiece_pool_manager"
-require "config.config_path"
-require "config.config_particle"
-require "config.config_ui"
-require "config.config_buff"
-require "config.config_skill"
-require "config.config_monster"
-require "config.config_map"
-require "app.logic.pve_game_ctrl"
+
+require "app.base.tool.lua_xml"
+require "app.base.tool.my_tool"
+require "app.base.tool.ui_tool"
+
+require "app.base.config.config_path"
+require "app.base.config.config_particle"
+require "app.base.config.config_ui"
+require "app.base.config.config_buff"
+require "app.base.config.config_skill"
+require "app.base.config.config_monster"
+require "app.base.config.config_map"
+
+require "app.base.monster_factory"
+require "app.base.game_data_ctrl"
+require "app.base.chesspiece_pool_manager"
+require "app.base.pve_game_ctrl"
 
 local function main()
 	collectgarbage("collect")

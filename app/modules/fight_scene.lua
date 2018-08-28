@@ -15,7 +15,7 @@ fight_scene.RESOURCE_BINDING = {
  }
 
 --面板文件位置
-fight_scene.VIEW_PATH = "app.views.fightscene"
+fight_scene.VIEW_PATH = "app.ui.fightscene"
 fight_scene.WAIT_TIME = 1
 fight_scene.ACTION_TIME = 0.3
 

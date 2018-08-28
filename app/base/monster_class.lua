@@ -44,8 +44,7 @@ monster_class.ctor = function(self, data, team_side, arena_pos, level)
 	self._tag = self.id * 100 + self._start_pos.x * 10 + self._start_pos.y
 	
 	if data.skill then
-		local skill_base = require("app.logic.skill_base")
-		self._skill = skill_base:instance():new(self, data.skill)
+		self._skill = skill_class:new(self, data.skill)
 	end
 
 	return self

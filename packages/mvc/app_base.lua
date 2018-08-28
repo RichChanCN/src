@@ -3,8 +3,7 @@ local app_base = class("app_base")
 
 app_base.ctor = function(self, configs)
     self._configs = {
-        scenes_root  = "app.scenes",
-        models_root = "app.models",
+        scenes_root  = "app.modules",
         default_scene_name = "main_scene",
     }
 
@@ -14,9 +13,6 @@ app_base.ctor = function(self, configs)
 
     if type(self._configs.scenes_root) ~= "table" then
         self._configs.scenes_root = {self._configs.scenes_root}
-    end
-    if type(self._configs.models_root) ~= "table" then
-        self._configs.models_root = {self._configs.models_root}
     end
 
     if DEBUG > 1 then

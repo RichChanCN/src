@@ -23,7 +23,7 @@ main_scene.RESOURCE_BINDING = {
     ["monster_info_view"]	= {["varname"] = "_monster_info_view"},
 }
 
-main_scene.VIEW_PATH = "app.views.mainscene"
+main_scene.VIEW_PATH = "app.ui.mainscene"
 
 main_scene.on_create = function(self)
 	game_data_ctrl:instance():register_scene(self)

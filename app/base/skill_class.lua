@@ -1,10 +1,6 @@
-local skill_base = {}
+skill_class = gtool.class()
 
-skill_base.instance = function(self)
-	return setmetatable({}, { __index = self })
-end
-
-skill_base.new = function(self, monster, skill_data)
+skill_class.ctor = function(self, monster, skill_data)
 	self._caster 				= monster
 	self._name 					= skill_data.name 		
 	self._description 			= skill_data.description 
@@ -26,7 +22,7 @@ skill_base.new = function(self, monster, skill_data)
 	return self
 end
 
-skill_base.use = function(self, target_pos_num)
+skill_class.use = function(self, target_pos_num)
 	self.target_pos_num = target_pos_num
 	
 	if (not target_pos_num) and (not self._is_need_target) or self._range < 1 then
@@ -52,7 +48,7 @@ skill_base.use = function(self, target_pos_num)
 
 end
 
-skill_base.play = function(self)
+skill_class.play = function(self)
 	if not self._particle_path then 
 		return
 	end
@@ -83,7 +79,7 @@ skill_base.play = function(self)
 
 end
 
-skill_base.get_be_affected_monster_list = function(self)
+skill_class.get_be_affected_monster_list = function(self)
 	local monster_list = {}
 	if self._range < 1 then
 		if (self._damage > 0 or self._debuff) and (self._healing > 0 or self._buff) then
@@ -117,52 +113,52 @@ skill_base.get_be_affected_monster_list = function(self)
 	return monster_list
 end
 
-skill_base.is_need_target = function(self)
+skill_class.is_need_target = function(self)
 	return self._is_need_target
 end
 
-skill_base.get_img_path = function(self)
+skill_class.get_img_path = function(self)
 	return self._img_path
 end
 
-skill_base.get_cost = function(self)
+skill_class.get_cost = function(self)
 	return self._cost
 end
 
-skill_base.get_name = function(self)
+skill_class.get_name = function(self)
 	return self._name
 end
 
-skill_base.get_caster = function(self)
+skill_class.get_caster = function(self)
 	return self._caster
 end
 
-skill_base.get_damage_level_plus = function(self)
+skill_class.get_damage_level_plus = function(self)
 	return self._damage_level_plus
 end
 
-skill_base.get_damage = function(self)
-	return self._damage + self._caster.level * self._damage_level_plus
+skill_class.get_damage = function(self)
+	return self._damage + self._caster:get_level() * self._damage_level_plus
 end
 
-skill_base.get_healing_level_plus = function(self)
+skill_class.get_healing_level_plus = function(self)
 	return self._healing_level_plus
 end
 
-skill_base.get_healing = function(self)
-	return self._healing
+skill_class.get_healing = function(self)
+	return self._healing + self._caster:get_level() * self._healing_level_plus
 end
 
-skill_base.get_buff = function(self)
+skill_class.get_buff = function(self)
 	return self._buff
 end
 
-skill_base.get_debuff = function(self)
+skill_class.get_debuff = function(self)
 	return self._debuff
 end
 
-skill_base.get_description = function(self)
+skill_class.get_description = function(self)
 	return self._description
 end
 
-return skill_base
+return skill_class
