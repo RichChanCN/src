@@ -1,3 +1,4 @@
+-- 打印table
 table.print = function(t)  
     local print_r_cache = {}
     local function sub_print_r(t, indent)
@@ -32,6 +33,7 @@ table.print = function(t)
     print()
 end
 
+-- 游戏工具
 gtool = {}
 
 gtool._class = {}

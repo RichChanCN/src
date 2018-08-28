@@ -4,10 +4,13 @@ game_data_ctrl.new = function(self)
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
-	
+	-- 存到本地的数据
 	self._save_data 	= {}
+	-- 配置里的地图数据
 	self._map_data 		= {}
+	-- 配置里的怪兽数据
 	self._monster_data 	= {}
+	-- 注册的场景列表，为广播模式准备
 	self._scene_list 	= {}
 
 	return o

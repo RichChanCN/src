@@ -5,10 +5,11 @@ monster_class.ctor = function(self, data, team_side, arena_pos, level)
 	self.id 					= data.id
 
 	-- private
+	-- 类型属性
 	self._attack_type			= data.attack_type
-	self._attack_particle		= data.attack_particle
 	self._move_type 			= data.move_type
 
+	-- 配置读取属性
 	self._level 				= data.level or level
 	self._max_anger				= data.anger
 	self._max_hp 				= data.hp
@@ -19,6 +20,7 @@ monster_class.ctor = function(self, data, team_side, arena_pos, level)
 	self._initiative 			= data.initiative
 	self._defense_penetration 	= data.defense_penetration
 
+	-- 可变化数值属性
 	self._cur_max_hp 				= self._max_hp 			
 	self._cur_damage 				= self._damage 			
 	self._cur_physical_defense 		= self._physical_defense 	
@@ -27,11 +29,13 @@ monster_class.ctor = function(self, data, team_side, arena_pos, level)
 	self._cur_initiative 			= self._initiative 		
 	self._cur_defense_penetration 	= self._defense_penetration
 
+	-- 常变化数值属性
 	self._cur_anger					= 0
 	self._cur_hp 					= self._max_hp
 	self._steps 					= self._cur_mobility
 	self._cur_towards				= self._towards
 	
+	-- 状态相关属性
 	self._team_side				= team_side or monster_class.TeamSide.NONE
 	self._towards				= g_config.towards[team_side]
 	self._has_waited			= false
@@ -41,15 +45,21 @@ monster_class.ctor = function(self, data, team_side, arena_pos, level)
 	self._buff_list				= {}
 	self._debuff_list			= {}
 
+	-- 唯一标识符
 	self._tag = self.id * 100 + self._start_pos.x * 10 + self._start_pos.y
 	
+	-- 技能
 	if data.skill then
 		self._skill = skill_class:new(self, data.skill)
 	end
 
+	-- 攻击特效
+	self._attack_particle		= data.attack_particle
+
 	return self
 end
 
+-- get & set
 monster_class.get_tag = function(self)
 	return self._tag
 end
@@ -216,6 +226,7 @@ monster_class.get_alive_friend_monsters = function(self)
 	return friend_list
 end
 
+-- 判断
 monster_class.is_monster = function(self)
 	return true
 end
@@ -267,6 +278,20 @@ monster_class.is_be_side_attacked = function(self, murderer)
 			or self._cur_towards - 1 == murderer._cur_towards - 6
 end
 
+monster_class.is_near = function(self, num)
+	local cur = self:get_cur_pos_num()
+
+	local temp_table = gtool:get_towards_tbl(num)
+
+	for k, v in pairs(temp_table) do
+		if cur == num + v then
+			return true
+		end
+	end
+
+	return false
+end
+
 monster_class.can_counter_attack = function(self, murderer)
 	return self:is_melee()
 			and self:can_attack()
@@ -287,6 +312,42 @@ monster_class.can_attack = function(self)
 	return self._status < g_config.monster_status.CANT_ATTACK
 end
 
+monster_class.nothing_can_do = function(self)
+	if pve_game_ctrl:instance():get_auto() then
+		return true
+	end
+	if not self:is_melee() then
+		return false
+	else
+		self:get_around_info()
+		
+		local count = 0
+		for k, v in pairs(self._can_reach_area_info) do
+		    count = count + 1
+		    if count > 1 then
+		    	return false
+		    end
+		end
+		return true
+	end
+end
+
+monster_class.can_reach_and_attack = function(self, num)
+	if self:can_attack() then
+		if self:is_near(num) or not self:is_melee() then
+			return true
+		end
+	
+		return self:get_near_pos_num(num)
+	else
+		return false
+	end
+end
+
+monster_class.can_move_to_pos_num = function(self, num)
+	return self._can_reach_area_info[num] and self._can_reach_area_info[num] > 10 and 100 > self._can_reach_area_info[num]
+end
+-- 重置
 monster_class.reset = function(self)
 	if not self.model and self.animation and self.node then
 		return
@@ -316,7 +377,7 @@ monster_class.reset = function(self)
 	self:change_monster_status(g_config.monster_status.ALIVE)
 end
 ---------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------
+-------------------------------------自动触发-------------------------------------------
 ---------------------------------------------------------------------------------------
 
 monster_class.on_enter_new_round = function(self, round_num)
@@ -367,7 +428,7 @@ monster_class.update_cur_attribute = function(self)
 end
 
 -------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------
+----------------------------------主动触发-----------------------------------------
 -------------------------------------------------------------------------------------------
 monster_class.move_to = function(self, arena_pos, attack_target, skill_target_pos)
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
@@ -406,20 +467,6 @@ monster_class.attack = function(self, target, distance)
 	end
 end
 
-monster_class.attack_directly = function(self, target, distance)
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
-	if self._attack_particle then
-		self:create_attack_particle(target)
-	end
-
-	self:add_anger()
-	local cur_num = self:get_cur_pos_num()
-	local to_num = gtool:ccp_2_int(target._cur_pos)
-	self:toward_to_int_pos(cur_num, to_num)
-	self:do_animation("attack1")
-	target:be_attacked(self, false, distance)
-end
-
 monster_class.wait = function(self, is_auto)
 	if self:has_waited() then
 		if is_auto then
@@ -452,21 +499,8 @@ monster_class.use_skill = function(self, target_pos_num)
 		self:move_and_use_skill(target_pos_num)
 	end
 end
-
-monster_class.use_skill_directly = function(self, target_pos_num)
-		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
-		self._skill:play()
-		self:minus_anger(self._skill:get_cost())
-		
-		local cb = function()
-			self._skill:use(target_pos_num)
-		end
-		local callback = cc.CallFunc:create(cb)
-		self:toward_to_int_pos(self:get_cur_pos_num(), target_pos_num)
-		self:do_animation("skill", callback)
-end
 -------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------
+---------------------------------被动触发-------------------------------------------------
 -------------------------------------------------------------------------------------------
 
 monster_class.die = function(self, is_buff_or_skill)
@@ -564,7 +598,7 @@ monster_class.toward_to_int_pos = function(self, cur_num, to_num, only_get)
 	end
 end
 --------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------
+---------------------------------伤害、血量、怒气操作-------------------------------------------------
 --------------------------------------------------------------------------------------------
 monster_class.get_attack_damage = function(self, murderer, distance)
 	local damage = murderer:get_cur_damage()
@@ -713,9 +747,9 @@ monster_class.set_anger = function(self, angle)
 
 	self:do_something_later(callback, 0.5)
 end
-----------------------------buff----------------------------------------------------
-----------------------------buff----------------------------------------------------
-----------------------------buff----------------------------------------------------
+-------------------------------------------------------------------------------------------
+----------------------------buff相关----------------------------------------------------
+------------------------------------------------------------------------------------------
 monster_class.add_buff = function(self, buff_list)
 	for k, v in pairs(buff_list) do
 		local buff = v:clone()
@@ -757,8 +791,34 @@ monster_class.deal_with_all_buff = function(self)
 end
 
 ------------------------------------------------------------------------------------
+--------------------------------辅助函数--------------------------------------
 ------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------
+monster_class.attack_directly = function(self, target, distance)
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+	if self._attack_particle then
+		self:create_attack_particle(target)
+	end
+
+	self:add_anger()
+	local cur_num = self:get_cur_pos_num()
+	local to_num = gtool:ccp_2_int(target._cur_pos)
+	self:toward_to_int_pos(cur_num, to_num)
+	self:do_animation("attack1")
+	target:be_attacked(self, false, distance)
+end
+
+monster_class.use_skill_directly = function(self, target_pos_num)
+		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+		self._skill:play()
+		self:minus_anger(self._skill:get_cost())
+		
+		local cb = function()
+			self._skill:use(target_pos_num)
+		end
+		local callback = cc.CallFunc:create(cb)
+		self:toward_to_int_pos(self:get_cur_pos_num(), target_pos_num)
+		self:do_animation("skill", callback)
+end
 
 monster_class.move_and_attack = function(self, target)
 	local num = gtool:ccp_2_int(target._cur_pos)
@@ -841,7 +901,7 @@ monster_class.create_attack_particle = function(self, target)
 	particle:runAction(seq)
 end
 ----------------------------------------------------------------------------------
-----------------------------------------------------------------------------------
+----------------------------------路径相关-------------------------------------
 ----------------------------------------------------------------------------------
 
 monster_class.get_around_info = function(self, is_to_show)
@@ -1003,61 +1063,8 @@ monster_class.get_near_pos_num = function(self, num)
 
 	return false
 end
-
----------------------------------------------------------------------------------
----------------------------------------------------------------------------------
----------------------------------------------------------------------------------
-monster_class.nothing_can_do = function(self)
-	if pve_game_ctrl:instance():get_auto() then
-		return true
-	end
-	if not self:is_melee() then
-		return false
-	else
-		self:get_around_info()
-		
-		local count = 0
-		for k, v in pairs(self._can_reach_area_info) do
-		    count = count + 1
-		    if count > 1 then
-		    	return false
-		    end
-		end
-		return true
-	end
-end
-
-monster_class.can_reach_and_attack = function(self, num)
-	if self:can_attack() then
-		if self:is_near(num) or not self:is_melee() then
-			return true
-		end
-	
-		return self:get_near_pos_num(num)
-	else
-		return false
-	end
-end
-
-monster_class.is_near = function(self, num)
-	local cur = self:get_cur_pos_num()
-
-	local temp_table = gtool:get_towards_tbl(num)
-
-	for k, v in pairs(temp_table) do
-		if cur == num + v then
-			return true
-		end
-	end
-
-	return false
-end
-
-monster_class.can_move_to_pos_num = function(self, num)
-	return self._can_reach_area_info[num] and self._can_reach_area_info[num] > 10 and 100 > self._can_reach_area_info[num]
-end
 ---------------------------------------------------------------------------
----------------------------------------------------------------------------
+------------------------------------状态转换----------------------------
 ---------------------------------------------------------------------------
 monster_class.change_monster_status = function(self, status)
 	status = status or self._last_status or g_config.monster_status.ALIVE
@@ -1135,11 +1142,7 @@ monster_class.do_something_later = function(self, callback, time)
 end
 
 ----------------------------------------------------------
-----------------------------------------------------------
-----------------------------------------------------------
 --------------------------AI------------------------------
-----------------------------------------------------------
-----------------------------------------------------------
 ----------------------------------------------------------
 
 monster_class.run_ai = function(self)

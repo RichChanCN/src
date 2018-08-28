@@ -8,7 +8,7 @@ pve_game_ctrl.MAP_ITEM = {
 	RIGHT_MONSTER 	= 4,
 	FRIEND			= 5,
 }
-
+-- 游戏状态
 pve_game_ctrl.GAME_STATUS = {
 	ACTIVE 			= 0,
 	RUNNING			= 1,
@@ -17,6 +17,7 @@ pve_game_ctrl.GAME_STATUS = {
 	AUTO 			= 4,
 }
 
+-- 战斗时可以输入的指令
 pve_game_ctrl.ORDER = {
 	ACTIVATE	= 0,
 	MOVE 		= 1,
@@ -25,7 +26,7 @@ pve_game_ctrl.ORDER = {
 	WAIT 		= 4,
 	USE_SKILL	= 5,
 }
-
+-- 战斗操作，和上面指令一一对应
 pve_game_ctrl.OPERATE = {
 	[0] = function(is_wait, round_num)
 		if pve_game_ctrl:instance():get_scene():get_battle_info_view():is_inited() then
@@ -98,6 +99,7 @@ pve_game_ctrl.instance = function(self)
 	return self._instance
 end
 
+-------------------------------游戏控制---------------------------
 pve_game_ctrl.init_game = function(self, left_team, right_team, map, chapter_num, level_num)
 	self._game_speed = 1
 	self._is_use_skill = false
@@ -150,6 +152,7 @@ pve_game_ctrl.game_over = function(self, win_side)
 	end
 end
 
+-------------------------------流程控制---------------------------
 pve_game_ctrl.next_monster_activate = function(self, is_wait)
 	self:set_is_use_skill(false)
 	if is_wait then
@@ -194,25 +197,13 @@ pve_game_ctrl.alive_monster_enter_new_round = function(self)
 	end
 end
 
-pve_game_ctrl.update_map_info = function(self)
-	self._map_info = {}
-
-	for k, v in pairs(self._map) do
-		table.insert(self._map_info, k, v)
-	end
-	
-	local monsters = self:get_all_alive_monsters()
-	for k, v in pairs(monsters) do
-		self._map_info[gtool:ccp_2_int(v:get_cur_pos())] = v
-	end
-end
-
 pve_game_ctrl.change_game_status = function(self, status)
 	self._cur_game_status = status
 	self:update_map_info()
 	self._scene:update_map_view()
 end
 
+-------------------------------外部控制---------------------------
 pve_game_ctrl.select_pos = function(self, node)
 	if self._map_info[gtool:ccp_2_int(node.arena_pos)] then
 		uitool:create_top_tip("you can't do that!")
@@ -267,6 +258,20 @@ pve_game_ctrl.check_game_over = function(self, is_buff)
 
 end
 
+pve_game_ctrl.update_map_info = function(self)
+	self._map_info = {}
+
+	for k, v in pairs(self._map) do
+		table.insert(self._map_info, k, v)
+	end
+	
+	local monsters = self:get_all_alive_monsters()
+	for k, v in pairs(monsters) do
+		self._map_info[gtool:ccp_2_int(v:get_cur_pos())] = v
+	end
+end
+
+-------------------------------get&set---------------------------
 pve_game_ctrl.set_is_use_skill = function(self, is_use_skill)
 	self._is_use_skill = is_use_skill
 end

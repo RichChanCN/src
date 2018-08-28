@@ -1,11 +1,13 @@
 g_config = g_config or {}
 
 g_config.Map = 
-{
+{	-- 章节编号
 	[1] = 
 	{
+		-- 关卡编号
 		[1] = 
 		{
+			-- 奖励列表
 			reward = 
 			{
 				monster = 
@@ -18,15 +20,17 @@ g_config.Map =
 				coin = 100,
 			},
 
+			-- 可以使用的怪物列表
 			can_use_monster_list = 
 			{
 				1
 			},
 
+			-- 上场怪物限制
 			monster_num_limit = 1,
-
+			-- 障碍物模型路径
 			barrier_model = g_config:to_model_path("tree.c3b"),
-			
+			-- 战场信息 0 代表可以放置怪物  2代表障碍物   大于100的代表敌人
 			arena_info = 
 			{
 				[12] = 0,
