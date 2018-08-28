@@ -9,7 +9,7 @@ monster_class.ctor = function(self, data, team_side, arena_pos, level)
 	self._attack_type			= data.attack_type
 	self._move_type 			= data.move_type
 
-	-- 配置读取数值属性
+	-- 固定数值属性
 	self._raw_attr = 
 	{
 		level 				= data.level or level or 1,
@@ -36,15 +36,15 @@ monster_class.ctor = function(self, data, team_side, arena_pos, level)
 		steps 				= self._raw_attr.mobility, 			
 		initiative 			= self._raw_attr.initiative,		
 		defense_penetration = self._raw_attr.defense_penetration,
-		pos 				= arena_pos,
-		towards				= g_config.towards[team_side],
 	}
 	
 	-- 状态相关属性
 	self._team_side				= team_side or monster_class.TeamSide.NONE
-	self._has_waited			= false
 	self._start_pos 			= arena_pos
+	self._cur_pos 				= arena_pos
+	self._cur_towards			= g_config.towards[team_side]
 	self._status 				= g_config.monster_status.ALIVE
+	self._has_waited			= false
 
 	self._buff_list				= {}
 	self._debuff_list			= {}
@@ -85,7 +85,7 @@ monster_class.get_start_pos = function(self)
 end
 
 monster_class.get_cur_pos = function(self)
-	return self._cur_attr.pos
+	return self._cur_pos
 end
 
 monster_class.get_cur_hp = function(self)
@@ -93,7 +93,7 @@ monster_class.get_cur_hp = function(self)
 end
 
 monster_class.get_cur_pos_num = function(self)
-	return gtool:ccp_2_int(self._cur_attr.pos)
+	return gtool:ccp_2_int(self._cur_pos)
 end
 
 monster_class.get_skill = function(self)
@@ -300,7 +300,7 @@ monster_class.can_counter_attack = function(self, murderer)
 	return self:is_melee()
 			and self:can_attack()
 			and murderer:is_melee() 
-			and self:is_near(gtool:ccp_2_int(murderer._cur_attr.pos)) 
+			and self:is_near(gtool:ccp_2_int(murderer._cur_pos)) 
 			and not(self:is_be_side_attacked(murderer) or self:is_be_back_attacked(murderer))
 end
 
@@ -357,12 +357,12 @@ monster_class.reset = function(self)
 		return
 	end
 
-	self._cur_attr.anger				= 0
-	self._cur_attr.hp 					= self._raw_attr.max_hp
-	self._cur_attr.pos    				= self._start_pos
 	self._cur_towards					= g_config.towards[self._team_side]
+	self._cur_pos    					= self._start_pos
 
-	self._cur_attr.max_hp 				= self._raw_attr.max_hp 			
+	self._cur_attr.max_hp 				= self._raw_attr.max_hp
+	self._cur_attr.hp 					= self._raw_attr.max_hp	
+	self._cur_attr.anger				= 0		
 	self._cur_attr.damage 				= self._raw_attr.damage 			
 	self._cur_attr.physical_defense 	= self._raw_attr.physical_defense 	
 	self._cur_attr.magic_defense 		= self._raw_attr.magic_defense 		
@@ -437,7 +437,7 @@ end
 monster_class.move_to = function(self, arena_pos, attack_target, skill_target_pos)
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	local cb = function()
-		self._cur_attr.pos = arena_pos
+		self._cur_pos = arena_pos
 		if attack_target then
 			local distance = self:get_distance_to_pos(attack_target:get_cur_pos_num(), true)
 			self:attack(attack_target, distance)
@@ -464,7 +464,7 @@ end
 monster_class.attack = function(self, target, distance)
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	
-	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target._cur_attr.pos)) then
+	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target._cur_pos)) then
 		self:move_and_attack(target)
 	else
 		self:attack_directly(target, distance)
@@ -531,7 +531,7 @@ monster_class.be_attacked = function(self, murderer, is_counter_attack, distance
 		self:add_anger()
 		local cb = function()
 			local cur_num = self:get_cur_pos_num()
-			local to_num = gtool:ccp_2_int(murderer._cur_attr.pos)
+			local to_num = gtool:ccp_2_int(murderer._cur_pos)
 			if (not is_counter_attack) and self:can_counter_attack(murderer) then
 				self:toward_to_int_pos(cur_num, to_num)
 				self:counter_attack(murderer)
@@ -547,7 +547,7 @@ end
 
 monster_class.counter_attack = function(self, target)
 	local cur_num = self:get_cur_pos_num()
-	local to_num = gtool:ccp_2_int(target._cur_attr.pos)
+	local to_num = gtool:ccp_2_int(target._cur_pos)
 	self:toward_to_int_pos(cur_num, to_num)
 	self:do_animation("attack1")
 	self:add_anger()
@@ -805,7 +805,7 @@ monster_class.attack_directly = function(self, target, distance)
 
 	self:add_anger()
 	local cur_num = self:get_cur_pos_num()
-	local to_num = gtool:ccp_2_int(target._cur_attr.pos)
+	local to_num = gtool:ccp_2_int(target._cur_pos)
 	self:toward_to_int_pos(cur_num, to_num)
 	self:do_animation("attack1")
 	target:be_attacked(self, false, distance)
@@ -825,7 +825,7 @@ monster_class.use_skill_directly = function(self, target_pos_num)
 end
 
 monster_class.move_and_attack = function(self, target)
-	local num = gtool:ccp_2_int(target._cur_attr.pos)
+	local num = gtool:ccp_2_int(target._cur_pos)
 	local pos = gtool:int_2_ccp(self:get_back_first_near_pos_num(num, target._cur_towards))
 
 	self:move_to(pos, target)
@@ -880,7 +880,7 @@ monster_class.get_distance_to_pos = function(self, num, update)
 end
 
 monster_class.get_distance_info = function(self)
-	local steps = math.abs(self._cur_attr.pos.x - 4) + math.abs(self._cur_attr.pos.y - 4) + 4
+	local steps = math.abs(self._cur_pos.x - 4) + math.abs(self._cur_pos.y - 4) + 4
 	if steps > 8 then 
 		steps = 8 
 	end
@@ -953,7 +953,7 @@ monster_class.get_around_info = function(self, is_to_show)
 		self._can_reach_area_info[v] = pve_game_ctrl.MAP_ITEM.ENEMY * 100 + self:get_distance_to_pos(v)
 	end
 	
-	self._can_reach_area_info[0] = self._cur_attr.pos
+	self._can_reach_area_info[0] = self._cur_pos
 	return self._can_reach_area_info
 end
 
@@ -975,7 +975,7 @@ monster_class.get_fly_path = function(self)
         end
     end
 
-	local steps = math.abs(self._cur_attr.pos.x - 4) + math.abs(self._cur_attr.pos.y - 4) + 4
+	local steps = math.abs(self._cur_pos.x - 4) + math.abs(self._cur_pos.y - 4) + 4
 	if steps > 8 then 
 		steps = 8 
 	end
@@ -1157,7 +1157,7 @@ monster_class.run_ai = function(self)
 	local target_enemy = self:get_enemy_can_attack(enemy_list)
 	
 	if target_enemy then
-		local pos_num = gtool:ccp_2_int(target_enemy._cur_attr.pos)
+		local pos_num = gtool:ccp_2_int(target_enemy._cur_pos)
 		local distance = self:get_distance_to_pos(pos_num)
 		if self:can_use_skill() then
 			return self:use_skill(target_enemy:get_cur_pos_num())
@@ -1190,7 +1190,7 @@ end
 monster_class.get_enemy_can_attack = function(self, enemy_list)
 	local can_attack_list = {}
 	for k, v in pairs(enemy_list) do
-		if self:can_reach_and_attack(gtool:ccp_2_int(v._cur_attr.pos)) then
+		if self:can_reach_and_attack(gtool:ccp_2_int(v._cur_pos)) then
 			table.insert(can_attack_list, v)
 		end
 	end
@@ -1216,7 +1216,7 @@ monster_class.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_inf
 	if not enemy then
 		return
 	end
-	local pos_num = gtool:ccp_2_int(enemy._cur_attr.pos)
+	local pos_num = gtool:ccp_2_int(enemy._cur_pos)
 
 	local all_path = self:get_path_info_to_target(map_info, pos_num)
 
