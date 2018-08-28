@@ -23,11 +23,11 @@ end
 
 confirm_view.init_events = function(self)
 	self.close_btn:addClickEventListener(function(sender)
-        self:get_ctrl():close_confirm_view()
+        self._ctrl:close_confirm_view()
     end)
     uitool:make_img_to_button(self.go_img, function(sender)
-    	self:get_ctrl():close_confirm_view()
-    	self:get_ctrl():open_specific_embattle_view(self.chapter_num, self.level_num)
+    	self._ctrl:close_confirm_view()
+    	self._ctrl:open_specific_embattle_view(self.chapter_num, self.level_num)
     end)
 end
 
@@ -46,12 +46,13 @@ confirm_view.update_view = function(self)
 	self.stage_text:setString("Stage " .. self.chapter_num .. "-" .. self.level_num)
 
 	for i = 1, 3 do
+		local star_sp = "star_" .. i .. "_sp"
 		if not (i > self.star_num) then
-			self["star_" .. i .. "_sp"]:setTexture(g_config.sprite.lager_star_got)
-			self["star_" .. i .. "_sp"]:setScale(1)
+			self[star_sp]:setTexture(g_config.sprite.lager_star_got)
+			self[star_sp]:setScale(1)
 		else
-			self["star_" .. i .. "_sp"]:setTexture(g_config.sprite.lager_star_empty)
-			self["star_" .. i .. "_sp"]:setScale(1.5)
+			self[star_sp]:setTexture(g_config.sprite.lager_star_empty)
+			self[star_sp]:setScale(1.5)
 		end
 	end
 	self:update_reward()

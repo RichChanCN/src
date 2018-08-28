@@ -1,32 +1,39 @@
 uitool = {}
 
-uitool.far_away = function(self)
+uitool.far_away_ccp = cc.p(10000, 10000)
+uitool.zero_ccp = cc.p(0, 0)
+
+uitool.screen_center_pos = cc.p(960, 540)
+
+uitool.top_z_order = 2000
+uitool.mid_z_order = 1000
+uitool.bottom_z_order = 0
+
+uitool.get_far_away_cpp = function(self)
     return cc.p(10000, 10000)
 end
 
-uitool.zero = function(self)
+uitool.get_zero_cpp = function(self)
     return cc.p(0, 0)
 end
 
-uitool.top_z_order = function(self)
+uitool.get_top_z_order = function(self)
     return 2000
 end
 
-uitool.mid_z_order = function(self)
+
+uitool.get_mid_z_order = function(self)
     return 1000
 end
 
-uitool.bottom_z_order = function(self)
+uitool.get_bottom_z_order = function(self)
     return 0
 end
 
-uitool.screen_center_pos = function(self)
+uitool.get_screen_center_pos = function(self)
     return cc.p(960, 540)
 end
 
-uitool.to_sprite_path = function(file)
-    return 
-end
 
 uitool.get_node_center_position = function(self, node)
     local size = node:getContentSize()
@@ -158,7 +165,7 @@ uitool.set_progress_bar = function(self, img, percent)
 end
 
 uitool.set_node_to_global_top = function(self, node, z)
-    z = z or self:top_z_order()
+    z = z or self.top_z_order
     local children = node:getChildren()
 
     for i = 1, #children do
@@ -321,7 +328,7 @@ uitool.create_top_tip = function(self, string, color)
         tip_bg:addChild(label)
         tip_bg:setScale(2)
         scene.top_tip = tip_bg
-        scene:addChild(tip_bg, self:top_z_order())
+        scene:addChild(tip_bg, self.top_z_order)
     else
         scene.top_tip:stopAllActions()
         scene.top_tip.label:setString(string)

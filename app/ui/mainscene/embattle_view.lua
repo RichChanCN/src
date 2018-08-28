@@ -23,9 +23,10 @@ embattle_view.init_arena = function(self)
 	for x = 1, 8 do
 		for y = 1, 7 do
 			--这里为了提高效率，调用了原本的接口，只在一层里面寻找节点。
-			self["gezi_" .. x .. "_" .. y] = self.arena_node:getChildByName("gezi_" .. x .. "_" .. y)
-			if self["gezi_" .. x .. "_" .. y] then
-				self["gezi_" .. x .. "_" .. y].pos = cc.p(x, y)
+			local geizi_key = "gezi_" .. x .. "_" .. y
+			self[geizi_key] = self.arena_node:getChildByName(geizi_key)
+			if self[geizi_key] then
+				self[geizi_key].pos = cc.p(x, y)
 			end
 		end
 	end
@@ -72,7 +73,7 @@ end
 embattle_view.init_events = function(self)
 	self:add_arena_listener()
 	self.back_btn:addClickEventListener(function(sender)
-        self:get_ctrl():close_embattle_view()
+        self._ctrl:close_embattle_view()
     end)
 
     uitool:make_img_to_button(self.fight_img, function()
@@ -82,7 +83,7 @@ embattle_view.init_events = function(self)
     	end
     	local left_team = self:make_team()
     	pve_game_ctrl:instance():init_game(left_team, self._enemy_team, self._other_gezi, self._chapter_num, self._level_num)
-        self:get_ctrl():go_to_fight_scene()
+        self._ctrl:go_to_fight_scene()
     end)
 end
 
@@ -156,8 +157,9 @@ embattle_view.init_lv_item = function(self, item, index)
 	for i = 1, 3 do
 		local cur_index = i + 3 * index
 		local cur_monster = {}
+		local monster_img_key = "monster_" .. i .. "_img"
 		if self._can_use_monster_list[cur_index] then
-			cur_monster.head_img = item:getChildByName("monster_" .. i .. "_img")
+			cur_monster.head_img = item:getChildByName(monster_img_key)
 			cur_monster.head_img:loadTexture(self._can_use_monster_list[cur_index].char_img_path)
 			cur_monster.border_img = cur_monster.head_img:getChildByName("border_img")
 			cur_monster.border_img:loadTexture(g_config.sprite["card_border_" .. self._can_use_monster_list[cur_index].rarity])
@@ -166,7 +168,7 @@ embattle_view.init_lv_item = function(self, item, index)
 			self:add_monster_card_event(cur_monster.head_img, cur_index)
 			table.insert(self._card_list, cur_monster.head_img)
 		else
-			cur_monster.head_img = item:getChildByName("monster_" .. i .. "_img")
+			cur_monster.head_img = item:getChildByName(monster_img_key)
 			cur_monster.head_img:setVisible(false)
 		end
 	end
@@ -197,7 +199,7 @@ embattle_view.add_monster_card_event = function(self, img, index)
 			and not self._cur_drag_chesspiece then
 
 			self._is_chesspiece_from_arena = false
-			self._cur_drag_chesspiece = self:create_chesspiece(self._can_use_monster_list[index],index)
+			self._cur_drag_chesspiece = self:create_chesspiece(self._can_use_monster_list[index], index)
 			node.listener:setSwallowTouches(true)
 		end
 
@@ -261,7 +263,7 @@ embattle_view.select_card = function(self, card)
 	local selected_sp = cc.Sprite:create(g_config.sprite.selected)
 	selected_sp:setName("selected_sp")
 	selected_sp:setScale(1.5)
-	card:addChild(selected_sp, uitool:top_z_order())
+	card:addChild(selected_sp, uitool.top_z_order)
 	card.selected = true
 	selected_sp:setPosition(uitool:get_node_center_position(card))
 end
@@ -305,7 +307,7 @@ embattle_view.create_chesspiece = function(self, monster, index)
 
 	local chesspiece = chesspiece_pool_manager:instance():get(monster, index)
 
-	self.hex_node:addChild(chesspiece, uitool:bottom_z_order())
+	self.hex_node:addChild(chesspiece, uitool.bottom_z_order)
 
 	return chesspiece
 end
@@ -335,11 +337,11 @@ end
 embattle_view.reset_select_hex_effect = function(self)
 	self.highlight_border_sp:cleanup()
 	self.selected_sp:cleanup()
-	self.highlight_border_sp:setPosition(uitool:far_away())
+	self.highlight_border_sp:setPosition(uitool.far_away_ccp)
 	self.highlight_border_sp:setOpacity(255)
 	self.highlight_border_sp:setScaleX(0.55)
 	self.highlight_border_sp:setScaleY(0.6)
-	self.selected_sp:setPosition(uitool:far_away())
+	self.selected_sp:setPosition(uitool.far_away_ccp)
 	self.selected_sp:setOpacity(255)
 end
 
@@ -352,7 +354,7 @@ embattle_view.add_draged_chesspiece_to_arena = function(self, add_to_team, card)
 
 	self._target_node.chesspiece = self._cur_drag_chesspiece
 	self._cur_drag_chesspiece:setPosition(self._target_node:getPosition())
-	self._cur_drag_chesspiece:setLocalZOrder(uitool:bottom_z_order())
+	self._cur_drag_chesspiece:setLocalZOrder(uitool.bottom_z_order)
 	self._cur_drag_chesspiece.arena_cell = self._target_node
 	if add_to_team then
 		table.insert(self._monster_team, self._cur_drag_chesspiece)
@@ -364,7 +366,7 @@ end
 embattle_view.exchange_draged_and_target_chesspiece = function(self)
 	self:put_in_hex_effect()
 
-	self._cur_drag_chesspiece:setLocalZOrder(uitool:bottom_z_order())
+	self._cur_drag_chesspiece:setLocalZOrder(uitool.bottom_z_order)
 
 	local temp_cell = self._cur_drag_chesspiece.arena_cell
 	self._cur_drag_chesspiece.arena_cell = self._target_node
@@ -408,23 +410,26 @@ embattle_view.update_arena = function(self)
 
 	for k, v in pairs(self._enable_gezi) do
 		local pos = gtool:int_2_ccp(k)
-		self["gezi_" .. pos.x .. "_" .. pos.y]:loadTexture(g_config.sprite.gezi_enable)
-		self["gezi_" .. pos.x .. "_" .. pos.y]:setScaleX(0.9)
-		self["gezi_" .. pos.x .. "_" .. pos.y]:setScaleY(0.8)
+		local gezi_wid = self:get_gezi_wid_by_pos(pos)
+		gezi_wid:loadTexture(g_config.sprite.gezi_enable)
+		gezi_wid:setScaleX(0.9)
+		gezi_wid:setScaleY(0.8)
 	end
 
 	for k, v in pairs(self._other_gezi) do
 		if v == 2 then 
 			local pos = gtool:int_2_ccp(k)
-			self["gezi_" .. pos.x .. "_" .. pos.y]:loadTexture(g_config.sprite.gezi_barrier)
-			self["gezi_" .. pos.x .. "_" .. pos.y]:setScale(0.8)
+		local gezi_wid = self:get_gezi_wid_by_pos(pos)
+			gezi_wid:loadTexture(g_config.sprite.gezi_barrier)
+			gezi_wid:setScale(0.8)
 		end
 	end
 
 	for k, v in pairs(self._enemy_team) do
 		local chesspiece = self:create_chesspiece(v, 300 + v:get_id())
 		local pos = v:get_start_pos()
-		chesspiece:setPosition(self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition())
+		local gezi_key = "gezi_" .. pos.x .. "_" .. pos.y
+		chesspiece:setPosition(self[gezi_key]:getPosition())
 	end
 
 end
@@ -436,7 +441,7 @@ embattle_view.add_arena_listener = function(self)
 		if uitool:is_touch_in_node_rect(node, touch, event ,0.8) then
 			if node.chesspiece then
 				self._cur_drag_chesspiece = node.chesspiece
-				self._cur_drag_chesspiece:setLocalZOrder(uitool:top_z_order())
+				self._cur_drag_chesspiece:setLocalZOrder(uitool.top_z_order)
 				self._is_chesspiece_from_arena = true
 			end
 		end
@@ -472,7 +477,7 @@ embattle_view.add_arena_listener = function(self)
 					self:remove_one_chesspiece_from_arena(self._cur_drag_chesspiece)
 				else
 					self._cur_drag_chesspiece:setPosition(self._cur_drag_chesspiece.arena_cell:getPosition())
-					self._cur_drag_chesspiece:setLocalZOrder(uitool:bottom_z_order())
+					self._cur_drag_chesspiece:setLocalZOrder(uitool.bottom_z_order)
 				end
 			elseif self._cur_drag_chesspiece and self._target_node then
 				--判断如果该位置已经有棋子，那么就交换
@@ -488,7 +493,7 @@ embattle_view.add_arena_listener = function(self)
 					self:remove_one_chesspiece_from_arena(self._cur_drag_chesspiece)
 				elseif node:getTag() == self._target_node:getTag() then
 					self._cur_drag_chesspiece:setPosition(self._cur_drag_chesspiece.arena_cell:getPosition())
-					self._cur_drag_chesspiece:setLocalZOrder(uitool:bottom_z_order())
+					self._cur_drag_chesspiece:setLocalZOrder(uitool.bottom_z_order)
 				end
 			end
 			self._cur_drag_chesspiece = nil
@@ -496,7 +501,6 @@ embattle_view.add_arena_listener = function(self)
 	end
 
 	local listener = cc.EventListenerTouchOneByOne:create()
-	--listener:setSwallowTouches(true)
 	listener:registerScriptHandler(touch_began, cc.Handler.EVENT_TOUCH_BEGAN)
 	listener:registerScriptHandler(touch_moved, cc.Handler.EVENT_TOUCH_MOVED)
 	listener:registerScriptHandler(touch_ended, cc.Handler.EVENT_TOUCH_ENDED)
@@ -505,8 +509,9 @@ embattle_view.add_arena_listener = function(self)
 	--注意！！！如果一个界面监听的事件很多会导致降帧！
 	for k, v in pairs(self._enable_gezi) do
 		local pos = gtool:int_2_ccp(k)
-		self["gezi_" .. pos.x .. "_" .. pos.y].listener = listener:clone()
-		self._event_dispatcher:addEventListenerWithSceneGraphPriority(self["gezi_" .. pos.x .. "_" .. pos.y].listener, self["gezi_" .. pos.x .. "_" .. pos.y])
+		local gezi_wid = self:get_gezi_wid_by_pos(pos)
+		gezi_wid.listener = listener:clone()
+		self._event_dispatcher:addEventListenerWithSceneGraphPriority(gezi_wid.listener, gezi_wid)
 	end
 
 	self:pause_arena_listener()
@@ -536,20 +541,26 @@ end
 embattle_view.reset_arena = function(self)
 	for k, v in pairs(self._enable_gezi) do
 		local pos = gtool:int_2_ccp(k)
-		self["gezi_" .. pos.x .. "_" .. pos.y].chesspiece = nil
-		self["gezi_" .. pos.x .. "_" .. pos.y]:loadTexture(g_config.sprite.gezi_disable)
-		self["gezi_" .. pos.x .. "_" .. pos.y]:setScale(1)
+		local gezi_wid = self:get_gezi_wid_by_pos(pos)
+		gezi_wid.chesspiece = nil
+		gezi_wid:loadTexture(g_config.sprite.gezi_disable)
+		gezi_wid:setScale(1)
 	end
 
 	for k, v in pairs(self._other_gezi) do
 		local pos = gtool:int_2_ccp(k)
-		self["gezi_" .. pos.x .. "_" .. pos.y]:loadTexture(g_config.sprite.gezi_disable)
-		self["gezi_" .. pos.x .. "_" .. pos.y]:setScale(1)
+		local gezi_wid = self:get_gezi_wid_by_pos(pos)
+		gezi_wid:loadTexture(g_config.sprite.gezi_disable)
+		gezi_wid:setScale(1)
 	end
 end
 
 embattle_view.put_all_chesspiece = function(self)
 	chesspiece_pool_manager:recycle_all()
+end
+
+embattle_view.get_gezi_wid_by_pos = function(self, pos)
+	return self["gezi_" .. pos.x .. "_" .. pos.y]
 end
 ------------右边战场部分结束------------
 

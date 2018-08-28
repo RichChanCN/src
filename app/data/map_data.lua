@@ -1,7 +1,7 @@
 local map_data = {}
 
 map_data.get_map_data_by_chapter_and_level = function(self, chapter_num, level_num)
-	local raw_data = g_config.Map[chapter_num][level_num]
+	local raw_data = g_config.map[chapter_num][level_num]
 	local ret_data = {}
 
 	ret_data.chapter_num = chapter_num
@@ -37,11 +37,11 @@ map_data.get_map_data_by_chapter_and_level = function(self, chapter_num, level_n
 end
 
 map_data.get_reward_by_chapter_and_level = function(self, chapter_num, level_num)
-	return g_config.Map[chapter_num][level_num].reward
+	return g_config.map[chapter_num][level_num].reward
 end
 
 map_data.get_barrier_model_by_chapter_and_level = function(self, chapter_num, level_num)
-	return g_config.Map[chapter_num][level_num].barrier_model
+	return g_config.map[chapter_num][level_num].barrier_model
 end
 
 return map_data

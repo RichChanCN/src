@@ -67,13 +67,13 @@ view_base.open_view = function(self, ...)
 	if self._view_pos then
 		self._root:setPosition(self._view_pos)
 	else
-		self._root:setPosition(uitool:zero())
+		self._root:setPosition(uitool.zero_ccp)
 	end
 end
 
 view_base.close_view = function(self)
 	self:on_close()
-	self._root:setPosition(uitool:far_away())
+	self._root:setPosition(uitool.far_away_ccp)
 end
 
 view_base.is_inited = function(self)

@@ -59,7 +59,7 @@ skill_class.play = function(self)
 		if self._particle_scale then
 			particle:setScale(self._particle_scale)
 		end
-		particle:setGlobalZOrder(uitool:mid_z_order())
+		particle:setGlobalZOrder(uitool.mid_z_order)
 		particle:setPosition(self._particle_pos)
 		if self._range < 1 then
 			pve_game_ctrl:instance():get_scene():get_particle_node():addChild(particle)

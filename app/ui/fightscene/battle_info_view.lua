@@ -108,7 +108,7 @@ battle_info_view.init_right_bottom_events = function(self)
     end)
 
     uitool:make_img_to_button_no_scale(self.exit_img, function()
-        self:get_ctrl():go_to_main_scene()
+        self._ctrl:go_to_main_scene()
     end)
 end
 
@@ -175,7 +175,7 @@ battle_info_view.add_queue_item_event = function(self, img)
         local node = event:getCurrentTarget()
         if pve_game_ctrl:instance():is_wait_order() then
             if uitool:is_touch_in_node_rect(node, touch, event) then
-                self:get_ctrl():show_other_around_info(node.monster)
+                self._ctrl:show_other_around_info(node.monster)
                 return true
             end
         end
@@ -183,7 +183,7 @@ battle_info_view.add_queue_item_event = function(self, img)
     end
 
     local touch_ended = function(touch, event)
-        self:get_ctrl():hide_other_around_info()
+        self._ctrl:hide_other_around_info()
     end
 
     img.listener = cc.EventListenerTouchOneByOne:create()
@@ -293,7 +293,7 @@ battle_info_view.update_skill_image = function(self)
             local particle = cc.ParticleSystemQuad:create(g_config.Particle.skill_will_use)
             particle:setName("skillicon")
             particle:setScale(0.6)
-            particle:setGlobalZOrder(uitool:mid_z_order())
+            particle:setGlobalZOrder(uitool.mid_z_order)
             particle:setPosition(uitool:get_node_center_position(self.skill_sp))
             self.skill_sp:addChild(particle)
             self.skill_sp.particle = particle
@@ -303,7 +303,7 @@ battle_info_view.update_skill_image = function(self)
             local particle = cc.ParticleSystemQuad:create(g_config.Particle.skill_can_use)
             particle:setName("skillicon")
             particle:setScale(1)
-            particle:setGlobalZOrder(uitool:mid_z_order())
+            particle:setGlobalZOrder(uitool.mid_z_order)
             particle:setPosition(uitool:get_node_center_position(self.skill_sp))
             self.skill_sp:addChild(particle)
             self.skill_sp.particle = particle

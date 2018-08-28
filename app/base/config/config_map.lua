@@ -1,6 +1,6 @@
 g_config = g_config or {}
 
-g_config.Map = 
+g_config.map = 
 {	-- 章节编号
 	[1] = 
 	{

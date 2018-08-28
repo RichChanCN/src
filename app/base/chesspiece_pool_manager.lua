@@ -37,22 +37,23 @@ chesspiece_pool_manager.put = function(self, chesspiece)
 end
 
 chesspiece_pool_manager.create_new_chesspiece = function(self, monster, index)
+	monster_cfg = gtool:get_monster_cfg_by_id(monster.id)
 	local chesspiece = cc.Sprite:create(g_config.sprite.chesspiece_mask)
 	chesspiece:setScale(0.5)
 	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}
 	chesspiece:setBlendFunc(blendfunc)
 	
-	chesspiece.face_sp = cc.Sprite:create(gtool:get_monster_cfg_by_id(monster.id).char_img_path)
+	chesspiece.face_sp = cc.Sprite:create(monster_cfg.char_img_path)
 	blendfunc = {src = gl.ONE_MINUS_DST_ALPHA, dst = gl.DST_ALPHA}
 	chesspiece.face_sp:setBlendFunc(blendfunc)
 	chesspiece.face_sp:setName("face_sp")
 
-	chesspiece.hex_border = cc.Sprite:create(g_config.sprite["hex_border_" .. gtool:get_monster_cfg_by_id(monster.id).rarity])
+	chesspiece.hex_border = cc.Sprite:create(g_config.sprite["hex_border_" .. monster_cfg.rarity])
 	chesspiece.hex_border:setScale(2.0)
 	chesspiece.hex_border:setName("hex_border")
-	chesspiece:addChild(chesspiece.hex_border, uitool:bottom_z_order() + 5)
+	chesspiece:addChild(chesspiece.hex_border, uitool.bottom_z_order + 5)
 	chesspiece.hex_border:setPosition(uitool:get_node_center_position(chesspiece))
-	chesspiece:addChild(chesspiece.face_sp, uitool:bottom_z_order())
+	chesspiece:addChild(chesspiece.face_sp, uitool.bottom_z_order)
 	chesspiece.face_sp:setPosition(uitool:get_node_center_position(chesspiece))
 	
 	chesspiece:setName("chesspiece_" .. index)
@@ -68,6 +69,7 @@ chesspiece_pool_manager.create_new_chesspiece = function(self, monster, index)
 end
 
 chesspiece_pool_manager.update_chesspiece = function(self, chesspiece, monster, index)
+	monster = gtool:get_monster_cfg_by_id(monster.id)
 	chesspiece.face_sp:setTexture(monster.char_img_path)
 	chesspiece.hex_border:setTexture(g_config.sprite["hex_border_" .. monster.rarity])
 	chesspiece:setName("chesspiece_" .. index)

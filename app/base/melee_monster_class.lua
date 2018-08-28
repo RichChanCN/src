@@ -7,12 +7,12 @@ end
 melee_monster_class.can_counter_attack = function(self, murderer)
 	return self:can_attack()
 			and murderer:is_melee() 
-			and self:is_near(gtool:ccp_2_int(murderer._cur_pos)) 
+			and self:is_near(gtool:ccp_2_int(murderer._cur_attr.pos)) 
 			and not(self:is_be_side_attacked(murderer) or self:is_be_back_attacked(murderer))
 end
 
 melee_monster_class.attack = function(self, target, distance)	
-	if not self:is_near(gtool:ccp_2_int(target._cur_pos)) then
+	if not self:is_near(gtool:ccp_2_int(target._cur_attr.pos)) then
 		self:move_and_attack(target)
 	else
 		self:attack_directly(target, distance)

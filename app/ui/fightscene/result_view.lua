@@ -17,13 +17,13 @@ result_view.RESOURCE_BINDING = {
 
 result_view.init_events = function(self)
     uitool:make_img_to_button(self.left_btn_img, function(sender)
-    	self:get_ctrl():close_result_view()
-    	self:get_ctrl():go_to_main_scene()
+    	self._ctrl:close_result_view()
+    	self._ctrl:go_to_main_scene()
     end)
 
     uitool:make_img_to_button(self.right_btn_img, function(sender)
-    	self:get_ctrl():close_result_view()
-    	self:get_ctrl():go_to_main_scene()
+    	self._ctrl:close_result_view()
+    	self._ctrl:go_to_main_scene()
     end)
 end
 
@@ -34,10 +34,11 @@ end
 
 result_view.update_view = function(self)
     for i = 1, 3 do
+        local star_key = "star_" .. i
         if not (i > self._result.star_num) then
-            self["star_" .. i]:loadTexture(g_config.sprite.result_star_got)
+            self[star_key]:loadTexture(g_config.sprite.result_star_got)
         else
-            self["star_" .. i]:loadTexture(g_config.sprite.result_star_gray)
+            self[star_key]:loadTexture(g_config.sprite.result_star_gray)
         end
     end
     local last_star_num = game_data_ctrl:instance():get_star_num_by_chapter_and_level(self._result.chapter_num, self._result.level_num)

@@ -9,7 +9,6 @@ range_monster_class.can_counter_attack = function(self, murderer)
 end
 
 range_monster_class.attack = function(self, target, distance)
-
 	self:attack_directly(target, distance)
 end
 
@@ -18,19 +17,11 @@ range_monster_class.use_skill = function(self, target_pos_num)
 end
 
 range_monster_class.nothing_can_do = function(self)
-	if pve_game_ctrl:instance():get_auto() then
-		return true
-	end
-
-	return false
+		return pve_game_ctrl:instance():get_auto()
 end
 
 range_monster_class.can_reach_and_attack = function(self, num)
-	if self:can_attack() then
-		return true
-	else
-		return false
-	end
+	return self:can_attack()
 end
 
 range_monster_class.ai_attack = function(self, target_enemy, distance)

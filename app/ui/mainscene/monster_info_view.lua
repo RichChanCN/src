@@ -80,7 +80,7 @@ end
 
 monster_info_view.init_events = function(self)
 	self.back_btn:addClickEventListener(function(sender)
-        self:get_ctrl():close_monster_info_view()
+        self._ctrl:close_monster_info_view()
     end)
 
     self.left_btn:addClickEventListener(function(sender)
@@ -163,9 +163,11 @@ monster_info_view.create_model = function(self, data)
 		model:setScale(4.5)
         model:setRotation3D(cc.vec3(0, -90, 0))
         if data.move_type == g_config.monster_move_type.FLY then
-            model:setPosition(uitool:get_node_center_position(self.model_panel))
+            local center_pos = uitool:get_node_center_position(self.model_panel)
+            model:setPosition(center_pos)
         else
-            model:setPosition(uitool:get_node_bottom_center_position(self.model_panel))
+            local center_pos = uitool:get_node_bottom_center_position(self.model_panel)
+            model:setPosition(center_pos)
         end
         
         self.animation = cc.Animation3D:create(data.model_path)
