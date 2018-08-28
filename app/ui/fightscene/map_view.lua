@@ -83,25 +83,25 @@ map_view.beginAnimation = function(self)
 end
 
 map_view.cameraAnimation = function(self)
-	local ac1 = self:get_root():runAction(cc.ScaleTo:create(self._ctrl.WAIT_TIME + 3, 0.75))
-	local ac2 = self:get_root():runAction(cc.ScaleTo:create(self._ctrl.ACTION_TIME, 1))
+	local ac1 = self._root:runAction(cc.ScaleTo:create(self._ctrl.WAIT_TIME + 3, 0.75))
+	local ac2 = self._root:runAction(cc.ScaleTo:create(self._ctrl.ACTION_TIME, 1))
 	local callback = cc.CallFunc:create(handler(self._ctrl, self._ctrl.start_game))
 
 	local seq = cc.Sequence:create(ac1, ac2, callback)
 		
 	self:show_mask()
-	self:get_root():runAction(seq)
+	self._root:runAction(seq)
 end
 
 map_view.endAnimation = function(self)
 	self:hide_guide()
-	local ac1 = self:get_root():runAction(cc.ScaleTo:create(self._ctrl.WAIT_TIME, 1))
-	local ac2 = self:get_root():runAction(cc.ScaleTo:create(self._ctrl.ACTION_TIME, 0.75))
+	local ac1 = self._root:runAction(cc.ScaleTo:create(self._ctrl.WAIT_TIME, 1))
+	local ac2 = self._root:runAction(cc.ScaleTo:create(self._ctrl.ACTION_TIME, 0.75))
 	local callback = cc.CallFunc:create(handler(self._ctrl, self._ctrl.open_result_view))
 
 	local seq = cc.Sequence:create(ac1, ac2, callback)
 		
-	self:get_root():runAction(seq)
+	self._root:runAction(seq)
 	self:hide_mask()
 	self._ctrl:close_battle_info_view()
 end

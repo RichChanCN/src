@@ -42,6 +42,7 @@ monster_class.ctor = function(self, data, team_side, arena_pos, level)
 	self._team_side				= team_side or monster_class.TeamSide.NONE
 	self._start_pos 			= arena_pos
 	self._cur_pos 				= arena_pos
+	self._cur_pos_num 			= gtool:ccp_2_int(arena_pos)
 	self._cur_towards			= g_config.towards[team_side]
 	self._status 				= g_config.monster_status.ALIVE
 	self._has_waited			= false
@@ -88,6 +89,10 @@ monster_class.get_cur_pos = function(self)
 	return self._cur_pos
 end
 
+monster_class.set_cur_pos = function(self, arena_pos)
+	self._cur_pos = arena_pos
+	self._cur_pos_num = gtool:ccp_2_int(self._cur_pos)
+end
 monster_class.get_cur_hp = function(self)
 	return self._cur_attr.hp
 end
@@ -283,12 +288,10 @@ monster_class.is_be_side_attacked = function(self, murderer)
 end
 
 monster_class.is_near = function(self, num)
-	local cur = self:get_cur_pos_num()
-
 	local temp_table = gtool:get_towards_tbl(num)
 
 	for k, v in pairs(temp_table) do
-		if cur == num + v then
+		if self._cur_pos_num == num + v then
 			return true
 		end
 	end
@@ -437,9 +440,9 @@ end
 monster_class.move_to = function(self, arena_pos, attack_target, skill_target_pos)
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	local cb = function()
-		self._cur_pos = arena_pos
+		self:set_cur_pos(arena_pos)
 		if attack_target then
-			local distance = self:get_distance_to_pos(attack_target:get_cur_pos_num(), true)
+			local distance = self:get_distance_to_pos(attack_target._cur_pos_num, true)
 			self:attack(attack_target, distance)
 		elseif skill_target_pos then
 			self:use_skill(skill_target_pos)
@@ -453,7 +456,7 @@ monster_class.move_to = function(self, arena_pos, attack_target, skill_target_po
 		end
 	end
 	local callback = cc.CallFunc:create(handler(self, cb))
-	if gtool:ccp_2_int(arena_pos) == self:get_cur_pos_num() then
+	if gtool:ccp_2_int(arena_pos) == self._cur_pos_num then
 		cb()
 	else
 		self:repeat_animation("walk")
@@ -530,7 +533,7 @@ monster_class.be_attacked = function(self, murderer, is_counter_attack, distance
 	if self:minus_hp(damage, damage_type) then
 		self:add_anger()
 		local cb = function()
-			local cur_num = self:get_cur_pos_num()
+			local cur_num = self._cur_pos_num
 			local to_num = gtool:ccp_2_int(murderer._cur_pos)
 			if (not is_counter_attack) and self:can_counter_attack(murderer) then
 				self:toward_to_int_pos(cur_num, to_num)
@@ -546,7 +549,7 @@ monster_class.be_attacked = function(self, murderer, is_counter_attack, distance
 end
 
 monster_class.counter_attack = function(self, target)
-	local cur_num = self:get_cur_pos_num()
+	local cur_num = self._cur_pos_num
 	local to_num = gtool:ccp_2_int(target._cur_pos)
 	self:toward_to_int_pos(cur_num, to_num)
 	self:do_animation("attack1")
@@ -555,21 +558,25 @@ monster_class.counter_attack = function(self, target)
 end
 
 monster_class.be_affected_by_skill = function(self, skill, is_last)
-	if self:is_enemy(skill:get_caster()) then
+	local caster = skill:get_caster()
+	local debuff = skill:get_debuff()
+	local buff   = skill:get_buff()
+
+	if self:is_enemy(caster) then
 		if skill:get_damage() > 0 then
 			local damage, damage_type = self:get_skill_damage(skill)
 			self:minus_hp(damage, damage_type, true)
 		end
-		if #skill:get_debuff() > 0 then
-			self:add_debuff(skill:get_debuff())
+		if #debuff > 0 then
+			self:add_debuff(debuff)
 		end
 	else
 		if skill:get_healing() > 0 then
 			local healing, htype = self:get_final_healing(skill)
 			self:add_hp(healing, htype)
 		end
-		if #skill:get_buff() > 0 then
-			self:add_buff(skill:get_buff())
+		if #buff > 0 then
+			self:add_buff(buff)
 		end
 	end
 
@@ -645,7 +652,10 @@ monster_class.get_final_healing = function(self, skill)
 end
 
 monster_class.get_skill_damage = function(self, skill)
-	local damage = self:get_damage_after_defense(skill:get_damage(), skill:get_caster())
+	local skill_damage = skill:get_damage()
+	local caster = skill:get_caster()
+
+	local damage = self:get_damage_after_defense(skill_damage, caster)
 
 	return self:get_final_damage(damage), g_config.damage_level.SKILL
 
@@ -804,7 +814,7 @@ monster_class.attack_directly = function(self, target, distance)
 	end
 
 	self:add_anger()
-	local cur_num = self:get_cur_pos_num()
+	local cur_num = self._cur_pos_num
 	local to_num = gtool:ccp_2_int(target._cur_pos)
 	self:toward_to_int_pos(cur_num, to_num)
 	self:do_animation("attack1")
@@ -814,13 +824,14 @@ end
 monster_class.use_skill_directly = function(self, target_pos_num)
 		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 		self._skill:play()
-		self:minus_anger(self._skill:get_cost())
+		local cost = self._skill:get_cost()
+		self:minus_anger(cost)
 		
 		local cb = function()
 			self._skill:use(target_pos_num)
 		end
 		local callback = cc.CallFunc:create(cb)
-		self:toward_to_int_pos(self:get_cur_pos_num(), target_pos_num)
+		self:toward_to_int_pos(self._cur_pos_num, target_pos_num)
 		self:do_animation("skill", callback)
 end
 
@@ -868,7 +879,7 @@ monster_class.move_follow_path = function(self, arena_pos, callback_final)
 	table.insert(ac_table, callback_final)
 
 	local all_seq = cc.Sequence:create(unpack(ac_table))
-	self:toward_to_int_pos(self:get_cur_pos_num(), path[#path])
+	self:toward_to_int_pos(self._cur_pos_num, path[#path])
 	self.node:runAction(all_seq)
 end
 
@@ -885,18 +896,18 @@ monster_class.get_distance_info = function(self)
 		steps = 8 
 	end
 
-    return gtool:bfs_distance(self:get_cur_pos_num(), steps)
+    return gtool:bfs_distance(self._cur_pos_num, steps)
 end
 
 monster_class.create_attack_particle = function(self, target)
 	local particle = cc.ParticleSystemQuad:create(self._attack_particle)
 	particle:setScale(0.3)
 	particle:setName("attack")
-	local start_pos = pve_game_ctrl:instance():get_position_by_int(self:get_cur_pos_num())
+	local start_pos = pve_game_ctrl:instance():get_position_by_int(self._cur_pos_num)
 	particle:setPosition(start_pos.x, start_pos.y)
 	local node = pve_game_ctrl:instance():get_map_top_arena_node()
 	node:addChild(particle)
-	local end_pos = pve_game_ctrl:instance():get_position_by_int(target:get_cur_pos_num())
+	local end_pos = pve_game_ctrl:instance():get_position_by_int(target._cur_pos_num)
 	local ac1 = particle:runAction(cc.MoveTo:create(0.5, cc.p(start_pos.x, start_pos.y + 30)))
 	particle:stopAction(ac1)
 	local ac2 = particle:runAction(cc.MoveTo:create(0.3, cc.p(end_pos.x, end_pos.y + 15)))
@@ -921,7 +932,7 @@ monster_class.get_around_info = function(self, is_to_show)
 
 	if steps > 0 then
 		
-		self._can_reach_area_info = self:get_can_reach_area_info(self:get_cur_pos_num(), map_info, steps)
+		self._can_reach_area_info = self:get_can_reach_area_info(self._cur_pos_num, map_info, steps)
 
 		if self:is_fly() then
 			self._fly_path = self:get_fly_path()
@@ -980,7 +991,7 @@ monster_class.get_fly_path = function(self)
 		steps = 8 
 	end
 
-    return gtool:bfs_path(self:get_cur_pos_num(), steps, path_find_help)
+    return gtool:bfs_path(self._cur_pos_num, steps, path_find_help)
 end
 
 monster_class.get_path_info_to_target = function(self, map_info, target)
@@ -1013,7 +1024,7 @@ monster_class.get_path_info_to_target = function(self, map_info, target)
         return false
     end
 
-    find_gezi(self:get_cur_pos_num())
+    find_gezi(self._cur_pos_num)
     for k, v in pairs(area_table) do
         table.insert(temp_list, k)
     end
@@ -1049,7 +1060,7 @@ monster_class.get_path_to_pos = function(self, num, path_table)
 		last_geizi = self._can_reach_area_info[num]
 	end
 
-	if self:get_cur_pos_num() == last_geizi then
+	if self._cur_pos_num == last_geizi then
 		return path_table
 	else
 		return self:get_path_to_pos(last_geizi, path_table)
@@ -1160,7 +1171,7 @@ monster_class.run_ai = function(self)
 		local pos_num = gtool:ccp_2_int(target_enemy._cur_pos)
 		local distance = self:get_distance_to_pos(pos_num)
 		if self:can_use_skill() then
-			return self:use_skill(target_enemy:get_cur_pos_num())
+			return self:use_skill(target_enemy._cur_pos_num)
 		end
 		self:ai_attack(target_enemy, distance)
 
@@ -1245,12 +1256,12 @@ monster_class.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_inf
 end
 
 monster_class.get_good_pos_to_attack = function(self, enemy, distance)
-	local enemy_direction = self:toward_to_int_pos(self:get_cur_pos_num(), enemy:get_cur_pos_num(), true)
+	local enemy_direction = self:toward_to_int_pos(self._cur_pos_num, enemy._cur_pos_num, true)
 	local pos_num
 	if distance < 3 then
-		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(), enemy_direction + 3, 2)
+		pos_num = self:get_pos_num_by_direction_and_steps(self._cur_pos_num, enemy_direction + 3, 2)
 	else
-		pos_num = self:get_pos_num_by_direction_and_steps(self:get_cur_pos_num(), enemy_direction, distance - 5)
+		pos_num = self:get_pos_num_by_direction_and_steps(self._cur_pos_num, enemy_direction, distance - 5)
 	end
 
 	if self:can_move_to_pos_num(pos_num) then
@@ -1287,7 +1298,7 @@ monster_class.get_path_to_pos_plus = function(self, num, all_path, path_table)
 		last_geizi = all_path[num]
 	end
 
-	if self:get_cur_pos_num() == last_geizi then
+	if self._cur_pos_num == last_geizi then
 		return path_table
 	else
 		return self:get_path_to_pos_plus(last_geizi, all_path, path_table)
@@ -1296,7 +1307,7 @@ end
 
 monster_class.get_back_first_near_pos_num = function(self, num, target_toward)
 	local help = function (a)
-		return self:can_move_to_pos_num(a) or a == self:get_cur_pos_num()
+		return self:can_move_to_pos_num(a) or a == self._cur_pos_num
 	end
 
 	local temp_table = gtool:get_towards_tbl(num)

@@ -33,11 +33,10 @@ chesspiece_pool_manager.put = function(self, chesspiece)
 	if chesspiece:getParent() then
 		chesspiece:removeFromParent()
 	end
-
 end
 
 chesspiece_pool_manager.create_new_chesspiece = function(self, monster, index)
-	monster_cfg = gtool:get_monster_cfg_by_id(monster.id)
+	local monster_cfg = gtool:get_monster_cfg_by_id(monster.id)
 	local chesspiece = cc.Sprite:create(g_config.sprite.chesspiece_mask)
 	chesspiece:setScale(0.5)
 	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}

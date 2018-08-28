@@ -267,7 +267,8 @@ pve_game_ctrl.update_map_info = function(self)
 	
 	local monsters = self:get_all_alive_monsters()
 	for k, v in pairs(monsters) do
-		self._map_info[gtool:ccp_2_int(v:get_cur_pos())] = v
+		local pos = v:get_cur_pos()
+		self._map_info[gtool:ccp_2_int(pos)] = v
 	end
 end
 

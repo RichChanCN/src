@@ -51,7 +51,8 @@ battle_info_view.init_events = function(self)
             if not self.queue_first.monster:get_skill():is_need_target() then
                 pve_game_ctrl:instance():run_game(pve_game_ctrl.ORDER.USE_SKILL)
             else
-                pve_game_ctrl:instance():set_is_use_skill(not pve_game_ctrl:instance():get_is_use_skill())
+                local is_use_skill = not pve_game_ctrl:instance():get_is_use_skill()
+                pve_game_ctrl:instance():set_is_use_skill(is_use_skill)
                 self:update_skill_image()
             end
         end
@@ -217,7 +218,8 @@ battle_info_view.update_right_bottom_queue = function(self, is_wait)
     self:update_lv_item(self.animate_card, self.queue_first.monster, true)
     
     self.left_bottom_img:addChild(self.animate_card)
-    self.animate_card:setPosition(self.queue_first:getPosition())
+    local px, py = self.queue_first:getPosition()
+    self.animate_card:setPosition(px, py)
     local x, y = self.animate_card:getPosition()
     self.animate_card:runAction(cc.JumpTo:create(0.3, cc.p(x + 700, y), 300, 1))
     self.animate_card:runAction(cc.FadeOut:create(0.3))
@@ -294,12 +296,14 @@ battle_info_view.update_skill_image = function(self)
             particle:setName("skillicon")
             particle:setScale(0.6)
             particle:setGlobalZOrder(uitool.mid_z_order)
-            particle:setPosition(uitool:get_node_center_position(self.skill_sp))
+            local x, y = uitool:get_node_center_position(self.skill_sp)
+            particle:setPosition(x, y)
             self.skill_sp:addChild(particle)
             self.skill_sp.particle = particle
             self.skill_sp:setVisible(true)
         else
-            self.skill_sp:setTexture(self.queue_first.monster:get_skill():get_img_path())
+            local img_path = self.queue_first.monster:get_skill():get_img_path()
+            self.skill_sp:setTexture(img_path)
             local particle = cc.ParticleSystemQuad:create(g_config.Particle.skill_can_use)
             particle:setName("skillicon")
             particle:setScale(1)

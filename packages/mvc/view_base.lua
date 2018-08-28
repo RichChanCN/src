@@ -17,10 +17,6 @@ view_base.new = function(self, name, root, ctrl)
 	return self
 end
 
-view_base.get_ctrl = function(self)
-	return self._ctrl
-end
-
 view_base.get_root = function(self)
 	return self._root
 end
