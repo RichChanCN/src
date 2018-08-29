@@ -293,13 +293,14 @@ battle_info_view.update_skill_image = function(self)
             self.skill_sp:removeChildByName("skillicon")
         end
 
+        local pos = uitool:get_node_center_position(self.skill_sp)
+        
         if pve_game_ctrl:instance():get_is_use_skill() then
             local particle = cc.ParticleSystemQuad:create(g_config.Particle.skill_will_use)
             particle:setName("skillicon")
             particle:setScale(0.6)
             particle:setGlobalZOrder(uitool.mid_z_order)
-            local x, y = uitool:get_node_center_position(self.skill_sp)
-            particle:setPosition(x, y)
+            particle:setPosition(pos)
             self.skill_sp:addChild(particle)
             self.skill_sp.particle = particle
             self.skill_sp:setVisible(true)
@@ -310,7 +311,7 @@ battle_info_view.update_skill_image = function(self)
             particle:setName("skillicon")
             particle:setScale(1)
             particle:setGlobalZOrder(uitool.mid_z_order)
-            particle:setPosition(uitool:get_node_center_position(self.skill_sp))
+            particle:setPosition(pos)
             self.skill_sp:addChild(particle)
             self.skill_sp.particle = particle
             self.skill_sp:setVisible(true)
