@@ -438,7 +438,7 @@ end
 ----------------------------------主动触发-----------------------------------------
 -------------------------------------------------------------------------------------------
 monster_class.move_to = function(self, arena_pos, attack_target, skill_target_pos)
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+	
 	local cb = function()
 		self:set_cur_pos(arena_pos)
 		if attack_target then
@@ -465,7 +465,7 @@ monster_class.move_to = function(self, arena_pos, attack_target, skill_target_po
 end
 
 monster_class.attack = function(self, target, distance)
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+	
 	
 	if self:is_melee() and not self:is_near(target._cur_pos_num) then
 		self:move_and_attack(target)
@@ -484,7 +484,7 @@ monster_class.wait = function(self, is_auto)
 	else
 		self:change_monster_status(g_config.monster_status.WAITING)
 		self._has_waited = true
-		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+		
 		pve_game_ctrl:instance():next_monster_activate(true)
 	end
 end
@@ -492,7 +492,7 @@ end
 monster_class.defend = function(self)
 	self:change_monster_status(g_config.monster_status.DEFEND)
 	self:add_buff({g_config.buff.defend})
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+	
 	pve_game_ctrl:instance():next_monster_activate()
 end
 
@@ -808,7 +808,7 @@ end
 --------------------------------辅助函数--------------------------------------
 ------------------------------------------------------------------------------------
 monster_class.attack_directly = function(self, target, distance)
-	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+	
 	if self._attack_particle then
 		self:create_attack_particle(target)
 	end
@@ -822,7 +822,7 @@ monster_class.attack_directly = function(self, target, distance)
 end
 
 monster_class.use_skill_directly = function(self, target_pos_num)
-		pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
+		
 		self._skill:play()
 		local cost = self._skill:get_cost()
 		self:minus_anger(cost)

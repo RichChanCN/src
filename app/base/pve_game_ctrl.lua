@@ -131,6 +131,7 @@ pve_game_ctrl.start_game = function(self)
 end
 
 pve_game_ctrl.run_game = function(self, order, param1, param2)
+	self:change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	local action = pve_game_ctrl.OPERATE[order]
 	action(param1, param2)
 end
@@ -198,9 +199,12 @@ pve_game_ctrl.alive_monster_enter_new_round = function(self)
 end
 
 pve_game_ctrl.change_game_status = function(self, status)
-	self._cur_game_status = status
+	if self._cur_game_status ~= status then
+		self._cur_game_status = status
+		self._scene:update_map_view()
+	end
+
 	self:update_map_info()
-	self._scene:update_map_view()
 end
 
 -------------------------------外部控制---------------------------
@@ -229,7 +233,6 @@ end
 
 pve_game_ctrl.request_wait = function(self)
 	self:run_game(pve_game_ctrl.ORDER.WAIT)
-
 end
 
 pve_game_ctrl.request_auto = function(self)
