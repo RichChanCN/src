@@ -2,12 +2,12 @@ local view = require("packages.mvc.view_base")
 
 local monster_info_view = view:instance()
 
-monster_info_view.RESOURCE_BINDING = {
+monster_info_view.RESOURCE_BINDING = 
+{
 	["left_node"]		    = {["varname"] = "left_node"},
     ["info_bg_img"]         = {["varname"] = "info_bg_img"},
     ["title_text"]          = {["varname"] = "title_text"},
     ["back_btn"]            = {["varname"] = "back_btn"},
-
 }
 
 monster_info_view.init_ui = function(self)
@@ -122,7 +122,7 @@ end
 ----------------------------------------------------------------
 
 monster_info_view.update_monster_by_id = function(self, id)
-    self._monster_list[self._cur_index] = game_data_ctrl:instance():get_save_monster_data_by_id(id)
+    self._monster_list[self._cur_index] = game_data_ctrl:instance():get_monster_data_by_id(id)
 end
 
 monster_info_view.upgrade_update = function(self)

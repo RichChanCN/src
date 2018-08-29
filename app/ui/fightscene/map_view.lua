@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local map_view = view:instance()
 
-map_view.RESOURCE_BINDING = {
+map_view.RESOURCE_BINDING = 
+{
     ["map_img"]				= {["varname"] = "map_img"},
     ["arena_show_node"]		= {["varname"] = "arena_show_node"},
     ["arena_bottom_node"]	= {["varname"] = "arena_bottom_node"},
@@ -220,7 +221,8 @@ map_view.create_monster_model = function(self, monster)
 
 	self._model_node_list[monster:get_tag()] = cc.Node:create()
 	self._model_node_list[monster:get_tag()]:retain()
-	
+
+	local path = game_data_ctrl:instance():get_monster_data_by_id(monster.id).model_path
 	local callback = function(model)
 		model:setScale(0.5)
 		local node = self._model_node_list[monster:get_tag()]
@@ -237,12 +239,12 @@ map_view.create_monster_model = function(self, monster)
 		self.model_panel:addChild(node)
 
 		monster.model = model
-		monster.animation = cc.Animation3D:create(gtool:get_monster_cfg_by_id(monster.id).model_path)
+		monster.animation = cc.Animation3D:create(path)
 		monster:reset()
 
 		self._monster_loaded_num = self._monster_loaded_num + 1
 	end
-	cc.Sprite3D:createAsync(gtool:get_monster_cfg_by_id(monster.id).model_path, callback)
+	cc.Sprite3D:createAsync(path, callback)
     
 end
 

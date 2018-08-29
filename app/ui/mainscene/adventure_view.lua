@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local adventure_view = view:instance()
 
-adventure_view.RESOURCE_BINDING = {
+adventure_view.RESOURCE_BINDING = 
+{
     ["back_btn"]			= {["varname"] = "back_btn"},
     ["chapter_sv"]			= {["varname"] = "chapter_sv"},
 	["left_btn"]			= {["varname"] = "left_btn"},

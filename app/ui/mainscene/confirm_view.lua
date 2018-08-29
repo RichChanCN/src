@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local confirm_view = view:instance()
 
-confirm_view.RESOURCE_BINDING = {
+confirm_view.RESOURCE_BINDING = 
+{
     ["close_btn"]			= {["varname"] = "close_btn"},
     ["go_img"]				= {["varname"] = "go_img"},
     ["stage_text"]			= {["varname"] = "stage_text"},

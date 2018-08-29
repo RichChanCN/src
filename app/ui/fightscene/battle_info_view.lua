@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local battle_info_view = view:instance()
 
-battle_info_view.RESOURCE_BINDING = {
+battle_info_view.RESOURCE_BINDING = 
+{
 	["left_bottom_img"]         = {["varname"] = "left_bottom_img"},
     ["right_bottom_node"]       = {["varname"] = "right_bottom_node"},
     ["particle_node"]           = {["varname"] = "particle_node"},
@@ -140,7 +141,8 @@ battle_info_view.update_lv_item = function(self, item, monster, update_only)
     item.child.border_img = item:getChildByName("border_img")
     item.child.level_text = item:getChildByName("level_text")
     
-    item:loadTexture(gtool:get_monster_cfg_by_id(monster.id).char_img_path)
+    local path = game_data_ctrl:instance():get_monster_data_by_id(monster.id).char_img_path
+    item:loadTexture(path)
     item.child.border_img:loadTexture(g_config.sprite["team_card_border_"..monster:get_team_side()])
     item.child.level_text:setString(monster.level)
 

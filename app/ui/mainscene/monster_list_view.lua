@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local monster_list_view = view:instance()
 
-monster_list_view.RESOURCE_BINDING = {
+monster_list_view.RESOURCE_BINDING = 
+{
     ["back_btn"]				= {["varname"] = "back_btn"},
     ["monster_lv"]				= {["varname"] = "monster_lv"},
     ["template_panel"]			= {["varname"] = "template_panel"},

@@ -36,7 +36,7 @@ chesspiece_pool_manager.put = function(self, chesspiece)
 end
 
 chesspiece_pool_manager.create_new_chesspiece = function(self, monster, index)
-	local monster_cfg = gtool:get_monster_cfg_by_id(monster.id)
+	local monster_cfg = game_data_ctrl:instance():get_monster_data_by_id(monster.id)
 	local chesspiece = cc.Sprite:create(g_config.sprite.chesspiece_mask)
 	chesspiece:setScale(0.5)
 	local blendfunc = {src = gl.ONE_MINUS_SRC_ALPHA, dst = gl.ONE_MINUS_SRC_ALPHA}
@@ -70,7 +70,7 @@ chesspiece_pool_manager.create_new_chesspiece = function(self, monster, index)
 end
 
 chesspiece_pool_manager.update_chesspiece = function(self, chesspiece, monster, index)
-	monster = gtool:get_monster_cfg_by_id(monster.id)
+	monster = game_data_ctrl:instance():get_monster_data_by_id(monster.id)
 	chesspiece.face_sp:setTexture(monster.char_img_path)
 	chesspiece.hex_border:setTexture(g_config.sprite["hex_border_" .. monster.rarity])
 	chesspiece:setName("chesspiece_" .. index)

@@ -2,7 +2,8 @@ local view= require("packages.mvc.view_base")
 
 local title_right_view = view:instance()
 
-title_right_view.RESOURCE_BINDING = {
+title_right_view.RESOURCE_BINDING = 
+{
     ["crystal_num_text"]	= {["varname"] = "crystal_num_text"},
     ["add_crystal_btn"]		= {["varname"] = "add_crystal_btn"},
     ["coin_num_text"]		= {["varname"] = "coin_num_text"},

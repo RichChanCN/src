@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local main_view = view:instance()
 
-main_view.RESOURCE_BINDING = {
+main_view.RESOURCE_BINDING = 
+{
 	["title_left_node"]		= {["varname"] = "title_left_node"},
     ["center_node"]			= {["varname"] = "center_node"},
 	["bottom_node"]		    = {["varname"] = "bottom_node"},

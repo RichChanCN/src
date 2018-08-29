@@ -28,6 +28,7 @@ game_data_ctrl.init = function(self)
  	self._save_data:init()
  	self._map_data = require("app.data.map_data")
  	self._monster_data = require("app.data.monster_data")
+ 	self._monster_data:init(self._save_data)
  end
 
 game_data_ctrl.register_scene = function(self, scene)
@@ -89,19 +90,15 @@ game_data_ctrl.get_monster_card_num_and_level_by_id = function(self, id)
 end
 
 game_data_ctrl.get_collected_monster_list = function(self)
-	return self._save_data:get_collected_monster_list()
+	return self._monster_data:get_collected_monster_list()
 end
 
 game_data_ctrl.get_not_collected_monster_list = function(self)
-	return self._save_data:get_not_collected_monster_list()
+	return self._monster_data:get_not_collected_monster_list()
 end
 
-game_data_ctrl.get_save_monster_data_by_id = function(self, id)
-	return self._save_data:get_monster_data_by_id(id)
-end
-
-game_data_ctrl.get_monster_data = function(self)
-	return self._monster_data
+game_data_ctrl.get_monster_data_by_id = function(self, id)
+	return self._monster_data:get_monster_data_by_id(id)
 end
 
 game_data_ctrl.requestUpgradeMonster = function(self, id)

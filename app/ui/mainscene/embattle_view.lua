@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local embattle_view = view:instance()
 
-embattle_view.RESOURCE_BINDING = {
+embattle_view.RESOURCE_BINDING = 
+{
     ["back_btn"]			= {["varname"] = "back_btn"},
     ["back_btn"]			= {["varname"] = "back_btn"},
     ["arena_node"]			= {["varname"] = "arena_node"},
@@ -13,7 +14,6 @@ embattle_view.RESOURCE_BINDING = {
     ["fight_img"]           = {["varname"] = "fight_img"},
 }
 ----------------------------------------------------------------
--------------------------------公有方法--------------------------
 ----------------------------------------------------------------
 embattle_view.init_ui = function(self)
 	self:init_arena()
@@ -124,7 +124,6 @@ embattle_view.on_close = function(self)
 	self:put_all_chesspiece()
 end
 ----------------------------------------------------------------
--------------------------------私有方法--------------------------
 ----------------------------------------------------------------
 embattle_view.make_team = function(self)
 	local team = {}

@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local setting_view = view:instance()
 
-setting_view.RESOURCE_BINDING = {
+setting_view.RESOURCE_BINDING = 
+{
     ["close_btn"]			= {["varname"] = "close_btn"},
 }
 

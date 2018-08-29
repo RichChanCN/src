@@ -2,7 +2,8 @@ local view = require("packages.mvc.view_base")
 
 local result_view = view:instance()
 
-result_view.RESOURCE_BINDING = {
+result_view.RESOURCE_BINDING = 
+{
     ["result_bg_img"]		= {["varname"] = "result_bg_img"},
     ["result_band_img"]		= {["varname"] = "result_band_img"},
     ["star_1"]				= {["varname"] = "star_1"},
