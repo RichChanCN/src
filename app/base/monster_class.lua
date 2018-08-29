@@ -467,7 +467,7 @@ end
 monster_class.attack = function(self, target, distance)
 	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	
-	if self:is_melee() and not self:is_near(gtool:ccp_2_int(target._cur_pos)) then
+	if self:is_melee() and not self:is_near(target._cur_pos_num) then
 		self:move_and_attack(target)
 	else
 		self:attack_directly(target, distance)
@@ -1201,7 +1201,7 @@ end
 monster_class.get_enemy_can_attack = function(self, enemy_list)
 	local can_attack_list = {}
 	for k, v in pairs(enemy_list) do
-		if self:can_reach_and_attack(gtool:ccp_2_int(v._cur_pos)) then
+		if self:can_reach_and_attack(v._cur_pos_num) then
 			table.insert(can_attack_list, v)
 		end
 	end
@@ -1248,8 +1248,8 @@ monster_class.move_close_to_lowest_hp_enemy = function(self, enemy_list, map_inf
 
 			end
 		end
-		
-		self:move_to(gtool:int_2_ccp(path[index]))
+		local pos = gtool:int_2_ccp(path[index])
+		self:move_to(pos)
 	else
 		self:wait(true)
 	end

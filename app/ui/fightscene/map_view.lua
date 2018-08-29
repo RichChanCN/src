@@ -154,7 +154,8 @@ map_view.show_enemy = function(self, num, monster, distance)
 	end
 
 	local x, y = math.modf(num / 10), num % 10
-	atk_img:setPosition(self["gezi_" .. x .. "_" .. y]:getPosition())
+	local px, py = self["gezi_" .. x .. "_" .. y]:getPosition()
+	atk_img:setPosition(px, py)
 
 	self.arena_top_node:addChild(atk_img)
 	uitool:repeat_fade_in_and_out(atk_img)

@@ -51,9 +51,11 @@ chesspiece_pool_manager.create_new_chesspiece = function(self, monster, index)
 	chesspiece.hex_border:setScale(2.0)
 	chesspiece.hex_border:setName("hex_border")
 	chesspiece:addChild(chesspiece.hex_border, uitool.bottom_z_order + 5)
-	chesspiece.hex_border:setPosition(uitool:get_node_center_position(chesspiece))
+
+	local pos = uitool:get_node_center_position(chesspiece)
+	chesspiece.hex_border:setPosition(pos)
 	chesspiece:addChild(chesspiece.face_sp, uitool.bottom_z_order)
-	chesspiece.face_sp:setPosition(uitool:get_node_center_position(chesspiece))
+	chesspiece.face_sp:setPosition(pos)
 	
 	chesspiece:setName("chesspiece_" .. index)
 

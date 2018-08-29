@@ -353,7 +353,8 @@ embattle_view.add_draged_chesspiece_to_arena = function(self, add_to_team, card)
 	end
 
 	self._target_node.chesspiece = self._cur_drag_chesspiece
-	self._cur_drag_chesspiece:setPosition(self._target_node:getPosition())
+	local px, py = self._target_node:getPosition()
+	self._cur_drag_chesspiece:setPosition(px, py)
 	self._cur_drag_chesspiece:setLocalZOrder(uitool.bottom_z_order)
 	self._cur_drag_chesspiece.arena_cell = self._target_node
 	if add_to_team then
@@ -376,8 +377,10 @@ embattle_view.exchange_draged_and_target_chesspiece = function(self)
 	temp_cell.chesspiece = self._target_node.chesspiece
 	self._target_node.chesspiece = temp_chesspiece
 
-	temp_cell.chesspiece:setPosition(temp_cell:getPosition())
-	self._target_node.chesspiece:setPosition(self._target_node:getPosition())
+	local px, py = temp_cell:getPosition()
+	temp_cell.chesspiece:setPosition(px, py)
+	px, py = self._target_node:getPosition()
+	self._target_node.chesspiece:setPosition(px, py)
 
 end
 
@@ -429,7 +432,8 @@ embattle_view.update_arena = function(self)
 		local chesspiece = self:create_chesspiece(v, 300 + v:get_id())
 		local pos = v:get_start_pos()
 		local gezi_key = "gezi_" .. pos.x .. "_" .. pos.y
-		chesspiece:setPosition(self[gezi_key]:getPosition())
+		local px, py = self[gezi_key]:getPosition()
+		chesspiece:setPosition(px, py)
 	end
 
 end
@@ -476,7 +480,8 @@ embattle_view.add_arena_listener = function(self)
 				if self._cur_drag_chesspiece.arena_cell and cur_pos.x < self._pool_right_boder then
 					self:remove_one_chesspiece_from_arena(self._cur_drag_chesspiece)
 				else
-					self._cur_drag_chesspiece:setPosition(self._cur_drag_chesspiece.arena_cell:getPosition())
+					local px, py = self._cur_drag_chesspiece.arena_cell:getPosition()
+					self._cur_drag_chesspiece:setPosition(px, py)
 					self._cur_drag_chesspiece:setLocalZOrder(uitool.bottom_z_order)
 				end
 			elseif self._cur_drag_chesspiece and self._target_node then
@@ -492,7 +497,8 @@ embattle_view.add_arena_listener = function(self)
 				if cur_pos.x < self._pool_right_boder then
 					self:remove_one_chesspiece_from_arena(self._cur_drag_chesspiece)
 				elseif node:getTag() == self._target_node:getTag() then
-					self._cur_drag_chesspiece:setPosition(self._cur_drag_chesspiece.arena_cell:getPosition())
+					local px, py = self._cur_drag_chesspiece.arena_cell:getPosition()
+					self._cur_drag_chesspiece:setPosition(px, py)
 					self._cur_drag_chesspiece:setLocalZOrder(uitool.bottom_z_order)
 				end
 			end

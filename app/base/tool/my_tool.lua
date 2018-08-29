@@ -91,7 +91,6 @@ gtool.ccp_2_int = function(self, pos)
     if type(pos) == type({}) and pos.x and pos.y then
         return pos.x * 10 + pos.y
     else
-        print("gtool:ccp_2_int warning: pos is type: " .. type(pos))
         return pos 
     end
 end
@@ -100,7 +99,6 @@ gtool.int_2_ccp = function(self, num)
     if type(num) == type(1) then 
         return cc.p(math.modf(num / 10),num % 10) 
     else
-        print("gtool:int_2_ccp warning: num is type: " .. type(num))
         return num
     end
 end

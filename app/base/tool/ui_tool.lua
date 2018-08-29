@@ -323,7 +323,8 @@ uitool.create_top_tip = function(self, string, color)
         local tip_bg = cc.Sprite:create()
         tip_bg:setTexture(g_config.sprite.tip_bg)
         local label = cc.Label:createWithTTF(string, g_config.font.default, 36)
-        label:setPosition(self:get_node_center_position(tip_bg))
+        local pos = self:get_node_center_position(tip_bg)
+        label:setPosition(pos)
         tip_bg.label = label
         tip_bg:addChild(label)
         tip_bg:setScale(2)
@@ -337,7 +338,8 @@ uitool.create_top_tip = function(self, string, color)
 
     scene.top_tip.label:setTextColor(color)
 
-    scene.top_tip:setPosition(self:get_node_center_position(scene))
+    local pos = self:get_node_center_position(scene)
+    scene.top_tip:setPosition(pos)
 
     local cb = function()
         scene.top_tip:setVisible(false)
