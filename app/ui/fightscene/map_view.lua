@@ -388,6 +388,12 @@ map_view.pause_arena_listener = function(self)
 	end
 end
 
+map_view.release_model_node = function(self)
+	for k, v in pairs(self._model_node_list) do
+		v:release()
+	end
+end
+
 map_view.clear_model_panel = function(self)
 	self.model_panel:removeAllChildren()
 end

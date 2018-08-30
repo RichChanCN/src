@@ -164,10 +164,11 @@ gtool.towards_pos_odd =
 gtool.bfs_distance = function(self, center_pos_num, range)
     local pos_list = {[center_pos_num] = 0}
     local temp_list = {[0] = center_pos_num}
-
+    local new_pos = {}
     local path_find_help = function(num, step)
         if not pos_list[num] and gtool:is_legal_pos_num(num) then
             pos_list[num] = step
+            new_pos[num] = 1
         end
     end
     
@@ -185,9 +186,11 @@ gtool.bfs_distance = function(self, center_pos_num, range)
         end
         temp_list = {}
 
-        for k, v in pairs(pos_list) do
+        for k, v in pairs(new_pos) do
             table.insert(temp_list, k)
         end
+
+        new_pos = {}
     end
 
     return pos_list
@@ -196,23 +199,23 @@ end
 gtool.bfs_path = function(self, pos_num, steps, path_find_help)
     local area_table = {}
     local temp_list = {}
-
-    gtool:find_gezi(pos_num, path_find_help, area_table)
+    local new_pos = {}
+    gtool:find_gezi(pos_num, path_find_help, area_table, new_pos)
     for k, v in pairs(area_table) do
         table.insert(temp_list, k)
     end
 
     for i = 2, steps do
         for _, v in pairs(temp_list) do
-
-            gtool:find_gezi(v, path_find_help, area_table)
-            
+            gtool:find_gezi(v, path_find_help, area_table, new_pos)
         end
         temp_list = {}
 
-        for k, v in pairs(area_table) do
+        for k, v in pairs(new_pos) do
             table.insert(temp_list, k)
         end
+
+        new_pos = {}
     end
 
     return area_table
@@ -267,11 +270,11 @@ gtool.get_toward_to_int_pos = function(self, cur_num, to_num)
     return result_towards
 end
 
-gtool.find_gezi = function(self, pos, help, path_table)
+gtool.find_gezi = function(self, pos, help, path_table, new_pos)
     local tbl = gtool:get_towards_tbl(pos)
     
     for k, v in pairs(tbl) do
-        help(pos, pos + v, path_table)
+        help(pos, pos + v, path_table, new_pos)
     end
 end
 

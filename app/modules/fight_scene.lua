@@ -50,6 +50,7 @@ end
 fight_scene.onExit = function(self)
 	pve_game_ctrl:instance():clear_team()
 	self._map_view:clear_model_panel()
+	-- self._map_view:release_model_node()
 end
 
 fight_scene.onEnterTransitionFinish = function(self)

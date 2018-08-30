@@ -546,7 +546,15 @@ monster_class.counter_attack = function(self, target)
 	local cur_num = self._cur_pos_num
 	local to_num = gtool:ccp_2_int(target._cur_pos)
 	self:toward_to_int_pos(cur_num, to_num)
-	self:do_animation("attack1")
+	
+	local cb = function()
+		if target:is_dead() then
+			pve_game_ctrl:instance():next_monster_activate()
+		end
+	end
+	local callback = cc.CallFunc:create(cb)
+	self:do_animation("attack1", callback)
+
 	self:add_anger()
 	target:be_attacked(self, true)
 end
@@ -972,9 +980,10 @@ monster_class.get_around_info = function(self, is_to_show)
 end
 
 monster_class.get_can_reach_area_info = function(self, center_pos_num, map_info, steps)
-    local path_find_help = function(pos, num, tbl)
+    local path_find_help = function(pos, num, tbl, new_pos)
         if not tbl[num] and gtool:is_legal_pos_num(num) and ((not map_info[num]) or self:is_fly()) then
             tbl[num] = pos
+            new_pos[num] = 1
         end
     end
 
@@ -982,10 +991,10 @@ monster_class.get_can_reach_area_info = function(self, center_pos_num, map_info,
 end
 
 monster_class.get_fly_path = function(self)
-
-    local path_find_help = function(pos, num, tbl)
+    local path_find_help = function(pos, num, tbl, new_pos)
         if not tbl[num] and gtool:is_legal_pos_num(num) then
             tbl[num] = pos
+            new_pos[num] = 1 
         end
     end
 
