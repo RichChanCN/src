@@ -75,8 +75,6 @@ skill_class.play = function(self)
 	else
 		cb()
 	end
-		
-
 end
 
 skill_class.get_be_affected_monster_list = function(self)

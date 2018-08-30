@@ -155,6 +155,12 @@ end
 
 -------------------------------流程控制---------------------------
 pve_game_ctrl.next_monster_activate = function(self, is_wait)
+	local win_side = pve_game_ctrl:instance():check_game_over()
+
+	if win_side then
+		return self:game_over(win_side)
+	end
+
 	self:set_is_use_skill(false)
 	if is_wait then
 		table.insert(self._cur_round_monster_queue, self._cur_active_monster)
@@ -247,16 +253,16 @@ pve_game_ctrl.stop_auto = function(self)
 	self:set_auto(false)
 end
 
-pve_game_ctrl.check_game_over = function(self, is_buff)
+pve_game_ctrl.check_game_over = function(self)
 	local right = self:get_right_alive_monsters()
 	local left = self:get_left_alive_monsters()
 	
 	if #right < 1 then
-		self:game_over(1)
+		return 1
 	elseif #left < 1 then
-		self:game_over(4)
-	elseif not is_buff then
-		self:next_monster_activate()
+		return 4
+	else
+		return false
 	end
 
 end

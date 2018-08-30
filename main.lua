@@ -20,6 +20,7 @@ require "app.base.monster_factory"
 require "app.base.game_data_ctrl"
 require "app.base.chesspiece_pool_manager"
 require "app.base.pve_game_ctrl"
+require "app.base.action_ctrl"
 
 local function main()
 	collectgarbage("collect")

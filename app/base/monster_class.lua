@@ -69,6 +69,10 @@ monster_class.get_tag = function(self)
 	return self._tag
 end
 
+monster_class.get_attack_particle = function(self)
+	return self._attack_particle
+end
+
 monster_class.get_id = function(self)
 	return self.id
 end
@@ -380,7 +384,8 @@ monster_class.reset = function(self)
 	self._debuff_list				= {}
 
 	self:toward_to(self._cur_towards)
-
+	self.model:setRotation3D(cc.vec3(0, (1 - self._cur_towards) * 60, 0))
+	
 	self:change_monster_status(g_config.monster_status.ALIVE)
 end
 ---------------------------------------------------------------------------------------
@@ -438,35 +443,29 @@ end
 ----------------------------------主动触发-----------------------------------------
 -------------------------------------------------------------------------------------------
 monster_class.move_to = function(self, arena_pos, attack_target, skill_target_pos)
-	
-	local cb = function()
-		self:set_cur_pos(arena_pos)
-		if attack_target then
-			local distance = self:get_distance_to_pos(attack_target._cur_pos_num, true)
-			self:attack(attack_target, distance)
-		elseif skill_target_pos then
-			self:use_skill(skill_target_pos)
-		else
-			self:change_monster_status(g_config.monster_status.ALIVE)
-			if self:nothing_can_do() then
-				pve_game_ctrl:instance():next_monster_activate()
-			else
-				pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.WAIT_ORDER)
-			end
-		end
-	end
-	local callback = cc.CallFunc:create(handler(self, cb))
-	if gtool:ccp_2_int(arena_pos) == self._cur_pos_num then
-		cb()
+	local num = gtool:ccp_2_int(arena_pos)
+	local path = self:get_path_to_pos(num)
+	self._cur_steps = self._cur_steps - #path
+
+	action_ctrl:instance():add_param_in_package("monster", self)
+	action_ctrl:instance():add_param_in_package("start_pos", self._cur_pos_num)
+	action_ctrl:instance():add_param_in_package("end_pos", num)
+	action_ctrl:instance():add_param_in_package("attack_target", attack_target)
+	action_ctrl:instance():add_param_in_package("skill_target_pos", skill_target_pos)
+	action_ctrl:instance():add_param_in_package("follow_path", path)
+
+	self:set_cur_pos(arena_pos)
+	if attack_target then
+		local distance = self:get_distance_to_pos(attack_target._cur_pos_num, true)
+		self:attack_directly(attack_target, distance)
+	elseif skill_target_pos then
+		self:use_skill(skill_target_pos)
 	else
-		self:repeat_animation("walk")
-		self:move_follow_path(arena_pos, callback)
+		action_ctrl:instance():play()
 	end
 end
 
 monster_class.attack = function(self, target, distance)
-	
-	
 	if self:is_melee() and not self:is_near(target._cur_pos_num) then
 		self:move_and_attack(target)
 	else
@@ -510,50 +509,41 @@ end
 ---------------------------------被动触发-------------------------------------------------
 -------------------------------------------------------------------------------------------
 
-monster_class.die = function(self, is_buff_or_skill)
+monster_class.die = function(self)
 	self._status = g_config.monster_status.DEAD
-	self.card.remove_self()
-
-	local ac = self.model:runAction(cc.FadeOut:create(1))
-	local cb = function()
-		self.node:setVisible(false)
-		if not pve_game_ctrl:instance():is_game_over() then
-			pve_game_ctrl:instance():check_game_over(is_buff_or_skill)
-		end
-	end
-
-	local callback = cc.CallFunc:create(cb)
-	local seq = cc.Sequence:create(ac, callback)
-	self:do_animation("die", seq)
 end
 
 monster_class.be_attacked = function(self, murderer, is_counter_attack, distance)
 	local damage, damage_type = self:get_attack_damage(murderer, distance)
 
+	if is_counter_attack then
+		action_ctrl:instance():add_param_in_package("c_atk_dmg", damage)
+	else
+		action_ctrl:instance():add_param_in_package("monster", murderer)
+		action_ctrl:instance():add_param_in_package("attack_target", self)
+		action_ctrl:instance():add_param_in_package("atk_dmg", damage)
+		action_ctrl:instance():add_param_in_package("atk_dmg_type", damage_type)
+	end
+
 	if self:minus_hp(damage, damage_type) then
+		self:toward_to_int_pos(self:get_cur_pos_num(), murderer:get_cur_pos_num())
 		self:add_anger()
-		local cb = function()
-			local cur_num = self._cur_pos_num
-			local to_num = gtool:ccp_2_int(murderer._cur_pos)
-			if (not is_counter_attack) and self:can_counter_attack(murderer) then
-				self:toward_to_int_pos(cur_num, to_num)
-				self:counter_attack(murderer)
-			else
-				self:toward_to_int_pos(cur_num, to_num)
-				pve_game_ctrl:instance():next_monster_activate()
-			end
+		if (not is_counter_attack) and self:can_counter_attack(murderer) then
+			print("==================")
+			self:counter_attack(murderer)
+		else
+			action_ctrl:instance():play()
 		end
-		local callback = cc.CallFunc:create(handler(self, cb))
-		self:do_animation("beattacked", callback)
+	else
+		action_ctrl:instance():play()
 	end
 end
 
 monster_class.counter_attack = function(self, target)
-	local cur_num = self._cur_pos_num
-	local to_num = gtool:ccp_2_int(target._cur_pos)
-	self:toward_to_int_pos(cur_num, to_num)
-	self:do_animation("attack1")
 	self:add_anger()
+	local cur_num = self:get_cur_pos_num()
+	local to_num = target:get_cur_pos_num()
+	self:toward_to_int_pos(cur_num, to_num)
 	target:be_attacked(self, true)
 end
 
@@ -590,11 +580,9 @@ monster_class.be_affected_by_skill = function(self, skill, is_last)
 end
 
 monster_class.toward_to = function(self, num)
-	if not num then 
-		return
+	if num then 
+		self._cur_towards = num
 	end
-	self._cur_towards = num
-	self.model:setRotation3D(cc.vec3(0, (1 - num) * 60, 0))
 end
 
 
@@ -700,26 +688,11 @@ end
 
 monster_class.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
 	local hp = self._cur_attr.hp - damage
-
-	local cb = function()
-		self.blood_bar.update_hp(hp / self._raw_attr.max_hp , damage , damage_type)
-		if hp < 1 then
-			self:die()
-		end
-	end
-	if not is_buff_or_skill then
-		local callback = cc.CallFunc:create(handler(self, cb))
-		self:do_something_later(callback, 0.5)
-	else
-		self.blood_bar.update_hp(hp / self._raw_attr.max_hp, damage, damage_type)
-		if hp < 1 then
-			self:die(is_buff_or_skill)
-		end
-	end
-
+	
 	self:set_hp(hp)
 
-	if hp > 0 then
+	if hp < 1 then
+		self:die()
 		return true
 	else
 		return false
@@ -808,21 +781,11 @@ end
 --------------------------------辅助函数--------------------------------------
 ------------------------------------------------------------------------------------
 monster_class.attack_directly = function(self, target, distance)
-	
-	if self._attack_particle then
-		self:create_attack_particle(target)
-	end
-
-	self:add_anger()
-	local cur_num = self._cur_pos_num
-	local to_num = gtool:ccp_2_int(target._cur_pos)
-	self:toward_to_int_pos(cur_num, to_num)
-	self:do_animation("attack1")
+	self:toward_to_int_pos(self:get_cur_pos_num(), target:get_cur_pos_num())
 	target:be_attacked(self, false, distance)
 end
 
 monster_class.use_skill_directly = function(self, target_pos_num)
-		
 		self._skill:play()
 		local cost = self._skill:get_cost()
 		self:minus_anger(cost)
@@ -1050,20 +1013,22 @@ monster_class.get_path_info_to_target = function(self, map_info, target)
     return area_table
 end
 
-monster_class.get_path_to_pos = function(self, num, path_table)
+monster_class.get_path_to_pos = function(self, end_pos_num, start_pos_num, path_table)
 	path_table = path_table or {}
-	table.insert(path_table, num)
-	local last_geizi
+	start_pos_num = start_pos_num or self._cur_pos_num
+
+	table.insert(path_table, end_pos_num)
+
 	if self:is_fly() then 
-		last_geizi = self._fly_path[num]
+		end_pos_num = self._fly_path[end_pos_num]
 	else
-		last_geizi = self._can_reach_area_info[num]
+		end_pos_num = self._can_reach_area_info[end_pos_num]
 	end
 
-	if self._cur_pos_num == last_geizi then
+	if start_pos_num == end_pos_num then
 		return path_table
 	else
-		return self:get_path_to_pos(last_geizi, path_table)
+		return self:get_path_to_pos(end_pos_num, start_pos_num, path_table)
 	end
 end
 
