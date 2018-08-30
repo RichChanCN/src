@@ -361,7 +361,6 @@ monster_class.reset = function(self)
 	end
 
 	self._cur_towards					= g_config.towards[self._team_side]
-	self._cur_pos    					= self._start_pos
 
 	self._cur_attr.max_hp 				= self._raw_attr.max_hp
 	self._cur_attr.hp 					= self._raw_attr.max_hp	
@@ -379,6 +378,7 @@ monster_class.reset = function(self)
 	self._buff_list					= {}
 	self._debuff_list				= {}
 
+	self:set_cur_pos(self._start_pos)
 	self:toward_to(self._cur_towards)
 
 	self:change_monster_status(g_config.monster_status.ALIVE)
@@ -465,8 +465,6 @@ monster_class.move_to = function(self, arena_pos, attack_target, skill_target_po
 end
 
 monster_class.attack = function(self, target, distance)
-	
-	
 	if self:is_melee() and not self:is_near(target._cur_pos_num) then
 		self:move_and_attack(target)
 	else
@@ -510,16 +508,12 @@ end
 ---------------------------------被动触发-------------------------------------------------
 -------------------------------------------------------------------------------------------
 
-monster_class.die = function(self, is_buff_or_skill)
-	self._status = g_config.monster_status.DEAD
+monster_class.die = function(self)
 	self.card.remove_self()
 
 	local ac = self.model:runAction(cc.FadeOut:create(1))
 	local cb = function()
 		self.node:setVisible(false)
-		if not pve_game_ctrl:instance():is_game_over() then
-			pve_game_ctrl:instance():check_game_over(is_buff_or_skill)
-		end
 	end
 
 	local callback = cc.CallFunc:create(cb)
@@ -700,7 +694,9 @@ end
 
 monster_class.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
 	local hp = self._cur_attr.hp - damage
-
+	if hp < 1 then
+		self._status = g_config.monster_status.DEAD
+	end
 	local cb = function()
 		self.blood_bar.update_hp(hp / self._raw_attr.max_hp , damage , damage_type)
 		if hp < 1 then
@@ -713,7 +709,7 @@ monster_class.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
 	else
 		self.blood_bar.update_hp(hp / self._raw_attr.max_hp, damage, damage_type)
 		if hp < 1 then
-			self:die(is_buff_or_skill)
+			self:die()
 		end
 	end
 
@@ -817,7 +813,14 @@ monster_class.attack_directly = function(self, target, distance)
 	local cur_num = self._cur_pos_num
 	local to_num = gtool:ccp_2_int(target._cur_pos)
 	self:toward_to_int_pos(cur_num, to_num)
-	self:do_animation("attack1")
+	local cb = function()
+		if target:is_dead() then
+			pve_game_ctrl:instance():next_monster_activate()
+		end
+	end
+	local callback = cc.CallFunc:create(cb)
+	self:do_animation("attack1", callback)
+	
 	target:be_attacked(self, false, distance)
 end
 

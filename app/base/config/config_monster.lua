@@ -107,7 +107,7 @@ g_config.monster_animate =
 		attack1		= g_config:create_animate_tbl(53, 84), 
 		attack2 	= g_config:create_animate_tbl(85, 115), 
 		skill 		= g_config:create_animate_tbl(85, 115), 
-		beattacked	= g_config:create_animate_tbl(116, 131), 
+		--beattacked	= g_config:create_animate_tbl(116, 131), 
 		walk	 	= g_config:create_animate_tbl(132, 152), 
 		die	 		= g_config:create_animate_tbl(153, 243), 
 	}, 

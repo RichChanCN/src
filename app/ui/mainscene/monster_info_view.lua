@@ -94,6 +94,8 @@ monster_info_view.init_events = function(self)
         if self._monster_data.card_num and not(self._monster_data.card_num < self._monster_data.level) then
             game_data_ctrl:instance():requestUpgradeMonster(self._monster_data.id)
             self:upgrade_update()
+        else
+            uitool:create_top_tip("you don't have enough card!", "red")
         end
     end)
     --------------左边节点事件-------------

@@ -50,10 +50,17 @@ end
 monster_data.update_collected_monsters = function(self)
 	local monsters = self._save_data:get_monsters_data()
 	for key, value in pairs(monsters) do
-		if self._collected_monsters[key] then
-			self._collected_monsters[key].card_num = value.card_num
-			self._collected_monsters[key].level = value.level
-		else
+		local is_new = true
+		for k, v in pairs(self._collected_monsters) do
+			if v.id == key then
+				v.card_num = value.card_num
+				v.level = value.level
+				is_new = false
+				break
+			end
+		end
+		
+		if is_new then
 			self:add_new_monster_in_collected(key, value)
 		end
 	end

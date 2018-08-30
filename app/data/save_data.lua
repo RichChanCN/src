@@ -11,7 +11,7 @@ save_data.number_index = {
 
 save_data.init = function(self, ctrl)
 	self._ctrl = ctrl
-	self._load_file = g_config:to_xml_path("save_raw.data")
+	self._load_file = g_config:to_xml_path("save_show.data")
 	self._save_file = g_config:to_xml_path("data2.data")
 	self._collected_monsters = {}
 

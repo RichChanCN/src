@@ -16,7 +16,7 @@ g_config.skill =
 		--技能是否需要选择目标
 		is_need_target = false,
 		--技能消耗的怒气值
-		cost = 4,
+		cost = 2,
 		--技能的伤害
 		damage = 80,
 		--怪物等级对技能伤害的加成
