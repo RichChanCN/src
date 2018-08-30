@@ -65,6 +65,7 @@ end
 
 fight_scene.game_over = function(self, result)
 	self:set_result(result)
+	self:close_battle_info_view()
 	self._map_view:endAnimation()
 end
 

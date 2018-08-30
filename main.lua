@@ -31,7 +31,7 @@ local function main()
 
 	game_data_ctrl:instance():init()
 
-    require("app.my_app"):create():run()
+    require("app.my_app"):create():run("pre_scene")
 
 end
 

@@ -104,7 +104,6 @@ map_view.endAnimation = function(self)
 		
 	self._root:runAction(seq)
 	self:hide_mask()
-	self._ctrl:close_battle_info_view()
 end
 
 map_view.get_position_by_int = function(self, num)
