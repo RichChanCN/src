@@ -3,6 +3,10 @@ monster_class = gtool.class()
 monster_class.ctor = function(self, data, team_side, arena_pos, level)
 	-- public 
 	self.id 					= data.id
+	self.animation 				= nil
+	self.node 					= nil
+	self.model 					= nil
+	self.card 					= nil
 
 	-- private
 	-- 类型属性
@@ -602,7 +606,7 @@ end
 
 monster_class.toward_to_int_pos = function(self, cur_num, to_num, only_get)
 	
-	result_towards = gtool:get_toward_to_int_pos(cur_num, to_num)
+	local result_towards = gtool:get_toward_to_int_pos(cur_num, to_num)
 	
 	if only_get then
 		return result_towards
@@ -868,7 +872,7 @@ monster_class.move_follow_path = function(self, arena_pos, callback_final)
 	local next_pos
 
 	for i = #path, 1, -1 do
-		local pos = pve_game_ctrl:instance():get_position_by_int(path[i])
+		local pos = pve_game_ctrl:instance():get_position_by_num(path[i])
 		
 		if self:is_fly() then
 			pos.y = pos.y + 10
@@ -914,11 +918,11 @@ monster_class.create_attack_particle = function(self, target)
 	local particle = cc.ParticleSystemQuad:create(self._attack_particle)
 	particle:setScale(0.3)
 	particle:setName("attack")
-	local start_pos = pve_game_ctrl:instance():get_position_by_int(self._cur_pos_num)
+	local start_pos = pve_game_ctrl:instance():get_position_by_num(self._cur_pos_num)
 	particle:setPosition(start_pos.x, start_pos.y)
 	local node = pve_game_ctrl:instance():get_map_top_arena_node()
 	node:addChild(particle)
-	local end_pos = pve_game_ctrl:instance():get_position_by_int(target._cur_pos_num)
+	local end_pos = pve_game_ctrl:instance():get_position_by_num(target._cur_pos_num)
 	local ac1 = particle:runAction(cc.MoveTo:create(0.5, cc.p(start_pos.x, start_pos.y + 30)))
 	particle:stopAction(ac1)
 	local ac2 = particle:runAction(cc.MoveTo:create(0.3, cc.p(end_pos.x, end_pos.y + 15)))
@@ -933,7 +937,7 @@ end
 monster_class.get_around_info = function(self, is_to_show)
 	local steps = self._cur_steps
 	if is_to_show then
-		if steps < 1 and not self:has_waited() then
+		if not self:has_waited() then
 			steps = self:get_cur_mobility()
 		end
 	end

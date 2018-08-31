@@ -177,7 +177,7 @@ g_config.buff =
 			monster.node:addChild(particle)
 		end,
 		once_a_round = function(monster)
-			monster:minus_hp(40, g_config.damage_level.POISON, true)
+			monster:minus_hp(20, g_config.damage_level.POISON, true)
 		end,
 		apply = function(monster)
 			monster:set_cur_damage(monster:get_cur_damage(true) * 0.9)

@@ -106,7 +106,7 @@ map_view.endAnimation = function(self)
 	self:hide_mask()
 end
 
-map_view.get_position_by_int = function(self, num)
+map_view.get_position_by_num = function(self, num)
 	local pos = gtool:int_2_ccp(num)
 	local a, b = self["gezi_" .. pos.x .. "_" .. pos.y]:getPosition()
 	return cc.p(a, b)
@@ -244,7 +244,6 @@ map_view.create_monster_model = function(self, monster)
 		self._monster_loaded_num = self._monster_loaded_num + 1
 	end
 	cc.Sprite3D:createAsync(path, callback)
-    
 end
 
 map_view.create_other_model = function(self, other_model, pos)
@@ -377,7 +376,6 @@ map_view.resume_arena_listener = function(self)
 end
 
 map_view.pause_arena_listener = function(self)
-	
 	for x = 1, 8 do
 		for y = 1, 7 do 
 			local gezi_key = "gezi_" .. x .. "_" .. y
@@ -399,7 +397,6 @@ map_view.clear_model_panel = function(self)
 end
 
 map_view.play_enter_animation = function(self)
-
 	self.shield_img:runAction(cc.FadeIn:create(0.5))
 	local a1 = self.word_img:runAction(cc.FadeIn:create(0.5))
 	local a2 = self.word_img:runAction(cc.ScaleTo:create(0.4, 1))

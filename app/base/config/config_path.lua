@@ -7,7 +7,6 @@ g_config.monster_img_path	= "Monster/"
 g_config.xml_path 			= "res/Data/"
 g_config.fonts_path 		= "res/Font/"
 
-
 g_config.to_sprite_path = function(self, file)
 	return self.sprite_path .. file
 end
@@ -31,3 +30,7 @@ end
 g_config.to_xml_path = function(self, file)
 	return self.xml_path .. file
 end
+
+
+g_config.load_data_file = g_config:to_xml_path("save_codereview.data")
+g_config.save_data_file = g_config:to_xml_path("save2.data")

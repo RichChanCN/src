@@ -547,8 +547,8 @@ pve_game_ctrl.get_monster_index_in_cur_round_alive_monster = function(self, mons
 	return index
 end
 
-pve_game_ctrl.get_position_by_int = function(self, num)
-	return self._scene:get_map_view():get_position_by_int(num)
+pve_game_ctrl.get_position_by_num = function(self, num)
+	return self._scene:get_map_view():get_position_by_num(num)
 end
 
 pve_game_ctrl.get_map_top_arena_node = function(self)
