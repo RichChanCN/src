@@ -32,6 +32,7 @@ end
 
 
 action_ctrl.play = function(self)
+	pve_game_ctrl:instance():change_game_status(pve_game_ctrl.GAME_STATUS.RUNNING)
 	self:set_final_call_back()
 	if self._package.end_pos then
 		self:move(self._package.monster, self._package.start_pos, self._package.end_pos, self._package.attack_target, self._package.skill_target_pos)
@@ -143,8 +144,9 @@ action_ctrl.be_attacked = function(self, monster, murderer, is_counter_attack)
 	self:update_hp(monster, is_counter_attack)
 
 	if not monster:is_dead() then
-		monster:add_anger()
 		local cb = function()
+			monster.card.update(monster:get_cur_anger())
+			monster.blood_bar.update_anger(monster:get_cur_anger())
 			self:toward_to_int_pos(monster, monster:get_cur_pos_num(), murderer:get_cur_pos_num())
 			if self._package.c_atk_dmg and not is_counter_attack then
 				self:counter_attack(monster ,murderer)
@@ -168,7 +170,6 @@ action_ctrl.counter_attack = function(self, monster, target)
 	local to_num = target:get_cur_pos_num()
 	self:toward_to_int_pos(monster, cur_num, to_num)
 	monster:do_animation("attack1")
-	monster:add_anger()
 	self:be_attacked(target, monster, true)
 end
 

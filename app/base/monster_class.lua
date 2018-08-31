@@ -447,6 +447,14 @@ monster_class.move_to = function(self, arena_pos, attack_target, skill_target_po
 	local path = self:get_path_to_pos(num)
 	self._cur_steps = self._cur_steps - #path
 
+	if #path > 1 then
+		print(path[2], path[1])
+		self:toward_to_int_pos(path[2] - path[1])
+	else
+		print(self._cur_pos_num, path[1])
+		self:toward_to_int_pos(self._cur_pos_num, path[1])
+	end
+
 	action_ctrl:instance():add_param_in_package("monster", self)
 	action_ctrl:instance():add_param_in_package("start_pos", self._cur_pos_num)
 	action_ctrl:instance():add_param_in_package("end_pos", num)
@@ -526,12 +534,12 @@ monster_class.be_attacked = function(self, murderer, is_counter_attack, distance
 	end
 
 	if self:minus_hp(damage, damage_type) then
-		self:toward_to_int_pos(self:get_cur_pos_num(), murderer:get_cur_pos_num())
 		self:add_anger()
+		
 		if (not is_counter_attack) and self:can_counter_attack(murderer) then
-			print("==================")
 			self:counter_attack(murderer)
 		else
+			self:toward_to_int_pos(self:get_cur_pos_num(), murderer:get_cur_pos_num())
 			action_ctrl:instance():play()
 		end
 	else
@@ -587,8 +595,7 @@ end
 
 
 monster_class.toward_to_int_pos = function(self, cur_num, to_num, only_get)
-	
-	result_towards = gtool:get_toward_to_int_pos(cur_num, to_num)
+	local result_towards = gtool:get_toward_to_int_pos(cur_num, to_num)
 	
 	if only_get then
 		return result_towards
@@ -693,9 +700,9 @@ monster_class.minus_hp = function(self, damage, damage_type, is_buff_or_skill)
 
 	if hp < 1 then
 		self:die()
-		return true
-	else
 		return false
+	else
+		return true
 	end
 end
 
@@ -811,41 +818,6 @@ monster_class.move_and_use_skill = function(self, target_pos_num)
 	self:move_to(pos, nil, target_pos_num)
 end
 
-monster_class.move_follow_path = function(self, arena_pos, callback_final)
-	local num = gtool:ccp_2_int(arena_pos)
-	local path = self:get_path_to_pos(num)
-	self._cur_steps = self._cur_steps - #path
-	
-	local ac_table  = {}
-	local next_pos
-
-	for i = #path, 1, -1 do
-		local pos = pve_game_ctrl:instance():get_position_by_int(path[i])
-		
-		if self:is_fly() then
-			pos.y = pos.y + 10
-		else
-			pos.y = pos.y - 10
-		end
-		
-		local action = self.node:runAction(cc.MoveTo:create(0.5, pos))
-		self.node:stopAction(action)
-		
-		local cb = function()
-			self:toward_to_int_pos(path[i], path[i - 1])
-		end
-		local callback = cc.CallFunc:create(handler(self, cb))
-		local seq = cc.Sequence:create(action, callback)
-		table.insert(ac_table, seq)
-	end
-	
-	table.insert(ac_table, callback_final)
-
-	local all_seq = cc.Sequence:create(unpack(ac_table))
-	self:toward_to_int_pos(self._cur_pos_num, path[#path])
-	self.node:runAction(all_seq)
-end
-
 monster_class.get_distance_to_pos = function(self, num, update)
 	if update then
 		self._distance_info = self:get_distance_info()
@@ -860,23 +832,6 @@ monster_class.get_distance_info = function(self)
 	end
 
     return gtool:bfs_distance(self._cur_pos_num, steps)
-end
-
-monster_class.create_attack_particle = function(self, target)
-	local particle = cc.ParticleSystemQuad:create(self._attack_particle)
-	particle:setScale(0.3)
-	particle:setName("attack")
-	local start_pos = pve_game_ctrl:instance():get_position_by_int(self._cur_pos_num)
-	particle:setPosition(start_pos.x, start_pos.y)
-	local node = pve_game_ctrl:instance():get_map_top_arena_node()
-	node:addChild(particle)
-	local end_pos = pve_game_ctrl:instance():get_position_by_int(target._cur_pos_num)
-	local ac1 = particle:runAction(cc.MoveTo:create(0.5, cc.p(start_pos.x, start_pos.y + 30)))
-	particle:stopAction(ac1)
-	local ac2 = particle:runAction(cc.MoveTo:create(0.3, cc.p(end_pos.x, end_pos.y + 15)))
-	particle:stopAction(ac2)
-	local seq = cc.Sequence:create(ac1, ac2)
-	particle:runAction(seq)
 end
 ----------------------------------------------------------------------------------
 ----------------------------------路径相关-------------------------------------
