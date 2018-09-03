@@ -732,14 +732,6 @@ end
 
 monster_class.set_anger = function(self, angle)
 	self._cur_attr.anger = angle
-
-	local cb = function()
-		self.card.update(self._cur_attr.anger)
-		self.blood_bar.update_anger(self._cur_attr.anger)
-	end
-	local callback = cc.CallFunc:create(handler(self, cb))
-
-	self:do_something_later(callback, 0.5)
 end
 -------------------------------------------------------------------------------------------
 ----------------------------buff相关----------------------------------------------------

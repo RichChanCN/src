@@ -2,6 +2,154 @@ g_config = g_config or {}
 
 g_config.skill = 
 {
+	-- 物理近战通用攻击
+	[1] = 
+	{
+		name = "physical melee common attack",
+		--技能描述
+		description = "",
+		--技能图标路径
+		img_path = g_config:to_monster_img_path(""),
+		--技能范围，0的话就是全范围
+		range = 1,
+		--技能是否需要选择目标
+		is_need_target = true,
+		--技能消耗的怒气值
+		cost = 0,
+		--技能的伤害
+		damage = 1,
+		--怪物等级对技能伤害的加成
+		damage_level_plus = 10,
+		--治疗量
+		healing = 0,
+		--怪物等级对治疗量的加成
+		healing_level_plus = 0,
+
+		--技能粒子路径
+	 	particle_path = g_config:to_particle_path(""),
+
+	 	--给队友加的buff列表
+		buff = 
+		{
+
+		},
+		--给敌人加的buff列表
+		debuff = 
+		{
+
+		},
+	},
+	-- 魔法近战通用攻击
+	[2] = 
+	{
+		name = "magic melee common attack",
+		--技能描述
+		description = "",
+		--技能图标路径
+		img_path = g_config:to_monster_img_path(""),
+		--技能范围，0的话就是全范围
+		range = 0,
+		--技能是否需要选择目标
+		is_need_target = true,
+		--技能消耗的怒气值
+		cost = 0,
+		--技能的伤害
+		damage = 1,
+		--怪物等级对技能伤害的加成
+		damage_level_plus = 10,
+		--治疗量
+		healing = 0,
+		--怪物等级对治疗量的加成
+		healing_level_plus = 0,
+
+		--技能粒子路径
+	 	particle_path = g_config:to_particle_path(""),
+
+	 	--给队友加的buff列表
+		buff = 
+		{
+
+		},
+		--给敌人加的buff列表
+		debuff = 
+		{
+
+		},
+	},
+	-- 物理远程通用攻击
+	[3] = 
+	{
+		name = "physical range common attack",
+		--技能描述
+		description = "",
+		--技能图标路径
+		img_path = g_config:to_monster_img_path(""),
+		--技能范围，0的话就是全范围
+		range = 0,
+		--技能是否需要选择目标
+		is_need_target = false,
+		--技能消耗的怒气值
+		cost = 0,
+		--技能的伤害
+		damage = 1,
+		--怪物等级对技能伤害的加成
+		damage_level_plus = 10,
+		--治疗量
+		healing = 0,
+		--怪物等级对治疗量的加成
+		healing_level_plus = 0,
+
+		--技能粒子路径
+	 	particle_path = g_config:to_particle_path(""),
+
+	 	--给队友加的buff列表
+		buff = 
+		{
+
+		},
+		--给敌人加的buff列表
+		debuff = 
+		{
+			[1] = g_config.buff.move_limit,
+		},
+	},
+	-- 魔法远程通用攻击
+	[4] = 
+	{
+		name = "magic range common attack",
+		--技能描述
+		description = "",
+		--技能图标路径
+		img_path = g_config:to_monster_img_path(""),
+		--技能范围，0的话就是全范围
+		range = 0,
+		--技能是否需要选择目标
+		is_need_target = false,
+		--技能消耗的怒气值
+		cost = 0,
+		--技能的伤害
+		damage = 1,
+		--怪物等级对技能伤害的加成
+		damage_level_plus = 10,
+		--治疗量
+		healing = 0,
+		--怪物等级对治疗量的加成
+		healing_level_plus = 0,
+
+		--技能粒子路径
+	 	particle_path = g_config:to_particle_path(""),
+
+	 	--给队友加的buff列表
+		buff = 
+		{
+
+		},
+		--给敌人加的buff列表
+		debuff = 
+		{
+
+		},
+	},
 	--暴风雪
 	[1001] = 
 	{
