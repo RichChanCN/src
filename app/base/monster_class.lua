@@ -73,6 +73,10 @@ monster_class.get_attack_particle = function(self)
 	return self._attack_particle
 end
 
+monster_class.get_skill = function(self)
+	return self._skill
+end
+
 monster_class.get_id = function(self)
 	return self.id
 end
@@ -448,10 +452,8 @@ monster_class.move_to = function(self, arena_pos, attack_target, skill_target_po
 	self._cur_steps = self._cur_steps - #path
 
 	if #path > 1 then
-		print(path[2], path[1])
 		self:toward_to_int_pos(path[2] - path[1])
 	else
-		print(self._cur_pos_num, path[1])
 		self:toward_to_int_pos(self._cur_pos_num, path[1])
 	end
 
@@ -503,11 +505,11 @@ monster_class.defend = function(self)
 	pve_game_ctrl:instance():next_monster_activate()
 end
 
+-- 这个函数会被子类覆盖
 monster_class.use_skill = function(self, target_pos_num)
 	if (not self._skill:is_need_target()) 
 		or (self:is_melee() and self:is_near(target_pos_num)) 
 		or (not self:is_melee()) then
-		
 		self:use_skill_directly(target_pos_num)
 	else
 		self:move_and_use_skill(target_pos_num)
@@ -576,14 +578,6 @@ monster_class.be_affected_by_skill = function(self, skill, is_last)
 		if #buff > 0 then
 			self:add_buff(buff)
 		end
-	end
-
-	if is_last then 
-		local cb = function()
-			pve_game_ctrl:instance():next_monster_activate()
-		end
-		local callback = cc.CallFunc:create(cb)
-		self:do_something_later(callback, 0.6)
 	end
 end
 
@@ -785,16 +779,11 @@ monster_class.attack_directly = function(self, target, distance)
 end
 
 monster_class.use_skill_directly = function(self, target_pos_num)
-		self._skill:play()
-		local cost = self._skill:get_cost()
-		self:minus_anger(cost)
-		
-		local cb = function()
-			self._skill:use(target_pos_num)
-		end
-		local callback = cc.CallFunc:create(cb)
-		self:toward_to_int_pos(self._cur_pos_num, target_pos_num)
-		self:do_animation("skill", callback)
+	local cost = self._skill:get_cost()
+	self:minus_anger(cost)
+	
+	self:toward_to_int_pos(self._cur_pos_num, target_pos_num)
+	action_ctrl:instance():play()
 end
 
 monster_class.move_and_attack = function(self, target)

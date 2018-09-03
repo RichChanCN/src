@@ -25,9 +25,6 @@ g_config.skill =
 		--怪物等级对治疗量的加成
 		healing_level_plus = 0,
 
-		--技能粒子路径
-	 	particle_path = g_config:to_particle_path(""),
-
 	 	--给队友加的buff列表
 		buff = 
 		{
@@ -99,9 +96,6 @@ g_config.skill =
 		--怪物等级对治疗量的加成
 		healing_level_plus = 0,
 
-		--技能粒子路径
-	 	particle_path = g_config:to_particle_path(""),
-
 	 	--给队友加的buff列表
 		buff = 
 		{
@@ -135,9 +129,6 @@ g_config.skill =
 		healing = 0,
 		--怪物等级对治疗量的加成
 		healing_level_plus = 0,
-
-		--技能粒子路径
-	 	particle_path = g_config:to_particle_path(""),
 
 	 	--给队友加的buff列表
 		buff = 
@@ -226,7 +217,7 @@ g_config.skill =
 		img_path = g_config:to_monster_img_path("icon_skill_holy_slash.png"),
 		range = 1,
 		is_need_target = true,
-		cost = 3,
+		cost = 0,
 		damage = 50,
 		damage_level_plus = 5,
 
