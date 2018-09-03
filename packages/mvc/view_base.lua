@@ -10,15 +10,11 @@ view_base.new = function(self, name, root, ctrl)
 	self._ctrl = ctrl
 
 	--事件分发器
-	self._eventDispatcher = cc.Director:getInstance():getEventDispatcher()
+	self._event_dispatcher = cc.Director:getInstance():getEventDispatcher()
 	
 	self._is_inited = false
 
 	return self
-end
-
-view_base.get_ctrl = function(self)
-	return self._ctrl
 end
 
 view_base.get_root = function(self)
@@ -38,21 +34,16 @@ view_base.init = function(self)
 		self:init_events()
 
 		self._is_inited = true
-	else
-		print(self._name.." is inited! scape the init()")
 	end
 end
 
 view_base.init_ui = function(self)
-	print("warning! you should implement init_ui() in instance!---"..self._name)
 end
 
 view_base.init_info = function(self)
-	print("warning! you should implement init_info() in instance!---"..self._name)
 end
 
 view_base.init_events = function(self)
-	print("warning! you should implement init_events() in instance")
 end
 
 view_base.on_open = function(self, ...)
@@ -72,13 +63,13 @@ view_base.open_view = function(self, ...)
 	if self._view_pos then
 		self._root:setPosition(self._view_pos)
 	else
-		self._root:setPosition(uitool:zero())
+		self._root:setPosition(uitool.zero_ccp)
 	end
 end
 
 view_base.close_view = function(self)
 	self:on_close()
-	self._root:setPosition(uitool:far_away())
+	self._root:setPosition(uitool.far_away_ccp)
 end
 
 view_base.is_inited = function(self)

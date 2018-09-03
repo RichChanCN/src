@@ -3,8 +3,7 @@ local app_base = class("app_base")
 
 app_base.ctor = function(self, configs)
     self._configs = {
-        scenes_root  = "app.scenes",
-        models_root = "app.models",
+        scenes_root  = "app.modules",
         default_scene_name = "main_scene",
     }
 
@@ -14,9 +13,6 @@ app_base.ctor = function(self, configs)
 
     if type(self._configs.scenes_root) ~= "table" then
         self._configs.scenes_root = {self._configs.scenes_root}
-    end
-    if type(self._configs.models_root) ~= "table" then
-        self._configs.models_root = {self._configs.models_root}
     end
 
     if DEBUG > 1 then
@@ -48,17 +44,12 @@ app_base.create_scene = function(self, name)
         local status, view = xpcall(function()
                 return require(packageName)
             end, function(msg)
-            if not string.find(msg, string.format("'%s' not found:", packageName)) then
-                print("load view error: ", msg)
-            end
         end)
         local t = type(view)
         if status and (t == "table" or t == "userdata") then
             return view:create(self, name)
         end
     end
-    error(string.format("app_base:create_scene() - not found view \"%s\" in search paths \"%s\"",
-        name, table.concat(self._configs.scenes_root, ",")), 0)
 end
 
 app_base.on_create = function(self)

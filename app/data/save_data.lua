@@ -11,17 +11,15 @@ save_data.number_index = {
 
 save_data.init = function(self, ctrl)
 	self._ctrl = ctrl
-	self._load_file = "save_show.data"
-	self._save_file = "data2.data"
+	self._load_file = g_config.load_data_file
+	self._save_file = g_config.save_data_file
 	self._collected_monsters = {}
-	self:init_info()
-	self:load_data()
-end
 
-save_data.init_info = function(self)
 	self._player = {}
 	self._story = {}
 	self._monsters = {}
+
+	self:load_data()
 end
 
 save_data.get_star_num_by_chapter_and_level = function(self, chapter_num, level_num)
@@ -36,48 +34,8 @@ save_data.get_player_data = function(self)
 	return self._player
 end
 
-save_data.init_collected_monsters = function(self)
-	for key,value in pairs(self._monsters) do
-		self:add_new_monster_in_collected(key, value)
-	end
-end
-
-save_data.add_new_monster_in_collected = function(self, key, value)
-	local monster = {}
-	for k, v in pairs(g_config.monter[key]) do
-		monster[k] = v
-	end
-	monster.level = value.level
-	monster.card_num = value.card_num
-
-	table.insert(self._collected_monsters, monster)
-end
-
-save_data.update_collected_monsters = function(self)
-	for key, value in pairs(self._monsters) do
-		if self._collected_monsters[key] then
-			self._collected_monsters[key].card_num = value.card_num
-			self._collected_monsters[key].level = value.level
-		else
-			self:add_new_monster_in_collected(key, value)
-		end
-	end
-end
-
-save_data.get_collected_monster_list = function(self)
-	self:update_collected_monsters()
-	return self._collected_monsters
-end
-
-save_data.get_not_collected_monster_list = function(self)
-	local monster_list = {}
-	for k,v in pairs(g_config.monter) do
-		if not self._monsters[v.id] then
-			table.insert(monster_list, v)
-		end
-	end
-
-	return monster_list
+save_data.get_monsters_data = function(self)
+	return self._monsters
 end
 
 save_data.get_monster_card_num_and_level_by_id = function(self, id)
@@ -132,25 +90,13 @@ save_data.upgrade_monster = function(self, id)
 		self._monsters[id].card_num = self._monsters[id].card_num - self._monsters[id].level
 		self._monsters[id].level = self._monsters[id].level + 1
 		return true
-	else
-		return false
 	end
-end
 
-save_data.get_monster_data_by_id = function(self, id)
-	local value = self._monsters[id]
-	local monster = {}
-	for k,v in pairs(g_config.monter[id]) do
-		monster[k] = v
-	end
-	monster.level = value.level
-	monster.card_num = value.card_num
-
-	return monster
+	return false
 end
 
 save_data.load_data = function(self)
-	local xml_file = xml.load(g_config.xml_path .. self._load_file)
+	local xml_file = xml.load(self._load_file)
 	self.time = xml_file.time
 
 	for key, value in pairs(self) do
@@ -183,8 +129,6 @@ save_data.load_data = function(self)
 	end
 
 	self._player.cur_max_exp = (100 + (self._player.level - 1) * 20)
-
-	self:init_collected_monsters()
 end
 
 save_data.load_help = function(self, xml)
@@ -239,7 +183,7 @@ save_data.save = function(self)
 			monster:append(k1)[1] = v1
 		end
 	end
-	xml_file:save(g_config.xml_path .. self._save_file)
+	xml_file:save(self._save_file)
 end
 
 return save_data

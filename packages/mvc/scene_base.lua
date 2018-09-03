@@ -38,18 +38,16 @@ scene_base.create_resource_node = function(self, resource_filename)
         self._resourceNode = nil
     end
     self._resourceNode = cc.CSLoader:createNode(resource_filename)
-    assert(self._resourceNode, string.format("scene_base:create_resource_node() - load resouce node from file \"%s\" failed", resource_filename))
     self:addChild(self._resourceNode)
 end
 
 scene_base.create_layout_binding = function(self, binding)
-    assert(self._resourceNode, "scene_base:createResourceBinding() - not load resource node")
-	for nodeName, nodeBinding in pairs(binding) do
+    for nodeName, nodeBinding in pairs(binding) do
         local node = self._resourceNode:getChildByName(nodeName);
         if nodeBinding.varname then
             local path = rawget(self.class, "VIEW_PATH")
             if path then
-                self[nodeBinding.varname] = require(path.."."..nodeBinding.varname):new(nodeBinding.varname, node, self)
+                self[nodeBinding.varname] = require(path.."."..nodeName):new(nodeBinding.varname, node, self)
             else
                 self[nodeBinding.varname] = node
             end
